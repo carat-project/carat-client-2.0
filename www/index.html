@@ -1,47 +1,125 @@
-<!DOCTYPE html>
-<!--
-    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
+<!doctype html>
 
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
+<html lang="en">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="utf-8">
         <meta name="format-detection" content="telephone=no" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Carat 2.0</title>
+
+
+        <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="css/material.css">
+        <link rel="stylesheet" href="css/carat.css">
+
     </head>
     <body>
-        <div class="app">
-            <h1>Carat 2.0</h1>
-            <p>Placeholder wheeee</p>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+        mdl-layout--fixed-tabs mdl-color--grey-200">
+        
+            <header class="mdl-layout__header mdl-color--grey-600">
+                <div class="mdl-layout__header-row mdl-layout-title">
+                    <!-- Title -->
+                    <span>Carat 2.0</span>
+                </div>
+                <!-- Tabs -->
+                <div class="mdl-layout__tab-bar mdl-color--grey-600">
+                    <a href="#home" class="mdl-layout__tab is-active">Home</a>
+                    <a href="#bugs" class="mdl-layout__tab">Bugs</a>
+                    <a href="#hogs" class="mdl-layout__tab">Hogs</a>
+                    <a href="#system" class="mdl-layout__tab">System</a>
+                </div>
+            </header>
+            
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Carat 2.0</span>
             </div>
+            
+            <main class="mdl-layout__content">
+                
+                <section class="mdl-layout__tab-panel is-active" id="home">
+                            
+                <div class="page-content">
+                <!-- Your content goes here -->
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <div class="mdl-card__title-text">Bluetooth
+                            </div>
+                            <span class="mdl-card__time">-39min</span>        
+                        </div>
+
+                        <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
+                         </div>
+                    
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-card__more">More</a>
+                        </div>         
+                    </div>
+                    
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <div class="mdl-card__title-text">Location
+                            </div>
+                            <span class="mdl-card__time">-49min</span>        
+                        </div>
+
+                        <div class="mdl-card__supporting-text">Info text in here. Something something.
+                        </div>
+                    
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-card__more">More</a>
+                        </div>         
+                    </div>            
+                </div>  
+                </section>
+                
+                <section class="mdl-layout__tab-panel" id="bugs">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="hogs">
+                    
+                <div class="page-content">
+                <!-- Your content goes here -->
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <div class="mdl-card__title-text">Facebook
+                            </div>
+                            <span class="mdl-card__time">-39min</span>        
+                        </div>
+
+                        <div class="mdl-card__supporting-text">Info text in here. Something something.
+                        </div>
+                    
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-card__more">More</a>
+                        </div>         
+                    </div>
+                    
+                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                        <div class="mdl-card__title">
+                            <div class="mdl-card__title-text">Maps
+                            </div>
+                            <span class="mdl-card__time">-49min</span>        
+                        </div>
+
+                        <div class="mdl-card__supporting-text">Info text in here. Something something.
+                        </div>
+                    
+                        <div class="mdl-card__actions">
+                            <a href="#" class="mdl-card__more">More</a>
+                        </div>         
+                    </div>            
+                </div>
+                                            
+                </section>
+                <section class="mdl-layout__tab-panel" id="system">
+                    <div class="page-content"><!-- Your content goes here --></div>
+                </section>
+            </main>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
+
+        <script src="js/material.min.js"></script>
     </body>
 </html>
