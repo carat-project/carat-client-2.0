@@ -53,11 +53,14 @@
                             </div>
 
                             <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
-                             </div>
+                                <div class="collapse" id="testi">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
+                                </div>
+                            </div>
 
                             <div class="mdl-card__actions">
-                                <a href="#" class="mdl-card__more">More</a>
-                            </div>         
+                                <a class="mdl-card__more" role="button" data-toggle="collapse" href="#testi" aria-expanded="false" aria-controls="collapseExample">More</a>
+                            </div> 
+                            
                         </div>
 
                         <div class="mdl-card mdl-shadow--2dp">
@@ -71,11 +74,13 @@
                             </div>
 
                             <div class="mdl-card__supporting-text">Info text in here. Something something.
+                                <div class="collapse" id="testi2">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
+                                </div>
                             </div>
 
                             <div class="mdl-card__actions">
-                                <a href="#" class="mdl-card__more">More</a>
-                            </div>         
+                                <a class="mdl-card__more" role="button" data-toggle="collapse" href="#testi2" aria-expanded="false" aria-controls="collapseExample">More</a>
+                            </div>        
                         </div>            
 
                         <div class="mdl-card mdl-shadow--2dp">
@@ -181,7 +186,9 @@
             </main>
         </div>
                 
-
-        <script src="js/material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="js/material.min.js"></script>      
+        <script src="js/collapse.js"></script>
+        <script src="js/transition.js"></script>
     </body>
 </html>
