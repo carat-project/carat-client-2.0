@@ -19,17 +19,17 @@
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
         mdl-layout--fixed-tabs mdl-color--grey-200">
         
-            <header class="mdl-layout__header mdl-color--grey-600">
+            <header class="mdl-layout__header mdl-color--blue-grey-500">
                 <div class="mdl-layout__header-row mdl-layout-title">
                     <!-- Title -->
                     <span>Carat 2.0</span>
                 </div>
                 <!-- Tabs -->
-                <div class="mdl-layout__tab-bar mdl-color--grey-600">
+                <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
                     <a href="#home" class="mdl-layout__tab is-active">Home</a>
-                    <a href="#bugs" class="mdl-layout__tab">Bugs</a>
-                    <a href="#hogs" class="mdl-layout__tab">Hogs</a>
-                    <a href="#system" class="mdl-layout__tab">System</a>
+                    <a href="#bugs" class="mdl-layout__tab">Bugs<span> (0)</span></a>
+                    <a href="#hogs" class="mdl-layout__tab">Hogs<span> (2)</span></a>
+                    <a href="#system" class="mdl-layout__tab">System<span> (0)</span></a>
                 </div>
             </header>
             
@@ -41,77 +41,138 @@
                 
                 <section class="mdl-layout__tab-panel is-active" id="home">
                             
-                <div class="page-content">
-                <!-- Your content goes here -->
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <div class="mdl-card__title-text">Bluetooth
+                    <div class="page-content">
+                    <!-- Your content goes here -->
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                <i class="material-icons">bluetooth</i>
+                                <div class="carat-card__title-text">Bluetooth
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <span class="carat-card-time">-39min</span>  
                             </div>
-                            <span class="mdl-card__time">-39min</span>        
+
+                            <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
+                             </div>
+
+                            <div class="mdl-card__actions">
+                                <a href="#" class="mdl-card__more">More</a>
+                            </div>         
                         </div>
 
-                        <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
-                         </div>
-                    
-                        <div class="mdl-card__actions">
-                            <a href="#" class="mdl-card__more">More</a>
-                        </div>         
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                                                <i class="material-icons">announcement</i>
+
+                                <div class="carat-card__title-text">Location on
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <span class="carat-card-time">-49min</span>        
+                            </div>
+
+                            <div class="mdl-card__supporting-text">Info text in here. Something something.
+                            </div>
+
+                            <div class="mdl-card__actions">
+                                <a href="#" class="mdl-card__more">More</a>
+                            </div>         
+                        </div>            
+
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                <div class="mdl-card__title-text">Hogs
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <span class="carat-card-time">-49min</span>        
+                            </div>
+
+                            <div class="mdl-card__supporting-text">
+                                <div class="mdl-grid">
+                                    <div class="mdl-cell mdl-cell--2-col">
+                                        <div><i class="material-icons">face</i></div>
+                                        <div><strong>Facebook</strong></div>
+                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--2-col">
+                                        <div><i class="material-icons">favorite</i></div>
+                                        <div><strong>Tinder</strong></div>
+                                        <div><span class="mdl-color-text--red-300">-1h12min</span></div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--2-col">
+                                        <div><i class="material-icons">face</i></div>
+                                        <div><span>testi</span></div>
+                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
+                                    </div>
+                                    <div class="mdl-cell mdl-cell--2-col">
+                                        <div><i class="material-icons">face</i></div>
+                                        <div><span>testi</span></div>
+                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
+
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                    
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <div class="mdl-card__title-text">Location
-                            </div>
-                            <span class="mdl-card__time">-49min</span>        
-                        </div>
-
-                        <div class="mdl-card__supporting-text">Info text in here. Something something.
-                        </div>
-                    
-                        <div class="mdl-card__actions">
-                            <a href="#" class="mdl-card__more">More</a>
-                        </div>         
-                    </div>            
-                </div>  
                 </section>
                 
                 <section class="mdl-layout__tab-panel" id="bugs">
                     <div class="page-content"><!-- Your content goes here --></div>
                 </section>
+                
                 <section class="mdl-layout__tab-panel" id="hogs">
                     
-                <div class="page-content">
-                <!-- Your content goes here -->
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <div class="mdl-card__title-text">Facebook
+                    <div class="page-content">
+                    <!-- Your content goes here -->
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title mdl-color--blue-grey-100">
+                                <div class="mdl-card__title-text">Hogs
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    <i class="material-icons">close</i>
+                                </button>
                             </div>
-                            <span class="mdl-card__time">-39min</span>        
+
+                            <div class="mdl-card__supporting-text">Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.
+                            </div>
+
+                            <div class="mdl-card__actions">
+                                <a href="#" class="mdl-card__more">More</a>
+                            </div>         
+                        </div>
+                        
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                <div class="mdl-card__title-text">Facebook
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <span class="carat-card-time ">-39min</span>        
+                            </div>
+
+                            <div class="mdl-card__supporting-text">Info text in here. Something something.
+                            </div>
+
+                            <div class="mdl-card__actions">
+                                <a href="#" class="mdl-card__more">More</a>
+                            </div>         
                         </div>
 
-                        <div class="mdl-card__supporting-text">Info text in here. Something something.
-                        </div>
-                    
-                        <div class="mdl-card__actions">
-                            <a href="#" class="mdl-card__more">More</a>
-                        </div>         
+                        <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                <div class="mdl-card__title-text">Maps
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                                <span class="carat-card-time">-49min</span> 
+                            </div>
+
+                            <div class="mdl-card__supporting-text">Info text in here. Something something.
+                            </div>
+
+                            <div class="mdl-card__actions">
+                                <a href="#" class="mdl-card__more">More</a>
+                            </div>         
+                        </div>            
                     </div>
-                    
-                    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                        <div class="mdl-card__title">
-                            <div class="mdl-card__title-text">Maps
-                            </div>
-                            <span class="mdl-card__time">-49min</span>        
-                        </div>
-
-                        <div class="mdl-card__supporting-text">Info text in here. Something something.
-                        </div>
-                    
-                        <div class="mdl-card__actions">
-                            <a href="#" class="mdl-card__more">More</a>
-                        </div>         
-                    </div>            
-                </div>
                                             
                 </section>
                 <section class="mdl-layout__tab-panel" id="system">
@@ -119,6 +180,7 @@
                 </section>
             </main>
         </div>
+                
 
         <script src="js/material.min.js"></script>
     </body>
