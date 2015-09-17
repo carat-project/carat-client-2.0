@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="org.carat.plugin"
+        version="1.0.0">
+    <name>CaratPlugin</name>
+
+	<platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="CaratPlugin">
+                <param name="android-package" value="org.carat20.client.Echo"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <js-module src="carat.js" name="Echo">
+            <clobbers target="carat" />
+        </js-module>
+
+        <source-file src="src/Echo.java" target-dir="src/org/carat20/client"/>
+    </platform>
+</plugin>

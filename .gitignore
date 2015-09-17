@@ -4,7 +4,10 @@
 
 # Generated files
 platforms/
-plugins/
+# plugins/
+plugins/cordova-plugin-whitelist
+plugins/android.json
+plugins/fetch.json
 hooks/
 
 # Java files
