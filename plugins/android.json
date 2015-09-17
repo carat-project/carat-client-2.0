@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"echoPlugin\"><param name=\"android-package\" value=\"org.carat20.client.Echo\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "carat-client-echo": {
+            "PACKAGE_NAME": "org.carat20.client"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "org.carat20.client"
+        }
+    },
+    "dependent_plugins": {}
+}

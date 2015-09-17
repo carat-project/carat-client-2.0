@@ -1,0 +1,25 @@
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+           id="carat-client-echo"
+      version="1.0.0">
+    <name>echoPlugin</name>
+    <engines>
+      <engine name="cordova-android" version=">=4.0.0-dev" />
+    </engines>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="echoPlugin" >
+                <param name="android-package" value="org.carat20.client.Echo"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/Echo.java" target-dir="src/org/carat20/client" />
+
+        <asset src="echo.js" target="js/echoDefiner.js" />
+
+        <js-module src="echo.js" name="echo">
+          <clobbers target="echoPlugin" />
+        </js-module>
+    </platform>
+</plugin>

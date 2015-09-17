@@ -4,7 +4,6 @@
 
 # Generated files
 platforms/
-plugins/
 hooks/
 
 # Java files

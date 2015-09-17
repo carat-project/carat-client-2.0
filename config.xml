@@ -8,6 +8,10 @@
         PhoneGap Team
     </author>
     <content src="index.html" />
+    <feature name="echoPlugin">
+        <param name="android-package" value="org.carat20.client.Echo" />
+        <param name="onload" value="true" />
+    </feature>
     <preference name="permissions" value="none" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
@@ -81,4 +85,5 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <engine name="android" spec="~4.1.1" />
 </widget>
