@@ -14,8 +14,15 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/material.css">
         <link rel="stylesheet" href="css/carat.css">
-
+        
+        <style>.animate {
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            transition: all 0.3s;    
+        } </style>
+        
     </head>
+    
     <body>
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
         mdl-layout--fixed-tabs mdl-color--grey-200">
@@ -35,7 +42,7 @@
             </header>
             
             <div class="mdl-layout__drawer">
-                <span class="mdl-layout-title">Carat 2.0</span>
+            <span class="mdl-layout-title">Carat 2.0</span>
             </div>
             
             <main class="mdl-layout__content">
@@ -45,6 +52,10 @@
                             
                     <div class="page-content">
                     <!-- Card 1 mock-up -->
+<<<<<<< HEAD
+=======
+                        
+>>>>>>> 5985b1dd74591ce132aee340898cc8df83243d8c
                         <div class="mdl-card mdl-shadow--2dp">
                             <div class="carat-card__title">
                                 <div class="mdl-card__title-text">Bluetooth
@@ -67,15 +78,16 @@
                         </div>
 
                         <!-- Card 1 mock-up -->
-                        <div class="mdl-card mdl-shadow--2dp">
+
+                        <div class="mdl-card mdl-shadow--2dp" id="hit">
                             <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Location on
+                                <div class="mdl-card__title-text">Swipe!
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                                 <span class="carat-card-time">-49min</span>        
                             </div>
 
-                            <div class="mdl-card__supporting-text">Info text in here. Something something.
+                            <div class="mdl-card__supporting-text">Swipe this card! Swipidiswaip.
                                 <div class="collapse" id="testi2">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
                                 </div>
                             </div>
@@ -136,11 +148,7 @@
                         <div class="mdl-card mdl-shadow--2dp">
                             <div class="carat-card__title mdl-color--blue-grey-100">
                                 <div class="mdl-card__title-text">Hogs
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-                                    <i class="material-icons">close</i>
-                                </button>
+                                </div>                  
                             </div>
 
                             <div class="mdl-card__supporting-text">Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.
@@ -193,7 +201,10 @@
                 </section>
             </main>
         </div>
-                
+       
+        <script src="js/hammer.min.js"></script>
+        <script src="js/swipe.js"></script>
+        <script src="js/pan_swipe.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="js/material.min.js"></script>      
         <script src="js/collapse.js"></script>
