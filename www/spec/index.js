@@ -38,7 +38,10 @@ describe('app', function() {
     describe('onDeviceReady', function() {
         it('should report that it fired', function() {
             spyOn(app, 'receivedEvent');
-            app.onDeviceReady();
+			carat = {
+				echo: function() {}
+				};
+            app.onDeviceReady(carat);
             expect(app.receivedEvent).toHaveBeenCalledWith('deviceready');
         });
     });
