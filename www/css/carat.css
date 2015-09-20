@@ -229,17 +229,15 @@ _:-ms-input-placeholder, :root .carat-graph {
           align-items: center;
 }
 
-.mdl-card.pink {
+.mdl-card.mint {
 	background-color: #b2dfdb;	
 	
 }
 
-.mdl-card.pink .mdl-card__supporting-text {
+.mdl-card.mint .mdl-card__supporting-text {
 	color: #006064;
 	text-align: center;
 	
 }
 
-.mdl-card.lila {
-	background-color: #ce93d8;	
-}
+
