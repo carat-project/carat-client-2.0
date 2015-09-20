@@ -23,7 +23,7 @@
         
     </head>
     
-    <body>
+    <body ng-app="CaratApp">
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
         mdl-layout--fixed-tabs mdl-color--grey-200">
         
@@ -34,10 +34,10 @@
                 </div>
                 <!-- Tabs -->
                 <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-                    <a href="#home" class="mdl-layout__tab is-active">Home</a>
-                    <a href="#bugs" class="mdl-layout__tab">Bugs<span> (0)</span></a>
-                    <a href="#hogs" class="mdl-layout__tab">Hogs<span> (2)</span></a>
-                    <a href="#system" class="mdl-layout__tab">System<span> (0)</span></a>
+                    <a href="#/home" class="mdl-layout__tab is-active">Home</a>
+                    <a href="#/bugs" class="mdl-layout__tab">Bugs<span> (0)</span></a>
+                    <a href="#/hogs" class="mdl-layout__tab">Hogs<span> (2)</span></a>
+                    <a href="#/system" class="mdl-layout__tab">System<span> (0)</span></a>
                 </div>
             </header>
             
@@ -46,193 +46,33 @@
             </div>
             
             <main class="mdl-layout__content">
-                
                 <!-- Home view -->
-                <section class="mdl-layout__tab-panel is-active" id="home">
-                            
-                    <div class="page-content">
-                    <!-- Card 1 mock-up -->
-                        
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Bluetooth
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time">-39min</span>  
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
-                                 <!-- Expanding text -->
-                                <div class="collapse" id="testi">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
-                                </div>
-                            </div>
-                            
-                            <!-- Card expand button, uses collapse.js -->
-                            <div class="mdl-card__actions">
-                                <a class="mdl-card__more" role="button" data-toggle="collapse" href="#testi" aria-expanded="false" aria-controls="collapseExample">More</a>
-                            </div> 
-                            
-                        </div>
-                        
-                        <!-- Card 2 mockup -->
-                        
-                        <div class="mdl-card pink mdl-shadow--2dp">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Vaihtoehtoinen kortti
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time">-39min</span>  
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten. 
-                                 <!-- Expanding text -->
-                                <div class="collapse" id="testi">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
-                                </div>
-                            </div>
-                            
-                            <!-- Card expand button, uses collapse.js -->
-                            <div class="mdl-card__actions">
-                                <a class="mdl-card__more" role="button" data-toggle="collapse" href="#testi" aria-expanded="false" aria-controls="collapseExample">More</a>
-                            </div> 
-                            
-                        </div>
-
-                        <!-- Card 1 mock-up -->
-                        <div class="mdl-card mdl-shadow--2dp" id="hit">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Swipe!
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time">-49min</span>        
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Swipe this card! Swipidiswaip.
-                                <div class="collapse" id="testi2">Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.
-                                </div>
-                            </div>
-
-                            <div class="mdl-card__actions">
-                                <a class="mdl-card__more" role="button" data-toggle="collapse" href="#testi2" aria-expanded="false" aria-controls="collapseExample">More</a>
-                            </div>        
-                        </div>  
-                        
-                                  
-
-                        <!-- Hogs summary card -->
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Hogs
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time">-49min</span>        
-                            </div>
- 
-                            <div class="mdl-card__supporting-text">
-                                <div class="mdl-grid">
-                                    <div class="mdl-cell mdl-cell--2-col">
-                                        <div><i class="material-icons">face</i></div>
-                                        <div><strong>Facebook</strong></div>
-                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--2-col">
-                                        <div><i class="material-icons">favorite</i></div>
-                                        <div><strong>Tinder</strong></div>
-                                        <div><span class="mdl-color-text--red-300">-1h12min</span></div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--2-col">
-                                        <div><i class="material-icons">face</i></div>
-                                        <div><span>testi</span></div>
-                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
-                                    </div>
-                                    <div class="mdl-cell mdl-cell--2-col">
-                                        <div><i class="material-icons">face</i></div>
-                                        <div><span>testi</span></div>
-                                        <div><span class="mdl-color-text--red-300">-38min</span></div>
-
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                </section>
-                
                 <!-- Bugs tabs view -->
-                <section class="mdl-layout__tab-panel" id="bugs">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
-                
                 <!-- Hogs tab view -->
-                <section class="mdl-layout__tab-panel" id="hogs">
-                    
-                    <div class="page-content">
-                    <!-- info card -->
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-card__title mdl-color--blue-grey-100">
-                                <div class="mdl-card__title-text">Hogs
-                                </div>                  
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.
-                            </div>
-
-                            <div class="mdl-card__actions">
-                                <a href="#" class="mdl-card__more">More</a>
-                            </div>         
-                        </div>
-                        
-                        <!-- Card 1 mock-up -->
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Facebook
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time ">-39min</span>        
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Info text in here. Something something.
-                            </div>
-
-                            <div class="mdl-card__actions">
-                                <a href="#" class="mdl-card__more">More</a>
-                            </div>         
-                        </div>
-
-                        <!-- Card 2 mock-up -->
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__title-text">Maps
-                                </div>
-                                <div class="mdl-layout-spacer"></div>
-                                <span class="carat-card-time">-49min</span> 
-                            </div>
-
-                            <div class="mdl-card__supporting-text">Info text in here. Something something.
-                            </div>
-
-                            <div class="mdl-card__actions">
-                                <a href="#" class="mdl-card__more">More</a>
-                            </div>         
-                        </div>            
-                    </div>
-                    
                 <!-- System tab view -->
-                </section>
-                <section class="mdl-layout__tab-panel" id="system">
-                    <div class="page-content"><!-- Your content goes here --></div>
-                </section>
+                <div ng-view></div>
             </main>
         </div>
        
-        <script src="js/hammer.min.js"></script>
+        <script src="js/lib/hammer.min.js"></script>
         <script src="js/swipe.js"></script>
         <script src="js/pan_swipe.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="js/material.min.js"></script>      
-        <script src="js/collapse.js"></script>
-        <script src="js/transition.js"></script>
+        <script src="js/lib/material.min.js"></script>      
+        <script src="js/lib/collapse.js"></script>
+        <script src="js/lib/transition.js"></script>
         <script src="js/index.js"></script>
         <script type="text/javascript">
         	app.initialize();
         </script>
+        <script src="js/lib/angular.min.js"></script>
+        <script src="js/lib/angular-route.min.js"></script>
+        <script src="js/carat_app.js"></script>
+
+        <-- templates -->
+        <script type="text/ng-template" src="home.html"></script>
+        <script type="text/ng-template" src="bugs.html"></script>
+        <script type="text/ng-template" src="hogs.html"></script>
+        <script type="text/ng-template" src="system.html"></script>
     </body>
 </html>
