@@ -16,7 +16,9 @@ function selectPanSwipable(selectors) {
         var mc = new Hammer.Manager(el, { touchAction: "pan-y" });
 
         var resetElement = function() {
-            el.className = 'animate mdl-card mdl-shadow--2dp';
+            if(!el.classList.contains("animation")) {
+                el.classList.add("animation");
+            }
             transform = {
                 translate: { x: START_X, y: START_Y },
                 scale: 1,
@@ -51,7 +53,9 @@ function selectPanSwipable(selectors) {
             //log.insertBefore(document.createTextNode(str +"\n"), log.firstChild);
         }
         var onPan = function(ev) {
-            el.className = 'mdl-card mdl-shadow--2dp';
+            if(el.classList.contains("animation")) {
+                el.classList.remove("animation");
+            }
             transform.translate = {
                 x: START_X + ev.deltaX,
                 y: START_Y
