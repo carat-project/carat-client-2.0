@@ -228,3 +228,16 @@ _:-ms-input-placeholder, :root .carat-graph {
       -ms-flex-align: center;
           align-items: center;
 }
+
+.mdl-card.mint {
+	background-color: #b2dfdb;	
+	
+}
+
+.mdl-card.mint .mdl-card__supporting-text {
+	color: #006064;
+	text-align: center;
+	
+}
+
+

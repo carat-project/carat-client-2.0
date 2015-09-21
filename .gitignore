@@ -4,11 +4,12 @@
 
 # Generated files
 platforms/
-# plugins/
 plugins/cordova-plugin-whitelist
 plugins/android.json
 plugins/fetch.json
 hooks/
+nbproject/
+*/coverage/
 
 # Java files
 *.class
