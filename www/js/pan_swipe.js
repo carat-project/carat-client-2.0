@@ -84,10 +84,7 @@ function makeElemPanSwipable(el) {
         }, 300);
         requestElementUpdate();
         logEvent(ev.type);
-        var e = document.querySelector(".modal");
-        var ee = document.querySelector(".overlay");
-        e.style.visibility='visible';
-        ee.style.visibility='visible';
+        toggleVisibility();
         el.style.display='none';
     }
 
@@ -105,6 +102,21 @@ function makeElemPanSwipable(el) {
         }
     });
     resetElement();
+}
+
+function toggleVisibility(){
+     var e = document.querySelector(".modal");
+        var ee = document.querySelector(".overlay");
+        e.style.visibility='visible';
+        ee.style.visibility='visible';
+}
+
+function toggleVisibilityOff(){
+     var e = document.querySelector(".modal");
+        var ee = document.querySelector(".overlay");
+        e.style.visibility='hidden';
+        ee.style.visibility='hidden';
+        
 }
 
 function makeModal() {
