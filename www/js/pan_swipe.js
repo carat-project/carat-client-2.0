@@ -102,6 +102,4 @@ function selectPanSwipable(selectors) {
     }
 }
 
-//for example, all cards
-
-selectPanSwipable(".mdl-card");
+selectPanSwipable("#hogs-summary");

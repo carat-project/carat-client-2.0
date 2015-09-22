@@ -16,6 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+model = {
+    notifications: {}
+};
+
 var app = {
     // Application Constructor
     initialize: function() {

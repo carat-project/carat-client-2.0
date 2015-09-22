@@ -240,4 +240,6 @@ _:-ms-input-placeholder, :root .carat-graph {
 	
 }
 
-
+.gray-title > .carat-card__title {
+    background-color: #CFD8DC;
+}
