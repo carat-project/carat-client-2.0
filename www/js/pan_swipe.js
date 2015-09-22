@@ -107,7 +107,18 @@ function makeElemPanSwipable(el) {
     resetElement();
 }
 
+function makeModal() {
+    var modal = document.createElement("div");
+    modal.className="modal";
+    modal.innerHTML="testitesti";
+    var button = document.createElement("button");
+    button.id=el.id + "button";
+    modal.appendChild(button);
+    button.innerHTML= (button.id);
 
+    var body = document.querySelector("body");
+    body.appendChild(modal);       
+}
 
 function selectPanSwipable(selectors) {
 
