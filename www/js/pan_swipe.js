@@ -62,7 +62,7 @@ function makeElemPanSwipable(el) {
         logEvent(ev.type);
     }
 
-    var onSwipe = function(ev) {
+    var onSwipeRight = function(ev) {
         transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
 
         clearTimeout(timer);
@@ -75,10 +75,29 @@ function makeElemPanSwipable(el) {
     }
 
 
+    var onSwipeLeft = function(ev) {
+        transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
+
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            resetElement();
+        }, 300);
+        requestElementUpdate();
+        logEvent(ev.type);
+        var e = document.querySelector(".modal");
+        var ee = document.querySelector(".overlay");
+        e.style.visibility='visible';
+        ee.style.visibility='visible';
+        el.style.display='none';
+    }
+
+
     mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
     mc.add(new Hammer.Swipe()).recognizeWith(mc.get('pan'));
     mc.on("panstart panmove", onPan);
-    mc.on("swipe", onSwipe);
+    mc.on("swiperight", onSwipeRight);
+    mc.on("swipeleft", onSwipeLeft);
+    
 
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
@@ -87,6 +106,9 @@ function makeElemPanSwipable(el) {
     });
     resetElement();
 }
+
+
+
 function selectPanSwipable(selectors) {
 
 

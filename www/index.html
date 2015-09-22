@@ -14,6 +14,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/material.css">
         <link rel="stylesheet" href="css/carat.css">
+        <link rel="stylesheet" href="css/dialog.css">
         
         <style>.animate {
             -webkit-transition: all 0.3s;
@@ -24,6 +25,31 @@
     </head>
     
     <body>
+
+                  <div class ="overlay" id="popup"></div>
+                            <div class="modal" id="popup">
+                                <div class="mdl-card mdl-shadow--2dp">
+                            <div class="carat-card__title">
+                                <div class="mdl-card__title-text">Älä näytä uudelleen?
+                                </div>
+                                <div class="mdl-layout-spacer"></div> 
+                            </div>
+
+                            <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
+                                
+                            </div>
+                            
+                            <!-- Card expand button, uses collapse.js -->
+                            <div class="mdl-card__actions">
+                               <button onclick="myFunction()">Tallenna</button>
+                               <button onclick="myFunction()">Peruuta</button>
+                            </div> 
+                            
+                        </div>
+                               
+                            </div>
+                    </div>
+
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
         mdl-layout--fixed-tabs mdl-color--grey-200">
         
@@ -51,6 +77,11 @@
                 <section class="mdl-layout__tab-panel is-active" id="home">
                             
                     <div class="page-content">
+
+                        <!-- dialogitesti -->
+          
+                               
+
                     <!-- Card 1 mock-up -->
 
                         <div class="mdl-card mdl-shadow--2dp">
