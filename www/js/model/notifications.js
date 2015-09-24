@@ -11,12 +11,35 @@ model.notifications = (function() {
         debugIds += 1;
 
         return {
-            title: title,
-            mainText: mainText,
-            secondaryText: secondaryText,
-            classes: classes,
-            timeDrain: timeDrain,
-            id: debugId
+            item: {
+                title: title,
+                mainText: mainText,
+                secondaryText: secondaryText,
+                classes: classes,
+                timeDrain: timeDrain,
+                id: debugId
+            }
+        };
+    }
+
+    var makeSummaryEntry = function(name, timeDrain, icon) {
+
+        return {
+            summaryEntry: {
+                name: name,
+                timeDrain: timeDrain,
+                icon: icon
+            }
+        };
+    }
+
+    var makeSummary = function(title, entries) {
+
+        return {
+            summary: {
+                title: title,
+                entries: entries
+            }
         };
     }
 
@@ -37,7 +60,21 @@ model.notifications = (function() {
                              "Swipe this card! Swipidiswaip.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
-                             49)
+                             49),
+            makeSummary("Hogs",
+                        [makeSummaryEntry("Facebook",
+                                          38,
+                                          "face"),
+                         makeSummaryEntry("Tinder",
+                                          72,
+                                          "favorite"),
+                         makeSummaryEntry("testi",
+                                          38,
+                                          "face"),
+                         makeSummaryEntry("testi",
+                                          38,
+                                          "face")
+                        ])
         ];
     }
 

@@ -1,17 +1,41 @@
 itemCards = (function(notificationsArray, panSwipeCallback) {
 
-    //get template Dom-node for a card
-    var getNewCardDomNodeTemplate = function() {
-
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">More</a></div></div>';
+    var parseDomNode = function(htmlString) {
 
         var dummyDiv = document.createElement("div");
         dummyDiv.innerHTML = htmlString;
 
         var result = dummyDiv.firstChild;
-        panSwipeCallback(result);
 
-        return result;
+        return result
+    }
+    //get template Dom-node for a card
+    var getNewItemDomNodeTemplate = function() {
+
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">More</a></div></div>';
+
+        var domNode = parseDomNode(htmlString);
+
+        panSwipeCallback(domNode);
+
+        return domNode;
+    }
+
+    var getNewSummaryEntryDomNodeTemplate = function() {
+        var htmlString = '<div class="mdl-cell mdl-cell--2-col"><div><i class="material-icons"></i></div><div><strong></strong></div><div><span class="mdl-color-text--red-300"></span></div></div>';
+
+        var domNode = parseDomNode(htmlString);
+
+        return domNode;
+    }
+
+    var getNewSummaryDomNodeTemplate = function() {
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
+
+        var domNode = parseDomNode(htmlString);
+        panSwipeCallback(domNode);
+
+        return domNode;
     }
 
     var trashANode = function(nodeToBeTrashed) {
@@ -83,37 +107,60 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
     }
 
-    var injectTimeDrain = function(cardDomNode, timeDrain) {
-
-        var timeDrainNode = cardDomNode
-            .querySelector(".carat-card-time");
-
+    var makeTimeDrainText = function(timeDrainNode,
+                                     timeDrain) {
         if(!timeDrain) {
             trashANode(timeDrainNode);
         } else {
             var timeDrainText = "-" + timeDrain + "min";
             addNodeText(timeDrainNode, timeDrainText);
         }
+
+        return timeDrainNode;
     }
 
-    var makeCardBasedOnModel = function(notificationObject) {
+    var injectTimeDrain = function(cardDomNode, timeDrain) {
 
-        var newCardNode = getNewCardDomNodeTemplate();
+        var timeDrainNode = cardDomNode
+            .querySelector(".carat-card-time");
 
-        injectTitle(newCardNode, notificationObject.title);
-        injectMainText(newCardNode,
-                       notificationObject.mainText);
-        injectSecondaryText(newCardNode,
-                            notificationObject.secondaryText,
-                            notificationObject.id);
-        injectClasses(newCardNode,
-                      notificationObject.classes);
-        injectTimeDrain(newCardNode,
-                        notificationObject.timeDrain);
+        makeTimeDrainText(timeDrainNode, timeDrain);
 
-        return newCardNode;
     }
 
+    var injectSummaryEntryName = function(summaryEntryDomNode,
+                                          name) {
+        var nameNode = summaryEntryDomNode
+            .querySelector(".mdl-cell > div strong");
+
+        appendTextOrRemoveNode(nameNode, name);
+    }
+
+    var injectSummaryEntryIcon = function(summaryEntryDomNode,
+                                          icon) {
+        var iconNode = summaryEntryDomNode
+            .querySelector("i.material-icons");
+
+        appendTextOrRemoveNode(iconNode, icon);
+    }
+
+    var injectSummaryEntryTimeDrain = function(
+        summaryEntryDomNode, timeDrain) {
+
+        var timeDrainNode = summaryEntryDomNode
+            .querySelector("div.mdl-cell div span");
+
+        makeTimeDrainText(timeDrainNode, timeDrain);
+    }
+
+    var injectSummaryTitle = function(summaryDomNode,
+                                      title) {
+
+        var titleNode = summaryDomNode
+            .querySelector("div.mdl-card__title-text");
+
+        appendTextOrRemoveNode(titleNode, title);
+    }
 
     var homebrewMap = function(array, callback) {
         for(var i = 0; i < array.length; i++) {
@@ -123,10 +170,80 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return array;
     }
 
+    var homebrewConcatChildren = function(spot,
+                                          firstChild,
+                                          concatees) {
+
+        for(var i = 0; i < concatees.length; i++) {
+            spot.insertBefore(concatees[i], firstChild);
+        }
+
+    }
+
+    var makeSummaryEntry = function(summaryEntryObject) {
+
+        var domNode = getNewSummaryEntryDomNodeTemplate();
+        var entryFields = summaryEntryObject.summaryEntry;
+
+        injectSummaryEntryName(domNode, entryFields.name);
+        injectSummaryEntryIcon(domNode, entryFields.icon);
+        injectSummaryEntryTimeDrain(domNode,
+                                    entryFields.timeDrain);
+
+        return domNode;
+    }
+
+    var makeSummaryCard = function(summaryObject,
+                                   summaryDomNode) {
+
+        injectSummaryTitle(summaryDomNode,
+                           summaryObject.title);
+
+        var summaryEntryNodes = homebrewMap(
+            summaryObject.entries, makeSummaryEntry);
+        var spot = summaryDomNode
+            .querySelector("div.mdl-grid");
+        homebrewConcatChildren(spot, spot.firstChild,
+                               summaryEntryNodes);
+    }
+
+    var makeCardBasedOnModel = function(notificationObject) {
+
+        var newCardNode;
+
+        if(notificationObject.item) {
+
+            newCardNode = getNewItemDomNodeTemplate();
+
+            var itemData = notificationObject.item;
+
+            injectTitle(newCardNode, itemData.title);
+            injectMainText(newCardNode,
+                           itemData.mainText);
+            injectSecondaryText(newCardNode,
+                                itemData.secondaryText,
+                                itemData.id);
+            injectClasses(newCardNode,
+                          itemData.classes);
+            injectTimeDrain(newCardNode,
+                            itemData.timeDrain);
+        } else if(notificationObject.summary) {
+
+            newCardNode = getNewSummaryDomNodeTemplate();
+
+            var summaryData = notificationObject.summary;
+            makeSummaryCard(summaryData, newCardNode);
+        }
+
+        return newCardNode;
+    }
+
+
+
     var getHomeCards = function() {
 
         var result = homebrewMap(notificationsArray.getGeneral(),
-                           makeCardBasedOnModel);
+                                 makeCardBasedOnModel);
         return result;
     }
 
@@ -153,15 +270,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return document.querySelector(selector + " .page-content");
     }
 
-    var homebrewConcatChildren = function(spot,
-                                          firstChild,
-                                          concatees) {
-
-        for(var i = 0; i < concatees.length; i++) {
-            spot.insertBefore(concatees[i], firstChild);
-        }
-
-    }
 
     var generatePage = function(selector, nodeArray) {
 
