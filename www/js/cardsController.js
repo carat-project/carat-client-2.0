@@ -33,7 +33,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
 
         var domNode = parseDomNode(htmlString);
-        panSwipeCallback(domNode);
 
         return domNode;
     }
@@ -59,6 +58,11 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         } else {
             addNodeText(nodeMaybeTextified, text);
         }
+    }
+
+    var injectIdToCard = function(cardDomNode, id) {
+
+        cardDomNode.id = id;
     }
 
     var injectTitle = function(cardDomNode, title) {
@@ -213,9 +217,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         if(notificationObject.item) {
 
-            newCardNode = getNewItemDomNodeTemplate();
-
             var itemData = notificationObject.item;
+
+            newCardNode = getNewItemDomNodeTemplate();
 
             injectTitle(newCardNode, itemData.title);
             injectMainText(newCardNode,
@@ -227,13 +231,20 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                           itemData.classes);
             injectTimeDrain(newCardNode,
                             itemData.timeDrain);
+            injectIdToCard(newCardNode, itemData.id)
+
+            if(localStorage.getItem(itemData.id) === 'dismissed') {
+                newCardNode.style.display = 'none';
+            }
         } else if(notificationObject.summary) {
 
             newCardNode = getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
+            injectIdToCard(newCardNode, summaryData.id)
         }
+
 
         return newCardNode;
     }

@@ -1,14 +1,11 @@
 model.notifications = (function() {
-    var debugIds = 0;
     //secondaryText: the text you get when you expand the card
     //
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
     var makeNotification = function(title, mainText,
                                     secondaryText, classes,
-                                    timeDrain) {
-        var debugId = debugIds;
-        debugIds += 1;
+                                    timeDrain, id) {
 
         return {
             item: {
@@ -17,7 +14,7 @@ model.notifications = (function() {
                 secondaryText: secondaryText,
                 classes: classes,
                 timeDrain: timeDrain,
-                id: debugId
+                id: id
             }
         };
     }
@@ -33,12 +30,13 @@ model.notifications = (function() {
         };
     }
 
-    var makeSummary = function(title, entries) {
+    var makeSummary = function(title, entries, id) {
 
         return {
             summary: {
                 title: title,
-                entries: entries
+                entries: entries,
+                id: id
             }
         };
     }
@@ -50,17 +48,20 @@ model.notifications = (function() {
                              "Info text in here. Something something. Info text in here. Something something.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
-                             39),
+                             39,
+                             "item-0"),
             makeNotification("Vaihtoehtoinen kortti",
                              "Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              ["mint"],
-                             39),
+                             39,
+                             "item-1"),
             makeNotification("Swipe!",
                              "Swipe this card! Swipidiswaip.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
-                             49),
+                             49,
+                             "item-2"),
             makeSummary("Hogs",
                         [makeSummaryEntry("Facebook",
                                           38,
@@ -74,7 +75,8 @@ model.notifications = (function() {
                          makeSummaryEntry("testi",
                                           38,
                                           "face")
-                        ])
+                        ],
+                        "summary-0")
         ];
     }
 
@@ -88,17 +90,20 @@ model.notifications = (function() {
                              "Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.",
                              "",
                              ["gray-title"],
-                             0),
+                             0,
+                             "item-3"),
             makeNotification("Facebook",
                              "Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.",
                              "",
                              [],
-                             39),
+                             39,
+                             "item-4"),
             makeNotification("Maps",
                              "Info text in here. Something something.",
                              "",
                              [],
-                             0)
+                             0,
+                             "item-5")
         ];
     }
 

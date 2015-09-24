@@ -76,16 +76,15 @@ function makeElemPanSwipable(el) {
 
 
     var onSwipeLeft = function(ev) {
-        transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
+        onSwipeRight(ev);
 
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 300);
-        requestElementUpdate();
-        logEvent(ev.type);
-        toggleVisibility();
-        el.style.display='none';
+        var acceptCallback = function() {
+            snooze(el.id);
+        }
+        var cancelCallback = function() {
+            cancel(el.id);
+        }
+        toggleVisibility(acceptCallback, cancelCallback);
     }
 
 
@@ -94,7 +93,6 @@ function makeElemPanSwipable(el) {
     mc.on("panstart panmove", onPan);
     mc.on("swiperight", onSwipeRight);
     mc.on("swipeleft", onSwipeLeft);
-    
 
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
@@ -104,37 +102,54 @@ function makeElemPanSwipable(el) {
     resetElement();
 }
 
-function toggleVisibility(){
-     var e = document.querySelector(".modal");
-        var ee = document.querySelector(".overlay");
-        e.style.visibility='visible';
-        ee.style.visibility='visible';
+function toggleElemVisibilityOn(id) {
+    var elem = document.getElementById(id);
+    elem.style.visibility = 'visible';
 }
 
-function toggleVisibilityOff(){
-     var e = document.querySelector(".modal");
-        var ee = document.querySelector(".overlay");
-        e.style.visibility='hidden';
-        ee.style.visibility='hidden';
-        
+function toggleElemVisibilityOff(id) {
+    var elem = document.getElementById(id);
+    elem.style.visibility = 'hidden';
+}
+
+function setPopupAcceptCallback(callback) {
+    var acceptButton = document
+        .getElementById("popup-accept-button");
+    acceptButton.onclick = callback;
+}
+
+function setPopupCancelCallback(callback) {
+    var cancelButton = document
+        .getElementById("popup-cancel-button");
+    cancelButton.onclick = callback;
+}
+
+function toggleVisibility(acceptCallback, cancelCallback) {
+    toggleElemVisibilityOn("popup-modal");
+    toggleElemVisibilityOn("popup-overlay");
+    setPopupAcceptCallback(acceptCallback);
+    setPopupCancelCallback(cancelCallback);
+}
+
+function toggleVisibilityOff() {
+    toggleElemVisibilityOff("popup-modal");
+    toggleElemVisibilityOff("popup-overlay");
 }
 
 function makeModal() {
     var modal = document.createElement("div");
-    modal.className="modal";
-    modal.innerHTML="testitesti";
+    modal.className = "modal";
+    modal.innerHTML = "testitesti";
     var button = document.createElement("button");
-    button.id=el.id + "button";
+    button.id = el.id + "button";
     modal.appendChild(button);
-    button.innerHTML= (button.id);
+    button.innerHTML = (button.id);
 
     var body = document.querySelector("body");
-    body.appendChild(modal);       
+    body.appendChild(modal);
 }
 
 function selectPanSwipable(selectors) {
-
-
     //select all elements matching selectors and
     //apply pannability and swipability
 

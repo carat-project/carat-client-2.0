@@ -26,11 +26,11 @@
   
   <body>
 
-    <div class ="overlay" id="popup"></div>
-    <div class="modal" id="popup">
+    <div class="overlay" id="popup-overlay"></div>
+    <div class="modal" id="popup-modal">
       <div class="mdl-card mdl-shadow--2dp">
         <div class="carat-card__title">
-          <div class="mdl-card__title-text">Älä näytä uudelleen?
+          <div class="mdl-card__title-text">Never show this item again?
           </div>
           <div class="mdl-layout-spacer"></div> 
         </div>
@@ -41,8 +41,8 @@
         
         <!-- Card expand button, uses collapse.js -->
         <div class="mdl-card__actions">
-          <button onclick="snooze()">Älä koskaan näytä tätä</button>
-          <button onclick="cancel('hit')">Peruuta</button>
+          <button id="popup-accept-button" onclick="">Accept</button>
+          <button id="popup-cancel-button" onclick="">Cancel</button>
         </div> 
         
       </div>
