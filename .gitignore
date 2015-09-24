@@ -21,7 +21,6 @@ plugins/org.carat.plugin/nbproject
 # Java files
 *.class
 *.dex
-*.jar
 *.war
 *.ear
 
@@ -30,7 +29,6 @@ plugins/org.carat.plugin/nbproject
 *.dmg
 *.gz
 *.iso
-*.jar
 *.rar
 *.tar
 *.zip
