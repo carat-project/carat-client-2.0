@@ -13,6 +13,12 @@ hooks/
 nbproject/
 */coverage/
 
+# Plugin build process
+plugins/org.carat.plugin/build
+plugins/org.carat.plugin/build.xml
+plugins/org.carat.plugin/nbproject
+plugins/org.carat.plugin/libs/
+
 # Java files
 *.class
 *.dex

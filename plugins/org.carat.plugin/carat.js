@@ -1,11 +1,11 @@
 module.exports = {
-	echo: function(name, success, error) {
+	getJscore: function(callback) {
 		var exec = require("cordova/exec");
-        exec(success,
-        	error,
+        exec(callback,
+        	callback,
         	"CaratPlugin",
-        	"echo",
-        	[name]
+        	"jscore",
+        	[""]
         );
 	}
 };

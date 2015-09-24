@@ -39,13 +39,15 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        var print = function(msg){
-            console.log("Received message from native Java: "+msg);
-        }
         console.log("Device is ready");
+        var displayJscore = function(jscore){
+
+            //Placeholder
+            document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
+        }
         app.receivedEvent('deviceready');
-        console.log("Calling carat.echo");
-        carat.echo("world",print, print);
+        console.log("Updating Jscore")
+        carat.getJscore(displayJscore);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
