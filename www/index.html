@@ -1,89 +1,115 @@
 <!doctype html>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <title>Carat 2.0</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <title>Carat 2.0</title>
 
-		<script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
 
-        <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="css/material.css">
-        <link rel="stylesheet" href="css/carat.css">
-        
-        <style>.animate {
-            -webkit-transition: all 0.3s;
-            -moz-transition: all 0.3s;
-            transition: all 0.3s;    
-        } </style>
-        
-    </head>
+    <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/material.css">
+    <link rel="stylesheet" href="css/carat.css">
+    <link rel="stylesheet" href="css/dialog.css">
     
-    <body>
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-        mdl-layout--fixed-tabs mdl-color--grey-200">
-        
-            <header class="mdl-layout__header mdl-color--blue-grey-500">
-                <div class="mdl-layout__header-row mdl-layout-title">
-                    <!-- Title -->
-                    <span>Carat 2.0</span>
-                </div>
-                <!-- Tabs -->
-                <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-                    <a href="#home" class="mdl-layout__tab is-active">Home</a>
-                    <a href="#bugs" class="mdl-layout__tab">Bugs<span> (0)</span></a>
-                    <a href="#hogs" class="mdl-layout__tab">Hogs<span> (2)</span></a>
-                    <a href="#system" class="mdl-layout__tab">System<span> (0)</span></a>
-                </div>
-            </header>
-            
-            <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Carat 2.0</span>
-            </div>
-            
-            <main class="mdl-layout__content">
-                
-                <!-- Home view -->
-                <section class="mdl-layout__tab-panel is-active" id="home">
-                            
-                    <div class="page-content">
-                                        </div>
-                </section>
-                
-                <!-- Bugs tabs view -->
-                <section class="mdl-layout__tab-panel" id="bugs">
-                    <div class="page-content"></div>
-                </section>
-                
-                <!-- Hogs tab view -->
-                <section class="mdl-layout__tab-panel" id="hogs">
-                    <div class="page-content">
-                   </div>
-                    
-                <!-- System tab view -->
-                </section>
-                <section class="mdl-layout__tab-panel" id="system">
-                    <div class="page-content"></div>
-                </section>
-            </main>
+    <style>.animate {
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+      transition: all 0.3s;    
+      } </style>
+    
+  </head>
+  
+  <body>
+
+    <div class ="overlay" id="popup"></div>
+    <div class="modal" id="popup">
+      <div class="mdl-card mdl-shadow--2dp">
+        <div class="carat-card__title">
+          <div class="mdl-card__title-text">Älä näytä uudelleen?
+          </div>
+          <div class="mdl-layout-spacer"></div> 
         </div>
-       
-        <script src="js/hammer.min.js"></script>
-        <script src="js/swipe.js"></script>
-        <script src="js/pan_swipe.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="js/material.min.js"></script>      
-        <script src="js/collapse.js"></script>
-        <script src="js/transition.js"></script>
-        <script src="js/index.js"></script>
-        <script type="text/javascript">
-        	app.initialize();
-        </script>
-        <script src="js/model/notifications.js"></script>
-        <script src="js/cardsController.js"></script>
-    </body>
+
+        <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
+          
+        </div>
+        
+        <!-- Card expand button, uses collapse.js -->
+        <div class="mdl-card__actions">
+          <button onclick="snooze()">Älä koskaan näytä tätä</button>
+          <button onclick="cancel('hit')">Peruuta</button>
+        </div> 
+        
+      </div>
+      
+    </div>
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+                mdl-layout--fixed-tabs mdl-color--grey-200">
+      
+      <header class="mdl-layout__header mdl-color--blue-grey-500">
+        <div class="mdl-layout__header-row mdl-layout-title">
+          <!-- Title -->
+          <span>Carat 2.0</span>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
+          <a href="#home" class="mdl-layout__tab is-active">Home</a>
+          <a href="#bugs" class="mdl-layout__tab">Bugs<span> (0)</span></a>
+          <a href="#hogs" class="mdl-layout__tab">Hogs<span> (2)</span></a>
+          <a href="#system" class="mdl-layout__tab">System<span> (0)</span></a>
+        </div>
+      </header>
+      
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Carat 2.0</span>
+      </div>
+      
+      <main class="mdl-layout__content">
+        
+        <!-- Home view -->
+        <section class="mdl-layout__tab-panel is-active" id="home">
+          
+          <div class="page-content">
+          </div>
+        </section>
+        
+        <!-- Bugs tabs view -->
+        <section class="mdl-layout__tab-panel" id="bugs">
+          <div class="page-content"></div>
+        </section>
+        
+        <!-- Hogs tab view -->
+        <section class="mdl-layout__tab-panel" id="hogs">
+          <div class="page-content">
+          </div>
+          
+          <!-- System tab view -->
+        </section>
+        <section class="mdl-layout__tab-panel" id="system">
+          <div class="page-content"></div>
+        </section>
+      </main>
+    </div>
+    
+    <script src="js/hammer.min.js"></script>
+    <script src="js/swipe.js"></script>
+    <script src="js/pan_swipe.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/material.min.js"></script>      
+    <script src="js/collapse.js"></script>
+    <script src="js/transition.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/snooze.js"></script>
+    <script type="text/javascript">
+      app.initialize();
+    </script>
+    <script src="js/model/notifications.js"></script>
+    <script src="js/cardsController.js"></script>
+  </body>
 </html>
