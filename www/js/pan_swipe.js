@@ -101,5 +101,3 @@ function selectPanSwipable(selectors) {
         }
     }
 }
-
-selectPanSwipable("#hogs-summary");
