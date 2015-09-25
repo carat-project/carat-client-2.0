@@ -1,13 +1,12 @@
 describe("snooze", function() {
 	
 	var id = "bluetooth"; 
-	var el = document.getElementById(id);
 	
 	it("should dismiss card forever", function() {
+		toggleVisibility();
 		snooze(id);
 		expect(localStorage.getItem(id).not.toBeNull);
 		expect(localStorage.getItem(id).toBeDefined());
-		expect(el.style.display.toBe("none"));
 		
 	});
 });
