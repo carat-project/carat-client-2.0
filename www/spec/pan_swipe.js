@@ -1,4 +1,4 @@
-describe("selectPanSwipable", function() {
+describe("makeElemPanSwipable", function() {
 	var elem = document.createElement("div"); 
 	
 	it("should make an element pannable and swipable", function() {
