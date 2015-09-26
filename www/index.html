@@ -26,28 +26,24 @@
   
   <body>
 
-    <div class="overlay" id="popup-overlay"></div>
-    <div class="modal" id="popup-modal">
-      <div class="mdl-card mdl-shadow--2dp">
-        <div class="carat-card__title">
-          <div class="mdl-card__title-text">Never show this item again?
+    <!-- dialog for closing card, pan_swipe.js -->
+      <div class="overlay" id="popup-overlay"></div>
+      <div class="modal" id="popup-modal">
+          <div class="mdl-card mdl-shadow--2dp">
+              <div class="carat-card__title">
+                  <div class="mdl-card__title-text">Don't show this card again?
+                  </div>
+                  <div class="mdl-layout-spacer"></div> 
+              </div>
+              <div class="mdl-card__supporting-text">Info text in here. If you want to display hidden cards again, select "show hidden cards" from...
+              </div>
+        
+              <div class="mdl-card__actions">
+                  <button id="popup-accept-button" class="mdl-button mdl-js-button" onclick="">Don't show</button>
+                  <button id="popup-cancel-button" class="mdl-button mdl-js-button" onclick="">Cancel</button>
+              </div>    
           </div>
-          <div class="mdl-layout-spacer"></div> 
-        </div>
-
-        <div class="mdl-card__supporting-text">Info text in here. Something something. Info text in here. Something something.
-          
-        </div>
-        
-        <!-- Card expand button, uses collapse.js -->
-        <div class="mdl-card__actions">
-          <button id="popup-accept-button" onclick="">Accept</button>
-          <button id="popup-cancel-button" onclick="">Cancel</button>
-        </div> 
-        
       </div>
-      
-    </div>
 
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
