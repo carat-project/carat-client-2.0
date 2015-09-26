@@ -47,9 +47,7 @@ function makeElemPanSwipable(el) {
             ticking = true;
         }
     }
-    var logEvent = function(str) {
-        //log.insertBefore(document.createTextNode(str +"\n"), log.firstChild);
-    }
+
     var onPan = function(ev) {
         if(el.classList.contains("animation")) {
             el.classList.remove("animation");
@@ -59,7 +57,6 @@ function makeElemPanSwipable(el) {
             y: START_Y
         };
         requestElementUpdate();
-        logEvent(ev.type);
     }
 
     var onSwipeRight = function(ev) {
@@ -70,10 +67,8 @@ function makeElemPanSwipable(el) {
             resetElement();
         }, 300);
         requestElementUpdate();
-        logEvent(ev.type);
         el.style.display='none';
     }
-
 
     var onSwipeLeft = function(ev) {
         onSwipeRight(ev);
@@ -104,12 +99,14 @@ function makeElemPanSwipable(el) {
 
 function toggleElemVisibilityOn(id) {
     var elem = document.getElementById(id);
+    elem.style.display = 'initial';
     elem.style.visibility = 'visible';
 }
 
 function toggleElemVisibilityOff(id) {
     var elem = document.getElementById(id);
     elem.style.visibility = 'hidden';
+    elem.style.display= 'none';
 }
 
 function setPopupAcceptCallback(callback) {
@@ -134,19 +131,6 @@ function toggleVisibility(acceptCallback, cancelCallback) {
 function toggleVisibilityOff() {
     toggleElemVisibilityOff("popup-modal");
     toggleElemVisibilityOff("popup-overlay");
-}
-
-function makeModal() {
-    var modal = document.createElement("div");
-    modal.className = "modal";
-    modal.innerHTML = "testitesti";
-    var button = document.createElement("button");
-    button.id = el.id + "button";
-    modal.appendChild(button);
-    button.innerHTML = (button.id);
-
-    var body = document.querySelector("body");
-    body.appendChild(modal);
 }
 
 function selectPanSwipable(selectors) {
