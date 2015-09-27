@@ -1,0 +1,52 @@
+*~
+
+# Built applications
+*.apk
+*.ap_
+
+# Generated files
+platforms/
+plugins/cordova-plugin-whitelist
+plugins/android.json
+plugins/fetch.json
+hooks/
+node_modules/
+nbproject/
+*/coverage/
+
+# Plugin build process
+plugins/org.carat.plugin/build
+plugins/org.carat.plugin/build.xml
+plugins/org.carat.plugin/nbproject
+
+# Java files
+*.class
+*.dex
+*.war
+*.ear
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Workspace
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+sftp-config.json
+
+# Other
+npm_modules/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Error.log

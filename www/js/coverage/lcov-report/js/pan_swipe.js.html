@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for js/pan_swipe.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">js/pan_swipe.js</span></h1>
+    <h2>
+        Statements: <span class="metric">7.27% <small>(4 / 55)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 14)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">8.33% <small>(1 / 12)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">7.27% <small>(4 / 55)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">js/</a> &#187; pan_swipe.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//function that makes an element pannable and swipable
+<span class="fstat-no" title="function not covered" >function makeElemPanSwipable(el) {</span>
+<span class="cstat-no" title="statement not covered" >    var reqAnimationFrame = (<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        return window[Hammer.prefixed(window, 'requestAnimationFrame')]</span>
+            || <span class="fstat-no" title="function not covered" >function (callback) {</span>
+<span class="cstat-no" title="statement not covered" >                window.setTimeout(callback, 1000 / 60);</span>
+            };
+    })();
+<span class="cstat-no" title="statement not covered" >    var START_X = 0;</span>
+<span class="cstat-no" title="statement not covered" >    var START_Y = 0;</span>
+<span class="cstat-no" title="statement not covered" >    var ticking = false;</span>
+<span class="cstat-no" title="statement not covered" >    var transform;</span>
+<span class="cstat-no" title="statement not covered" >    var timer;</span>
+<span class="cstat-no" title="statement not covered" >    var mc = new Hammer.Manager(el, { touchAction: "pan-y" });</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var resetElement = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        if(!el.classList.contains("animation")) {</span>
+<span class="cstat-no" title="statement not covered" >            el.classList.add("animation");</span>
+        }
+<span class="cstat-no" title="statement not covered" >        transform = {</span>
+            translate: { x: START_X, y: START_Y },
+            scale: 1,
+            angle: 0,
+            rx: 0,
+            ry: 0,
+            rz: 0
+        };
+<span class="cstat-no" title="statement not covered" >        requestElementUpdate();</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var updateElementTransform = <span class="fstat-no" title="function not covered" >function() {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var value = [</span>
+            'translate3d(' + transform.translate.x + 'px, ' + transform.translate.y + 'px, 0)',
+            'scale(' + transform.scale + ', ' + transform.scale + ')',
+            'rotate3d('+ transform.rx +','+ transform.ry +','+ transform.rz +','+  transform.angle + 'deg)'
+        ];
+<span class="cstat-no" title="statement not covered" >        value = value.join(" ");</span>
+<span class="cstat-no" title="statement not covered" >        el.style.webkitTransform = value;</span>
+<span class="cstat-no" title="statement not covered" >        el.style.mozTransform = value;</span>
+<span class="cstat-no" title="statement not covered" >        el.style.transform = value;</span>
+<span class="cstat-no" title="statement not covered" >        ticking = false;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    var requestElementUpdate = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        if(!ticking) {</span>
+<span class="cstat-no" title="statement not covered" >            reqAnimationFrame(updateElementTransform);</span>
+<span class="cstat-no" title="statement not covered" >            ticking = true;</span>
+        }
+    }
+<span class="cstat-no" title="statement not covered" >    var logEvent = <span class="fstat-no" title="function not covered" >function(str) {</span></span>
+        //log.insertBefore(document.createTextNode(str +"\n"), log.firstChild);
+    }
+<span class="cstat-no" title="statement not covered" >    var onPan = <span class="fstat-no" title="function not covered" >function(ev) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if(el.classList.contains("animation")) {</span>
+<span class="cstat-no" title="statement not covered" >            el.classList.remove("animation");</span>
+        }
+<span class="cstat-no" title="statement not covered" >        transform.translate = {</span>
+            x: START_X + ev.deltaX,
+            y: START_Y
+        };
+<span class="cstat-no" title="statement not covered" >        requestElementUpdate();</span>
+<span class="cstat-no" title="statement not covered" >        logEvent(ev.type);</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var onSwipe = <span class="fstat-no" title="function not covered" >function(ev) {</span></span>
+<span class="cstat-no" title="statement not covered" >        transform.ry = (ev.direction &amp; Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        clearTimeout(timer);</span>
+<span class="cstat-no" title="statement not covered" >        timer = setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            resetElement();</span>
+        }, 300);
+<span class="cstat-no" title="statement not covered" >        requestElementUpdate();</span>
+<span class="cstat-no" title="statement not covered" >        logEvent(ev.type);</span>
+<span class="cstat-no" title="statement not covered" >        el.style.display='none';</span>
+    }
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));</span>
+<span class="cstat-no" title="statement not covered" >    mc.add(new Hammer.Swipe()).recognizeWith(mc.get('pan'));</span>
+<span class="cstat-no" title="statement not covered" >    mc.on("panstart panmove", onPan);</span>
+<span class="cstat-no" title="statement not covered" >    mc.on("swipe", onSwipe);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    mc.on("hammer.input", <span class="fstat-no" title="function not covered" >function(ev) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if(ev.isFinal) {</span>
+<span class="cstat-no" title="statement not covered" >            resetElement();</span>
+        }
+    });
+<span class="cstat-no" title="statement not covered" >    resetElement();</span>
+}
+function selectPanSwipable(selectors) {
+&nbsp;
+&nbsp;
+    //select all elements matching selectors and
+    //apply pannability and swipability
+&nbsp;
+    var elems = document.querySelectorAll(selectors);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if(elems) {</span>
+<span class="cstat-no" title="statement not covered" >        for(var i = 0; i &lt; elems.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            makeElemPanSwipable(elems[i]);</span>
+        }
+    }
+}
+&nbsp;
+//for example, all cards
+&nbsp;
+selectPanSwipable(".mdl-card");
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 21 2015 02:51:13 GMT+0300 (EEST)</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
