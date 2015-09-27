@@ -10,6 +10,7 @@ plugins/cordova-plugin-whitelist
 plugins/android.json
 plugins/fetch.json
 hooks/
+node_modules/
 nbproject/
 */coverage/
 

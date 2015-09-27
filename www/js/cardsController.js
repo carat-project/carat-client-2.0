@@ -7,8 +7,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         var result = dummyDiv.firstChild;
 
-        return result
-    }
+        return result;
+    };
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
@@ -19,7 +19,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         panSwipeCallback(domNode);
 
         return domNode;
-    }
+    };
 
     var getNewSummaryEntryDomNodeTemplate = function() {
         var htmlString = '<div class="mdl-cell mdl-cell--2-col"><div><i class="material-icons"></i></div><div><strong></strong></div><div><span class="mdl-color-text--red-300"></span></div></div>';
@@ -27,7 +27,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var domNode = parseDomNode(htmlString);
 
         return domNode;
-    }
+    };
 
     var getNewSummaryDomNodeTemplate = function() {
         var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
@@ -35,13 +35,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var domNode = parseDomNode(htmlString);
 
         return domNode;
-    }
+    };
 
     var trashANode = function(nodeToBeTrashed) {
 
         var parent = nodeToBeTrashed.parentNode;
         parent.removeChild(nodeToBeTrashed);
-    }
+    };
 
     var addNodeText = function(nodeToBeTextified, text) {
 
@@ -49,7 +49,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         nodeToBeTextified
             .insertBefore(textNode,
                           nodeToBeTextified.firstChild);
-    }
+    };
 
     var appendTextOrRemoveNode = function(nodeMaybeTextified,
                                           text) {
@@ -58,12 +58,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         } else {
             addNodeText(nodeMaybeTextified, text);
         }
-    }
+    };
 
     var injectIdToCard = function(cardDomNode, id) {
 
         cardDomNode.id = id;
-    }
+    };
 
     var injectTitle = function(cardDomNode, title) {
 
@@ -71,7 +71,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector(".mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
-    }
+    };
 
     var injectMainText = function(cardDomNode, mainText) {
 
@@ -79,7 +79,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector(".mdl-card__supporting-text");
 
         appendTextOrRemoveNode(mainTextNode, mainText);
-    }
+    };
 
     var injectSecondaryText = function(cardDomNode,
                                        secondaryText,
@@ -100,7 +100,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             secondaryTextNode.id = nodeId;
             moreButton.href = "#" + nodeId;
         }
-    }
+    };
 
     var injectClasses = function(cardDomNode, classes) {
 
@@ -109,7 +109,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         for(var i = 0; i < classes.length; i++) {
             nodeClassList.add(classes[i]);
         }
-    }
+    };
 
     var makeTimeDrainText = function(timeDrainNode,
                                      timeDrain) {
@@ -121,7 +121,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         return timeDrainNode;
-    }
+    };
 
     var injectTimeDrain = function(cardDomNode, timeDrain) {
 
@@ -130,7 +130,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         makeTimeDrainText(timeDrainNode, timeDrain);
 
-    }
+    };
 
     var injectSummaryEntryName = function(summaryEntryDomNode,
                                           name) {
@@ -138,7 +138,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector(".mdl-cell > div strong");
 
         appendTextOrRemoveNode(nameNode, name);
-    }
+    };
 
     var injectSummaryEntryIcon = function(summaryEntryDomNode,
                                           icon) {
@@ -146,7 +146,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector("i.material-icons");
 
         appendTextOrRemoveNode(iconNode, icon);
-    }
+    };
 
     var injectSummaryEntryTimeDrain = function(
         summaryEntryDomNode, timeDrain) {
@@ -155,7 +155,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector("div.mdl-cell div span");
 
         makeTimeDrainText(timeDrainNode, timeDrain);
-    }
+    };
 
     var injectSummaryTitle = function(summaryDomNode,
                                       title) {
@@ -164,7 +164,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector("div.mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
-    }
+    };
 
     var homebrewMap = function(array, callback) {
         for(var i = 0; i < array.length; i++) {
@@ -172,7 +172,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         return array;
-    }
+    };
 
     var homebrewConcatChildren = function(spot,
                                           firstChild,
@@ -182,7 +182,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             spot.insertBefore(concatees[i], firstChild);
         }
 
-    }
+    };
 
     var makeSummaryEntry = function(summaryEntryObject) {
 
@@ -195,7 +195,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                     entryFields.timeDrain);
 
         return domNode;
-    }
+    };
 
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
@@ -209,7 +209,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector("div.mdl-grid");
         homebrewConcatChildren(spot, spot.firstChild,
                                summaryEntryNodes);
-    }
+    };
 
     var makeCardBasedOnModel = function(notificationObject) {
 
@@ -231,7 +231,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                           itemData.classes);
             injectTimeDrain(newCardNode,
                             itemData.timeDrain);
-            injectIdToCard(newCardNode, itemData.id)
+            injectIdToCard(newCardNode, itemData.id);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -242,12 +242,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
-            injectIdToCard(newCardNode, summaryData.id)
+            injectIdToCard(newCardNode, summaryData.id);
         }
 
 
         return newCardNode;
-    }
+    };
 
 
 
@@ -256,30 +256,30 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var result = homebrewMap(notificationsArray.getGeneral(),
                                  makeCardBasedOnModel);
         return result;
-    }
+    };
 
     var getHogsCards = function() {
 
         return homebrewMap(notificationsArray.getHogs(),
                            makeCardBasedOnModel);
-    }
+    };
 
     var getBugsCards = function() {
 
         return homebrewMap(notificationsArray.getBugs(),
                            makeCardBasedOnModel);
-    }
+    };
 
     var getSystemCards = function() {
 
         return homebrewMap(notificationsArray.getSystem(),
                            makeCardBasedOnModel);
-    }
+    };
 
     var selectCardsSpot = function(selector) {
 
         return document.querySelector(selector + " .page-content");
-    }
+    };
 
 
     var generatePage = function(selector, nodeArray) {
@@ -290,7 +290,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             homebrewConcatChildren(rightSpot,
                                    rightSpot.firstChild,
                                    nodeArray);
-    }
+    };
 
     var generateCards = function() {
 
@@ -298,11 +298,11 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         generatePage("#bugs", getBugsCards());
         generatePage("#hogs", getHogsCards());
         generatePage("#system", getSystemCards());
-    }
+    };
 
     return {
         generateCards: generateCards
-    }
+    };
 })(model.notifications, makeElemPanSwipable);
 
 itemCards.generateCards();
