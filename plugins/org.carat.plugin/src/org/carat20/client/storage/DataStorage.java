@@ -74,9 +74,13 @@ public final class DataStorage {
     }
     
     public Reports getMainReports() {
+        Log.v("Carat", "Getting main reports");
         if (mainReports != null) {
-            return mainReports.get();
+            Reports reports = mainReports.get();
+            Log.v("Carat", "Main reports are in memory, returning "+reports);
+            return reports;
         }
+        Log.v("Carat", "Main reports are not in memory.");
         return readMainReports();
     }
     
@@ -92,6 +96,7 @@ public final class DataStorage {
     
     
     private Reports readMainReports() {
+        Log.v("Carat", "Reading main reports from disk");
         Object o = read(MAINFILE);
         if(o == null) return null;
         mainReports = new WeakReference<Reports>((Reports) o);
@@ -99,6 +104,7 @@ public final class DataStorage {
     }
     
     private SimpleHogBug[] readHogReports() {
+        Log.v("Carat", "Reading hog reports from disk");
         Object o = read(HOGFILE);
         if(o == null) return null;
         hogReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
@@ -106,6 +112,7 @@ public final class DataStorage {
     }
     
     private SimpleHogBug[] readBugReports() {
+        Log.v("Carat", "Reading bug reports from disk");
         Object o = read(BUGFILE);
         if(o == null) return null;
         bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
@@ -142,7 +149,7 @@ public final class DataStorage {
             stream.close();
             //Try with resources handles closing
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when writing object", e);
+            Log.v("Carat", "Exception when writing object to disk");
         }
     }
 
@@ -155,7 +162,7 @@ public final class DataStorage {
             stream.close();
             return object;
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when reading object", e);
+            Log.v("Carat", "Exception when reading object from disk");
         }
         return null;
     }
@@ -166,7 +173,7 @@ public final class DataStorage {
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No report file to write to", e);
         } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for writing.", e);
+            Log.v("Carat", "Exception opening " + fileName + " for writing");
         }
         return null;
     }
@@ -177,7 +184,7 @@ public final class DataStorage {
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No reports to be read yet.");
         } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for reading", e);
+            Log.v("Carat", "Exception opening " + fileName + " for reading");
         }
         return null;
     }
