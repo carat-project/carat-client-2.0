@@ -126,7 +126,7 @@ public final class DataStorage {
     }
     
     public void writeBugReports(HogBugReport bugReports) {
-        SimpleHogBug[] list = convertAndFilter(bugReports.getHbList(), false);
+        SimpleHogBug[] list = convertAndFilter(bugReports.getHbList(), true);
         if(list != null){
             this.bugReports = new WeakReference<SimpleHogBug[]>(list);
         }

@@ -6,6 +6,7 @@ import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 
@@ -51,17 +52,24 @@ public class Carat extends CordovaPlugin {
         context = this.cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);
         c = new CommunicationManager(storage);
+        
         cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
                     //No data
-                    if(storage.isEmpty())   c.refreshAllReports();
+                    if(storage.isEmpty()){
+                        Log.v("Carat", "Storages are empty, refreshing all reports");
+                        c.refreshAllReports();
+                    }
                     
                     //Missing data
-                    else {
+                    else if (!storage.isComplete()){
+                        Log.v("Carat", "Some storages are empty, refreshing");
                         if(storage.mainEmpty()) c.refreshMainReports();
                         if(storage.hogsEmpty()) c.refreshHogsBugs("hogs");
                         if(storage.bugsEmpty()) c.refreshHogsBugs("bugs");
+                    } else {
+                        Log.v("Carat", "Storages are complete and ready to go");
                     }
                 }
         });
@@ -111,12 +119,16 @@ public class Carat extends CordovaPlugin {
             );
             return true;
         } else if(action.equals("ready")){
+            Log.v("Carat", "Entering data wait state");
+            long startTime = System.currentTimeMillis();
             // This is very performance heavy, replace!
             while(true){
                 if(storage.isComplete()){
                     break;
                 }
             }
+            long operationTime = ((System.currentTimeMillis()-startTime)/1000);
+            Log.v("Carat", "Built storage successfully in " + operationTime + "s");
             callbackContext.success();
             return true;
         }
@@ -136,6 +148,7 @@ public class Carat extends CordovaPlugin {
     // JSON conversion
     
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
+        Log.v("Converting hog/bug reports to JSON", Arrays.toString(reports));
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
                 JSONObject reportObject = new JSONObject()
@@ -154,6 +167,7 @@ public class Carat extends CordovaPlugin {
     }
     
     public JSONObject convertToJSON(Reports r) throws JSONException{
+        Log.v("Converting main reports to JSON", r.toString());
         JSONObject results = new JSONObject()
                 .put("jscore", r.getJScore())
                 .put("jscoreWith", r.getJScore())
