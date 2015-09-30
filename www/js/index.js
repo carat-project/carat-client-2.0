@@ -74,7 +74,7 @@ var app = {
         }
 
         var displayMain = function(main){
-            //Not used currently
+            // ...
         }
 
         //Temporary solution for waiting plugin to finish

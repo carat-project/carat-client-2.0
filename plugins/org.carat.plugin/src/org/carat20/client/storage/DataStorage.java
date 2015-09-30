@@ -48,6 +48,10 @@ public final class DataStorage {
         readBugReports();
     }
     
+    /**
+     * Checks if all storage references are null.
+     * @return true if all references are null.
+     */
     public boolean isEmpty(){
         Log.v("Carat","Status | mainReports: "+mainReports+", hogReports: "+hogReports+", bugReports: "+bugReports);
         return (mainReports == null 
@@ -55,36 +59,67 @@ public final class DataStorage {
                 && bugReports == null);
     }
     
+    /**
+     * Checks if all references are defined.
+     * @return true if all references are defined.
+     */
     public boolean isComplete(){
         return !(mainReports == null 
                 || hogReports == null 
                 || bugReports == null);
     }
     
+    /**
+     * Checks if main reports reference is null. 
+     * @return true if mainReports is null.
+     */
     public boolean mainEmpty(){
         return (mainReports == null);
     }
     
+    /**
+     * Checks if hog reports reference is null. 
+     * @return true if hogReports is null.
+     */
     public boolean hogsEmpty(){
         return (hogReports == null);
     }
     
+    /**
+     * Checks if bug reports reference is null. 
+     * @return true if bugReports is null.
+     */
     public boolean bugsEmpty(){
         return (bugReports == null);
     }
     
+    /**
+     * Provides main reports from a reference or from storage.
+     * Storage is used if references are not in memory.
+     * @return Main reports.
+     */
     public Reports getMainReports() {
         Log.v("Carat", "Getting main reports");
         return (mainReports != null && mainReports.get() != null) ?
                 mainReports.get() : readMainReports();
     }
     
+    /**
+     * Provides hog reports from a reference or from storage.
+     * Storage is used if references are not in memory.
+     * @return Hog reports.
+     */    
     public SimpleHogBug[] getHogReports() {
         Log.v("Carat", "Getting hog reports");
         return (hogReports != null && hogReports.get() != null) ? 
                 hogReports.get() : readHogReports();
     }
     
+    /**
+     * Provides bug reports from a reference or from storage.
+     * Storage is used if references are not in memory.
+     * @return Bug reports.
+     */
     public SimpleHogBug[] getBugReports() {
        Log.v("Carat", "Getting bug reports");
        return (bugReports != null && bugReports.get() != null) ? 
@@ -92,6 +127,7 @@ public final class DataStorage {
     }
     
     
+    //Reads main reports from file.
     private Reports readMainReports() {
         Log.v("Carat", "Reading main reports from disk");
         Object o = read(MAINFILE);
@@ -100,6 +136,7 @@ public final class DataStorage {
         return (Reports) o;
     }
     
+    //Reads hog reports from file.
     private SimpleHogBug[] readHogReports() {
         Log.v("Carat", "Reading hog reports from disk");
         Object o = read(HOGFILE);
@@ -108,6 +145,7 @@ public final class DataStorage {
         return (SimpleHogBug[]) o;
     }
     
+    //Reads bug reports from file.
     private SimpleHogBug[] readBugReports() {
         Log.v("Carat", "Reading bug reports from disk");
         Object o = read(BUGFILE);
@@ -116,11 +154,19 @@ public final class DataStorage {
         return (SimpleHogBug[]) o;
     }
 
+    /**
+     * Creates a reference and writes main reports to a file.
+     * @param reports Main reports.
+     */
     public void writeMainReports(Reports reports) {
         mainReports = new WeakReference<Reports>(reports);
         write(reports, MAINFILE);
     }
 
+    /**
+     * Creates a reference and writes hog reports to a file.
+     * @param hogReports Hog reports.
+     */
     public void writeHogReports(HogBugReport hogReports) {
         SimpleHogBug[] list = convertAndFilter(hogReports.getHbList(), false);
         if(list != null){
@@ -128,7 +174,11 @@ public final class DataStorage {
         }
         write(list, HOGFILE);
     }
-    
+
+    /**
+     * Creates a reference and writes bug reports to a file.
+     * @param bugReports
+     */
     public void writeBugReports(HogBugReport bugReports) {
         SimpleHogBug[] list = convertAndFilter(bugReports.getHbList(), true);
         if(list != null){
@@ -137,7 +187,9 @@ public final class DataStorage {
         write(list, BUGFILE);
     }
 
-    public void write(Object object, String fileName) {
+    
+    // Save object to file
+    private void write(Object object, String fileName) {
         FileOutputStream out = openOutputStream(fileName);
         Log.v("Carat", "Writing ("+object.getClass()+")"+object.toString()+" to "+fileName);
         try {
@@ -150,7 +202,8 @@ public final class DataStorage {
         }
     }
 
-    public Object read(String fileName) {
+    // Read object from file
+    private Object read(String fileName) {
         FileInputStream in = openInputStream(fileName);
         Log.v("Carat", "Reading from "+fileName);
         try {
@@ -164,7 +217,8 @@ public final class DataStorage {
         return null;
     }
 
-    public FileOutputStream openOutputStream(String fileName) {
+    // Open outputstream for writing to file
+    private FileOutputStream openOutputStream(String fileName) {
         try {
             return context.openFileOutput(fileName, Context.MODE_PRIVATE);
         } catch (FileNotFoundException e) {
@@ -175,7 +229,8 @@ public final class DataStorage {
         return null;
     }
 
-    public FileInputStream openInputStream(String fileName) {
+    // Open inputstream for reading from file
+    private FileInputStream openInputStream(String fileName) {
         try {
             return context.openFileInput(fileName);
         } catch (FileNotFoundException e) {
@@ -186,6 +241,7 @@ public final class DataStorage {
         return null;
     }
 
+    // Convert HogsBugs list to SimpleHogBug list
     private SimpleHogBug[] convertAndFilter(List<HogsBugs> list, boolean isBug) {
         if (list == null) {
             return null;

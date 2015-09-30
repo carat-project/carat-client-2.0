@@ -49,8 +49,8 @@ public class Carat extends CordovaPlugin {
      *    in a separate thread to avoid blocking Webcore.
      * 
      * Ideally the storage should contain all reports after these steps.
-     * @param cordova Activity interface letting us access the context
-     * @param webView
+     * @param cordova Activity interface with access to application context
+     * @param webView Main interface for interacting with Cordova webView
      */
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -95,7 +95,7 @@ public class Carat extends CordovaPlugin {
      * @param args Optional information about the request, e.g. events.
      * @param callbackContext Used for returning data to callback functions.
      * @return State boolean, which is true if an action gets executed.
-     * @throws JSONException In case the JSONArray used for args is invalid.
+     * @throws JSONException JSONArray used for args is invalid.
      */
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -156,6 +156,12 @@ public class Carat extends CordovaPlugin {
     
     // JSON conversion
     
+    /**
+     * Creates a JSON format for hog or bug reports
+     * @param reports Hogs/bugs in a list
+     * @return JSONArray Containing each report as a JSONObject
+     * @throws JSONException Object or array cannot be created
+     */
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
         Log.v("Converting hog/bug reports to JSON", Arrays.toString(reports));
         JSONArray results = new JSONArray();
@@ -174,7 +180,12 @@ public class Carat extends CordovaPlugin {
         }
         return results;
     }
-    
+    /**
+     * Creates a JSON format for main reports.
+     * @param r Main reports
+     * @return JSONObject containing main report data
+     * @throws JSONException Object cannot be created
+     */
     public JSONObject convertToJSON(Reports r) throws JSONException{
         Log.v("Converting main reports to JSON", r.toString());
         JSONObject results = new JSONObject()
