@@ -1,15 +1,19 @@
 package org.carat20.client;
 
+import android.content.Context;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import java.util.Arrays;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
 
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
-import org.carat20.client.thrift.HogBugReport;
-import org.carat20.client.thrift.Reports;
+import org.carat20.client.storage.SimpleHogBug;
+import org.json.JSONObject;
 
 /**
  * This class acts as the middleware between Phonegap and native functions of
@@ -17,22 +21,51 @@ import org.carat20.client.thrift.Reports;
  * initializing the background process, refreshing/fetching data and providing
  * the requested data.
  *
- * <p>
- * Class and method snippets are based on the work by original author
- * <a href="https://github.com/lagerspetz">Eemil Lagerspetz</a>.
- * </p>
- *
  * @author Jonatan Hamberg
  * @see CommunicationManager
  * @see DataStorage
  */
 public class Carat extends CordovaPlugin {
 
-    private static DataStorage storage = null;
-    private static CommunicationManager communicationManager = null;
-    
+    private static DataStorage storage;
+    private static CommunicationManager c;
+    private static Context context;
+
     private int jscore;
-    private String reports;
+    private SimpleHogBug[] hogReports;
+    private SimpleHogBug[] bugReports;
+
+    /**
+     * Constructor
+     *
+     * @param cordova
+     * @param webView
+     */
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        // This should remain at the top, unless modifying params
+        super.initialize(cordova, webView);
+        Log.v("Carat", "Carat plugin is initializing");
+
+        context = this.cordova.getActivity().getApplicationContext();
+        storage = new DataStorage(context);
+        c = new CommunicationManager(storage);
+        cordova.getThreadPool().execute(new Runnable() {
+                @Override
+                public void run() {
+                    //No data
+                    if(storage.isEmpty())   c.refreshAllReports();
+                    
+                    //Missing data
+                    else {
+                        if(storage.mainEmpty()) c.refreshMainReports();
+                        if(storage.hogsEmpty()) c.refreshHogsBugs("hogs");
+                        if(storage.bugsEmpty()) c.refreshHogsBugs("bugs");
+                    }
+                }
+        });
+        Log.v("Carat", "Completed initialization phase");
+    }
 
     /**
      * Provides an interface for cordova exec which accepts data requests and
@@ -48,48 +81,58 @@ public class Carat extends CordovaPlugin {
      */
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        storage = new DataStorage();
 
-        //Create communicationManager in it's own thread to avoid blocking WebCore
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                communicationManager = new CommunicationManager(storage);
-                while (communicationManager == null) {}
-                communicationManager.refreshAllReports();
-                jscore = getJscore();
-                callbackContext.success(jscore);
+        Log.v("Carat", "Calling action " + action);
+        
+        // No support for switching strings yet
+        if(action.equals("jscore")){
+            jscore = (int)(storage.getMainReports().getJScore() * 100);
+            callbackContext.success(jscore);
+            return true;
+        } else if(action.equals("hogs")){
+            hogReports = storage.getHogReports();
+            callbackContext.success(convertToJSON(hogReports));
+            return true;
+        } else if(action.equals("bugs")){
+            bugReports = storage.getBugReports();
+            callbackContext.success(convertToJSON(bugReports));
+            return true;
+        } else if(action.equals("ready")){
+            // This is very performance heavy, replace!
+            while(true){
+                if(storage.isComplete()){
+                    break;
+                }
             }
-        });
-        return true;
+            callbackContext.success();
+            return true;
+        }
+        callbackContext.error("No such action");
+        return false;
     }
 
     /**
-     * Makes a storage call to get main reports from which a JScore is
-     * extracted. We must make sure the background process has finished so that
-     * reports don't get called as null.
-     *
-     * @return JScore, the original value from server multiplied by 100.
+     * Refresh data on resume
+     * @param multitasking 
      */
-    public static int getJscore() {
-        //Again, a dirty workaround
-        while (storage.getReports() == null) {}
-        Reports reports = storage.getReports();
-        return (int) (reports.getJScore() * 100);
+    @Override
+    public void onResume(boolean multitasking) {
+
+    }
+    
+    public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
+        JSONArray results = new JSONArray();
+        for(SimpleHogBug s : reports){
+                JSONObject hog = new JSONObject()
+                        .put("label", s.getAppLabel())
+                        .put("name", s.getAppName())
+                        .put("priority",s.getAppPriority())
+                        .put("benefit",s.getBenefitText())
+                        .put("expected",s.getExpectedValue())
+                        .put("type", s.getType());
+                results.put(hog);
+        }
+        return results;
     }
 
-    /**
-     * Makes a storage call to get reports from which Hog and Bug reports are
-     * extracted. We must make sure the background process has finished so that
-     * reports don't get called as null.
-     *
-     * @return HogBugReport converted to String format.
-     */
-    public static String getHogBugs() {
-
-        //Let's not make this a habit
-        while (storage.getHogBugReports() == null) {}
-        HogBugReport reports = storage.getHogBugReports();
-        return reports.toString();
-    }
 }
