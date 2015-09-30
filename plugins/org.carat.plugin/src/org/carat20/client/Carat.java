@@ -38,8 +38,17 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] bugReports;
 
     /**
-     * Constructor
-     *
+     * Prepares context, storage and communication manager for use.
+     * This method should run before any calls to execute.
+     * 
+     * It works in the following manner:
+     * 1. Pull application context from Cordova, used for storage access.
+     * 2. Initialize storage and read reports from disk. Returns an exception 
+     *    when no data has been fetched yet.
+     * 3. Create communication manager and refresh needed data. This is done 
+     *    in a separate thread to avoid blocking Webcore.
+     * 
+     * Ideally the storage should contain all reports after these steps.
      * @param cordova
      * @param webView
      */
@@ -49,6 +58,11 @@ public class Carat extends CordovaPlugin {
         super.initialize(cordova, webView);
         Log.v("Carat", "Carat plugin is initializing");
 
+        /**
+         * 
+        
+        */
+        
         context = this.cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);
         c = new CommunicationManager(storage);

@@ -49,7 +49,7 @@ public final class DataStorage {
     }
     
     public boolean isEmpty(){
-        Log.v("Carat","Mainreports is "+mainReports+"| hogReports is "+hogReports+"|bugReports is "+bugReports);
+        Log.v("Carat","Status | mainReports: "+mainReports+", hogReports: "+hogReports+", bugReports: "+bugReports);
         return (mainReports == null 
                 && hogReports == null 
                 && bugReports == null);
@@ -75,7 +75,7 @@ public final class DataStorage {
     
     public Reports getMainReports() {
         Log.v("Carat", "Getting main reports");
-        if (mainReports != null) {
+        if (mainReports != null && mainReports.get() != null) {
             Reports reports = mainReports.get();
             Log.v("Carat", "Main reports are in memory, returning "+reports);
             return reports;
@@ -85,12 +85,14 @@ public final class DataStorage {
     }
     
     public SimpleHogBug[] getHogReports() {
-        return (hogReports != null) ? 
+        Log.v("Carat", "Getting hog reports");
+        return (hogReports != null && hogReports.get() != null) ? 
                 hogReports.get() : readHogReports();
     }
     
     public SimpleHogBug[] getBugReports() {
-       return (bugReports != null) ? 
+       Log.v("Carat", "Getting bug reports");
+       return (bugReports != null && bugReports.get() != null) ? 
                 bugReports.get() : readBugReports();
     }
     
