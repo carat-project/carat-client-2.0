@@ -48,6 +48,7 @@ var app = {
             carat.getJscore(displayJscore);
             carat.getHogs(displayHogs);
             carat.getBugs(displayBugs);
+            carat.getMainReports(displayMain);
         }
 
         //Display callsbacks get called once whenReady fires
@@ -56,12 +57,15 @@ var app = {
         }
 
         var displayHogs = function(hogs){
-            console.log(hogs);
             document.getElementById("hogdebug").innerHTML = JSON.stringify(hogs);
         }
 
         var displayBugs = function(bugs){
             document.getElementById("bugdebug").innerHTML = JSON.stringify(bugs);
+        }
+
+        var displayMain = function(main){
+            document.getElementById("maindebug").innerHTML = JSON.stringify(main);
         }
 
         //Temporary solution for waiting plugin to finish

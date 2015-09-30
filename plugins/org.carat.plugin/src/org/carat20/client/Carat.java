@@ -6,13 +6,13 @@ import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
-import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
 import org.carat20.client.storage.SimpleHogBug;
+import org.carat20.client.thrift.Reports;
 import org.json.JSONObject;
 
 /**
@@ -32,6 +32,7 @@ public class Carat extends CordovaPlugin {
     private static Context context;
 
     private int jscore;
+    private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
 
@@ -87,15 +88,27 @@ public class Carat extends CordovaPlugin {
         // No support for switching strings yet
         if(action.equals("jscore")){
             jscore = (int)(storage.getMainReports().getJScore() * 100);
-            callbackContext.success(jscore);
+            callbackContext.success(
+                    jscore
+            );
+            return true;
+        } else if(action.equals("main")){
+            mainReports = storage.getMainReports();
+            callbackContext.success(
+                    convertToJSON(mainReports)
+            );
             return true;
         } else if(action.equals("hogs")){
             hogReports = storage.getHogReports();
-            callbackContext.success(convertToJSON(hogReports));
+            callbackContext.success(
+                    convertToJSON(hogReports)
+            );
             return true;
         } else if(action.equals("bugs")){
             bugReports = storage.getBugReports();
-            callbackContext.success(convertToJSON(bugReports));
+            callbackContext.success(
+                    convertToJSON(bugReports)
+            );
             return true;
         } else if(action.equals("ready")){
             // This is very performance heavy, replace!
@@ -120,18 +133,37 @@ public class Carat extends CordovaPlugin {
 
     }
     
+    // JSON conversion
+    
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
-                JSONObject hog = new JSONObject()
+                JSONObject reportObject = new JSONObject()
                         .put("label", s.getAppLabel())
                         .put("name", s.getAppName())
                         .put("priority",s.getAppPriority())
                         .put("benefit",s.getBenefitText())
-                        .put("expected",s.getExpectedValue())
+                        .put("samples", s.getSamples())
+                        .put("samplesWithout", s.getSamplesWithout())
+                        .put("expected", s.getExpectedValue())
+                        .put("expectedWithout", s.getExpectedValueWithout())
                         .put("type", s.getType());
-                results.put(hog);
+                results.put(reportObject);
         }
+        return results;
+    }
+    
+    public JSONObject convertToJSON(Reports r) throws JSONException{
+        JSONObject results = new JSONObject()
+                .put("jscore", r.getJScore())
+                .put("jscoreWith", r.getJScore())
+                .put("jscoreWithout", r.jScoreWithout)
+                .put("os", r.os)
+                .put("osWithout", r.osWithout)
+                .put("model",r.model)
+                .put("modelWithout", r.modelWithout)
+                .put("similarApps", r.similarApps)
+                .put("similarAppsWithout", r.similarAppsWithout);
         return results;
     }
 
