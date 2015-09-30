@@ -75,13 +75,8 @@ public final class DataStorage {
     
     public Reports getMainReports() {
         Log.v("Carat", "Getting main reports");
-        if (mainReports != null && mainReports.get() != null) {
-            Reports reports = mainReports.get();
-            Log.v("Carat", "Main reports are in memory, returning "+reports);
-            return reports;
-        }
-        Log.v("Carat", "Main reports are not in memory.");
-        return readMainReports();
+        return (mainReports != null && mainReports.get() != null) ?
+                mainReports.get() : readMainReports();
     }
     
     public SimpleHogBug[] getHogReports() {

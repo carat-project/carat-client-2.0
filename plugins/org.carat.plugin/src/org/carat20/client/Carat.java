@@ -49,7 +49,7 @@ public class Carat extends CordovaPlugin {
      *    in a separate thread to avoid blocking Webcore.
      * 
      * Ideally the storage should contain all reports after these steps.
-     * @param cordova
+     * @param cordova Activity interface letting us access the context
      * @param webView
      */
     @Override
@@ -57,11 +57,6 @@ public class Carat extends CordovaPlugin {
         // This should remain at the top, unless modifying params
         super.initialize(cordova, webView);
         Log.v("Carat", "Carat plugin is initializing");
-
-        /**
-         * 
-        
-        */
         
         context = this.cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);

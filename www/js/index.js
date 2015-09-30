@@ -51,21 +51,30 @@ var app = {
             carat.getMainReports(displayMain);
         }
 
+
         //Display callsbacks get called once whenReady fires
         var displayJscore = function(jscore){
             document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
         }
 
+        // Create cards for hogs and append to UI
         var displayHogs = function(hogs){
-            document.getElementById("hogdebug").innerHTML = JSON.stringify(hogs);
+            for(var i in hogs){
+                var card = app.constructCardHTML(hogs[i])
+                document.getElementById("system").appendChild(card);
+            }
         }
 
+        // Create cards for bugs and append to UI
         var displayBugs = function(bugs){
-            document.getElementById("bugdebug").innerHTML = JSON.stringify(bugs);
+            for(var i in bugs){
+                var card = app.constructCardHTML(bugs[i])
+                document.getElementById("system").appendChild(card);
+            }
         }
 
         var displayMain = function(main){
-            document.getElementById("maindebug").innerHTML = JSON.stringify(main);
+            //Not used currently
         }
 
         //Temporary solution for waiting plugin to finish
@@ -75,5 +84,34 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
+    },
+
+
+    // This should eventually be moved to a separate file.
+    // But for now, pretend we're react.
+    constructCardHTML: function(hogBug){
+        var cardHTML =
+            '<div class="mdl-card mdl-shadow--2dp"> ' +
+                    '<div class="carat-card__title">' +
+                        '<div class="mdl-card__title-text">' + hogBug.name + '</div>'+
+                        '<div class="mdl-layout-spacer"></div>'+
+                        '<span class="carat-card-time">' + hogBug.benefit + '</span>'+
+                    '</div>'+
+                    '<div class="mdl-card__supporting-text">'+
+                        'Type: ' + hogBug.type +
+                        '<div class="collapse"></div>'+
+                    '</div>'+
+                    '<div class="mdl-card__actions">'+
+                        '<a class="mdl-card__more" '+
+                            'role="button" '+
+                            'data-toggle="collapse" '+
+                            'aria-expanded="false" '+
+                            'aria-controls="collapseExample">More</a>'+
+                    '</div>'+
+                '</div>'
+
+        var card = document.createElement('div');
+        card.innerHTML = cardHTML;
+        return card;
     }
 };
