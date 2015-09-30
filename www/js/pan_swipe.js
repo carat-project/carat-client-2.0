@@ -81,13 +81,32 @@ function makeElemPanSwipable(el) {
         }
         toggleVisibility(acceptCallback, cancelCallback);
     }
+    
+    var onTap = function(ev) {
+    console.log(el.className);
+        var moreText = document.querySelector("#card-" + el.id + "-textpand");
+    console.log(moreText);
+    if (moreText.className == "collapse.in") {
+        moreText.className="collapse";
+    } else {
+        moreText.className = "collapse.in";
+    }
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            resetElement();
+        }, 200);
+        requestElementUpdate();
+    }
 
 
-    mc.add(new Hammer.Pan({ threshold: 0, pointers: 0 }));
+    mc.add(new Hammer.Pan({ threshold: 30, pointers: 0 }));
     mc.add(new Hammer.Swipe()).recognizeWith(mc.get('pan'));
+    mc.add( new Hammer.Tap({ threshold:15, event: 'singletap' }) );
     mc.on("panstart panmove", onPan);
     mc.on("swiperight", onSwipeRight);
     mc.on("swipeleft", onSwipeLeft);
+    mc.on("singletap", onTap);
+
 
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
