@@ -83,12 +83,13 @@ model.notifications = (function() {
 
     var hogsBugsPurify = function(arr) {
         return arr.map(function(elem) {
+            var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
             var result =  makeNotification("",
                                            elem.name,
                                            "Samples: " + elem.samples,
                                            ["smaller-time-text"],
                                            elem.benefit,
-                                           elem.name);
+                                           idPrefix + "-" + elem.type);
             return result;
         });
     };

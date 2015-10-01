@@ -27,7 +27,7 @@ function makeElemPanSwipable(el) {
             rz: 0
         };
         requestElementUpdate();
-    }
+    };
 
     var updateElementTransform = function() {
 
@@ -41,67 +41,67 @@ function makeElemPanSwipable(el) {
         el.style.mozTransform = value;
         el.style.transform = value;
         ticking = false;
-    }
+    };
     var requestElementUpdate = function() {
         if(!ticking) {
             reqAnimationFrame(updateElementTransform);
             ticking = true;
         }
-    }
+    };
 
 
     var onPanStart = function(ev) {
         var angle = Math.abs(ev.angle);
-                console.log("trying to start"  + angle);
+        console.log("trying to start"  + angle);
 
 
-            if (angle >= 90 && angle < 150)
-                return;
+        if (angle >= 90 && angle < 150)
+            return;
 
-            if (angle > 30 && angle < 90)
-                return;
+        if (angle > 30 && angle < 90)
+            return;
 
         moving = true;
         console.log("start");
-    }
-    
+    };
+
     var onPanMove = function(ev) {
         if (moving == true) {
             console.log("moving");
-          
+
             if(el.classList.contains("animate")) {
-            el.classList.remove("animate");
-        }
-            
-        transform.translate = {
-            x: START_X + ev.deltaX,
-            y: START_Y
-        };
-        requestElementUpdate();
+                el.classList.remove("animate");
             }
-        
-    }
-        
-    
-        
+
+            transform.translate = {
+                x: START_X + ev.deltaX,
+                y: START_Y
+            };
+            requestElementUpdate();
+        }
+
+    };
+
+
+
     var onPanEnd = function(ev) {
-                if (moving == true) {
+        if (moving == true) {
 
 
-//        transform.translate = {
-//            x: START_X,
-//            y: START_Y
-//        };
-//                
-//        requestElementUpdate();
-        moving = false;
-        console.log("end");
-                }
-    }
-    
+            //        transform.translate = {
+            //            x: START_X,
+            //            y: START_Y
+            //        };
+            //
+            //        requestElementUpdate();
+            moving = false;
+            console.log("end");
+        }
+    };
+
     var onPan = function(ev) {
         var angle = Math.abs(ev.angle);
-        console.log(angle); 
+        console.log(angle);
         if(el.classList.contains("animate")) {
             el.classList.remove("animate");
         }
@@ -110,8 +110,8 @@ function makeElemPanSwipable(el) {
             y: START_Y
         };
         requestElementUpdate();
-        
-    }
+
+    };
 
     var onSwipeRight = function(ev) {
         transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
@@ -122,34 +122,34 @@ function makeElemPanSwipable(el) {
         }, 300);
         requestElementUpdate();
         el.style.display='none';
-    }
+    };
 
     var onSwipeLeft = function(ev) {
         onSwipeRight(ev);
 
         var acceptCallback = function() {
             snooze(el.id);
-        }
+        };
         var cancelCallback = function() {
             cancel(el.id);
-        }
+        };
         toggleVisibility(acceptCallback, cancelCallback);
-    }
-    
+    };
+
     var onTap = function(ev) {
-        var moreText = document.querySelector("#card-" + el.id + "-textpand");       
-               
-    if (moreText.className == "collapse.in") {
-        moreText.className="collapse";      
-    } else if (moreText.className="collapse") {
-        moreText.className = "collapse.in";
-    }
+        var moreText = document.querySelector("#card-" + el.id + "-textpand");
+
+        if (moreText && moreText.className === "collapse.in") {
+            moreText.className="collapse";
+        } else if (moreText && moreText.className === "collapse") {
+            moreText.className = "collapse.in";
+        }
         clearTimeout(timer);
         timer = setTimeout(function () {
             resetElement();
         }, 200);
         requestElementUpdate();
-    }
+    };
 
 
     mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
@@ -183,13 +183,13 @@ function toggleElemVisibilityOff(id) {
 
 function setPopupAcceptCallback(callback) {
     var acceptButton = document
-        .getElementById("popup-accept-button");
+            .getElementById("popup-accept-button");
     acceptButton.onclick = callback;
 }
 
 function setPopupCancelCallback(callback) {
     var cancelButton = document
-        .getElementById("popup-cancel-button");
+            .getElementById("popup-cancel-button");
     cancelButton.onclick = callback;
 }
 
