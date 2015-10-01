@@ -17,10 +17,6 @@
  * under the License.
  */
 
-model = {
-    notifications: {}
-};
-
 var app = {
     // Construct controller
     initialize: function() {
@@ -67,11 +63,8 @@ var app = {
 
         // Create cards for bugs and append to UI
         var displayBugs = function(bugs){
-            for(var i in bugs){
-                var card = app.constructCardHTML(bugs[i])
-                document.getElementById("system").appendChild(card);
-            }
-        }
+            itemCards.generateCards(bugs);
+        };
 
         var displayMain = function(main){
             // ...

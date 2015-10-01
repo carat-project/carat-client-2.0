@@ -1,3 +1,4 @@
+model = {notifications: {}};
 model.notifications = (function() {
     //secondaryText: the text you get when you expand the card
     //
@@ -17,7 +18,7 @@ model.notifications = (function() {
                 id: id
             }
         };
-    }
+    };
 
     var makeSummaryEntry = function(name, timeDrain, icon) {
 
@@ -28,7 +29,7 @@ model.notifications = (function() {
                 icon: icon
             }
         };
-    }
+    };
 
     var makeSummary = function(title, entries, id) {
 
@@ -39,7 +40,7 @@ model.notifications = (function() {
                 id: id
             }
         };
-    }
+    };
 
     var getGeneral = function() {
 
@@ -78,11 +79,23 @@ model.notifications = (function() {
                         ],
                         "summary-0")
         ];
-    }
+    };
 
-    var getBugs = function() {
-        return [];
-    }
+    var getBugs = function(bugsSource) {
+        var purify = function(arr) {
+            return arr.map(function(elem) {
+                var result =  makeNotification("",
+                                 elem.name,
+                                 "Samples: " + elem.samples,
+                                 ["smaller-time-text"],
+                                 elem.benefit,
+                                 elem.name);
+                return result;
+            });
+        };
+        var bugs = purify(bugsSource);
+        return bugs;
+    };
 
     var getHogs = function() {
         return [
@@ -105,11 +118,11 @@ model.notifications = (function() {
                              0,
                              "item-5")
         ];
-    }
+    };
 
     var getSystem = function() {
         return [];
-    }
+    };
 
 
     return {
@@ -117,5 +130,5 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem
-    }
+    };
 })();

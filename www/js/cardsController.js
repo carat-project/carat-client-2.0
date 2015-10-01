@@ -67,6 +67,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     var injectTitle = function(cardDomNode, title) {
 
+        if(!title) {
+            return;
+        }
+
         var titleNode = cardDomNode
             .querySelector(".mdl-card__title-text");
 
@@ -74,6 +78,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 
     var injectMainText = function(cardDomNode, mainText) {
+
+        if(!mainText) {
+            return;
+        }
 
         var mainTextNode = cardDomNode
             .querySelector(".mdl-card__supporting-text");
@@ -113,12 +121,19 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     var makeTimeDrainText = function(timeDrainNode,
                                      timeDrain) {
+        var timeDrainText;
+
         if(!timeDrain) {
             trashANode(timeDrainNode);
+
+            return timeDrainNode;
+        } else if(typeof timeDrain === "number"){
+            timeDrainText = "-" + timeDrain + "min";
         } else {
-            var timeDrainText = "-" + timeDrain + "min";
-            addNodeText(timeDrainNode, timeDrainText);
+            timeDrainText = timeDrain;
         }
+
+        addNodeText(timeDrainNode, timeDrainText);
 
         return timeDrainNode;
     };
@@ -264,10 +279,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            makeCardBasedOnModel);
     };
 
-    var getBugsCards = function() {
+    var getBugsCards = function(bugsSource) {
 
-        return homebrewMap(notificationsArray.getBugs(),
+        var result =  homebrewMap(notificationsArray.getBugs(bugsSource),
                            makeCardBasedOnModel);
+
+        return result;
     };
 
     var getSystemCards = function() {
@@ -292,10 +309,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                    nodeArray);
     };
 
-    var generateCards = function() {
+    var generateCards = function(bugsSource) {
 
         generatePage("#home", getHomeCards());
-        generatePage("#bugs", getBugsCards());
+        generatePage("#bugs", getBugsCards(bugsSource));
         generatePage("#hogs", getHogsCards());
         generatePage("#system", getSystemCards());
     };
@@ -305,4 +322,3 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 })(model.notifications, makeElemPanSwipable);
 
-itemCards.generateCards();
