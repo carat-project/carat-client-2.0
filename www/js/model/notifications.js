@@ -1,3 +1,4 @@
+model = {notifications: {}};
 model.notifications = (function() {
     //secondaryText: the text you get when you expand the card
     //
@@ -17,7 +18,7 @@ model.notifications = (function() {
                 id: id
             }
         };
-    }
+    };
 
     var makeSummaryEntry = function(name, timeDrain, icon) {
 
@@ -28,7 +29,7 @@ model.notifications = (function() {
                 icon: icon
             }
         };
-    }
+    };
 
     var makeSummary = function(title, entries, id) {
 
@@ -39,7 +40,7 @@ model.notifications = (function() {
                 id: id
             }
         };
-    }
+    };
 
     var getGeneral = function() {
 
@@ -78,38 +79,35 @@ model.notifications = (function() {
                         ],
                         "summary-0")
         ];
-    }
+    };
 
-    var getBugs = function() {
-        return [];
-    }
+    var hogsBugsPurify = function(arr) {
+        return arr.map(function(elem) {
+            var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
+            var result =  makeNotification("",
+                                           elem.name,
+                                           "Samples: " + elem.samples,
+                                           ["smaller-time-text"],
+                                           elem.benefit,
+                                           idPrefix + "-" + elem.type);
+            return result;
+        });
+    };
 
-    var getHogs = function() {
-        return [
-            makeNotification("Hogs",
-                             "Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.",
-                             "",
-                             ["gray-title"],
-                             0,
-                             "item-3"),
-            makeNotification("Facebook",
-                             "Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something. Hogs are etc. text in here. Something something.",
-                             "",
-                             [],
-                             39,
-                             "item-4"),
-            makeNotification("Maps",
-                             "Info text in here. Something something.",
-                             "",
-                             [],
-                             0,
-                             "item-5")
-        ];
-    }
+
+    var getBugs = function(bugsSource) {
+        var bugs = hogsBugsPurify(bugsSource);
+        return bugs;
+    };
+
+    var getHogs = function(hogsSource) {
+        var hogs = hogsBugsPurify(hogsSource);
+        return hogs;
+    };
 
     var getSystem = function() {
         return [];
-    }
+    };
 
 
     return {
@@ -117,5 +115,5 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem
-    }
+    };
 })();

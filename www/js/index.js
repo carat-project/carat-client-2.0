@@ -17,68 +17,72 @@
  * under the License.
  */
 
-model = {
-    notifications: {}
-};
-
 var app = {
     // Construct controller
     initialize: function() {
-        console.log("Initializing");
+        console.log("Initializing application");
         this.bindEvents();
     },
 
-
     // Bind functions to their corresponding events
     bindEvents: function() {
-        console.log("Binding deviceready");
+        console.log("Binding events");
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('dataready', this.onDataReady, false);
     },
 
 
     // These functions get called when device is ready
     onDeviceReady: function() {
-        console.log("Device is ready");
         app.receivedEvent('deviceready');
-        var updateData = function(){
-            console.log("Plugin finished fetching data, updating UI..");
 
+        // Start waiting for data after cordova has fully loaded
+        console.log("Initializing plugin");
+        carat.initialize();
+    },
 
-            //These return JSON-type data
+    // Attempt at event driven async loading with a callback chain
+    onDataReady: function(){
+        app.receivedEvent('dataready');
+        console.log("Requesting data from plugin");
+
+        // Start of the callback chain
+        var displayData = function(){
             carat.getJscore(displayJscore);
-            carat.getHogs(displayHogs);
-            carat.getBugs(displayBugs);
-            carat.getMainReports(displayMain);
-        }
+        };
 
-
-        //Display callsbacks get called once whenReady fires
+        // Display jscore in a premade card in system tab
         var displayJscore = function(jscore){
+            console.log("Received Data: jscore");
             document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
-        }
 
-        // Create cards for hogs and append to UI
+            carat.getHogs(displayHogs);
+        };
+
+        // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
-            for(var i in hogs){
-                var card = app.constructCardHTML(hogs[i])
-                document.getElementById("system").appendChild(card);
-            }
-        }
+            console.log("Received Data: hogs");
+            itemCards.generateHogs(hogs);
 
-        // Create cards for bugs and append to UI
+            carat.getBugs(displayBugs);
+        };
+
+        // Create cards for bugs and append to system tab
         var displayBugs = function(bugs){
-            for(var i in bugs){
-                var card = app.constructCardHTML(bugs[i])
-                document.getElementById("system").appendChild(card);
-            }
-        }
+            console.log("Received Data: bugs");
+            itemCards.generateBugs(bugs);
 
+            carat.getMainReports(displayMain);
+        };
+
+        // Handle main reports
         var displayMain = function(main){
+            console.log("Finished rendering");
             // ...
-        }
+        };
 
-        //Temporary solution for waiting plugin to finish
-        carat.whenReady(updateData);
+        // Begin callback chain
+        displayData();
     },
 
     // Update DOM on a Received Event
@@ -91,24 +95,24 @@ var app = {
     // But for now, pretend we're react.
     constructCardHTML: function(hogBug){
         var cardHTML =
-            '<div class="mdl-card mdl-shadow--2dp"> ' +
-                    '<div class="carat-card__title">' +
-                        '<div class="mdl-card__title-text">' + hogBug.name + '</div>'+
-                        '<div class="mdl-layout-spacer"></div>'+
-                        '<span class="carat-card-time">' + hogBug.benefit + '</span>'+
-                    '</div>'+
-                    '<div class="mdl-card__supporting-text">'+
-                        'Type: ' + hogBug.type +
-                        '<div class="collapse"></div>'+
-                    '</div>'+
-                    '<div class="mdl-card__actions">'+
-                        '<a class="mdl-card__more" '+
-                            'role="button" '+
-                            'data-toggle="collapse" '+
-                            'aria-expanded="false" '+
-                            'aria-controls="collapseExample">More</a>'+
-                    '</div>'+
-                '</div>'
+                '<div class="mdl-card mdl-shadow--2dp"> ' +
+                '<div class="carat-card__title">' +
+                '<div class="mdl-card__title-text">' + hogBug.name + '</div>'+
+                '<div class="mdl-layout-spacer"></div>'+
+                '<span class="carat-card-time">' + hogBug.benefit + '</span>'+
+                '</div>'+
+                '<div class="mdl-card__supporting-text">'+
+                'Type: ' + hogBug.type +
+                '<div class="collapse"></div>'+
+                '</div>'+
+                '<div class="mdl-card__actions">'+
+                '<a class="mdl-card__more" '+
+                'role="button" '+
+                'data-toggle="collapse" '+
+                'aria-expanded="false" '+
+                'aria-controls="collapseExample">More</a>'+
+                '</div>'+
+                '</div>';
 
         var card = document.createElement('div');
         card.innerHTML = cardHTML;

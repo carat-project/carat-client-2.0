@@ -11,11 +11,12 @@ function makeElemPanSwipable(el) {
     var ticking = false;
     var transform;
     var timer;
+    var moving = false;
     var mc = new Hammer.Manager(el, { touchAction: "pan-y" });
 
     var resetElement = function() {
-        if(!el.classList.contains("animation")) {
-            el.classList.add("animation");
+        if(!el.classList.contains("animate")) {
+            el.classList.add("animate");
         }
         transform = {
             translate: { x: START_X, y: START_Y },
@@ -26,7 +27,7 @@ function makeElemPanSwipable(el) {
             rz: 0
         };
         requestElementUpdate();
-    }
+    };
 
     var updateElementTransform = function() {
 
@@ -40,24 +41,77 @@ function makeElemPanSwipable(el) {
         el.style.mozTransform = value;
         el.style.transform = value;
         ticking = false;
-    }
+    };
     var requestElementUpdate = function() {
         if(!ticking) {
             reqAnimationFrame(updateElementTransform);
             ticking = true;
         }
-    }
+    };
+
+
+    var onPanStart = function(ev) {
+        var angle = Math.abs(ev.angle);
+        console.log("trying to start"  + angle);
+
+
+        if (angle >= 90 && angle < 150)
+            return;
+
+        if (angle > 30 && angle < 90)
+            return;
+
+        moving = true;
+        console.log("start");
+    };
+
+    var onPanMove = function(ev) {
+        if (moving == true) {
+            console.log("moving");
+
+            if(el.classList.contains("animate")) {
+                el.classList.remove("animate");
+            }
+
+            transform.translate = {
+                x: START_X + ev.deltaX,
+                y: START_Y
+            };
+            requestElementUpdate();
+        }
+
+    };
+
+
+
+    var onPanEnd = function(ev) {
+        if (moving == true) {
+
+
+            //        transform.translate = {
+            //            x: START_X,
+            //            y: START_Y
+            //        };
+            //
+            //        requestElementUpdate();
+            moving = false;
+            console.log("end");
+        }
+    };
 
     var onPan = function(ev) {
-        if(el.classList.contains("animation")) {
-            el.classList.remove("animation");
+        var angle = Math.abs(ev.angle);
+        console.log(angle);
+        if(el.classList.contains("animate")) {
+            el.classList.remove("animate");
         }
         transform.translate = {
             x: START_X + ev.deltaX,
             y: START_Y
         };
         requestElementUpdate();
-    }
+
+    };
 
     var onSwipeRight = function(ev) {
         transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
@@ -68,46 +122,45 @@ function makeElemPanSwipable(el) {
         }, 300);
         requestElementUpdate();
         el.style.display='none';
-    }
+    };
 
     var onSwipeLeft = function(ev) {
         onSwipeRight(ev);
 
         var acceptCallback = function() {
             snooze(el.id);
-        }
+        };
         var cancelCallback = function() {
             cancel(el.id);
-        }
+        };
         toggleVisibility(acceptCallback, cancelCallback);
-    }
-    
+    };
+
     var onTap = function(ev) {
-    console.log(el.className);
         var moreText = document.querySelector("#card-" + el.id + "-textpand");
-    console.log(moreText);
-    if (moreText.className == "collapse.in") {
-        moreText.className="collapse";
-    } else {
-        moreText.className = "collapse.in";
-    }
+
+        if (moreText && moreText.className === "collapse.in") {
+            moreText.className="collapse";
+        } else if (moreText && moreText.className === "collapse") {
+            moreText.className = "collapse.in";
+        }
         clearTimeout(timer);
         timer = setTimeout(function () {
             resetElement();
         }, 200);
         requestElementUpdate();
-    }
+    };
 
 
-    mc.add(new Hammer.Pan({ threshold: 30, pointers: 0 }));
-    mc.add(new Hammer.Swipe()).recognizeWith(mc.get('pan'));
-    mc.add( new Hammer.Tap({ threshold:15, event: 'singletap' }) );
-    mc.on("panstart panmove", onPan);
+    mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
+    mc.add(new Hammer.Swipe({ threshold: 150, pointers: 1, velocity: 0.5 })).recognizeWith(mc.get('pan'));
+    mc.add( new Hammer.Tap({ threshold:15, pointers: 1, event: 'singletap' }) );
+    mc.on("panstart", onPanStart);
+    mc.on("panmove", onPanMove);
+    mc.on("panend", onPanEnd);
     mc.on("swiperight", onSwipeRight);
     mc.on("swipeleft", onSwipeLeft);
     mc.on("singletap", onTap);
-
-
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
             resetElement();
@@ -130,13 +183,13 @@ function toggleElemVisibilityOff(id) {
 
 function setPopupAcceptCallback(callback) {
     var acceptButton = document
-        .getElementById("popup-accept-button");
+            .getElementById("popup-accept-button");
     acceptButton.onclick = callback;
 }
 
 function setPopupCancelCallback(callback) {
     var cancelButton = document
-        .getElementById("popup-cancel-button");
+            .getElementById("popup-cancel-button");
     cancelButton.onclick = callback;
 }
 
