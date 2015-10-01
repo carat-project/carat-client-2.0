@@ -24,15 +24,15 @@ model = {
 var app = {
     // Construct controller
     initialize: function() {
-        console.log("Initializing");
+        console.log("Initializing application");
         this.bindEvents();
     },
-
 
     // Bind functions to their corresponding events
     bindEvents: function() {
         console.log("Binding deviceready");
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('dataready', this.onDataReady, false);
     },
 
 
@@ -40,45 +40,57 @@ var app = {
     onDeviceReady: function() {
         console.log("Device is ready");
         app.receivedEvent('deviceready');
-        var updateData = function(){
-            console.log("Plugin finished fetching data, updating UI..");
 
+        // Start waiting for data after cordova has fully loaded
+        carat.initialize();
+    },
 
-            //These return JSON-type data
+    // Attempt at event driven async loading with a callback chain
+    onDataReady: function(){
+        app.receivedEvent('dataready');
+        console.log("Fetching data from native java");
+
+        // Start of the callback chain
+        var displayData = function(){
             carat.getJscore(displayJscore);
-            carat.getHogs(displayHogs);
-            carat.getBugs(displayBugs);
-            carat.getMainReports(displayMain);
         }
 
-
-        //Display callsbacks get called once whenReady fires
+        // Display jscore in a premade card in system tab
         var displayJscore = function(jscore){
+            console.log("Received jscore");
             document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
+
+            carat.getHogs(displayHogs);
         }
 
-        // Create cards for hogs and append to UI
+        // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
+            console.log("Received hogs");
             for(var i in hogs){
                 var card = app.constructCardHTML(hogs[i])
                 document.getElementById("system").appendChild(card);
             }
+            carat.getBugs(displayBugs);
         }
 
-        // Create cards for bugs and append to UI
+        // Create cards for bugs and append to system tab
         var displayBugs = function(bugs){
+            console.log("Received bugs");
             for(var i in bugs){
                 var card = app.constructCardHTML(bugs[i])
                 document.getElementById("system").appendChild(card);
             }
+            carat.getMainReports(displayMain);
         }
 
+        // Handle main reports
         var displayMain = function(main){
+            console.log("Finished rendering view");
             // ...
         }
 
-        //Temporary solution for waiting plugin to finish
-        carat.whenReady(updateData);
+        // Begin callback chain
+        displayData();
     },
 
     // Update DOM on a Received Event

@@ -35,12 +35,15 @@ module.exports = {
         	       [""]
                 );
 	},
-	whenReady: function(callback){
-		var exec = require("cordova/exec");
+	initialize: function(){
+                var exec = require("cordova/exec");
+                var callback = function(d){
+                        return;
+                }
                 exec(callback,
         	       callback,
         	       "CaratPlugin",
-        	       "ready",
+        	       "init",
         	       [""]
                 );
 	}

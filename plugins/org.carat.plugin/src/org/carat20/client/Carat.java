@@ -36,6 +36,8 @@ public class Carat extends CordovaPlugin {
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
+    
+    private CordovaWebView cordovaWebView;
 
     /**
      * Prepares context, storage and communication manager for use.
@@ -53,12 +55,23 @@ public class Carat extends CordovaPlugin {
      * @param webView Main interface for interacting with Cordova webView
      */
     @Override
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+    public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+        Log.v("Carat", "Carat plugin is starting");
+        this.cordovaWebView = webView;
+        
         // This should remain at the top, unless modifying params
         super.initialize(cordova, webView);
+    }
+    
+    public void sendEvent(String event){
+        Log.v("Carat", "Sending " + event + " to webView");
+        this.cordovaWebView.loadUrl("javascript:cordova.fireDocumentEvent('"+event+"');");
+    }
+    
+    public void prepareData(){
         Log.v("Carat", "Carat plugin is initializing");
         
-        context = this.cordova.getActivity().getApplicationContext();
+        context = cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);
         c = new CommunicationManager(storage);
         
@@ -74,12 +87,20 @@ public class Carat extends CordovaPlugin {
                     //Missing data
                     else if (!storage.isComplete()){
                         Log.v("Carat", "Some storages are empty, refreshing");
-                        if(storage.mainEmpty()) c.refreshMainReports();
-                        if(storage.hogsEmpty()) c.refreshHogsBugs("hogs");
-                        if(storage.bugsEmpty()) c.refreshHogsBugs("bugs");
+                        if(storage.getMainReports() == null) c.refreshMainReports();
+                        if(storage.getHogReports() == null) c.refreshHogsBugs("hogs");
+                        if(storage.getBugReports() == null) c.refreshHogsBugs("bugs");
                     } else {
                         Log.v("Carat", "Storages are complete and ready to go");
                     }
+                    
+                    //Forget about the bridge
+                    cordova.getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendEvent("dataready");
+                        }
+                    });
                 }
         });
         Log.v("Carat", "Completed initialization phase");
@@ -102,45 +123,40 @@ public class Carat extends CordovaPlugin {
 
         Log.v("Carat", "Calling action " + action);
         
-        // No support for switching strings yet
-        if(action.equals("jscore")){
+        //Initialize
+        if(action.equals("init")){
+            Log.v("Carat", "Initializing plugin");
+            this.prepareData();
+            callbackContext.success();
+        // Jscore
+        } else if(action.equals("jscore")){
             jscore = (int)(storage.getMainReports().getJScore() * 100);
             callbackContext.success(
                     jscore
             );
             return true;
+        // Main reports
         } else if(action.equals("main")){
             mainReports = storage.getMainReports();
             callbackContext.success(
                     convertToJSON(mainReports)
             );
             return true;
+        //Hogs
         } else if(action.equals("hogs")){
             hogReports = storage.getHogReports();
             callbackContext.success(
                     convertToJSON(hogReports)
             );
             return true;
+        // Bugs
         } else if(action.equals("bugs")){
             bugReports = storage.getBugReports();
             callbackContext.success(
                     convertToJSON(bugReports)
             );
             return true;
-        } else if(action.equals("ready")){
-            Log.v("Carat", "Entering data wait state");
-            long startTime = System.currentTimeMillis();
-            // This is very performance heavy, replace!
-            while(true){
-                if(storage.isComplete()){
-                    break;
-                }
-            }
-            long operationTime = ((System.currentTimeMillis()-startTime)/1000);
-            Log.v("Carat", "Built storage successfully in " + operationTime + "s");
-            callbackContext.success();
-            return true;
-        }
+        }    
         callbackContext.error("No such action");
         return false;
     }
