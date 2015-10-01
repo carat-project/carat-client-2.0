@@ -36,8 +36,71 @@ public class Carat extends CordovaPlugin {
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
-    
-    private CordovaWebView cordovaWebView;
+
+    /**
+     * Initializes CordovaPlugin and gives early access to CordovaWebView
+     * @param cordova Activity interface with access to application context
+     * @param webView Main interface for interacting with Cordova webView
+     */
+    @Override
+    public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
+        Log.v("Carat", "Plugin is initializing");
+        super.initialize(cordova, webView);
+        
+        // ...
+    }
+
+    /**
+     * Provides an interface for cordova exec which accepts data requests and
+     * fulfills them by either utilizing the server or local storage. Callbacks
+     * are mostly used for passing reports to globally accessible Javascript
+     * objects. Initialize takes care of data and invokes dataready-event.
+     *
+     * @param action Determines the function call.
+     * @param args Optional information about the request, e.g. events.
+     * @param callbackContext Used for returning data to callback functions.
+     * @return State boolean, which is true if an action gets executed.
+     * @throws JSONException JSONArray used for args is invalid.
+     */
+    @Override
+    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
+        Log.v("Carat", "Calling action " + action);
+        
+        // Switch action
+        if(action.equals("init")){
+            Log.v("Carat", "Initializing plugin");
+            this.prepareData();
+            callbackContext.success();
+        } else if(action.equals("jscore")){
+            jscore = (int)(storage.getMainReports().getJScore() * 100);
+            callbackContext.success(
+                    jscore
+            );
+            return true;
+        } else if(action.equals("main")){
+            mainReports = storage.getMainReports();
+            callbackContext.success(
+                    convertToJSON(mainReports)
+            );
+            return true;
+        } else if(action.equals("hogs")){
+            hogReports = storage.getHogReports();
+            callbackContext.success(
+                    convertToJSON(hogReports)
+            );
+            return true;
+        } else if(action.equals("bugs")){
+            bugReports = storage.getBugReports();
+            callbackContext.success(
+                    convertToJSON(bugReports)
+            );
+            return true;
+        }    
+        
+        // No matching actions found
+        callbackContext.error("No such action");
+        return false;
+    }
 
     /**
      * Prepares context, storage and communication manager for use.
@@ -51,25 +114,9 @@ public class Carat extends CordovaPlugin {
      *    in a separate thread to avoid blocking Webcore.
      * 
      * Ideally the storage should contain all reports after these steps.
-     * @param cordova Activity interface with access to application context
-     * @param webView Main interface for interacting with Cordova webView
      */
-    @Override
-    public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
-        Log.v("Carat", "Carat plugin is starting");
-        this.cordovaWebView = webView;
-        
-        // This should remain at the top, unless modifying params
-        super.initialize(cordova, webView);
-    }
-    
-    public void sendEvent(String event){
-        Log.v("Carat", "Sending " + event + " to webView");
-        this.cordovaWebView.loadUrl("javascript:cordova.fireDocumentEvent('"+event+"');");
-    }
-    
     public void prepareData(){
-        Log.v("Carat", "Carat plugin is initializing");
+        Log.v("Carat", "Plugin is preparing data");
         
         context = cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);
@@ -107,58 +154,14 @@ public class Carat extends CordovaPlugin {
     }
 
     /**
-     * Provides an interface for cordova exec which accepts data requests and
-     * fulfills them by either utilizing the server or local storage. Callbacks
-     * are mostly used for passing reports to globally accessible Javascript
-     * objects.
-     *
-     * @param action Determines the function call.
-     * @param args Optional information about the request, e.g. events.
-     * @param callbackContext Used for returning data to callback functions.
-     * @return State boolean, which is true if an action gets executed.
-     * @throws JSONException JSONArray used for args is invalid.
+     * Invokes a webview event.
+     * @param event String representation.
      */
-    @Override
-    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-
-        Log.v("Carat", "Calling action " + action);
-        
-        //Initialize
-        if(action.equals("init")){
-            Log.v("Carat", "Initializing plugin");
-            this.prepareData();
-            callbackContext.success();
-        // Jscore
-        } else if(action.equals("jscore")){
-            jscore = (int)(storage.getMainReports().getJScore() * 100);
-            callbackContext.success(
-                    jscore
-            );
-            return true;
-        // Main reports
-        } else if(action.equals("main")){
-            mainReports = storage.getMainReports();
-            callbackContext.success(
-                    convertToJSON(mainReports)
-            );
-            return true;
-        //Hogs
-        } else if(action.equals("hogs")){
-            hogReports = storage.getHogReports();
-            callbackContext.success(
-                    convertToJSON(hogReports)
-            );
-            return true;
-        // Bugs
-        } else if(action.equals("bugs")){
-            bugReports = storage.getBugReports();
-            callbackContext.success(
-                    convertToJSON(bugReports)
-            );
-            return true;
-        }    
-        callbackContext.error("No such action");
-        return false;
+    public void sendEvent(String event){
+        Log.v("Carat", "Sending " + event + " to webView");
+        webView.loadUrl(
+                "javascript:cordova.fireDocumentEvent('"+event+"');"
+        );
     }
 
     /**
@@ -173,7 +176,7 @@ public class Carat extends CordovaPlugin {
     // JSON conversion
     
     /**
-     * Creates a JSON format for hog or bug reports
+     * Creates a JSON array for hog or bug reports
      * @param reports Hogs/bugs in a list
      * @return JSONArray Containing each report as a JSONObject
      * @throws JSONException Object or array cannot be created
@@ -196,8 +199,9 @@ public class Carat extends CordovaPlugin {
         }
         return results;
     }
+
     /**
-     * Creates a JSON format for main reports.
+     * Creates a JSON object for main reports.
      * @param r Main reports
      * @return JSONObject containing main report data
      * @throws JSONException Object cannot be created
