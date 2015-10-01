@@ -26,7 +26,7 @@ var app = {
 
     // Bind functions to their corresponding events
     bindEvents: function() {
-        console.log("Binding deviceready");
+        console.log("Binding events");
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('dataready', this.onDataReady, false);
     },
@@ -34,17 +34,17 @@ var app = {
 
     // These functions get called when device is ready
     onDeviceReady: function() {
-        console.log("Device is ready");
         app.receivedEvent('deviceready');
 
         // Start waiting for data after cordova has fully loaded
+        console.log("Initializing plugin");
         carat.initialize();
     },
 
     // Attempt at event driven async loading with a callback chain
     onDataReady: function(){
         app.receivedEvent('dataready');
-        console.log("Fetching data from native java");
+        console.log("Requesting data from plugin");
 
         // Start of the callback chain
         var displayData = function(){
@@ -53,7 +53,7 @@ var app = {
 
         // Display jscore in a premade card in system tab
         var displayJscore = function(jscore){
-            console.log("Received jscore");
+            console.log("Received Data: jscore");
             document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
 
             carat.getHogs(displayHogs);
@@ -61,7 +61,7 @@ var app = {
 
         // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
-            console.log("Received hogs");
+            console.log("Received Data: hogs");
             itemCards.generateHogs(hogs);
 
             carat.getBugs(displayBugs);
@@ -69,7 +69,7 @@ var app = {
 
         // Create cards for bugs and append to system tab
         var displayBugs = function(bugs){
-            console.log("Received bugs");
+            console.log("Received Data: bugs");
             itemCards.generateBugs(bugs);
 
             carat.getMainReports(displayMain);
@@ -77,7 +77,7 @@ var app = {
 
         // Handle main reports
         var displayMain = function(main){
-            console.log("Finished rendering view");
+            console.log("Finished rendering");
             // ...
         };
 
