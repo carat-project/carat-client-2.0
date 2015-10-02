@@ -67,46 +67,48 @@ public class Carat extends CordovaPlugin {
      * @param args Optional information about the request, e.g. events.
      * @param callbackContext Used for returning data to callback functions.
      * @return State boolean, which is true if an action gets executed.
-     * @throws JSONException JSONArray used for args is invalid.
      */
     @Override
-    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(final String action, JSONArray args, final CallbackContext callbackContext) {
         Log.v("Carat", "Calling action " + action);
-        
-        // Switch action
-        if(action.equals("init")){
-            Log.v("Carat", "Initializing plugin");
-            this.prepareData();
-            callbackContext.success();
-        } else if(action.equals("jscore")){
-            jscore = (int)(storage.getMainReports().getJScore() * 100);
-            callbackContext.success(
-                    jscore
-            );
-            return true;
-        } else if(action.equals("main")){
-            mainReports = storage.getMainReports();
-            callbackContext.success(
-                    convertToJSON(mainReports)
-            );
-            return true;
-        } else if(action.equals("hogs")){
-            hogReports = storage.getHogReports();
-            callbackContext.success(
-                    convertToJSON(hogReports)
-            );
-            return true;
-        } else if(action.equals("bugs")){
-            bugReports = storage.getBugReports();
-            callbackContext.success(
-                    convertToJSON(bugReports)
-            );
-            return true;
-        }    
-        
-        // No matching actions found
-        callbackContext.error("No such action");
-        return false;
+        cordova.getThreadPool().execute(new Runnable(){
+            @Override
+            public void run() {
+                try{
+                    // Switch action
+                    if(action.equals("init")){
+                        Log.v("Carat", "Initializing plugin");
+                        prepareData();
+                        callbackContext.success();
+                    } else if(action.equals("jscore")){
+                        jscore = (int)(storage.getMainReports().getJScore() * 100);
+                        callbackContext.success(
+                                jscore
+                        );
+                    } else if(action.equals("main")){
+                        mainReports = storage.getMainReports();
+                        callbackContext.success(
+                                convertToJSON(mainReports)
+                        );
+                    } else if(action.equals("hogs")){
+                        hogReports = storage.getHogReports();
+                        callbackContext.success(
+                                convertToJSON(hogReports)
+                        );
+                    } else if(action.equals("bugs")){
+                        bugReports = storage.getBugReports();
+                        callbackContext.success(
+                                convertToJSON(bugReports)
+                        );
+                    }    
+                    // No matching actions found
+                    callbackContext.error("No such action");
+                } catch (JSONException e){
+                    Log.v("Carat", "JSONException: "+e);
+                }
+            }
+        });
+        return true;
     }
 
     /**
