@@ -62,6 +62,7 @@ var app = {
         // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
+            //pass hogs to controller
             itemCards.generateHogs(hogs);
 
             carat.getBugs(displayBugs);
@@ -70,6 +71,7 @@ var app = {
         // Create cards for bugs and append to system tab
         var displayBugs = function(bugs){
             console.log("Received Data: bugs");
+            //pass bugs to controller
             itemCards.generateBugs(bugs);
 
             carat.getMainReports(displayMain);

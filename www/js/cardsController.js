@@ -1,4 +1,5 @@
 itemCards = (function(notificationsArray, panSwipeCallback) {
+    //                  ^dependency callbacks/objects
 
     var parseDomNode = function(htmlString) {
 
@@ -21,6 +22,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
+    //summary card template
     var getNewSummaryEntryDomNodeTemplate = function() {
         var htmlString = '<div class="mdl-cell mdl-cell--2-col"><div><i class="material-icons"></i></div><div><strong></strong></div><div><span class="mdl-color-text--red-300"></span></div></div>';
 
@@ -29,6 +31,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
+    //summary card item template
     var getNewSummaryDomNodeTemplate = function() {
         var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
 
@@ -37,12 +40,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
+    //remove a node from dom
     var trashANode = function(nodeToBeTrashed) {
 
         var parent = nodeToBeTrashed.parentNode;
         parent.removeChild(nodeToBeTrashed);
     };
 
+    //add a text node with text as content as a child of a node
     var addNodeText = function(nodeToBeTextified, text) {
 
         var textNode = document.createTextNode(text);
@@ -51,6 +56,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                           nodeToBeTextified.firstChild);
     };
 
+    //if text exists, add a text node as child, otherwise remove node
     var appendTextOrRemoveNode = function(nodeMaybeTextified,
                                           text) {
         if(!text) {
@@ -60,11 +66,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
     };
 
+    //add id to the right place in a card
     var injectIdToCard = function(cardDomNode, id) {
 
         cardDomNode.id = id;
     };
 
+    //add title to the right place in a card
     var injectTitle = function(cardDomNode, title) {
 
         if(!title) {
@@ -77,6 +85,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(titleNode, title);
     };
 
+    //add main text (the one that is always visible) to a card
     var injectMainText = function(cardDomNode, mainText) {
 
         if(!mainText) {
@@ -89,6 +98,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
 
+    //add additional text to a card, id is required for
+    //the expand to work
     var injectSecondaryText = function(cardDomNode,
                                        secondaryText,
                                        notificationId) {
@@ -110,6 +121,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
     };
 
+    //inject css style classes to card
     var injectClasses = function(cardDomNode, classes) {
 
         var nodeClassList = cardDomNode.classList;
@@ -119,6 +131,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
     };
 
+    //style the time drain or benefit text accordingly,
+    //based on whether it was given as an integer or string
     var makeTimeDrainText = function(timeDrainNode,
                                      timeDrain) {
         var timeDrainText;
@@ -138,6 +152,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return timeDrainNode;
     };
 
+    //inject time drain or benefit text to a node, styling
+    //it correctly
     var injectTimeDrain = function(cardDomNode, timeDrain) {
 
         var timeDrainNode = cardDomNode
@@ -147,6 +163,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     };
 
+    //name of summary item
     var injectSummaryEntryName = function(summaryEntryDomNode,
                                           name) {
         var nameNode = summaryEntryDomNode
@@ -155,6 +172,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(nameNode, name);
     };
 
+    //add summary item icon (for example, facebook icon)
     var injectSummaryEntryIcon = function(summaryEntryDomNode,
                                           icon) {
         var iconNode = summaryEntryDomNode
@@ -163,6 +181,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(iconNode, icon);
     };
 
+    //time drain or benefit of the item in question
     var injectSummaryEntryTimeDrain = function(
         summaryEntryDomNode, timeDrain) {
 
@@ -172,6 +191,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         makeTimeDrainText(timeDrainNode, timeDrain);
     };
 
+    //summary card title
     var injectSummaryTitle = function(summaryDomNode,
                                       title) {
 
@@ -181,6 +201,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(titleNode, title);
     };
 
+    //implementation of the map function, because for
+    //some reason the normal JS array map didn't work
     var homebrewMap = function(array, callback) {
         for(var i = 0; i < array.length; i++) {
             array[i] = callback(array[i]);
@@ -189,6 +211,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return array;
     };
 
+    //insert concatees (array with some number of nodes)
+    //as children of 'spot' element, inserting them before first child
     var homebrewConcatChildren = function(spot,
                                           firstChild,
                                           concatees) {
@@ -199,6 +223,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     };
 
+    //creates summary entry dom node from summary entry model object
     var makeSummaryEntry = function(summaryEntryObject) {
 
         var domNode = getNewSummaryEntryDomNodeTemplate();
@@ -212,6 +237,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
+    //contructs summary card from summary model object
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
@@ -226,6 +252,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                summaryEntryNodes);
     };
 
+    //make either an item card (hog or bug) or summary card
+    //from a model object that represents either one
     var makeCardBasedOnModel = function(notificationObject) {
 
         var newCardNode;
@@ -265,7 +293,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 
 
-
+    //fetch correct models for the home tab and create corresponding cards
+    //for them
     var getHomeCards = function() {
 
         var result = homebrewMap(notificationsArray.getGeneral(),
@@ -273,12 +302,18 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return result;
     };
 
+    //pass hogs source(data from server) to
+    //model and get get a cleaned-up model object
+    //to create cards from
     var getHogsCards = function(hogsSource) {
 
         return homebrewMap(notificationsArray.getHogs(hogsSource),
                            makeCardBasedOnModel);
     };
 
+    //pass bugs source(data from server) to
+    //model and get a cleaned-up model object
+    //to create cards from
     var getBugsCards = function(bugsSource) {
 
         var result =  homebrewMap(notificationsArray.getBugs(bugsSource),
@@ -287,18 +322,23 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return result;
     };
 
+    //fetch a model object for the system tab cards
+    //and create corresponding cards for the tab
     var getSystemCards = function() {
 
         return homebrewMap(notificationsArray.getSystem(),
                            makeCardBasedOnModel);
     };
 
+    //select the correct spot to enter the cards in each tab
     var selectCardsSpot = function(selector) {
 
         return document.querySelector(selector + " .page-content");
     };
 
 
+    //generate cards for each tab (tab id passed in "selector", cards
+    //in "nodeArray")
     var generatePage = function(selector, nodeArray) {
 
         var rightSpot = selectCardsSpot(selector);
@@ -309,25 +349,29 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                    nodeArray);
     };
 
+    //generate home and system tab cards
     var generateCards = function() {
 
         generatePage("#home", getHomeCards());
         generatePage("#system", getSystemCards());
     };
 
+    //receive bugs server data; create and add corresponding cards
     var generateBugs = function(bugsSource) {
         generatePage("#bugs", getBugsCards(bugsSource));
     };
 
+    //receive hogs server data; create and add corresponding cards
     var generateHogs = function(hogsSource) {
         generatePage("#hogs", getHogsCards(hogsSource));
     };
 
+    //public methods of the module
     return {
         generateCards: generateCards,
         generateBugs: generateBugs,
         generateHogs: generateHogs
     };
-})(model.notifications, makeElemPanSwipable);
+})(model.notifications, makeElemPanSwipable); //dependencies
 
-itemCards.generateCards();
+itemCards.generateCards(); //bugs and hogs are generated elsewhere

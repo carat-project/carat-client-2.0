@@ -1,5 +1,7 @@
 model = {notifications: {}};
 model.notifications = (function() {
+
+    //basically a bug or hog card model representation
     //secondaryText: the text you get when you expand the card
     //
     //timeDrain: how much the item reduces battery life in minutes,
@@ -20,6 +22,7 @@ model.notifications = (function() {
         };
     };
 
+    //summary item model representation
     var makeSummaryEntry = function(name, timeDrain, icon) {
 
         return {
@@ -31,6 +34,7 @@ model.notifications = (function() {
         };
     };
 
+    //summary model representation
     var makeSummary = function(title, entries, id) {
 
         return {
@@ -42,6 +46,7 @@ model.notifications = (function() {
         };
     };
 
+    //currently dummy data
     var getGeneral = function() {
 
         return [
@@ -81,6 +86,8 @@ model.notifications = (function() {
         ];
     };
 
+    //function that cleans up data straight from native plugin
+    //so it can be passed forward
     var hogsBugsPurify = function(arr) {
         return arr.map(function(elem) {
             var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
@@ -95,21 +102,25 @@ model.notifications = (function() {
     };
 
 
+    //clean up bugs data
     var getBugs = function(bugsSource) {
         var bugs = hogsBugsPurify(bugsSource);
         return bugs;
     };
 
+    //clean up hogs data
     var getHogs = function(hogsSource) {
         var hogs = hogsBugsPurify(hogsSource);
         return hogs;
     };
 
+    //nothing at the moment
     var getSystem = function() {
         return [];
     };
 
 
+    //public methods of the module
     return {
         getGeneral: getGeneral,
         getBugs: getBugs,
