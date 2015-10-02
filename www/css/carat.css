@@ -246,7 +246,7 @@ _:-ms-input-placeholder, :root .carat-graph {
 	
 }
 
-#com-sec-android-app-mt-BUG > .button {
+#com-sec-android-app-mt-BUG div div span.button {
   padding: 8px 12px;
   font-size: 14px;
   background: #ccc;
@@ -256,7 +256,7 @@ _:-ms-input-placeholder, :root .carat-graph {
   cursor: pointer;
 }
 
-#com-sec-android-app-mt-BUG > .mdl-card__more {
+#com-sec-android-app-mt-BUG div a.mdl-card__more {
   width: 10px;
   height: 10px;
   float: left;
@@ -265,7 +265,7 @@ _:-ms-input-placeholder, :root .carat-graph {
   margin: 15px 15px 0 0;	
 }
 	
-#com-sec-android-app-mt-BUG > .icon {
+#com-sec-android-app-mt-BUG .icon {
   height: 64px;
   width: 64px;
   float: left;
