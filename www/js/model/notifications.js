@@ -6,13 +6,14 @@ model.notifications = (function() {
     //
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
-    var makeNotification = function(title, mainText,
+    var makeNotification = function(title, icon, mainText,
                                     secondaryText, classes,
                                     timeDrain, id) {
 
         return {
             item: {
                 title: title,
+                icon: icon,
                 mainText: mainText,
                 secondaryText: secondaryText,
                 classes: classes,
@@ -51,18 +52,21 @@ model.notifications = (function() {
 
         return [
             makeNotification("Bluetooth",
+            				 "",
                              "Info text in here. Something something. Info text in here. Something something.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
                              39,
                              "item-0"),
             makeNotification("Vaihtoehtoinen kortti",
+            				 "",
                              "Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              ["mint"],
                              39,
                              "item-1"),
             makeNotification("Wifi",
+            				 "",
                              "Swipe this card! Info text in here. Something something. Info text in here. Something something.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
@@ -91,7 +95,8 @@ model.notifications = (function() {
     var hogsBugsPurify = function(arr) {
         return arr.map(function(elem) {
             var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
-            var result =  makeNotification("",
+            var result =  makeNotification(elem.label,
+            							   elem.icon,
                                            elem.name,
                                            "Samples: " + elem.samples,
                                            ["smaller-time-text"],

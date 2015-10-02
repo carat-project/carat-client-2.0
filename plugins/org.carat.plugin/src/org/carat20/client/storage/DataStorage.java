@@ -1,6 +1,10 @@
 package org.carat20.client.storage;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,6 +29,7 @@ import org.carat20.client.thrift.Reports;
 public final class DataStorage {
 
     private final Context context;
+    private final PackageManager pm;
 
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
@@ -41,6 +46,7 @@ public final class DataStorage {
      */
     public DataStorage(Context context) {
         this.context = context;
+        this.pm = context.getPackageManager();
         
         //These might need to be optimized
         readMainReports();
@@ -240,8 +246,11 @@ public final class DataStorage {
         }
         return null;
     }
+    
+    // Below are some utility methods that should be moved elsewhere
 
-    // Convert HogsBugs list to SimpleHogBug list
+    // Convert HogsBugs list to SimpleHogBug list.
+    // Set application label and icon.
     private SimpleHogBug[] convertAndFilter(List<HogsBugs> list, boolean isBug) {
         if (list == null) {
             return null;
@@ -253,7 +262,10 @@ public final class DataStorage {
             HogsBugs item = list.get(i);
             String n = fixName(item.getAppName());
             SimpleHogBug h = new SimpleHogBug(n, isBug ? Constants.Type.BUG : Constants.Type.HOG);
-            h.setAppLabel(item.getAppLabel());
+            h.setAppPackage(item.getAppName());
+            h.setAppLabel(
+                    this.getApplicationLabel(n)
+            );
             String priority = item.getAppPriority();
             if (priority == null || priority.length() == 0) {
                 priority = "Foreground app";
@@ -269,6 +281,24 @@ public final class DataStorage {
             result.add(h);
         }
         return result.toArray(new SimpleHogBug[result.size()]);
+    }
+    
+    /**
+     * Return a human-readable application label from package name.
+     * @param packageName Fixed package name
+     * @return Application label if found, otherwise package name.
+     * Null package names are returned with <i>Unknown</i> as label.
+     */
+    private String getApplicationLabel(String packageName){
+        if(packageName == null) return "Unknown";
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+            if(info !=null){
+                return pm.getApplicationLabel(info).toString();
+            } else return packageName; 
+        } catch(NameNotFoundException e){
+            return packageName;
+        }
     }
 
     //Splits the string and returns everything before a colon+

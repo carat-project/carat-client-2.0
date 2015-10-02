@@ -1,11 +1,17 @@
 package org.carat20.client;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
@@ -29,7 +35,7 @@ import org.json.JSONObject;
 public class Carat extends CordovaPlugin {
 
     private static DataStorage storage;
-    private static CommunicationManager c;
+    private static CommunicationManager commManager;
     private static Context context;
 
     private int jscore;
@@ -38,7 +44,8 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] bugReports;
 
     /**
-     * Initializes CordovaPlugin and gives early access to CordovaWebView
+     * Initializes CordovaPlugin and gives early access to CordovaWebView.
+     * Creates ByteArrayOutputStream to avoid multiple object references.
      * @param cordova Activity interface with access to application context
      * @param webView Main interface for interacting with Cordova webView
      */
@@ -120,7 +127,7 @@ public class Carat extends CordovaPlugin {
         
         context = cordova.getActivity().getApplicationContext();
         storage = new DataStorage(context);
-        c = new CommunicationManager(storage);
+        commManager = new CommunicationManager(storage);
         
         cordova.getThreadPool().execute(new Runnable() {
                 @Override
@@ -128,15 +135,15 @@ public class Carat extends CordovaPlugin {
                     //No data
                     if(storage.isEmpty()){
                         Log.v("Carat", "Storages are empty, refreshing all reports");
-                        c.refreshAllReports();
+                        commManager.refreshAllReports();
                     }
                     
                     //Missing data
                     else if (!storage.isComplete()){
                         Log.v("Carat", "Some storages are empty, refreshing");
-                        if(storage.getMainReports() == null) c.refreshMainReports();
-                        if(storage.getHogReports() == null) c.refreshHogsBugs("hogs");
-                        if(storage.getBugReports() == null) c.refreshHogsBugs("bugs");
+                        if(storage.getMainReports() == null) commManager.refreshMainReports();
+                        if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
+                        if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
                     } else {
                         Log.v("Carat", "Storages are complete and ready to go");
                     }
@@ -173,6 +180,8 @@ public class Carat extends CordovaPlugin {
 
     }
     
+    // Below are some utility methods that should be moved elsewhere
+    
     // JSON conversion
     
     /**
@@ -185,9 +194,11 @@ public class Carat extends CordovaPlugin {
         Log.v("Converting hog/bug reports to JSON", Arrays.toString(reports));
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
+                String packageName = s.getAppName();
                 JSONObject reportObject = new JSONObject()
                         .put("label", s.getAppLabel())
-                        .put("name", s.getAppName())
+                        .put("icon", this.getBase64Icon(packageName))
+                        .put("name", packageName)
                         .put("priority",s.getAppPriority())
                         .put("benefit",s.getBenefitText())
                         .put("samples", s.getSamples())
@@ -199,7 +210,7 @@ public class Carat extends CordovaPlugin {
         }
         return results;
     }
-
+    
     /**
      * Creates a JSON object for main reports.
      * @param r Main reports
@@ -220,5 +231,38 @@ public class Carat extends CordovaPlugin {
                 .put("similarAppsWithout", r.similarAppsWithout);
         return results;
     }
+    
+    // Drawable resource encoding
+    
+    /**
+     * Return base64 encoded icon PNG from application package.
+     * @param packageName Package name.
+     * @return Base 64 encoded PNG or an empty string.
+     */
+    private String getBase64Icon(String packageName){
+        try{
+            Drawable d = context.getPackageManager().getApplicationIcon(packageName);
+            return "data:image/png;base64,"+ encodeIcon(d);
+        } catch (PackageManager.NameNotFoundException e){
+            return "";
+        }
+    }
+    /**
+     * Converts a drawable resource to base64 encoded PNG image.
+     * @param icon Drawable image resource.
+     * @return Base64 representation of PNG compressed bitmap.
+     */
+    public static String encodeIcon(Drawable icon){
+            if(icon == null) return "";
+            
+            BitmapDrawable bmDrawable = ((BitmapDrawable) icon);
+            Bitmap bitmap = bmDrawable.getBitmap();
+            
+            bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48, true);
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            byte[] bitmapByte = outStream.toByteArray();
 
+            return Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+    }
 }
