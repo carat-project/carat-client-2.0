@@ -13,7 +13,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">More</a></div></div>';
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__icon"></div><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">More</a></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
@@ -56,6 +56,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                           nodeToBeTextified.firstChild);
     };
 
+    // create an image node, give it the base64 data and append
+    var addNodeImage = function(nodeToBeTextified, image) {
+        var img = document.createElement("img");
+        img.src = image;
+        nodeToBeTextified.appendChild(img);
+    };
+
     //if text exists, add a text node as child, otherwise remove node
     var appendTextOrRemoveNode = function(nodeMaybeTextified,
                                           text) {
@@ -63,6 +70,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             trashANode(nodeMaybeTextified);
         } else {
             addNodeText(nodeMaybeTextified, text);
+        }
+    };
+
+    // append image to a node if image exists
+    var appendImageOrRemoveNode = function(nodeMaybeTextified,
+                                          image) {
+        if(!image) {
+            trashANode(nodeMaybeTextified);
+        } else {
+            addNodeImage(nodeMaybeTextified, image);
         }
     };
 
@@ -83,6 +100,19 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector(".mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
+    };
+
+    // find card node for icon and append to it
+    var injectIcon = function(cardDomNode, icon){
+
+        if(!icon){
+            return;
+        }
+        var iconNode = cardDomNode
+            .querySelector(".mdl-card__icon");
+
+        console.log("Icon node is "+iconNode);
+        appendImageOrRemoveNode(iconNode, icon);
     };
 
     //add main text (the one that is always visible) to a card
@@ -265,6 +295,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             newCardNode = getNewItemDomNodeTemplate();
 
             injectTitle(newCardNode, itemData.title);
+            injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
                            itemData.mainText);
             injectSecondaryText(newCardNode,

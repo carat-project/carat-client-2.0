@@ -1,6 +1,7 @@
 package org.carat20.client.storage;
 
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseArray;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import org.carat20.client.Constants;
  */
 public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     
+    
     //Auto-generated UID for serialization
     private static final long serialVersionUID = 8272459694607111058L;
     
@@ -22,6 +24,9 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     // the server, and showing them in the process list.
     private static final SparseArray<String> importanceToString = new SparseArray<String>();
 
+    // Application package
+    private String appPackage;
+    
     static {
         importanceToString.put(RunningAppProcessInfo.IMPORTANCE_EMPTY, "Not running");
         importanceToString.put(RunningAppProcessInfo.IMPORTANCE_BACKGROUND, "Background process");
@@ -75,6 +80,20 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
      */
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+    
+    /**
+     * @return the appPackage
+     */
+    public String getAppPackage() {
+        return appPackage;
+    }
+
+    /**
+     * @param appPackage the appPackage
+     */
+    public void setAppPackage(String appPackage) {
+        this.appPackage = appPackage;
     }
 
     /**
