@@ -241,6 +241,41 @@ _:-ms-input-placeholder, :root .carat-graph {
 	
 }
 
+.mdl-card.bugs {
+	background-color: #eeeeee;
+	
+}
+
+.mdl-card.bugs .button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background: #ccc;
+  display: block:
+  width: 200px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.mdl-card.bugs .mdl-card_actions .mdl-card__more {
+  width: 10px;
+  height: 10px;
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 15px 15px 0 0;	
+}
+	
+.mdl-cards.bugs .icon {
+  height: 64px;
+  width: 64px;
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+.mdl-card.bugs .apple {
+  background: url("http://placehold.it/50x50") top left no-repeat;
+}
+
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
 }
@@ -248,3 +283,4 @@ _:-ms-input-placeholder, :root .carat-graph {
 .smaller-time-text > span.carat-card-time {
     font-size: 60%;
 }
+
