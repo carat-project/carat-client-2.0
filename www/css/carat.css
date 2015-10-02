@@ -241,12 +241,12 @@ _:-ms-input-placeholder, :root .carat-graph {
 	
 }
 
-.mdl-card.bugs {
+#com-sec-android-app-mt-BUG {
 	background-color: #eeeeee;
 	
 }
 
-.mdl-card.bugs .button {
+#com-sec-android-app-mt-BUG > .button {
   padding: 8px 12px;
   font-size: 14px;
   background: #ccc;
@@ -256,7 +256,7 @@ _:-ms-input-placeholder, :root .carat-graph {
   cursor: pointer;
 }
 
-.mdl-card.bugs .mdl-card_actions .mdl-card__more {
+#com-sec-android-app-mt-BUG > .mdl-card__more {
   width: 10px;
   height: 10px;
   float: left;
@@ -265,16 +265,14 @@ _:-ms-input-placeholder, :root .carat-graph {
   margin: 15px 15px 0 0;	
 }
 	
-.mdl-cards.bugs .icon {
+#com-sec-android-app-mt-BUG > .icon {
   height: 64px;
   width: 64px;
   float: left;
   margin: 0 15px 0 0;
+  background: url("apple.png") top left no-repeat;
 }
 
-.mdl-card.bugs .apple {
-  background: url("http://placehold.it/50x50") top left no-repeat;
-}
 
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
