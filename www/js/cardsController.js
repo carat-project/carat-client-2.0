@@ -247,7 +247,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            summaryObject.title);
 
         var summaryEntryNodes = homebrewMap(
-            summaryObject.entries, makeSummaryEntry);
+            summaryObject.bugEntries.concat(summaryObject.hogEntries), makeSummaryEntry);
         var spot = summaryDomNode
             .querySelector("div.mdl-grid");
         homebrewConcatChildren(spot, spot.firstChild,
@@ -286,6 +286,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             newCardNode = getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
+            console.log("NEWCARD: " + summaryData);
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
         }
@@ -332,6 +333,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            makeCardBasedOnModel);
     };
 
+    var getSummaryCard = function(hogsSource, bugsSource) {
+
+        var summaryObject = notificationsArray.getSummary(hogsSource,
+                                                          bugsSource);
+        return homebrewMap(summaryObject,
+                           makeCardBasedOnModel);
+    };
+
     //select the correct spot to enter the cards in each tab
     var selectCardsSpot = function(selector) {
 
@@ -368,11 +377,18 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         generatePage("#hogs", getHogsCards(hogsSource));
     };
 
+    //make summary card (and for the time being other cards in home tab)
+    //based on server data
+    var generateSummary = function(hogsSource, bugsSource) {
+        generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+    };
+
     //public methods of the module
     return {
         generateCards: generateCards,
         generateBugs: generateBugs,
-        generateHogs: generateHogs
+        generateHogs: generateHogs,
+        generateSummary: generateSummary
     };
 })(model.notifications, makeElemPanSwipable); //dependencies
 

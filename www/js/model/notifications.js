@@ -45,20 +45,38 @@ model.notifications = (function() {
 //    };
 
     //summary model representation
-    var makeSummary = function(title, entries, id) {
+    var makeSummary = function(title, hogEntries, bugEntries, id) {
 
         return {
             summary: {
                 title: title,
-                entries: entries,
+                bugEntries: bugEntries,
+                hogEntries: hogEntries,
                 id: id
             }
         };
     };
 
-    //currently dummy data
-    var getGeneral = function() {
+    var purifySummaryEntries = function(arr) {
+        return arr.map(function(entry) {
+            var icons = ["face", "favorite"];
+            var randomIcon =
+                    icons[Math.floor(Math.random() * icons.length)];
 
+            return makeSummaryEntry(entry.name, entry.benefit, randomIcon);
+        });
+    };
+
+    //currently dummy data
+    var getSummary = function(hogsSource, bugsSource) {
+
+        return [makeSummary("Bugs, Hogs, System notifications",
+                           purifySummaryEntries(hogsSource),
+                           purifySummaryEntries(bugsSource),
+                           "summary-0")];
+    };
+
+    var getGeneral = function() {
         return [
             makeNotification("Bluetooth",
                              "Info text in here. Something something. Info text in here. Something something.",
@@ -77,33 +95,8 @@ model.notifications = (function() {
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
                              [],
                              49,
-                             "item-2"),
-            makeSummary("Bugs, Hogs, System notifications",
-                        [makeSummaryEntry("Facebook",
-                                          38,
-                                          "face"),
-                         makeSummaryEntry("Tinder",
-                                          72,
-                                          "favorite"),
-                         makeSummaryEntry("Tinder",
-                                          72,
-                                          "favorite"),
-                         makeSummaryEntry("Tinder",
-                                          72,
-                                          "favorite"),
-                         makeSummaryEntry("Tinder",
-                                          72,
-                                          "favorite"),
-                         makeSummaryEntry("testi",
-                                          38,
-                                          "face"),
-                         makeSummaryEntry("testi",
-                                          38,
-                                          "face")
-                        ],
-                        "summary-0")
-        ];
-    }
+                             "item-2")];
+    };
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
@@ -144,6 +137,7 @@ model.notifications = (function() {
         getGeneral: getGeneral,
         getBugs: getBugs,
         getHogs: getHogs,
-        getSystem: getSystem
+        getSystem: getSystem,
+        getSummary: getSummary
     };
 })();
