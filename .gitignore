@@ -11,6 +11,7 @@ plugins/android.json
 plugins/fetch.json
 hooks/
 node_modules/
+log.txt
 nbproject/
 */coverage/
 
