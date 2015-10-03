@@ -33,6 +33,16 @@ model.notifications = (function() {
             }
         };
     };
+    
+//    var makeSummaryGroup = function(name, timeDrain, entries) {      
+//        return {
+//            summaryGroup: {
+//                name: name,
+//                timeDrain: timeDrain,
+//                entries: entries
+//            }
+//        };
+//    };
 
     //summary model representation
     var makeSummary = function(title, entries, id) {
@@ -68,10 +78,19 @@ model.notifications = (function() {
                              [],
                              49,
                              "item-2"),
-            makeSummary("Hogs",
+            makeSummary("Bugs, Hogs, System notifications",
                         [makeSummaryEntry("Facebook",
                                           38,
                                           "face"),
+                         makeSummaryEntry("Tinder",
+                                          72,
+                                          "favorite"),
+                         makeSummaryEntry("Tinder",
+                                          72,
+                                          "favorite"),
+                         makeSummaryEntry("Tinder",
+                                          72,
+                                          "favorite"),
                          makeSummaryEntry("Tinder",
                                           72,
                                           "favorite"),
@@ -84,7 +103,7 @@ model.notifications = (function() {
                         ],
                         "summary-0")
         ];
-    };
+    }
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
