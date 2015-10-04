@@ -51,10 +51,10 @@ var app = {
             carat.getJscore(displayJscore);
         };
 
-        // Display jscore in a premade card in system tab
+        // Display jscore in a premade card in home tab
         var displayJscore = function(jscore){
             console.log("Received Data: jscore");
-            document.getElementById("jscore").innerHTML = "<h3>"+jscore+"</h3>";
+            document.getElementById("jscore").innerHTML = "<h3>Your JScore is "+jscore+"</h3>";
 
             carat.getHogs(displayHogs);
         };
