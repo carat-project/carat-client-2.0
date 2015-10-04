@@ -14,6 +14,7 @@ import org.carat20.client.thrift.CaratService;
  * connection. Contains the methods necessary to properly open 
  * and close {@link CaratService}{@code .Client} instances.
  *
+ * @author Eemil Lagerspetz
  * @author Jonatan Hamberg
  * @see <a href="https://thrift.apache.org/">Apache Thrift</a>
  */

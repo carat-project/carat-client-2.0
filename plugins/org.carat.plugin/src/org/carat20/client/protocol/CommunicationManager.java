@@ -14,6 +14,7 @@ import org.carat20.client.thrift.Reports;
  * It provides the means necessary for fetching data based on client information and 
  * writing that data in memory for later use. 
  * 
+ * @author Eemil Lagerspetz
  * @author Jonatan Hamberg
  */
 public class CommunicationManager {
@@ -46,7 +47,7 @@ public class CommunicationManager {
         this.os = "5.0.1";
             
         //Add branching for failed execution
-        this.refreshJscore();
+        this.refreshMainReports();
         this.refreshHogsBugs("Hog");
         this.refreshHogsBugs("Bug");
     }
@@ -54,15 +55,16 @@ public class CommunicationManager {
     /** Refreshes JScore by requesting main reports from {@link CaratService} instance.
      * @return State boolean, which is true if a connection can be opened and reports fetched.
      */
-    public boolean refreshJscore() {
+    public boolean refreshMainReports() {
         try {
             instance = ProtocolClient.open();
             Reports r = instance.getReports(uuid, 
                     createFeatureList(
                             "Model", model, 
-                            "OS", os)
+                            "OS", os
+                    )
             );
-            dataStorage.writeReports(r);
+            dataStorage.writeMainReports(r);
             ProtocolClient.close(instance);
             return true;
         } catch (Throwable error) {
@@ -72,18 +74,26 @@ public class CommunicationManager {
     }
     
     /** Refreshes Hog and Bug reports by requesting reports from {@link CaratService} instance.
-     * @param reportType Determines whether the data should be hogs or bugs.
+     * @param type Determines whether the data should be hogs or bugs.
      * @return State boolean, which is true if a connection can be opened and reports fetched.
      */
-    public boolean refreshHogsBugs(String reportType){
+    public boolean refreshHogsBugs(String type){
         try {
             instance = ProtocolClient.open();
             HogBugReport r = instance.getHogOrBugReport(uuid, 
                     createFeatureList(
-                    "ReportType", reportType, 
-                    "Model", model)
+                    "ReportType", type, 
+                    "Model", model
+                    )
             );
-            dataStorage.writeReports(r);
+            
+            if(type.equals("Hog")){
+                dataStorage.writeHogReports(r);
+            } else if(type.equals("Bug")){
+                dataStorage.writeBugReports(r);
+            }
+            
+            //Safely close the instance
             ProtocolClient.close(instance);
             return true;
         } catch (Throwable error) {

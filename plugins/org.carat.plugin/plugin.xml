@@ -18,9 +18,11 @@
 
         <!-- Classes -->
         <source-file src="src/org/carat20/client/Carat.java" target-dir="src/org/carat20/client/"/>
+        <source-file src="src/org/carat20/client/Constants.java" target-dir="src/org/carat20/client/"/>
         <source-file src="src/org/carat20/client/protocol/CommunicationManager.java" target-dir="src/org/carat20/client/carat/protocol"/>
         <source-file src="src/org/carat20/client/protocol/ProtocolClient.java" target-dir="src/org/carat20/client/carat/protocol"/>
         <source-file src="src/org/carat20/client/storage/DataStorage.java" target-dir="src/org/carat20/client/carat/storage"/>
+        <source-file src="src/org/carat20/client/storage/SimpleHogBug.java" target-dir="src/org/carat20/client/carat/storage"/>
 
         <!-- Libs -->
         <source-file src="src/org/carat20/client/libs/libthrift-0.9.2.jar" target-dir="libs"/>

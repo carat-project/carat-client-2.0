@@ -1,6 +1,84 @@
 /**
-Taken from demo template. Not in use yet.
+Taken from demo template. Partly in use.
  */
+
+
+.carat_summaryCard_title_text {
+    font-size: 18px;
+    font-weight: 400;
+    padding-left: 15px;
+    padding-top: 
+    color:dimgray;
+}
+
+.carat_summaryCard_app_time {
+    text-align: center;
+    color: #f00000
+}
+
+.carat_summaryCard_app_name {
+    text-align: center;
+}
+
+.carat_summaryCard_app_icon {
+    margin-left: auto;
+    margin-right: auto;
+    width: 99%;
+    text-align: center;
+}
+
+.carat_summaryCard_first_group_title{
+    font-weight: 400;
+    font-size: 14px;
+    color:dimgrey;
+}
+
+.carat_summaryCard_group_title{
+    font-size: 16px;
+    font-weight: 400;
+    color:dimgrey;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color:#E8E8E8;
+}
+
+.carat_summaryCard_group_title_summary_time{
+    font-size: 14px;
+    font-weight: 400;
+    position: absolute;
+    right: 20px;
+    color: #f00000;
+}
+
+.carat_summaryCard_line {
+    border-top: solid;
+    border-width: 1px;
+    border-color:#E8E8E8;
+}
+
+.carat_summary_grid {
+padding-top: 20px;
+}
+
+.carat_summary_more_button {
+    font-size: 14px;
+    color: #a0a0a0;
+    padding-bottom: 10px;
+}
+
+.carat_hide {
+    display: none;
+}
+
+.carat_show {
+    display: inline-grid;
+}
+
+
+
+
 
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
@@ -16,6 +94,7 @@ html, body {
 .carat-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: rgba(0, 0, 0, 0.54);
 }
+
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
@@ -237,9 +316,104 @@ _:-ms-input-placeholder, :root .carat-graph {
 .mdl-card.mint .mdl-card__supporting-text {
 	color: #006064;
 	text-align: center;
+}
+
+section.mdl-layout__tab-panel div.page-content {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.mdl-card.sleeker {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.mdl-card.sleeker div.carat-card__title {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+}
+
+.mdl-card.sleeker .mdl-card__supporting-text {
+    padding: 10px 15px;
+}
+
+.mdl-card.sleeker .mdl-card__title-text {
+  font-size: 17px;
+  font-weight: light;
+  color: #616161;
+}
+
+.mdl-card.sleeker div div span.button {
+  padding: 8px 12px;
+  font-size: 14px;
+  background: #ccc;
+  display: block:
+  width: 200px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.mdl-card.sleeker div a.mdl-card__more {
+  width: 2px;
+  height: 10px;
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 0px;
+  margin-right: 20px;
+  display: inline;
+}
+
+.mdl-card.sleeker div .mdl-card__actions {
+    width: inherit;
+    padding: 0px 5px;
+}
+
+.mdl-card.sleeker .carat-card-time {
+	color: #bf360c;
+	font-size: 16px;	
+}
 	
+.mdl-card.sleeker .icon {
+  height: 42px;
+  width: 42px;
+  float: left;
+  margin: 0 15px 0 0;
+  background: url("apple.png") top left no-repeat;
+}
+
+.mdl-card.sleeker div.mdl-card__icon img {
+    width: 35px;
+    height 35px;
+}
+
+#bugs .bar {
+  background-color: #eeeeee;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-right: 10px;
+    margin-left: 15px;
+	color: #757575;
+	
+}
+
+#bugs .bar .button{
+		float: right;
 }
 
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
+}
+
+.smaller-time-text > span.carat-card-time {
+    font-size: 60%;
+    display: inline;
+}
+
+[data-icon]:before {
+  font-family: icons; /* BYO icon font, mapped smartly */
+  content: attr(data-icon);
+  speak: none; /* Not to be trusted, but hey. */
 }
