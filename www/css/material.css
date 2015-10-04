@@ -9625,9 +9625,10 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 
 @media (max-width: 479px) {
   .mdl-grid {
-    padding: 8px; }
+    padding: 4px; }
   .mdl-cell {
-    margin: 8px;
+    margin-left: 4px;
+      margin-right: 4px;
     width: calc(100% - 16px); }
     .mdl-grid--no-spacing > .mdl-cell {
       width: 100%; }
@@ -9635,7 +9636,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     display: none !important; }
   .mdl-cell--1-col,
   .mdl-cell--1-col-phone.mdl-cell--1-col-phone {
-    width: calc(25% - 16px); }
+    width: calc(25% - 8px); }
     .mdl-grid--no-spacing > .mdl-cell--1-col,
     .mdl-grid--no-spacing > .mdl-cell--1-col-phone.mdl-cell--1-col-phone {
       width: 25%; }
@@ -9708,7 +9709,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 
 @media (min-width: 480px) and (max-width: 839px) {
   .mdl-grid {
-    padding: 8px; }
+    padding: 4px; }
   .mdl-cell {
     margin: 8px;
     width: calc(50% - 16px); }
