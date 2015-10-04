@@ -242,7 +242,8 @@ _:-ms-input-placeholder, :root .carat-graph {
 }
 
 #com-sec-android-app-mt-BUG {
-	background-color: #eeeeee;
+	background-color: #ffffff;
+	
 	
 }
 
@@ -273,6 +274,19 @@ _:-ms-input-placeholder, :root .carat-graph {
   background: url("apple.png") top left no-repeat;
 }
 
+#bugs .bar {
+  background-color: #eeeeee;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-right: 10px;
+    margin-left: 15px;
+	color: #757575;
+	
+}
+
+#bugs .bar .button{
+		float: right;
+}
 
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
@@ -282,3 +296,8 @@ _:-ms-input-placeholder, :root .carat-graph {
     font-size: 60%;
 }
 
+[data-icon]:before {
+  font-family: icons; /* BYO icon font, mapped smartly */
+  content: attr(data-icon);
+  speak: none; /* Not to be trusted, but hey. */
+}
