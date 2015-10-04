@@ -70,7 +70,7 @@ model.notifications = (function() {
     //currently dummy data
     var getSummary = function(hogsSource, bugsSource) {
 
-        return [makeSummary("Bugs, Hogs, System notifications",
+        return [makeSummary("Summary and actions",
                            purifySummaryEntries(hogsSource),
                            purifySummaryEntries(bugsSource),
                            "summary-0")];
@@ -84,12 +84,12 @@ model.notifications = (function() {
                              [],
                              39,
                              "item-0"),
-            makeNotification("Vaihtoehtoinen kortti",
-                             "Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten.",
-                             "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
-                             ["mint"],
-                             39,
-                             "item-1"),
+//            makeNotification("Vaihtoehtoinen kortti",
+//                             "Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten.",
+//                             "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
+//                             ["mint"],
+//                             39,
+//                             "item-1"),
             makeNotification("Wifi",
                              "Swipe this card! Info text in here. Something something. Info text in here. Something something.",
                              "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
