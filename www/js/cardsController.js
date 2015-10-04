@@ -22,19 +22,22 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
-    //summary card template
+    //summary card item template
     var getNewSummaryEntryDomNodeTemplate = function() {
-        var htmlString = '<div class="mdl-cell mdl-cell--2-col"><div><i class="material-icons"></i></div><div><strong></strong></div><div><span class="mdl-color-text--red-300"></span></div></div>';
+        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone"><div class="carat_summaryCard_app_icon"><i class="material-icons"></i></div><div class="carat_summaryCard_app_name"></div><div class="carat_summaryCard_app_time"></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
         return domNode;
     };
 
-    //summary card item template
+    //summary card template
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat_summaryCard_title"><div class="carat_summaryCard_title_text mdl-card__title-text"><i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
+        
 
+
+        
         var domNode = parseDomNode(htmlString);
 
         return domNode;
@@ -192,12 +195,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         makeTimeDrainText(timeDrainNode, timeDrain);
 
     };
-
+    
     //name of summary item
     var injectSummaryEntryName = function(summaryEntryDomNode,
                                           name) {
         var nameNode = summaryEntryDomNode
-            .querySelector(".mdl-cell > div strong");
+            .querySelector(".carat_summaryCard_app_name");
 
         appendTextOrRemoveNode(nameNode, name);
     };
@@ -216,7 +219,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         summaryEntryDomNode, timeDrain) {
 
         var timeDrainNode = summaryEntryDomNode
-            .querySelector("div.mdl-cell div span");
+            .querySelector(".carat_summaryCard_app_time");
 
         makeTimeDrainText(timeDrainNode, timeDrain);
     };
@@ -250,7 +253,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         for(var i = 0; i < concatees.length; i++) {
             spot.insertBefore(concatees[i], firstChild);
         }
-
     };
 
     //creates summary entry dom node from summary entry model object
@@ -275,7 +277,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            summaryObject.title);
 
         var summaryEntryNodes = homebrewMap(
-            summaryObject.entries, makeSummaryEntry);
+            summaryObject.bugEntries.concat(summaryObject.hogEntries), makeSummaryEntry);
         var spot = summaryDomNode
             .querySelector("div.mdl-grid");
         homebrewConcatChildren(spot, spot.firstChild,
@@ -315,6 +317,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             newCardNode = getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
+            console.log("NEWCARD: " + summaryData);
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
         }
@@ -361,6 +364,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            makeCardBasedOnModel);
     };
 
+    var getSummaryCard = function(hogsSource, bugsSource) {
+
+        var summaryObject = notificationsArray.getSummary(hogsSource,
+                                                          bugsSource);
+        return homebrewMap(summaryObject,
+                           makeCardBasedOnModel);
+    };
+
     //select the correct spot to enter the cards in each tab
     var selectCardsSpot = function(selector) {
 
@@ -397,11 +408,18 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         generatePage("#hogs", getHogsCards(hogsSource));
     };
 
+    //make summary card (and for the time being other cards in home tab)
+    //based on server data
+    var generateSummary = function(hogsSource, bugsSource) {
+        generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+    };
+
     //public methods of the module
     return {
         generateCards: generateCards,
         generateBugs: generateBugs,
-        generateHogs: generateHogs
+        generateHogs: generateHogs,
+        generateSummary: generateSummary
     };
 })(model.notifications, makeElemPanSwipable); //dependencies
 

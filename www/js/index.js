@@ -65,14 +65,18 @@ var app = {
             //pass hogs to controller
             itemCards.generateHogs(hogs);
 
-            carat.getBugs(displayBugs);
+            carat.getBugs(function(bugs) {
+                return displayBugsAndSummary(bugs, hogs);
+            });
         };
 
         // Create cards for bugs and append to system tab
-        var displayBugs = function(bugs){
+        //NOTE: temporary solution for generating summary card
+        var displayBugsAndSummary = function(bugs, hogs){
             console.log("Received Data: bugs");
             //pass bugs to controller
             itemCards.generateBugs(bugs);
+            itemCards.generateSummary(hogs, bugs);
 
             carat.getMainReports(displayMain);
         };

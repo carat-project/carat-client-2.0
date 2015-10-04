@@ -2,6 +2,85 @@
 Taken from demo template. Not in use yet.
  */
 
+
+
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.carat_summaryCard_title {
+    height: 30px;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    background-color: gainsboro;
+}
+
+.carat_summaryCard_title_text {
+    font-size: 14px;
+    font-weight: 400;
+    color:dimgray;
+    text-transform:uppercase;
+
+}
+
+
+
+.carat_summaryCard_app_time {
+    text-align: center;
+    color: firebrick;
+}
+
+.carat_summaryCard_app_name {
+    text-align: center;
+}
+
+.carat_summaryCard_app_icon {
+    margin-left: auto;
+    margin-right: auto;
+    width: 99%;
+    text-align: center;
+}
+
+.carat_summaryCard_first_group_title{
+    font-weight: 400;
+    font-size: 14px;
+    color:dimgrey;
+}
+
+.carat_summaryCard_group_title{
+    font-size: 14px;
+    font-weight: 400;
+    color:dimgrey;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+.carat_summaryCard_group_title_summary_time{
+    font-size: 14px;
+    font-weight: 400;
+    padding-left: 5px;
+    color:dimgrey;
+    
+
+}
+
+.carat_summaryCard_line {
+    border-bottom: solid;
+    border-width: 1px;
+    border-color:#E8E8E8;
+}
+
+.carat_material-icons_arrow {
+    position:absolute;
+    right: 10px;
+    top: 11px;
+}
+
+
+
+
+
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
