@@ -71,7 +71,7 @@ model.notifications = (function() {
     //currently dummy data
     var getSummary = function(hogsSource, bugsSource) {
 
-        return [makeSummary("Bugs, Hogs, System notifications",
+        return [makeSummary("Summary",
                            purifySummaryEntries(hogsSource),
                            purifySummaryEntries(bugsSource),
                            "summary-0")];

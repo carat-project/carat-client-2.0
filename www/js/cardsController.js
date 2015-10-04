@@ -31,9 +31,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
-    //summary card template
+    //summary card template, still partly static
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat_summaryCard_title"><div class="carat_summaryCard_title_text mdl-card__title-text"><i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title">4 Bugs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">7 Hogs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">3 System notifications<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div id="summaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid"></div></div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
+
+            
+//left the old template html if we decide to go backwards  
+        
+//            '<div class="mdl-card mdl-shadow--2dp"><div class="carat_summaryCard_title"><div class="carat_summaryCard_title_text mdl-card__title-text"><i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
         
 
 
