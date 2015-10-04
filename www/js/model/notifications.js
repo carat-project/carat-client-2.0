@@ -63,8 +63,9 @@ model.notifications = (function() {
             var icons = ["face", "favorite"];
             var randomIcon =
                     icons[Math.floor(Math.random() * icons.length)];
+            var cutName = entry.label.slice(0, 9);
 
-            return makeSummaryEntry(entry.label, entry.benefit, randomIcon);
+            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
         });
     };
 
@@ -78,28 +79,7 @@ model.notifications = (function() {
     };
 
     var getGeneral = function() {
-        return [
-            makeNotification("Bluetooth",
-            				 "",
-                             "Info text in here. Something something. Info text in here. Something something.",
-                             "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
-                             [],
-                             39,
-                             "item-0"),
-            makeNotification("Vaihtoehtoinen kortti",
-            				 "",
-                             "Tältä näyttää kun teksti on keskellä ja sen väri on tumman turkoosi minttua taustaa vasten.",
-                             "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
-                             ["mint"],
-                             39,
-                             "item-1"),
-            makeNotification("Wifi",
-            				 "",
-                             "Swipe this card! Info text in here. Something something. Info text in here. Something something.",
-                             "Nulla quis ante nisl. Ut auctor arcu ut felis volutpat, vitae vestibulum neque molestie. Vivamus varius finibus purus, id condimentum libero imperdiet vel. In auctor vehicula elit quis mollis. Nullam dapibus, diam at maximus pulvinar, nisl ante feugiat justo, et iaculis lorem ipsum eu lorem.",
-                             [],
-                             49,
-                             "item-2")];
+        return [];
     };
 
     //function that cleans up data straight from native plugin
@@ -111,7 +91,8 @@ model.notifications = (function() {
             							   elem.icon,
                                            elem.name,
                                            "Samples: " + elem.samples,
-                                           ["smaller-time-text"],
+                                           ["sleeker",
+                                            "smaller-time-text"],
                                            elem.benefit,
                                            idPrefix + "-" + elem.type);
             return result;
