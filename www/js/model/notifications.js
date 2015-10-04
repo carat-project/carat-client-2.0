@@ -64,7 +64,7 @@ model.notifications = (function() {
             var randomIcon =
                     icons[Math.floor(Math.random() * icons.length)];
 
-            return makeSummaryEntry(entry.name, entry.benefit, randomIcon);
+            return makeSummaryEntry(entry.label, entry.benefit, randomIcon);
         });
     };
 
