@@ -23,13 +23,20 @@ public class CommunicationManager {
     private final DataStorage dataStorage;
     
     // Unique identifier, device model and operating system version.
-    private String uuid, model, os;
+    private final String uuid, model, os;
 
     /**
      * Constructor for Communication manager which sets the data storage.
      * @param dataStorage Used for writing reports in memory. 
+     * @param uuid User identifier from build parameters.
      */
-    public CommunicationManager(DataStorage dataStorage) {
+    public CommunicationManager(DataStorage dataStorage, String uuid) {
+        this.uuid = uuid;
+        
+        //Theseshould come from sampler
+        this.model = "GT-I9505";
+        this.os = "5.0.1";
+        
         if(dataStorage == null){
             Log.v("Carat", "Failed to construct CommunicationManager, "
                     + "DataStorage is null");
@@ -40,11 +47,6 @@ public class CommunicationManager {
 
     /** Responsible for initializing Hogs, Bugs and JScore refresh. */
     public void refreshAllReports() {
-        
-        //Replace this with real data
-        this.uuid = "19db5bb46aa305ae";
-        this.model = "GT-I9505";
-        this.os = "5.0.1";
             
         //Add branching for failed execution
         this.refreshMainReports();

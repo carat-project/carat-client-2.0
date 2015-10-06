@@ -197,7 +197,7 @@ public final class DataStorage {
     // Save object to file
     private void write(Object object, String fileName) {
         FileOutputStream out = openOutputStream(fileName);
-        Log.v("Carat", "Writing ("+object.getClass()+")"+object.toString()+" to "+fileName);
+        Log.v("Carat", "Writing "+object.getClass()+" to "+fileName);
         try {
             ObjectOutputStream stream = new ObjectOutputStream(out);
             stream.writeObject(object);

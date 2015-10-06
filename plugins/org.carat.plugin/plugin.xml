@@ -12,6 +12,10 @@
             </feature>
         </config-file>
 
+		<config-file target="res/values/strings.xml" parent="/*">
+			<string name="uuid">19db5bb46aa305ae</string>
+		</config-file>
+
         <js-module src="carat.js" name="Carat">
             <clobbers target="carat" />
         </js-module>

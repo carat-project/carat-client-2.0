@@ -126,10 +126,19 @@ public class Carat extends CordovaPlugin {
      */
     public void prepareData(){
         Log.v("Carat", "Plugin is preparing data");
-        
         context = cordova.getActivity().getApplicationContext();
+        
+        int appResId = cordova.getActivity().getResources().getIdentifier(
+                "uuid", 
+                "string", 
+                cordova.getActivity().getPackageName()
+        );
+        
+        String uuid = cordova.getActivity().getString(appResId);
+        Log.v("Carat", "Using uuid: "+uuid);
+        
         storage = new DataStorage(context);
-        commManager = new CommunicationManager(storage);
+        commManager = new CommunicationManager(storage, uuid);
         
         cordova.getThreadPool().execute(new Runnable() {
                 @Override
