@@ -33,7 +33,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     //summary card template, still partly static
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title">4 Bugs</div><div id="bugSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title">7 Hogs</div><div id="hogSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">3 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div><div id="bugSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div><div id="hogSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">0 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
             
 //left the old template html if we decide to go backwards  
@@ -235,6 +235,26 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         appendTextOrRemoveNode(titleNode, title);
     };
+    
+    var injectSummaryBugHogCount = function(summaryDomNode, 
+                                             count, bugOrHog) {
+        
+        var bug = "bugTitleAndCount";
+        var hog = "hogTitleAndCount";
+        var countNode;
+        
+        if (bugOrHog=="bug"){
+            countNode = summaryDomNode
+                .querySelector("#" + bug);
+        } else {
+            countNode = summaryDomNode
+                .querySelector("#" + hog);
+        }
+            
+        appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
+    };
+        
+    
 
     //implementation of the map function, because for
     //some reason the normal JS array map didn't work
@@ -256,6 +276,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
+    
+    //like homebrewConcatChildren with maximium number of concatees
+    var homebrewConcatChildrenWithMaxNumber = function(spot,
+                                          firstChild,
+                                          concatees, maxNumber) {
+
+        for(var i = concatees.length - 1; i >= concatees.length - maxNumber; i--) {
+            spot.insertBefore(concatees[i], firstChild);
+        }
+    };    
 
     //creates summary entry dom node from summary entry model object
     var makeSummaryEntry = function(summaryEntryObject) {
@@ -275,22 +305,32 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
+        //summary title
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
-
+        
+        
         var summaryEntryBugNodes = homebrewMap(
             summaryObject.bugEntries, makeSummaryEntry);
+        
+        //Bug group title and amount of bugs
+        injectSummaryBugHogCount(summaryDomNode, summaryEntryBugNodes.length, "bug");
+
         var bugSpot = summaryDomNode
             .querySelector("#bugsGrid");
-        homebrewConcatChildren(bugSpot, bugSpot.firstChild,
-                               summaryEntryBugNodes);
+        homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
+                               summaryEntryBugNodes, 4);
         
-                var summaryEntryHogNodes = homebrewMap(
+        var summaryEntryHogNodes = homebrewMap(
             summaryObject.hogEntries, makeSummaryEntry);
+        
+        //Hog group title and amount of hogs
+        injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
+
         var hogSpot = summaryDomNode
             .querySelector("#hogsGrid");
-        homebrewConcatChildren(hogSpot, hogSpot.firstChild,
-                               summaryEntryHogNodes);
+        homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
+                               summaryEntryHogNodes, 4);
     };
     
     //make either an item card (hog or bug) or summary card

@@ -29,17 +29,17 @@ Taken from demo template. Partly in use.
 
 .carat_summaryCard_first_group_title{
     font-weight: 400;
-    font-size: 14px;
+    font-size: 18px;
     color:dimgrey;
 }
 
 .carat_summaryCard_group_title{
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 400;
     color:dimgrey;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: solid;
+    border-top: solid;
     border-width: 1px;
     border-color:#E8E8E8;
 }
@@ -59,7 +59,8 @@ Taken from demo template. Partly in use.
 }
 
 .carat_summary_grid {
-padding-top: 20px;
+    padding-top: 15px;
+    padding-bottom: 20px;
 }
 
 .carat_summary_more_button {
