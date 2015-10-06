@@ -74,6 +74,17 @@ var app = {
         //NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){
             console.log("Received Data: bugs");
+
+            // Application information example, see console
+            for(i in bugs){
+                console.log(
+                    bugs[i].label + "\n "
+                    + "running: "      + bugs[i].running    + "\n "
+                    + "killable: "     + bugs[i].killable   + "\n "
+                    + "removable: "    + bugs[i].removable  + "\n"
+                    );
+            }
+
             //pass bugs to controller
             itemCards.generateBugs(bugs);
             itemCards.generateSummary(hogs, bugs);

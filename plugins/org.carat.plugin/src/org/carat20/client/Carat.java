@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
+import org.carat20.client.device.ApplicationService;
 
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
@@ -30,6 +31,7 @@ public class Carat extends CordovaPlugin {
 
     private static DataStorage storage;
     private static CommunicationManager commManager;
+    private static ApplicationService appService;
     private static Context context;
 
     private int jscore;
@@ -133,6 +135,7 @@ public class Carat extends CordovaPlugin {
         
         storage = new DataStorage(context);
         commManager = new CommunicationManager(storage, uuid);
+        appService = new ApplicationService(context);
         
         cordova.getThreadPool().execute(new Runnable() {
                 @Override
@@ -199,17 +202,24 @@ public class Carat extends CordovaPlugin {
         Log.v("Converting hog/bug reports to JSON", Arrays.toString(reports));
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
+                String packageName = s.getAppName();
                 JSONObject app = new JSONObject()
-                        .put("label", s.getAppLabel())
-                        .put("icon", s.getAppIcon())
-                        .put("name", s.getAppName())
-                        .put("priority",s.getAppPriority())
-                        .put("benefit",s.getBenefitText())
-                        .put("samples", s.getSamples())
-                        .put("samplesWithout", s.getSamplesWithout())
-                        .put("expected", s.getExpectedValue())
-                        .put("expectedWithout", s.getExpectedValueWithout())
-                        .put("type", s.getType());
+                    //Static
+                    .put("type", s.getType())
+                    .put("label", s.getAppLabel())
+                    .put("name", packageName)
+                    .put("benefit",s.getBenefitText())
+                    .put("priority",s.getAppPriority())
+                    .put("samples", s.getSamples())
+                    .put("samplesWithout", s.getSamplesWithout())
+                    .put("expected", s.getExpectedValue())
+                    .put("expectedWithout", s.getExpectedValueWithout())
+                    .put("icon", s.getAppIcon())
+
+                     // Dynamic
+                    .put("running", appService.isAppRunning(packageName))
+                    .put("killable", appService.isAppKillable(packageName))
+                    .put("removable", appService.isAppRemovable(packageName));
                 results.put(app);
         }
         return results;
