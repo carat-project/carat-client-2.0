@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
+import org.carat20.client.Constants.ActionType;
 import org.carat20.client.device.ApplicationService;
 
 import org.carat20.client.protocol.CommunicationManager;
@@ -33,8 +34,7 @@ public class Carat extends CordovaPlugin {
     private static CommunicationManager commManager;
     private static ApplicationService appService;
     private static Context context;
-
-    private int jscore;
+    
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
@@ -61,46 +61,26 @@ public class Carat extends CordovaPlugin {
      *
      * @param action Determines the function call.
      * @param args Optional information about the request, e.g. events.
-     * @param callbackContext Used for returning data to callback functions.
+     * @param cc Used for returning data to callback functions.
      * @return State boolean, which is true if an action gets executed.
      */
     @Override
-    public boolean execute(final String action, JSONArray args, final CallbackContext callbackContext) {
+    public boolean execute(final String action, final JSONArray args, final CallbackContext cc) {
         Log.v("Carat", "Calling action " + action);
+        
+        // Use threading to avoid blocking rendering
         cordova.getThreadPool().execute(new Runnable(){
             @Override
             public void run() {
-                try{
-                    // Switch action
-                    if(action.equals("init")){
-                        Log.v("Carat", "Initializing plugin");
-                        prepareData();
-                        callbackContext.success();
-                    } else if(action.equals("jscore")){
-                        jscore = (int)(storage.getMainReports().getJScore() * 100);
-                        callbackContext.success(
-                                jscore
-                        );
-                    } else if(action.equals("main")){
-                        mainReports = storage.getMainReports();
-                        callbackContext.success(
-                                convertToJSON(mainReports)
-                        );
-                    } else if(action.equals("hogs")){
-                        hogReports = storage.getHogReports();
-                        callbackContext.success(
-                                convertToJSON(hogReports)
-                        );
-                    } else if(action.equals("bugs")){
-                        bugReports = storage.getBugReports();
-                        callbackContext.success(
-                                convertToJSON(bugReports)
-                        );
-                    }    
-                    // No matching actions found
-                    callbackContext.error("No such action");
-                } catch (JSONException e){
-                    Log.v("Carat", "JSONException: "+e);
+                switch(ActionType.get(action)){
+                    case INIT:      handleInit(cc);         break;
+                    case JSCORE:    handleJscore(cc);       break;
+                    case MAIN:      handleMain(cc);         break;
+                    case HOGS:      handleHogs(cc);         break;
+                    case BUGS:      handleBugs(cc);         break;
+                    case KILL:      handleKill(cc, args);   break;
+                 // case REMOVE:    handleRemove(cc, args); break;
+                    default: cc.error("No such action");
                 }
             }
         });
@@ -138,32 +118,30 @@ public class Carat extends CordovaPlugin {
         appService = new ApplicationService(context);
         
         cordova.getThreadPool().execute(new Runnable() {
-                @Override
-                public void run() {
-                    //No data
-                    if(storage.isEmpty()){
-                        Log.v("Carat", "Storages are empty, refreshing all reports");
-                        commManager.refreshAllReports();
-                    }
-                    
-                    //Missing data
-                    else if (!storage.isComplete()){
-                        Log.v("Carat", "Some storages are empty, refreshing");
-                        if(storage.getMainReports() == null) commManager.refreshMainReports();
-                        if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
-                        if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
-                    } else {
-                        Log.v("Carat", "Storages are complete and ready to go");
-                    }
-                    
-                    //Forget about the bridge
-                    cordova.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendEvent("dataready");
-                        }
-                    });
+            @Override
+            public void run() {
+                //No data
+                if(storage.isEmpty()){
+                    Log.v("Carat", "Storages are empty, refreshing all reports");
+                    commManager.refreshAllReports();
                 }
+                //Missing data
+                else if (!storage.isComplete()){
+                    Log.v("Carat", "Some storages are empty, refreshing");
+                    if(storage.getMainReports() == null) commManager.refreshMainReports();
+                    if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
+                    if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                } else {
+                    Log.v("Carat", "Storages are complete and ready to go");
+                }
+                //Forget about the bridge
+                cordova.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendEvent("dataready");
+                    }
+                });
+            }
         });
         Log.v("Carat", "Completed initialization phase");
     }
@@ -185,10 +163,8 @@ public class Carat extends CordovaPlugin {
      */
     @Override
     public void onResume(boolean multitasking) {
-
+        //...
     }
-    
-    // Below are some utility methods that should be moved elsewhere
     
     // JSON conversion
     
@@ -245,4 +221,71 @@ public class Carat extends CordovaPlugin {
                 .put("similarAppsWithout", r.similarAppsWithout);
         return results;
     }
+    
+    // Action handling
+    
+    // Init
+    private void handleInit(CallbackContext cc){
+         Log.v("Carat", "Initializing plugin");
+         prepareData();
+         cc.success();
+    }
+    
+    // Jscore
+    private void handleJscore(CallbackContext cc){
+        int jscore = (int)(storage.getMainReports().getJScore() * 100);
+        cc.success(jscore);
+    }
+    
+    // Main reports
+    private void handleMain(CallbackContext cc){
+        try{
+            mainReports = storage.getMainReports();
+            cc.success(convertToJSON(mainReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert main reports.", e);
+        }
+    }
+    
+    // Hog reports
+    private void handleHogs(CallbackContext cc){
+        try{
+            hogReports = storage.getHogReports();
+            cc.success(convertToJSON(hogReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert hog reports.", e);
+        }
+    }
+    
+    // Bug reports
+    private void handleBugs(CallbackContext cc){
+        try{
+            bugReports = storage.getBugReports();
+            cc.success(convertToJSON(bugReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert bug reports.", e);
+        }
+    }
+    
+    // Kill application
+    private void handleKill(CallbackContext cc, JSONArray args){
+        try{
+            String packageName = (String) args.get(0);
+            if(appService.killApp(packageName)){
+                cc.success("Success");
+            } else {
+                cc.error("Failed");
+            }
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to kill app, invalid package name.", e);
+        }
+        cc.error("Failed to kill app, invalid package name.");
+    }
+    
+    // Uninstall application
+    private void handleRemove(CallbackContext cc){
+        //...
+        cc.success();
+    }
+    
 }

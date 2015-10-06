@@ -1,50 +1,27 @@
+var exec = require("cordova/exec"),
+    service = "CaratPlugin";
+
 module.exports = {
+    initialize: function(){
+        // Replace this
+        var callback = function(d) {
+            return;
+        }
+        exec(callback, callback, service, "init", [""]);
+    },
 	getJscore: function(callback) {
-		var exec = require("cordova/exec");
-                exec(callback,
-        	       callback,
-        	       "CaratPlugin",
-        	       "jscore",
-        	       [""]
-                );
+        exec(callback, callback, service, "jscore", [""]);
 	},
-        getMainReports: function(callback){
-                var exec = require("cordova/exec");
-                exec(callback,
-                       callback,
-                       "CaratPlugin",
-                       "main",
-                       [""]
-                );
-        },
+    getMainReports: function(callback){
+        exec(callback, callback, service, "main", [""]);
+    },
 	getHogs: function(callback){
-		var exec = require("cordova/exec");
-                exec(callback,
-        	       callback,
-        	       "CaratPlugin",
-        	       "hogs",
-        	       [""]
-                );
+        exec(callback, callback, service, "hogs", [""]);
 	},
 	getBugs: function(callback){
-		var exec = require("cordova/exec");
-                exec(callback,
-        	       callback,
-        	       "CaratPlugin",
-        	       "bugs",
-        	       [""]
-                );
+        exec(callback, callback, service, "bugs", [""]);
 	},
-	initialize: function(){
-                var exec = require("cordova/exec");
-                var callback = function(d){
-                        return;
-                }
-                exec(callback,
-        	       callback,
-        	       "CaratPlugin",
-        	       "init",
-        	       [""]
-                );
-	}
+    killApp: function(packageName, callback){
+        exec(callback, callback, service, "kill", [packageName]);
+    }
 };

@@ -93,6 +93,7 @@ public class ApplicationService {
         if(!isAppRunning(packageName)) return false;
         try{
             am.killBackgroundProcesses(packageName);
+            Log.v("Carat", "Killed process "+packageName);
             return true;
         } catch (Throwable th){
             Log.v("Carat","Process could not be killed: " + packageName);

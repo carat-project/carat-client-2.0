@@ -12,9 +12,14 @@
             </feature>
         </config-file>
 
+        <!-- UUID -->
 		<config-file target="res/values/strings.xml" parent="/*">
 			<string name="uuid">19db5bb46aa305ae</string>
 		</config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+        </config-file>
 
         <js-module src="carat.js" name="Carat">
             <clobbers target="carat" />
