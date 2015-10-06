@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -259,13 +263,21 @@ public final class DataStorage {
         List<SimpleHogBug> result = new LinkedList<SimpleHogBug>();
         int size = list.size();
         for (int i = 0; i < size; ++i) {
+            
             HogsBugs item = list.get(i);
-            String n = fixName(item.getAppName());
-            SimpleHogBug h = new SimpleHogBug(n, isBug ? Constants.Type.BUG : Constants.Type.HOG);
+            String packageName = fixPackageName(item.getAppName());
+            
+            SimpleHogBug h = new SimpleHogBug(packageName, isBug ? 
+                    Constants.Type.BUG : 
+                    Constants.Type.HOG);
+            
+            
             h.setAppPackage(item.getAppName());
-            h.setAppLabel(
-                    this.getApplicationLabel(n)
-            );
+            // Device specific application icon and label
+            
+            h.setAppLabel(this.getApplicationLabel(packageName));
+            h.setAppIcon(this.getApplicationIcon(packageName));
+            
             String priority = item.getAppPriority();
             if (priority == null || priority.length() == 0) {
                 priority = "Foreground app";
@@ -301,8 +313,40 @@ public final class DataStorage {
         }
     }
 
-    //Splits the string and returns everything before a colon+
-    private String fixName(String name) {
+    //Splits the string and returns everything before a colon
+    private String fixPackageName(String name) {
         return (name == null)? null : name.split(":")[0];
+    }
+    
+    /**
+     * Return base64 encoded icon PNG from a package.
+     * @param packageName Package name.
+     * @return Base 64 encoded PNG or an empty string.
+     */
+    private String getApplicationIcon(String packageName){
+        try{
+            Drawable d = context.getPackageManager().getApplicationIcon(packageName);
+            return "data:image/png;base64,"+ encodeIcon(d);
+        } catch (PackageManager.NameNotFoundException e){
+            return "";
+        }
+    }
+    /**
+     * Converts a drawable resource to a base64 encoded bitmap.
+     * @param icon Drawable image resource.
+     * @return Base64 representation of PNG compressed bitmap.
+     */
+    public static String encodeIcon(Drawable icon){
+            if(icon == null) return "";
+            
+            BitmapDrawable bmDrawable = ((BitmapDrawable) icon);
+            Bitmap bitmap = bmDrawable.getBitmap();
+            
+            bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48, true);
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            byte[] bitmapByte = outStream.toByteArray();
+
+            return Base64.encodeToString(bitmapByte,Base64.DEFAULT);
     }
 }

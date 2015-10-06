@@ -24,8 +24,8 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     // the server, and showing them in the process list.
     private static final SparseArray<String> importanceToString = new SparseArray<String>();
 
-    // Application package
     private String appPackage;
+    private String appIcon;
     
     static {
         importanceToString.put(RunningAppProcessInfo.IMPORTANCE_EMPTY, "Not running");
@@ -48,12 +48,12 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
         return type == Constants.Type.BUG;
     }
 
-    public SimpleHogBug(String appName, Constants.Type type) {
+    public SimpleHogBug(String packageName, Constants.Type type) {
         this.type = type;
         if (type == Constants.Type.OS) {
             appPriority = importanceString(Constants.IMPORTANCE_SUGGESTION);
         }
-        this.appName = appName;
+        this.appName = packageName;
     }
 
     public SimpleHogBug(String appName, Constants.Type type, String priority) {
@@ -151,6 +151,23 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     public void setAppLabel(String appLabel) {
         this.appLabel = appLabel;
     }
+    
+    /**
+     * Returns application icon as base64 encoded bitmap
+     * @return the appIcon
+     */
+    public String getAppIcon() {
+        return appIcon;
+    }
+
+    /**
+     * Sets application icon as base64 encoded bitmap
+     * @param appIcon the appIcon
+     */
+    public void setAppIcon(String appIcon) {
+        this.appIcon = appIcon;
+    }
+    
 
     /**
      * @return the appPriority
