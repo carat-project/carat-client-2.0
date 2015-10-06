@@ -63,9 +63,12 @@ model.notifications = (function() {
             var icons = ["face", "favorite"];
             var randomIcon =
                     icons[Math.floor(Math.random() * icons.length)];
-            var cutName = entry.label.slice(0, 9);
+            
+            return makeSummaryEntry(entry.name, entry.benefit, randomIcon);
+            
+//            var cutName = entry.label.slice(0, 9);
 
-            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
+//            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
         });
     };
 

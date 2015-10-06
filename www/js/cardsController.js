@@ -33,7 +33,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     //summary card template, still partly static
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title">4 Bugs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">7 Hogs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">3 System notifications<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div id="summaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid"></div></div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title">4 Bugs</div><div id="bugSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title">7 Hogs</div><div id="hogSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">3 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
             
 //left the old template html if we decide to go backwards  
@@ -278,14 +278,21 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
 
-        var summaryEntryNodes = homebrewMap(
-            summaryObject.bugEntries.concat(summaryObject.hogEntries), makeSummaryEntry);
-        var spot = summaryDomNode
-            .querySelector("div.mdl-grid");
-        homebrewConcatChildren(spot, spot.firstChild,
-                               summaryEntryNodes);
+        var summaryEntryBugNodes = homebrewMap(
+            summaryObject.bugEntries, makeSummaryEntry);
+        var bugSpot = summaryDomNode
+            .querySelector("#bugsGrid");
+        homebrewConcatChildren(bugSpot, bugSpot.firstChild,
+                               summaryEntryBugNodes);
+        
+                var summaryEntryHogNodes = homebrewMap(
+            summaryObject.hogEntries, makeSummaryEntry);
+        var hogSpot = summaryDomNode
+            .querySelector("#hogsGrid");
+        homebrewConcatChildren(hogSpot, hogSpot.firstChild,
+                               summaryEntryHogNodes);
     };
-
+    
     //make either an item card (hog or bug) or summary card
     //from a model object that represents either one
     var makeCardBasedOnModel = function(notificationObject) {
