@@ -63,8 +63,8 @@ model.notifications = (function() {
             var icons = ["face", "favorite"];
             var randomIcon =
                     icons[Math.floor(Math.random() * icons.length)];
-            var cutLabel = entry.label.length() > 10 ?
-                    entry.label.slice(0,9) : entry.label;
+            var cutLabel = entry.label.length > 9 ?
+                    entry.label.slice(0,8) : entry.label;
 
             return makeSummaryEntry(cutLabel, entry.benefit, randomIcon);
 
