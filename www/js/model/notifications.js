@@ -34,8 +34,8 @@ model.notifications = (function() {
             }
         };
     };
-    
-//    var makeSummaryGroup = function(name, timeDrain, entries) {      
+
+//    var makeSummaryGroup = function(name, timeDrain, entries) {
 //        return {
 //            summaryGroup: {
 //                name: name,
@@ -63,9 +63,11 @@ model.notifications = (function() {
             var icons = ["face", "favorite"];
             var randomIcon =
                     icons[Math.floor(Math.random() * icons.length)];
-            
-            return makeSummaryEntry(entry.label, entry.benefit, randomIcon);
-            
+            var cutLabel = entry.label.length() > 10 ?
+                    entry.label.slice(0,9) : entry.label;
+
+            return makeSummaryEntry(cutLabel, entry.benefit, randomIcon);
+
 //            var cutName = entry.label.slice(0, 9);
 
 //            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
