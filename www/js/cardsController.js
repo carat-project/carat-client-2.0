@@ -281,7 +281,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var homebrewConcatChildrenWithMaxNumber = function(spot,
                                           firstChild,
                                           concatees, maxNumber) {
-
+        
         for(var i = concatees.length - 1; i >= concatees.length - maxNumber; i--) {
             spot.insertBefore(concatees[i], firstChild);
         }
@@ -309,28 +309,33 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
         
-        
+        // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
             summaryObject.bugEntries, makeSummaryEntry);
         
         //Bug group title and amount of bugs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryBugNodes.length, "bug");
-
+     
+        //adds bugs to grid      
+        if(summaryEntryBugNodes.length != 0) {
         var bugSpot = summaryDomNode
             .querySelector("#bugsGrid");
         homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
                                summaryEntryBugNodes, 4);
+        }
         
         var summaryEntryHogNodes = homebrewMap(
             summaryObject.hogEntries, makeSummaryEntry);
         
         //Hog group title and amount of hogs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
-
+        //adds hogs to grid
+        if(summaryEntryHogNodes.length != 0) {
         var hogSpot = summaryDomNode
             .querySelector("#hogsGrid");
         homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
                                summaryEntryHogNodes, 4);
+        }
     };
     
     //make either an item card (hog or bug) or summary card
