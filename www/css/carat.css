@@ -311,7 +311,6 @@ _:-ms-input-placeholder, :root .carat-graph {
 
 .mdl-card.mint {
 	background-color: #b2dfdb;	
-	
 }
 
 .mdl-card.mint .mdl-card__supporting-text {
@@ -325,8 +324,12 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker {
-    margin-top: 4px;
-    margin-bottom: 4px;
+    z-index: 2;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
 }
 
 .mdl-card.sleeker div.carat-card__title {

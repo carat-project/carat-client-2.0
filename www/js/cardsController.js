@@ -13,8 +13,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">+</a></div><div class="mdl-card__icon"></div><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div></div>';
-
+        var htmlString = '<div class="mdl-card"><div class="carat-card__title"><div class="mdl-card__actions"></div><div class="mdl-card__icon"></div><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div></div>';
+// commented away<a class="mdl-card__more" role="button">+</a>
         var domNode = parseDomNode(htmlString);
 
         panSwipeCallback(domNode);
@@ -33,7 +33,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     //summary card template, still partly static
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div><div id="bugSummaryGrid" class="carat_show"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div><div id="hogSummaryGrid" class="carat_show"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">0 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">Less</a></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div><div id="bugSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div><div id="hogSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">0 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
             
 //left the old template html if we decide to go backwards  
@@ -152,7 +152,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         } else {
             addNodeText(secondaryTextNode, secondaryText);
             secondaryTextNode.id = nodeId;
-            moreButton.href = "#" + nodeId;
+//            moreButton.href = "#" + nodeId;
         }
     };
 
@@ -272,7 +272,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                           firstChild,
                                           concatees) {
 
-        for(var i = 0; i < concatees.length; i++) {
+        for(var i = concatees.length -1; i >= 0; i--) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
@@ -301,7 +301,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
-    //contructs summary card from summary model object
+    //constructs summary card from summary model object
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
@@ -320,6 +320,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         if(summaryEntryBugNodes.length != 0) {
         var bugSpot = summaryDomNode
             .querySelector("#bugsGrid");
+            //dirty workaround, to be changed...
         homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
                                summaryEntryBugNodes, 4);
         }
@@ -333,8 +334,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         if(summaryEntryHogNodes.length != 0) {
         var hogSpot = summaryDomNode
             .querySelector("#hogsGrid");
+            //dirty workaround, to be changed...
         homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
-                               summaryEntryHogNodes, 4);
+                               summaryEntryHogNodes, 4);           
         }
     };
     
@@ -436,8 +438,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //generate cards for each tab (tab id passed in "selector", cards
     //in "nodeArray")
     var generatePage = function(selector, nodeArray) {
-
+        
         var rightSpot = selectCardsSpot(selector);
+        
+        if (selector == "#hogs") {
+         var div = document.createElement("div");   
+            rightSpot.appendChild(div);
+            div.className="mdl-card mdl-shadow--2dp mdl-color--grey-300";
+             rightSpot = div;
+        }
+        
         var children = rightSpot.childNodes;
         rightSpot.childNodes =
             homebrewConcatChildren(rightSpot,
@@ -466,6 +476,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
         generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+        //calls summaryCard.js and opens summary entries grid
+        showOrHideActions();
     };
 
     //public methods of the module
