@@ -7,14 +7,17 @@ model.notifications = (function() {
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
 
-    var makeNotification = function(title, icon, label,
+    var makeNotification = function(title, icon, label, packageName,
                                     samples, classes,
-                                    timeDrain, killButton, removeButton, id) {
+                                    timeDrain,
+                                    killButton, removeButton,
+                                    id, appCloseCallback) {
         return {
             item: {
                 title: title,
                 icon: icon,
                 label: label,
+                packageName: packageName,
                 samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
@@ -22,7 +25,8 @@ model.notifications = (function() {
                     killButton: killButton,
                     removeButton: removeButton
                 },
-                id: id
+                id: id,
+                appCloseCallback: appCloseCallback
             }
         };
     };
@@ -93,11 +97,12 @@ model.notifications = (function() {
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
-    var hogsBugsPurify = function(arr) {
+    var hogsBugsPurify = function(arr, appCloseCallback) {
         return arr.map(function(elem) {
             var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
             var result =  makeNotification(elem.label,
-            							   elem.icon,
+                                           elem.icon,
+                                           elem.name,
                                            elem.name,
                                            "Samples: " + elem.samples,
                                            ["sleeker",
@@ -106,21 +111,22 @@ model.notifications = (function() {
                                            elem.killable && elem.running,
                                            elem.removable &&
                                            !(elem.killable && elem.running),
-                                           idPrefix + "-" + elem.type);
+                                           idPrefix + "-" + elem.type,
+                                           appCloseCallback);
             return result;
         });
     };
 
 
     //clean up bugs data
-    var getBugs = function(bugsSource) {
-        var bugs = hogsBugsPurify(bugsSource);
+    var getBugs = function(bugsSource, appCloseCallback) {
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback);
         return bugs;
     };
 
     //clean up hogs data
-    var getHogs = function(hogsSource) {
-        var hogs = hogsBugsPurify(hogsSource);
+    var getHogs = function(hogsSource, appCloseCallback) {
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback);
         return hogs;
     };
 

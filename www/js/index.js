@@ -63,7 +63,7 @@ var app = {
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
             //pass hogs to controller
-            itemCards.generateHogs(hogs);
+            itemCards.generateHogs(hogs, carat.killApp);
 
             carat.getBugs(function(bugs) {
                 return displayBugsAndSummary(bugs, hogs);
@@ -86,7 +86,7 @@ var app = {
             }
 
             //pass bugs to controller
-            itemCards.generateBugs(bugs);
+            itemCards.generateBugs(bugs, carat.killApp);
             itemCards.generateSummary(hogs, bugs);
 
             carat.getMainReports(displayMain);
