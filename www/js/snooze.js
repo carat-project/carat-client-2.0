@@ -20,7 +20,7 @@ function cancelAll(){
     li.addEventListener('click', function () {
         var keys = Object.keys(localStorage);
         i = keys.length;
-        
+
         while (i--) {
             if (localStorage.getItem(keys[i]) == "dismissed") {
                 cancel(keys[i]);
@@ -28,4 +28,4 @@ function cancelAll(){
             }
         }
     });
-}                        
+}
