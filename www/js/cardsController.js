@@ -13,8 +13,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
-        var htmlString = '<div class="mdl-card"><div class="carat-card__title"><div class="mdl-card__actions"></div><div class="mdl-card__icon"></div><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div></div>';
+        var htmlString = '<div class="mdl-card"><div class="carat-card__title"><div class="mdl-card__icon"></div><div class="mdl-card__title-text"><div class="expand"><i class="material-icons">&#xE5CF;</i></div></div><div class="carat-card-time"></div></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div></div>';
 // commented away<a class="mdl-card__more" role="button">+</a>
+     //   <div class="mdl-card__actions"></div>
         var domNode = parseDomNode(htmlString);
 
         panSwipeCallback(domNode);
@@ -354,10 +355,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
-            injectMainText(newCardNode,
-                           itemData.mainText);
+//            injectMainText(newCardNode,
+//                           itemData.label);
             injectSecondaryText(newCardNode,
-                                itemData.secondaryText,
+                                itemData.samples,
                                 itemData.id);
             injectClasses(newCardNode,
                           itemData.classes);

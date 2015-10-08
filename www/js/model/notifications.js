@@ -6,16 +6,16 @@ model.notifications = (function() {
     //
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
-    var makeNotification = function(title, icon, mainText,
-                                    secondaryText, classes,
+    var makeNotification = function(title, icon, label,
+                                    samples, classes,
                                     timeDrain, id) {
 
         return {
             item: {
                 title: title,
                 icon: icon,
-                mainText: mainText,
-                secondaryText: secondaryText,
+                label: label,
+                samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
                 id: id
