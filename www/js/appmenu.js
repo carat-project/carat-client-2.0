@@ -16,3 +16,7 @@ function appSettings(){
         	console.log("app settings clicked");
     		});
 }
+
+	sendFeedback();
+	appSettings();
+
