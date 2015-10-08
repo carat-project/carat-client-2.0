@@ -474,7 +474,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         var rightSpot = selectCardsSpot(selector);
 
-        if (selector == "#hogs") {
+        if (selector == "#hogs" || selector == "#bugs") {
          var div = document.createElement("div");
             rightSpot.appendChild(div);
             div.className="mdl-card mdl-shadow--2dp mdl-color--grey-300";
