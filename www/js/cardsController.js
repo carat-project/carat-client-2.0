@@ -35,14 +35,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var getNewSummaryDomNodeTemplate = function() {
         var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div><div id="bugSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div><div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div><div id="hogSummaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div><div class="carat_summaryCard_group_title">0 System notifications</div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
-            
-//left the old template html if we decide to go backwards  
-        
+
+//left the old template html if we decide to go backwards
+
 //            '<div class="mdl-card mdl-shadow--2dp"><div class="carat_summaryCard_title"><div class="carat_summaryCard_title_text mdl-card__title-text"><i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
-        
 
 
-        
+
+
         var domNode = parseDomNode(htmlString);
 
         return domNode;
@@ -140,7 +140,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                        notificationId) {
 
         var secondaryTextNode = cardDomNode
-            .querySelector(".collapse");
+            .querySelector(".collapse, .collapse.in");
         var moreButton = cardDomNode
             .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
@@ -164,6 +164,35 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         for(var i = 0; i < classes.length; i++) {
             nodeClassList.add(classes[i]);
         }
+    };
+
+    //will add either close button or uninstall button,
+    //depending on whether the flags are set
+    var injectCloseOrUninstallButton = function(cardDomNode,
+                                                hasCloseButton,
+                                                hasUninstallButton) {
+
+        if(!hasCloseButton && !hasUninstallButton) {
+            return;
+        }
+
+        var buttonSpot = cardDomNode
+                .querySelector(".collapse, .collapse.in");
+
+        var button = document.createElement("button");
+
+        var buttonText;
+
+        if(hasCloseButton) {
+            buttonText = document.createTextNode("Close App");
+            button.appendChild(buttonText);
+        } else {
+            buttonText = document.createTextNode("Uninstall App");
+            button.appendChild(buttonText);
+        }
+
+        buttonSpot.appendChild(button);
+
     };
 
     //style the time drain or benefit text accordingly,
@@ -197,7 +226,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         makeTimeDrainText(timeDrainNode, timeDrain);
 
     };
-    
+
     //name of summary item
     var injectSummaryEntryName = function(summaryEntryDomNode,
                                           name) {
@@ -235,14 +264,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         appendTextOrRemoveNode(titleNode, title);
     };
-    
-    var injectSummaryBugHogCount = function(summaryDomNode, 
+
+    var injectSummaryBugHogCount = function(summaryDomNode,
                                              count, bugOrHog) {
-        
+
         var bug = "bugTitleAndCount";
         var hog = "hogTitleAndCount";
         var countNode;
-        
+
         if (bugOrHog=="bug"){
             countNode = summaryDomNode
                 .querySelector("#" + bug);
@@ -250,11 +279,11 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             countNode = summaryDomNode
                 .querySelector("#" + hog);
         }
-            
+
         appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
     };
-        
-    
+
+
 
     //implementation of the map function, because for
     //some reason the normal JS array map didn't work
@@ -276,16 +305,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
-    
+
     //like homebrewConcatChildren with maximium number of concatees
     var homebrewConcatChildrenWithMaxNumber = function(spot,
                                           firstChild,
                                           concatees, maxNumber) {
-        
+
         for(var i = concatees.length - 1; i >= concatees.length - maxNumber; i--) {
             spot.insertBefore(concatees[i], firstChild);
         }
-    };    
+    };
 
     //creates summary entry dom node from summary entry model object
     var makeSummaryEntry = function(summaryEntryObject) {
@@ -308,15 +337,15 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         //summary title
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
-        
+
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
             summaryObject.bugEntries, makeSummaryEntry);
-        
+
         //Bug group title and amount of bugs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryBugNodes.length, "bug");
-     
-        //adds bugs to grid      
+
+        //adds bugs to grid
         if(summaryEntryBugNodes.length != 0) {
         var bugSpot = summaryDomNode
             .querySelector("#bugsGrid");
@@ -324,10 +353,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
                                summaryEntryBugNodes, 4);
         }
-        
+
         var summaryEntryHogNodes = homebrewMap(
             summaryObject.hogEntries, makeSummaryEntry);
-        
+
         //Hog group title and amount of hogs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
         //adds hogs to grid
@@ -336,10 +365,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             .querySelector("#hogsGrid");
             //dirty workaround, to be changed...
         homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
-                               summaryEntryHogNodes, 4);           
+                               summaryEntryHogNodes, 4);
         }
     };
-    
+
     //make either an item card (hog or bug) or summary card
     //from a model object that represents either one
     var makeCardBasedOnModel = function(notificationObject) {
@@ -364,6 +393,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             injectTimeDrain(newCardNode,
                             itemData.timeDrain);
             injectIdToCard(newCardNode, itemData.id);
+            injectCloseOrUninstallButton(newCardNode,
+                                         itemData.buttons.killButton,
+                                         itemData.buttons.removeButton);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -438,16 +470,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //generate cards for each tab (tab id passed in "selector", cards
     //in "nodeArray")
     var generatePage = function(selector, nodeArray) {
-        
+
         var rightSpot = selectCardsSpot(selector);
-        
+
         if (selector == "#hogs") {
-         var div = document.createElement("div");   
+         var div = document.createElement("div");
             rightSpot.appendChild(div);
             div.className="mdl-card mdl-shadow--2dp mdl-color--grey-300";
              rightSpot = div;
         }
-        
+
         var children = rightSpot.childNodes;
         rightSpot.childNodes =
             homebrewConcatChildren(rightSpot,

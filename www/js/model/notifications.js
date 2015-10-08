@@ -8,7 +8,7 @@ model.notifications = (function() {
     //always positive or zero (but displayed as negative or zero minutes)
     var makeNotification = function(title, icon, mainText,
                                     secondaryText, classes,
-                                    timeDrain, id) {
+                                    timeDrain, killButton, removeButton, id) {
 
         return {
             item: {
@@ -18,6 +18,10 @@ model.notifications = (function() {
                 secondaryText: secondaryText,
                 classes: classes,
                 timeDrain: timeDrain,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
                 id: id
             }
         };
@@ -99,6 +103,9 @@ model.notifications = (function() {
                                            ["sleeker",
                                             "smaller-time-text"],
                                            elem.benefit,
+                                           elem.killable && elem.running,
+                                           elem.removable &&
+                                           !(elem.killable && elem.running),
                                            idPrefix + "-" + elem.type);
             return result;
         });
