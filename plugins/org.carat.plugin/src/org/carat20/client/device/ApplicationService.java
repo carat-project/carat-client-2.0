@@ -57,7 +57,7 @@ public class ApplicationService {
     }
 
     /**
-     * Returns whether the app is installed on device.
+     * Returns whether the application is installed on device.
      *
      * @param packageName Application package name.
      * @return True if application is installed.

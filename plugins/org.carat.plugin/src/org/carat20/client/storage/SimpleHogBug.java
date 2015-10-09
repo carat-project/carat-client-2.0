@@ -81,20 +81,6 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     public void setAppName(String appName) {
         this.appName = appName;
     }
-    
-    /**
-     * @return the appPackage
-     */
-    public String getAppPackage() {
-        return appPackage;
-    }
-
-    /**
-     * @param appPackage the appPackage
-     */
-    public void setAppPackage(String appPackage) {
-        this.appPackage = appPackage;
-    }
 
     /**
      * @return the wDistance

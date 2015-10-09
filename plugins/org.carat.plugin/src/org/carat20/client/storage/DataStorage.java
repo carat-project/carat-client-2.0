@@ -271,10 +271,7 @@ public final class DataStorage {
                     Constants.Type.BUG : 
                     Constants.Type.HOG);
             
-            
-            h.setAppPackage(item.getAppName());
             // Device specific application icon and label
-            
             h.setAppLabel(this.getApplicationLabel(packageName));
             h.setAppIcon(this.getApplicationIcon(packageName));
             

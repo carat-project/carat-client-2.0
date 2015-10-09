@@ -179,28 +179,29 @@ public class Carat extends CordovaPlugin {
      * @throws JSONException Object or array cannot be created
      */
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
-        Log.v("Converting hog/bug reports to JSON", Arrays.toString(reports));
+        Log.v("Carat", "Converting hog/bug reports to JSON");
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
-                String packageName = s.getAppName();
-                JSONObject app = new JSONObject()
-                    //Static
-                    .put("type", s.getType())
-                    .put("label", s.getAppLabel())
-                    .put("name", packageName)
-                    .put("benefit",s.getBenefitText())
-                    .put("priority",s.getAppPriority())
-                    .put("samples", s.getSamples())
-                    .put("samplesWithout", s.getSamplesWithout())
-                    .put("expected", s.getExpectedValue())
-                    .put("expectedWithout", s.getExpectedValueWithout())
-                    .put("icon", s.getAppIcon())
+            String packageName = s.getAppName();
+            if(!appService.isAppInstalled(packageName)) continue;
+            JSONObject app = new JSONObject()
+                //Static
+                .put("type", s.getType())
+                .put("label", s.getAppLabel())
+                .put("name", packageName)
+                .put("benefit",s.getBenefitText())
+                .put("priority",s.getAppPriority())
+                .put("samples", s.getSamples())
+                .put("samplesWithout", s.getSamplesWithout())
+                .put("expected", s.getExpectedValue())
+                .put("expectedWithout", s.getExpectedValueWithout())
+                .put("icon", s.getAppIcon())
 
-                     // Dynamic
-                    .put("running", appService.isAppRunning(packageName))
-                    .put("killable", appService.isAppKillable(packageName))
-                    .put("removable", appService.isAppRemovable(packageName));
-                results.put(app);
+                 // Dynamic
+                .put("running", appService.isAppRunning(packageName))
+                .put("killable", appService.isAppKillable(packageName))
+                .put("removable", appService.isAppRemovable(packageName));
+            results.put(app);
         }
         return results;
     }
@@ -214,15 +215,15 @@ public class Carat extends CordovaPlugin {
     public JSONObject convertToJSON(Reports r) throws JSONException{
         Log.v("Converting main reports to JSON", r.toString());
         JSONObject results = new JSONObject()
-                .put("jscore", r.getJScore())
-                .put("jscoreWith", r.getJScore())
-                .put("jscoreWithout", r.jScoreWithout)
-                .put("os", r.os)
-                .put("osWithout", r.osWithout)
-                .put("model",r.model)
-                .put("modelWithout", r.modelWithout)
-                .put("similarApps", r.similarApps)
-                .put("similarAppsWithout", r.similarAppsWithout);
+            .put("jscore", r.getJScore())
+            .put("jscoreWith", r.getJScore())
+            .put("jscoreWithout", r.jScoreWithout)
+            .put("os", r.os)
+            .put("osWithout", r.osWithout)
+            .put("model",r.model)
+            .put("modelWithout", r.modelWithout)
+            .put("similarApps", r.similarApps)
+            .put("similarAppsWithout", r.similarAppsWithout);
         return results;
     }
     
