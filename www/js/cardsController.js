@@ -25,7 +25,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     //summary card item template
     var getNewSummaryEntryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone"><div class="carat_summaryCard_app_icon"><i class="material-icons"></i></div><div class="carat_summaryCard_app_name"></div><div class="carat_summaryCard_app_time"></div></div>';
+        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone"><div class="carat_summaryCard_app_icon"><div class="mdl-card__icon"></div><i class="material-icons"></i></div><div class="carat_summaryCard_app_name"></div><div class="carat_summaryCard_app_time"></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
@@ -248,14 +248,16 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(nameNode, name);
     };
 
-    //add summary item icon (for example, facebook icon)
-    var injectSummaryEntryIcon = function(summaryEntryDomNode,
-                                          icon) {
-        var iconNode = summaryEntryDomNode
-                .querySelector("i.material-icons");
-
-        appendTextOrRemoveNode(iconNode, icon);
-    };
+    //add summary item icon (for example, facebook icon)  
+    //useless, summary entry icon is injected using injectIcon
+    
+//    var injectSummaryEntryIcon = function(summaryEntryDomNode,
+//                                          icon) {
+//        var iconNode = summaryEntryDomNode
+//                .querySelector("i.material-icons");
+//
+//        appendTextOrRemoveNode(iconNode, icon);
+//    };
 
     //time drain or benefit of the item in question
     var injectSummaryEntryTimeDrain = function(
@@ -335,7 +337,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var entryFields = summaryEntryObject.summaryEntry;
 
         injectSummaryEntryName(domNode, entryFields.name);
-        injectSummaryEntryIcon(domNode, entryFields.icon);
+                    injectIcon(domNode, entryFields.icon);
+
+//        injectSummaryEntryIcon(domNode, entryFields.icon);
         injectSummaryEntryTimeDrain(domNode,
                                     entryFields.timeDrain);
 

@@ -43,16 +43,6 @@ model.notifications = (function() {
         };
     };
 
-//    var makeSummaryGroup = function(name, timeDrain, entries) {
-//        return {
-//            summaryGroup: {
-//                name: name,
-//                timeDrain: timeDrain,
-//                entries: entries
-//            }
-//        };
-//    };
-
     //summary model representation
     var makeSummary = function(title, hogEntries, bugEntries, id) {
 
@@ -68,17 +58,13 @@ model.notifications = (function() {
 
     var purifySummaryEntries = function(arr) {
         return arr.map(function(entry) {
-            var icons = ["face", "favorite"];
-            var randomIcon =
-                    icons[Math.floor(Math.random() * icons.length)];
+//            var icons = ["face", "favorite"];
+//            var randomIcon =
+//                    icons[Math.floor(Math.random() * icons.length)];
             var cutLabel = entry.label.length > 9 ?
                     entry.label.slice(0,8) : entry.label;
 
-            return makeSummaryEntry(cutLabel, entry.benefit, randomIcon);
-
-//            var cutName = entry.label.slice(0, 9);
-
-//            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
+            return makeSummaryEntry(cutLabel, entry.benefit, entry.icon);
         });
     };
 
