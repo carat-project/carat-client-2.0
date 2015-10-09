@@ -173,7 +173,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                                 hasCloseButton,
                                                 hasUninstallButton,
                                                 packageName,
-                                                appCloseCallback) {
+                                                appCloseCallback,
+                                                appUninstallCallback) {
 
         if(!hasCloseButton && !hasUninstallButton) {
             return;
@@ -187,20 +188,29 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var buttonText;
 
         if(hasCloseButton) {
-            buttonText = document.createTextNode("Close App");
+            buttonText = document.createTextNode("Close");
             button.appendChild(buttonText);
 
             console.log(appCloseCallback);
 
             button.addEventListener("click",  function() {
                 appCloseCallback(packageName, function(state) {
-                    console.log("Killing app" + state);
+                    console.log("Killing app: " + state);
                     cardDomNode.style.display = "none";
                 });
             });
         } else {
-            buttonText = document.createTextNode("Uninstall App");
+            buttonText = document.createTextNode("Uninstall");
             button.appendChild(buttonText);
+
+            button.addEventListener("click", function(){
+                appUninstallCallback(packageName, function(state) {
+                        console.log("Opening app details: " + state);
+
+                        // Setup this when we have dynamic onResume
+                        // cardDomNode.style.display = "none";
+                });
+            });
         }
 
         buttonSpot.appendChild(button);
@@ -413,7 +423,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                          itemData.buttons.killButton,
                                          itemData.buttons.removeButton,
                                          itemData.packageName,
-                                         itemData.appCloseCallback);
+                                         itemData.appCloseCallback,
+                                         itemData.appUninstallCallback);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -445,20 +456,20 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //pass hogs source(data from server) to
     //model and get get a cleaned-up model object
     //to create cards from
-    var getHogsCards = function(hogsSource, appCloseCallback) {
+    var getHogsCards = function(hogsSource, appCloseCallback, appUninstallCallback) {
 
         return homebrewMap(notificationsArray
-                           .getHogs(hogsSource, appCloseCallback),
+                           .getHogs(hogsSource, appCloseCallback, appUninstallCallback),
                            makeCardBasedOnModel);
     };
 
     //pass bugs source(data from server) to
     //model and get a cleaned-up model object
     //to create cards from
-    var getBugsCards = function(bugsSource, appCloseCallback) {
+    var getBugsCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
 
         var result =  homebrewMap(notificationsArray
-                                  .getBugs(bugsSource, appCloseCallback),
+                                  .getBugs(bugsSource, appCloseCallback, appUninstallCallback),
                                   makeCardBasedOnModel);
 
         return result;
@@ -515,13 +526,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 
     //receive bugs server data; create and add corresponding cards
-    var generateBugs = function(bugsSource, appCloseCallback) {
-        generatePage("#bugs", getBugsCards(bugsSource, appCloseCallback));
+    var generateBugs = function(bugsSource, appCloseCallback, appUninstallCallback) {
+        generatePage("#bugs", getBugsCards(bugsSource, appCloseCallback, appUninstallCallback));
     };
 
     //receive hogs server data; create and add corresponding cards
-    var generateHogs = function(hogsSource, appCloseCallback) {
-        generatePage("#hogs", getHogsCards(hogsSource, appCloseCallback));
+    var generateHogs = function(hogsSource, appCloseCallback, appUninstallCallback) {
+        generatePage("#hogs", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
     };
 
     //make summary card (and for the time being other cards in home tab)

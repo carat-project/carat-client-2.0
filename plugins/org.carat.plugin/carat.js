@@ -3,7 +3,6 @@ var exec = require("cordova/exec"),
 
 module.exports = {
     initialize: function(){
-        // Replace this
         var callback = function(d) {
             return;
         }
@@ -23,5 +22,8 @@ module.exports = {
 	},
     killApp: function(packageName, callback){
         exec(callback, callback, service, "kill", [packageName]);
+    },
+    uninstallApp: function(packageName, callback){
+        exec(callback, callback, service, "uninstall", [packageName]);
     }
 };
