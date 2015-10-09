@@ -49,15 +49,13 @@ function makeElemPanSwipable(el) {
         }
     };
 
-
+    //detects start movement with angle filter. If movement is sideways, moving starts
     var onPanStart = function(ev) {
         var angle = Math.abs(ev.angle);
         console.log("trying to start"  + angle);
 
-
         if (angle >= 90 && angle < 150)
             return;
-
         if (angle > 30 && angle < 90)
             return;
 
@@ -72,46 +70,36 @@ function makeElemPanSwipable(el) {
             if(el.classList.contains("animate")) {
                 el.classList.remove("animate");
             }
-
             transform.translate = {
                 x: START_X + ev.deltaX,
                 y: START_Y
             };
             requestElementUpdate();
         }
-
     };
 
 
 
     var onPanEnd = function(ev) {
         if (moving == true) {
-
-
-            //        transform.translate = {
-            //            x: START_X,
-            //            y: START_Y
-            //        };
-            //
-            //        requestElementUpdate();
             moving = false;
             console.log("end");
         }
     };
 
-    var onPan = function(ev) {
-        var angle = Math.abs(ev.angle);
-        console.log(angle);
-        if(el.classList.contains("animate")) {
-            el.classList.remove("animate");
-        }
-        transform.translate = {
-            x: START_X + ev.deltaX,
-            y: START_Y
-        };
-        requestElementUpdate();
-
-    };
+//    var onPan = function(ev) {
+//        var angle = Math.abs(ev.angle);
+//        console.log(angle);
+//        if(el.classList.contains("animate")) {
+//            el.classList.remove("animate");
+//        }
+//        transform.translate = {
+//            x: START_X + ev.deltaX,
+//            y: START_Y
+//        };
+//        requestElementUpdate();
+//
+//    };
 
     var onSwipeRight = function(ev) {
         transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
@@ -137,13 +125,8 @@ function makeElemPanSwipable(el) {
     };
 
     var onTap = function(ev) {
-        var moreText = document.querySelector("#card-" + el.id + "-textpand");
-
-        if (moreText && moreText.className === "collapse.in") {
-            moreText.className="collapse";
-        } else if (moreText && moreText.className === "collapse") {
-            moreText.className = "collapse.in";
-        }
+        
+        showOrHideCollapse(ev);
         clearTimeout(timer);
         timer = setTimeout(function () {
             resetElement();
@@ -151,6 +134,18 @@ function makeElemPanSwipable(el) {
         requestElementUpdate();
     };
 
+    var showOrHideCollapse = function(ev) {
+        var moreText = document.querySelector
+        ("#card-" + el.id + "-textpand");
+
+        //hide
+        if (moreText && moreText.className === "collapse.in") {
+            moreText.className="collapse";
+        //show
+        } else if (moreText && moreText.className === "collapse") {
+            moreText.className = "collapse.in";
+        }
+    };
 
     mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
     mc.add(new Hammer.Swipe({ threshold: 150, pointers: 1, velocity: 0.5 })).recognizeWith(mc.get('pan'));

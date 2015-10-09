@@ -2,6 +2,11 @@
 Taken from demo template. Partly in use.
  */
 
+.animate {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
 
 .carat_summaryCard_title_text {
     font-size: 18px;
