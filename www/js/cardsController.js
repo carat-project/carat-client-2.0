@@ -24,7 +24,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 							'<div class="collapse"></div></div></div>';
 		    // commented away<a class="mdl-card__more" role="button">+</a>
      					//   <div class="mdl-card__actions"></div>
-						
+
         var domNode = parseDomNode(htmlString);
 
         panSwipeCallback(domNode);
@@ -35,10 +35,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //summary card item template
     var getNewSummaryEntryDomNodeTemplate = function() {
         var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">' +
-							'<div class="carat_summaryCard_app_icon">' + 
+							'<div class="carat_summaryCard_app_icon">' +
 								'<div class="mdl-card__icon"></div>' +
 								'<i class="material-icons"></i></div>' +
-							'<div class="carat_summaryCard_app_name"></div>' + 
+							'<div class="carat_summaryCard_app_name"></div>' +
 							'<div class="carat_summaryCard_app_time"></div></div>';
 
         var domNode = parseDomNode(htmlString);
@@ -145,7 +145,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var iconNode = cardDomNode
             .querySelector(".mdl-card__icon");
 
-        console.log("Icon node is "+iconNode);
         appendImageOrRemoveNode(iconNode, icon);
     };
 
@@ -286,9 +285,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(nameNode, name);
     };
 
-    //add summary item icon (for example, facebook icon)  
+    //add summary item icon (for example, facebook icon)
     //useless, summary entry icon is injected using injectIcon
-    
+
 //    var injectSummaryEntryIcon = function(summaryEntryDomNode,
 //                                          icon) {
 //        var iconNode = summaryEntryDomNode
@@ -363,7 +362,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                                        firstChild,
                                                        concatees, maxNumber) {
 
-        for(var i = concatees.length - 1; i >= concatees.length - maxNumber; i--) {
+        var limit = concatees.length <= maxNumber ?
+                concatees.length - 1 : concatees.length - maxNumber;
+        for(var i = concatees.length - 1; i >= limit; i--) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
@@ -391,6 +392,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         //summary title
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
+        console.log(summaryObject);
 
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
@@ -411,6 +413,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var summaryEntryHogNodes = homebrewMap(
             summaryObject.hogEntries, makeSummaryEntry);
 
+        console.log(summaryEntryHogNodes);
         //Hog group title and amount of hogs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
         //adds hogs to grid
@@ -462,7 +465,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             newCardNode = getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
-            console.log("NEWCARD: " + summaryData);
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
         }
