@@ -40,7 +40,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 								'<i class="material-icons"></i></div>' +
 							'<div class="carat_summaryCard_app_name"></div>' +
 							'<div class="carat_summaryCard_app_time"></div></div>';
-
+			
         var domNode = parseDomNode(htmlString);
 
         return domNode;

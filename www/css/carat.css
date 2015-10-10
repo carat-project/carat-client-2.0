@@ -429,6 +429,24 @@ section.mdl-layout__tab-panel div.page-content {
 		float: right;
 }
 
+#home .mdl-card__supporting-text {
+    padding: 10px 15px;
+}
+
+#home div.carat-card__title {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    display: inline-block;
+}
+#home div.carat-card__title-text {
+  font-size: 20px;
+  font-weight: light;
+  color: #616161;
+    display: block;
+    padding-left: 60px;
+}
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
 }
