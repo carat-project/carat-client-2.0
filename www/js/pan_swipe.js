@@ -102,21 +102,14 @@ function makeElemPanSwipable(el) {
 //    };
 
     var onSwipeRight = function(ev) {
-        transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
-
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 300);
-        requestElementUpdate();
-        el.style.display='none';
+        hideCard(ev);
         if (el.style.display==='none'){
         createSnackbar('Card dismissed', 'Undo', function(){ el.style.display='inline'}); //torkutetusta kortista snackbar ja palautusnappi
         }
     };
 
     var onSwipeLeft = function(ev) {
-        onSwipeRight(ev);
+        hideCard(ev);
 
         var acceptCallback = function() {
             snooze(el.id);
@@ -150,6 +143,18 @@ function makeElemPanSwipable(el) {
         }
     };
 
+    var hideCard = function(ev){
+    transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                resetElement();
+            }, 300);
+            requestElementUpdate();
+            el.style.display='none';
+    };
+
+
     mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
     mc.add(new Hammer.Swipe({ threshold: 150, pointers: 1, velocity: 0.5 })).recognizeWith(mc.get('pan'));
     mc.add( new Hammer.Tap({ threshold:15, pointers: 1, event: 'singletap' }) );
@@ -166,6 +171,7 @@ function makeElemPanSwipable(el) {
     });
     resetElement();
 }
+
 
 function toggleElemVisibilityOn(id) {
     var elem = document.getElementById(id);

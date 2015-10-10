@@ -3,7 +3,6 @@
 function snooze(id){
     toggleVisibilityOff();
     localStorage.setItem(id, "dismissed");
-
     console.log(localStorage.getItem(id));
 }
 
