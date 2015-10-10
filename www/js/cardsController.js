@@ -21,10 +21,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 						 				'<i class="material-icons">&#xE5CF;</i></div></div>' +
 						 		'<div class="carat-card-time"></div></div>' +
 						 	'<div class="mdl-card__supporting-text">' +
-							'<div class="collapse"></div></div></div>';
-		    // commented away<a class="mdl-card__more" role="button">+</a>
-     					//   <div class="mdl-card__actions"></div>
-
+				                '<div class="collapse">' + 
+                                    '<div class="mdl-card__actions"></div></div></div></div>';
+        
         var domNode = parseDomNode(htmlString);
 
         panSwipeCallback(domNode);
@@ -211,6 +210,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                 .querySelector(".collapse, .collapse.in");
 
         var button = document.createElement("button");
+        
+        button.className ="mdl-button mdl-js-button mdl-button--raised";
 
         var buttonText;
 
