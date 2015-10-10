@@ -111,7 +111,7 @@ function makeElemPanSwipable(el) {
         requestElementUpdate();
         el.style.display='none';
         if (el.style.display==='none'){
-        createSnackbar('Card dismissed', 'Undo', el.style.display='inline'); //torkutetusta kortista snackbar ja palautusnappi
+        createSnackbar('Card dismissed', 'Undo', function(){ el.style.display='inline'}); //torkutetusta kortista snackbar ja palautusnappi
         }
     };
 
