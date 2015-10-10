@@ -80,7 +80,6 @@
           <section class="mdl-layout__tab-panel is-active" id="home">
 
           <!-- Jscore card -->
-
              <div class="mdl-card mdl-shadow--2dp">
                       <div class="carat-card__title">
                           <i class="material-icons">announcement</i>
@@ -94,6 +93,23 @@
                           <span class="collapse">J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices.</span>
                       </div>
              </div>
+              
+              <!--test card for swipe hint-->
+<script>function testi () {
+    var t = document.querySelector("#testi");
+    makeElemPanSwipable(t);
+}</script>
+              <div class="mdl-card-background mdl-shadow--2dp">
+                <div class="mdl-card-front mdl-shadow--2dp" id="testi">
+                    <div class="carat-card__title">
+                        <i class="material-icons">announcement</i>
+                        <div class="carat-card__title-text">Test for swipe hint</div>
+                    </div>
+                  <div class="mdl-card__supporting-text">
+                      <button onclick="testi()">Tästä napista lähtee swipe-kuuntelija päälle</button>
+                  </div>             
+                </div>
+            </div>
 
              <div class="page-content">
              </div>

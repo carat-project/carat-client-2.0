@@ -2,6 +2,47 @@
 Taken from demo template. Partly in use.
  */
 
+
+/*just for testing purposes*/
+.mdl-card-background {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: 16px;
+  font-weight: 400;
+  height: auto;
+  overflow: hidden;
+    margin: 8px;
+  width: calc(100% - 16px);
+  z-index: 0;
+  position: relative;
+  background-color: darkgray;
+    background-image: url(../img/ic_close_white.png), url(../img/ic_close_white.png);
+    background-position:5%50%, 95%50%;
+    background-repeat: no-repeat;
+  border-radius: 2px;
+  box-sizing: content-box; }
+
+/*just for testing purposes*/
+.mdl-card-front {
+  font-size: 16px;
+  font-weight: 400;
+  height: auto;
+  overflow: hidden;
+  width: calc(100%);
+ margin: 0px;
+  z-index: 3;
+  position:inherit;
+  background: rgb(255,255,255);
+  border-radius: 2px;
+  box-sizing: border-box; }
+
 .animate {
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;

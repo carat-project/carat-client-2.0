@@ -61,16 +61,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 							'<div class="mdl-card__actions">' +
 								'<a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
-
-//left the old template html if we decide to go backwards
-
-//            '<div class="mdl-card mdl-shadow--2dp">
-//				<div class="carat_summaryCard_title">
-//					<div class="carat_summaryCard_title_text mdl-card__title-text">
-//						<i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div>
-//					<div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text">
-//						<div class="mdl-grid"></div></div></div>';
-
         var domNode = parseDomNode(htmlString);
 
         return domNode;
@@ -456,7 +446,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                          itemData.buttons.removeButton,
                                          itemData.packageName,
                                          itemData.appCloseCallback,
-                                         itemData.appUninstallCallback);
+                                         itemData.appUninstallCallback);            
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
