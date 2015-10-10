@@ -21,9 +21,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 						 				'<i class="material-icons">&#xE5CF;</i></div></div>' +
 						 		'<div class="carat-card-time"></div></div>' +
 						 	'<div class="mdl-card__supporting-text">' +
-				                '<div class="collapse">' + 
+				                '<div class="collapse">' +
                                     '<div class="mdl-card__actions"></div></div></div></div>';
-        
+
         var domNode = parseDomNode(htmlString);
 
         panSwipeCallback(domNode);
@@ -39,7 +39,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 								'<i class="material-icons"></i></div>' +
 							'<div class="carat_summaryCard_app_name"></div>' +
 							'<div class="carat_summaryCard_app_time"></div></div>';
-			
+
         var domNode = parseDomNode(htmlString);
 
         return domNode;
@@ -64,6 +64,19 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var domNode = parseDomNode(htmlString);
 
         return domNode;
+    };
+
+    //adds a swipe hint background to a card
+    //better to add this after doing everything else
+    //just in case it messes something up
+    var makeSwipeHintBackground = function(cardDom) {
+
+        var backgroundNode = document.createElement("div");
+        backgroundNode.classList.add("mdl-card-background");
+        backgroundNode.classList.add("mdl-shadow--2dp");
+        backgroundNode.appendChild(cardDom);
+
+        return backgroundNode;
     };
 
     //remove a node from dom
@@ -200,7 +213,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                 .querySelector(".collapse, .collapse.in");
 
         var button = document.createElement("button");
-        
+
         button.className ="mdl-button mdl-js-button mdl-button--raised";
 
         var buttonText;
@@ -383,7 +396,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         //summary title
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
-        console.log(summaryObject);
 
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
@@ -404,7 +416,6 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var summaryEntryHogNodes = homebrewMap(
             summaryObject.hogEntries, makeSummaryEntry);
 
-        console.log(summaryEntryHogNodes);
         //Hog group title and amount of hogs
         injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
         //adds hogs to grid
@@ -446,11 +457,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                          itemData.buttons.removeButton,
                                          itemData.packageName,
                                          itemData.appCloseCallback,
-                                         itemData.appUninstallCallback);            
+                                         itemData.appUninstallCallback);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
             }
+
         } else if(notificationObject.summary) {
 
             newCardNode = getNewSummaryDomNodeTemplate();
@@ -525,18 +537,21 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         var rightSpot = selectCardsSpot(selector);
 
-        if (selector == "#hogs" || selector == "#bugs") {
-            var div = document.createElement("div");
-            rightSpot.appendChild(div);
-            div.className="mdl-card mdl-shadow--2dp mdl-color--grey-300";
-            rightSpot = div;
-        }
-
         var children = rightSpot.childNodes;
-        rightSpot.childNodes =
-            homebrewConcatChildren(rightSpot,
-                                   rightSpot.firstChild,
-                                   nodeArray);
+
+        if(selector === "#bugs" || selector === "#hogs") {
+            var withSwipeBackgrounds = nodeArray
+                    .map(makeSwipeHintBackground);
+            rightSpot.childNodes =
+                homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       withSwipeBackgrounds);
+        } else {
+            rightSpot.childNodes =
+                homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       nodeArray);
+        }
     };
 
     //generate home and system tab cards
