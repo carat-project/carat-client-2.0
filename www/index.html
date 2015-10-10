@@ -1,11 +1,12 @@
 <!doctype html>
 
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
     <title>Carat 2.0</title>
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -15,47 +16,55 @@
     <link rel="stylesheet" href="css/material.css">
     <link rel="stylesheet" href="css/carat.css">
     <link rel="stylesheet" href="css/dialog.css">
+    <link rel="stylesheet" href="css/snackbar.css">
 
-<!--
-    <style>.animate {
-      -webkit-transition: all 0.3s;
-      -moz-transition: all 0.3s;
-      transition: all 0.3s;
-      } </style>
--->
+    <!--
+        <style>.animate {
+          -webkit-transition: all 0.3s;
+          -moz-transition: all 0.3s;
+          transition: all 0.3s;
+          } </style>
+    -->
 
-  </head>
+</head>
 
-  <body>
+<body>
 
-    <!-- dialog for closing card, pan_swipe.js -->
-      <div class="overlay" id="popup-overlay"></div>
-      <div class="modal" id="popup-modal">
-          <div class="mdl-card mdl-shadow--2dp">
-              <div class="carat-card__title">
-                  <div class="mdl-card__title-text">Don't show this card again?
-                  </div>
-                  <div class="mdl-layout-spacer"></div>
-              </div>
-              <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner and select "show hidden cards".
-              </div>
+<!-- dialog for closing card, pan_swipe.js -->
+<div class="overlay" id="popup-overlay"></div>
+<div class="modal" id="popup-modal">
+    <div class="mdl-card mdl-shadow--2dp">
+        <div class="carat-card__title">
+            <div class="mdl-card__title-text">Don't show this card again?
+            </div>
+            <div class="mdl-layout-spacer"></div>
+        </div>
+        <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner
+            and select "show hidden cards".
+        </div>
 
-              <div class="mdl-card__actions">
-                  <button id="popup-accept-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="">Don't show</button>
-                  <button id="popup-cancel-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="">Cancel</button>
-              </div>
-          </div>
-      </div>
+        <div class="mdl-card__actions">
+            <button id="popup-accept-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                    onclick="">Don't show
+            </button>
+            <button id="popup-cancel-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                    onclick="">Cancel
+            </button>
+        </div>
+    </div>
+</div>
 
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
 
-      <header class="mdl-layout__header mdl-color--blue-grey-500">
+    <header class="mdl-layout__header mdl-color--blue-grey-500">
         <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
-          <!-- Title -->
+            <!-- Title -->
             <span>Carat 2.0</span>
+
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="HiddenCards" onclick="cancelAll()">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="HiddenCards"
+                    onclick="cancelAll()">
                 <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="HiddenCards">
@@ -65,97 +74,113 @@
             </ul>
 
         </div>
+
+
+
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-          <a href="#home" class="mdl-layout__tab is-active">Home</a>
-          <a href="#bugs" class="mdl-layout__tab">Bugs</a>
-          <a href="#hogs" class="mdl-layout__tab">Hogs</a>
-          <a href="#system" class="mdl-layout__tab">System</a>
+            <a href="#home" class="mdl-layout__tab is-active">Home</a>
+            <a href="#bugs" class="mdl-layout__tab">Bugs</a>
+            <a href="#hogs" class="mdl-layout__tab">Hogs</a>
+            <a href="#system" class="mdl-layout__tab">System</a>
         </div>
-      </header>
+    </header>
 
-      <main class="mdl-layout__content">
+    <main class="mdl-layout__content">
 
-          <!-- Home view -->
-          <section class="mdl-layout__tab-panel is-active" id="home">
+        <!-- Home view -->
+        <section class="mdl-layout__tab-panel is-active" id="home">
 
-          <!-- Jscore card -->
-             <div class="mdl-card mdl-shadow--2dp">
-                      <div class="carat-card__title">
-                          <i class="material-icons">announcement</i>
-                          <div id ="jscore" class="carat-card__title-text">J-Score</div>
-                          <div class="mdl-layout-spacer"></div>
-                      </div>
+            <!-- Jscore card -->
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="carat-card__title">
+                    <i class="material-icons">announcement</i>
 
-                      <!--   Tähän olis kiva saada se piilotettavuus mut en löydä mistä ja miten
-                      -->
-                      <div class="mdl-card__supporting-text">
-                          <span class="collapse">J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices.</span>
-                      </div>
-             </div>
-              
-              <!--test card for swipe hint-->
-<script>function testi () {
-    var t = document.querySelector("#testi");
-    makeElemPanSwipable(t);
-}</script>
-              <div class="mdl-card-background mdl-shadow--2dp">
-                <div class="mdl-card-front mdl-shadow--2dp" id="testi">
-                    <div class="carat-card__title">
-                        <i class="material-icons">announcement</i>
-                        <div class="carat-card__title-text">Test for swipe hint</div>
-                    </div>
-                  <div class="mdl-card__supporting-text">
-                      <button onclick="testi()">Tästä napista lähtee swipe-kuuntelija päälle</button>
-                  </div>             
+                    <div id="jscore" class="carat-card__title-text">J-Score</div>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+
+                <!--   Tähän olis kiva saada se piilotettavuus mut en löydä mistä ja miten
+                -->
+                <div class="mdl-card__supporting-text">
+                    <span class="collapse">J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices.</span>
                 </div>
             </div>
 
-             <div class="page-content">
-             </div>
-          </section>
+            <!--testing the snackbar-->
+            <!--<div>-->
+                <!--<button id="singleaction" class="paper-button raised-button colored">Testaa tästä snackbaria-->
 
-          <!-- Bugs tabs view -->
-          <section class="mdl-layout__tab-panel" id="bugs">
-              <div class="page-content">
-                  <!--<div class="bar bar-header">-->
-                      <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
-                      <!--<div class="mdl-layout-spacer"></div>-->
-                  <!--</div>-->
-              </div>
-          </section>
+                <!--</button>-->
 
-          <!-- Hogs tab view -->
-          <section class="mdl-layout__tab-panel" id="hogs">
-              <div class="page-content">
-              </div>
+            <!--</div>-->
 
-              <!-- System tab view -->
-          </section>
-          <section class="mdl-layout__tab-panel" id="system">
-              <div class="page-content">
-                  <!-- Debug content for CaratPlugin, move elsewhere -->
+            <!--test card for swipe hint-->
+            <script>function testi () {
+    var t = document.querySelector("#testi");
+    makeElemPanSwipable(t);
+}
+            </script>
+            <div class="mdl-card-background mdl-shadow--2dp">
+                <div class="mdl-card-front mdl-shadow--2dp" id="testi">
+                    <div class="carat-card__title">
+                        <i class="material-icons">announcement</i>
 
-                  <!-- End of debug content -->
-              </div>
-          </section>
-      </main>
-    </div>
+                        <div class="carat-card__title-text">Test for swipe hint</div>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <button onclick="testi()">Tästä napista lähtee swipe-kuuntelija päälle</button>
+                    </div>
+                </div>
+            </div>
 
-    <script src="js/hammer.min.js"></script>
-    <script src="js/swipe.js"></script>
-    <script src="js/pan_swipe.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/material.min.js"></script>
-    <script src="js/model/notifications.js"></script>
-    <script src="js/cardsController.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/summaryCard.js"></script>
-    <script src="js/snooze.js"></script>
-    <script src="js/appmenu.js"></script>
-    <script type="text/javascript">
+            <div class="page-content">
+            </div>
+        </section>
+
+        <!-- Bugs tabs view -->
+        <section class="mdl-layout__tab-panel" id="bugs">
+            <div class="page-content">
+                <!--<div class="bar bar-header">-->
+                <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
+                <!--<div class="mdl-layout-spacer"></div>-->
+                <!--</div>-->
+            </div>
+        </section>
+
+        <!-- Hogs tab view -->
+        <section class="mdl-layout__tab-panel" id="hogs">
+            <div class="page-content">
+            </div>
+
+            <!-- System tab view -->
+        </section>
+        <section class="mdl-layout__tab-panel" id="system">
+            <div class="page-content">
+                <!-- Debug content for CaratPlugin, move elsewhere -->
+
+                <!-- End of debug content -->
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="js/hammer.min.js"></script>
+<script src="js/swipe.js"></script>
+<script src="js/pan_swipe.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/material.min.js"></script>
+<script src="js/model/notifications.js"></script>
+<script src="js/cardsController.js"></script>
+<script src="js/index.js"></script>
+<script src="js/summaryCard.js"></script>
+<script src="js/snooze.js"></script>
+<script src="js/appmenu.js"></script>
+<script src="js/snackbar.js"></script>
+<script type="text/javascript">
      app.initialize();
-    </script>
-  </body>
+
+</script>
+</body>
 
 </html>

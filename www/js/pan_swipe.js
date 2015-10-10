@@ -110,6 +110,9 @@ function makeElemPanSwipable(el) {
         }, 300);
         requestElementUpdate();
         el.style.display='none';
+        if (el.style.display==='none'){
+        createSnackbar('Card dismissed', 'Undo', el.style.display='inline'); //torkutetusta kortista snackbar ja palautusnappi
+        }
     };
 
     var onSwipeLeft = function(ev) {
