@@ -224,7 +224,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             console.log(appCloseCallback);
 
-            button.addEventListener("click",  function() {
+            button.addEventListener("click",  function(ev) {
                 appCloseCallback(packageName, function(state) {
                     console.log("Killing app: " + state);
                     cardDomNode.style.display = "none";
@@ -234,7 +234,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             buttonText = document.createTextNode("Uninstall");
             button.appendChild(buttonText);
 
-            button.addEventListener("click", function(){
+            button.addEventListener("click", function(ev){
                 appUninstallCallback(packageName, function(state) {
                         console.log("Opening app details: " + state);
 

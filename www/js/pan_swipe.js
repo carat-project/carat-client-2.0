@@ -104,7 +104,9 @@ function makeElemPanSwipable(el) {
     var onSwipeRight = function(ev) {
         hideCard(ev);
         if (el.style.display==='none'){
-        createSnackbar('Card dismissed', 'Undo', function(){ el.style.display='inline'}); //torkutetusta kortista snackbar ja palautusnappi
+            createSnackbar('Card dismissed', 'Undo', function() {
+                el.style.display = 'inline';
+            }); //torkutetusta kortista snackbar ja palautusnappi
         }
     };
 
@@ -121,7 +123,11 @@ function makeElemPanSwipable(el) {
     };
 
     var onTap = function(ev) {
-        
+
+        if(ev.target.nodeName === "BUTTON") {
+            return;
+        }
+
         showOrHideCollapse(ev);
         clearTimeout(timer);
         timer = setTimeout(function () {
