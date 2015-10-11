@@ -25,7 +25,10 @@ TODO: add the action that returns card when you hit UNDO
       var actionButton = document.createElement('button');
       actionButton.className = 'action';
       actionButton.innerHTML = actionText;
-      actionButton.addEventListener('click', action);
+      actionButton.addEventListener('click', function(){
+      	action();
+      	previous.dismiss(); //Fade out
+      });
       snackbar.appendChild(actionButton);
     }
     setTimeout(function() {

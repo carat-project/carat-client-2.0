@@ -125,7 +125,7 @@ model.notifications = (function() {
     //clean up hogs data
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
-        var hogs = hogsBugsPurify(hogsSource, appCloseCallback);
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback);
         return hogs;
     };
 
