@@ -109,9 +109,11 @@ public class ApplicationService {
         if (appInfo == null) {
             return false;
         }
-        return !(isSystem(appInfo)
-                || isPersistent(appInfo)
-                || isIgnored(appInfo));
+        
+        // Allow killing system apps for now
+        return !(//isSystem(appInfo)  || 
+                isPersistent(appInfo) || 
+                isIgnored(appInfo));
     }
 
     /**
