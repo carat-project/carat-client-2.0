@@ -66,6 +66,24 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         return domNode;
     };
 
+    var getNewStatisticsDomNodeTemplate = function() {
+
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
+                     '<div class="carat-card__title">' +
+                         '<i class="material-icons">announcement</i>' +
+                         '<div id ="jscore" class="carat-card__title-text"></div>' +
+                         '<div class="mdl-layout-spacer"></div>' +
+                     '</div>' +
+                     '<div class="mdl-card__supporting-text">' +
+                '<span class="collapse">J-Score tells you how well your device is doing compared to others! It&#39;s a percentile: if it&#39;s 75, for instance, your battery is outperforming three quarters of similar devices.</span>' +
+                     '</div>' +
+                '</div>';
+
+        var domNode = parseDomNode(htmlString);
+
+        return domNode;
+    };
+
     //adds a swipe hint background to a card
     //better to add this after doing everything else
     //just in case it messes something up
@@ -338,6 +356,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
     };
 
+    var injectJscore = function(statisticsDomNode,
+                                jscore) {
+        var spot = statisticsDomNode.querySelector("#jscore");
+
+        appendTextOrRemoveNode(spot, 'Your J-Score: ' + jscore);
+    };
+
 
 
     //implementation of the map function, because for
@@ -387,6 +412,12 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                     entryFields.timeDrain);
 
         return domNode;
+    };
+
+    var makeStatisticsCard = function(statisticsObject,
+                                      statisticsDomNode) {
+
+        injectJscore(statisticsDomNode, statisticsObject.jscore);
     };
 
     //constructs summary card from summary model object
@@ -470,6 +501,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
+        } else if(notificationObject.statistics) {
+
+            newCardNode = getNewStatisticsDomNodeTemplate();
+
+            var statisticsData = notificationObject.statistics;
+
+            makeStatisticsCard(statisticsData, newCardNode);
         }
 
 
@@ -522,6 +560,14 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                                           bugsSource);
         return homebrewMap(summaryObject,
                            makeCardBasedOnModel);
+    };
+
+    var getStatisticsCard = function(mainDataSource) {
+
+        var statisticsObject = notificationsArray
+                .getStatistics(mainDataSource);
+
+        return makeCardBasedOnModel(statisticsObject);
     };
 
     //select the correct spot to enter the cards in each tab
@@ -579,12 +625,17 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         showOrHideActions();
     };
 
+    var generateStatistics = function(mainDataSource) {
+        generatePage("#home", [getStatisticsCard(mainDataSource)]);
+    };
+
     //public methods of the module
     return {
         generateCards: generateCards,
         generateBugs: generateBugs,
         generateHogs: generateHogs,
-        generateSummary: generateSummary
+        generateSummary: generateSummary,
+        generateStatistics: generateStatistics
     };
 })(model.notifications, makeElemPanSwipable); //dependencies
 

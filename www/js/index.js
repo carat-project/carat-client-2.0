@@ -48,14 +48,6 @@ var app = {
 
         // Start of the callback chain
         var displayData = function(){
-            carat.getJscore(displayJscore);
-        };
-
-        // Display jscore in a premade card in home tab
-        var displayJscore = function(jscore){
-            console.log("Received Data: jscore");
-            document.getElementById("jscore").innerHTML = "<h3>Your J-Score: "+jscore+"</h3>";
-
             carat.getHogs(displayHogs);
         };
 
@@ -76,7 +68,7 @@ var app = {
             console.log("Received Data: bugs");
 
             // Application information example, see console
-            for(i in bugs){
+            for(var i in bugs){
                 console.log(
                     bugs[i].label + "\n "
                     + "running: "      + bugs[i].running    + "\n "
@@ -94,6 +86,8 @@ var app = {
 
         // Handle main reports
         var displayMain = function(main){
+            itemCards.generateStatistics(main);
+            console.log(main);
             console.log("Finished rendering");
             // ...
         };

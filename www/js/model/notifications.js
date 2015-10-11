@@ -57,6 +57,15 @@ model.notifications = (function() {
         };
     };
 
+    var makeStatistics = function(jscore) {
+
+        return {
+            statistics: {
+                jscore: jscore
+            }
+        };
+    };
+
     var purifySummaryEntries = function(arr) {
         return arr.map(function(entry) {
 //            var icons = ["face", "favorite"];
@@ -107,13 +116,15 @@ model.notifications = (function() {
 
 
     //clean up bugs data
-    var getBugs = function(bugsSource, appCloseCallback, appUninstallCallback) {
+    var getBugs = function(bugsSource,
+                           appCloseCallback, appUninstallCallback) {
         var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback);
         return bugs;
     };
 
     //clean up hogs data
-    var getHogs = function(hogsSource, appCloseCallback, appUninstallCallback) {
+    var getHogs = function(hogsSource,
+                           appCloseCallback, appUninstallCallback) {
         var hogs = hogsBugsPurify(hogsSource, appCloseCallback);
         return hogs;
     };
@@ -123,6 +134,12 @@ model.notifications = (function() {
         return [];
     };
 
+    var getStatistics = function(mainDataSource) {
+        var statistics = makeStatistics(Math.floor(mainDataSource.jscore * 100));
+
+        return statistics;
+    };
+
 
     //public methods of the module
     return {
@@ -130,6 +147,7 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem,
-        getSummary: getSummary
+        getSummary: getSummary,
+        getStatistics: getStatistics
     };
 })();
