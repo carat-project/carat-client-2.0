@@ -475,10 +475,10 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 #home div.carat-card__title {
-    padding-top: 15px;
+    padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
-    padding-bottom: 0px;
+    padding-bottom: 5px;
     display: inline-block;
 }
 #home div.carat-card__title-text {
@@ -486,7 +486,7 @@ section.mdl-layout__tab-panel div.page-content {
   font-weight: light;
   color: #616161;
     display: block;
-    padding-left: 60px;
+    padding-left: 10px;
 }
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
