@@ -86,7 +86,13 @@ var app = {
 
         // Handle main reports
         var displayMain = function(main){
-            itemCards.generateStatistics(main);
+
+            var deviceInfo = {
+                modelName: device.model,
+                osVersion: device.platform + " " + device.version
+            };
+
+            itemCards.generateStatistics(main, deviceInfo);
             console.log(main);
             console.log("Finished rendering");
             // ...

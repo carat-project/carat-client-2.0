@@ -449,7 +449,7 @@ section.mdl-layout__tab-panel div.page-content {
     top: 15px;
 }
 
-.mdl-card.sleeker .expand {
+.mdl-card .expand {
     display: inline;
     position: absolute;
     right: 15px;

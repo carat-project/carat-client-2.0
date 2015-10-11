@@ -1,4 +1,4 @@
-itemCards = (function(notificationsArray, panSwipeCallback) {
+itemCards = (function(notificationsArray, gestureCallbacks) {
     //                  ^dependency callbacks/objects
 
     var parseDomNode = function(htmlString) {
@@ -26,7 +26,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
         var domNode = parseDomNode(htmlString);
 
-        panSwipeCallback(domNode);
+        gestureCallbacks.panSwipefy(domNode);
 
         return domNode;
     };
@@ -69,17 +69,21 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var getNewStatisticsDomNodeTemplate = function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
-                     '<div class="carat-card__title">' +
-                         '<i class="material-icons">announcement</i>' +
-                         '<div id ="jscore" class="carat-card__title-text"></div>' +
-                         '<div class="mdl-layout-spacer"></div>' +
-                     '</div>' +
-                     '<div class="mdl-card__supporting-text">' +
-                '<span class="collapse">J-Score tells you how well your device is doing compared to others! It&#39;s a percentile: if it&#39;s 75, for instance, your battery is outperforming three quarters of similar devices.</span>' +
-                     '</div>' +
+                '<div class="carat-card__title">' +
+                '<i class="material-icons">announcement</i>' +
+                '<div id ="jscore" class="carat-card__title-text">' +
+                '<div class="expand">' +
+                '<i class="material-icons">&#xE5CF;</i></div></div>' +
+                '<div class="mdl-layout-spacer"></div>' +
+                '</div>' +
+                '<div class="mdl-card__supporting-text">' +
+                '<span class="collapse"></span>' +
+                '</div>' +
                 '</div>';
 
         var domNode = parseDomNode(htmlString);
+
+        gestureCallbacks.onlyTapify(domNode);
 
         return domNode;
     };
@@ -132,7 +136,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     // append image to a node if image exists
     var appendImageOrRemoveNode = function(nodeMaybeTextified,
-                                          image) {
+                                           image) {
         if(!image) {
             trashANode(nodeMaybeTextified);
         } else {
@@ -154,7 +158,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         var titleNode = cardDomNode
-            .querySelector(".mdl-card__title-text");
+                .querySelector(".mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
     };
@@ -163,7 +167,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var injectIcon = function(cardDomNode, icon){
 
         var iconNode = cardDomNode
-            .querySelector(".mdl-card__icon");
+                .querySelector(".mdl-card__icon");
 
         appendImageOrRemoveNode(iconNode, icon);
     };
@@ -176,7 +180,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         var mainTextNode = cardDomNode
-            .querySelector(".mdl-card__supporting-text");
+                .querySelector(".mdl-card__supporting-text");
 
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
@@ -188,19 +192,51 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                        notificationId) {
 
         var secondaryTextNode = cardDomNode
-            .querySelector(".collapse, .collapse.in");
+                .querySelector(".collapse, .collapse.in");
         var moreButton = cardDomNode
-            .querySelector(".mdl-card__more");
+                .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
 
 
         if(!secondaryText) {
             trashANode(secondaryTextNode);
-            trashANode(moreButton);
+            if(moreButton) {
+                trashANode(moreButton);
+            }
         } else {
             addNodeText(secondaryTextNode, secondaryText);
             secondaryTextNode.id = nodeId;
-//            moreButton.href = "#" + nodeId;
+            //            moreButton.href = "#" + nodeId;
+        }
+    };
+
+    var injectMultiparagraphSecondaryText = function(cardDomNode,
+                                                     secondaryTextParagraphs,
+                                                     notificationId) {
+        var secondaryTextNode = cardDomNode
+                .querySelector(".collapse, .collapse.in");
+        var moreButton = cardDomNode
+                .querySelector(".mdl-card__more");
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        if(!secondaryTextParagraphs) {
+            trashANode(secondaryTextNode);
+            if(moreButton) {
+                trashANode(moreButton);
+            }
+        } else {
+            for(var paragraphKey in secondaryTextParagraphs) {
+                var paragraph = secondaryTextParagraphs[paragraphKey];
+                var paragraphNode = document.createElement("p");
+                var textNode = document.createTextNode(paragraph);
+
+                paragraphNode.appendChild(textNode);
+                console.log(paragraphNode);
+
+                secondaryTextNode.appendChild(paragraphNode);
+            }
+
+            secondaryTextNode.id = nodeId;
         }
     };
 
@@ -254,10 +290,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             button.addEventListener("click", function(ev){
                 appUninstallCallback(packageName, function(state) {
-                        console.log("Opening app details: " + state);
+                    console.log("Opening app details: " + state);
 
-                        // Setup this when we have dynamic onResume
-                        // cardDomNode.style.display = "none";
+                    // Setup this when we have dynamic onResume
+                    // cardDomNode.style.display = "none";
                 });
             });
         }
@@ -310,13 +346,13 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //add summary item icon (for example, facebook icon)
     //useless, summary entry icon is injected using injectIcon
 
-//    var injectSummaryEntryIcon = function(summaryEntryDomNode,
-//                                          icon) {
-//        var iconNode = summaryEntryDomNode
-//                .querySelector("i.material-icons");
-//
-//        appendTextOrRemoveNode(iconNode, icon);
-//    };
+    //    var injectSummaryEntryIcon = function(summaryEntryDomNode,
+    //                                          icon) {
+    //        var iconNode = summaryEntryDomNode
+    //                .querySelector("i.material-icons");
+    //
+    //        appendTextOrRemoveNode(iconNode, icon);
+    //    };
 
     //time drain or benefit of the item in question
     var injectSummaryEntryTimeDrain = function(
@@ -405,9 +441,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var entryFields = summaryEntryObject.summaryEntry;
 
         injectSummaryEntryName(domNode, entryFields.name);
-                    injectIcon(domNode, entryFields.icon);
+        injectIcon(domNode, entryFields.icon);
 
-//        injectSummaryEntryIcon(domNode, entryFields.icon);
+        //        injectSummaryEntryIcon(domNode, entryFields.icon);
         injectSummaryEntryTimeDrain(domNode,
                                     entryFields.timeDrain);
 
@@ -415,9 +451,19 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 
     var makeStatisticsCard = function(statisticsObject,
+                                      deviceInfo,
                                       statisticsDomNode) {
+        var statisticsCardId = "statistics-jscore";
+        console.log(deviceInfo.osVersion);
 
         injectJscore(statisticsDomNode, statisticsObject.jscore);
+        injectIdToCard(statisticsDomNode, statisticsCardId);
+        var expandText = ["OS version: " + deviceInfo.osVersion,
+                          "Device model: " + deviceInfo.modelName,
+                          "J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices."];
+        injectMultiparagraphSecondaryText(statisticsDomNode,
+                                          expandText,
+                                          statisticsCardId);
     };
 
     //constructs summary card from summary model object
@@ -507,7 +553,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             var statisticsData = notificationObject.statistics;
 
-            makeStatisticsCard(statisticsData, newCardNode);
+            makeStatisticsCard(statisticsData,
+                               notificationObject.deviceInfo, newCardNode);
         }
 
 
@@ -527,20 +574,25 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //pass hogs source(data from server) to
     //model and get get a cleaned-up model object
     //to create cards from
-    var getHogsCards = function(hogsSource, appCloseCallback, appUninstallCallback) {
+    var getHogsCards = function(hogsSource,
+                                appCloseCallback, appUninstallCallback) {
 
         return homebrewMap(notificationsArray
-                           .getHogs(hogsSource, appCloseCallback, appUninstallCallback),
+                           .getHogs(hogsSource,
+                                    appCloseCallback, appUninstallCallback),
                            makeCardBasedOnModel);
     };
 
     //pass bugs source(data from server) to
     //model and get a cleaned-up model object
     //to create cards from
-    var getBugsCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
+    var getBugsCards = function(bugsSource,
+                                appCloseCallback, appUninstallCallback) {
 
         var result =  homebrewMap(notificationsArray
-                                  .getBugs(bugsSource, appCloseCallback, appUninstallCallback),
+                                  .getBugs(bugsSource,
+                                           appCloseCallback,
+                                           appUninstallCallback),
                                   makeCardBasedOnModel);
 
         return result;
@@ -562,10 +614,11 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            makeCardBasedOnModel);
     };
 
-    var getStatisticsCard = function(mainDataSource) {
+    var getStatisticsCard = function(mainDataSource, deviceInfo) {
 
         var statisticsObject = notificationsArray
                 .getStatistics(mainDataSource);
+        statisticsObject.deviceInfo = deviceInfo;
 
         return makeCardBasedOnModel(statisticsObject);
     };
@@ -625,8 +678,9 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         showOrHideActions();
     };
 
-    var generateStatistics = function(mainDataSource) {
-        generatePage("#home", [getStatisticsCard(mainDataSource)]);
+    var generateStatistics = function(mainDataSource, deviceInfo) {
+        generatePage("#home", [getStatisticsCard(mainDataSource,
+                                                 deviceInfo)]);
     };
 
     //public methods of the module
@@ -637,6 +691,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         generateSummary: generateSummary,
         generateStatistics: generateStatistics
     };
-})(model.notifications, makeElemPanSwipable); //dependencies
+})(model.notifications, {panSwipefy: makeElemPanSwipable,
+                         onlyTapify: makeElemTappable}); //dependencies
 
 itemCards.generateCards(); //bugs and hogs are generated elsewhere

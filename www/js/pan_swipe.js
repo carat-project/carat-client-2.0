@@ -1,3 +1,58 @@
+function makeElemTappable(el, mc, timer, ticking, requestElementUpdate, resetElement) {
+
+    if(!timer) {
+        var dummyTimer;
+        timer = dummyTimer;
+        clearTimeout(timer);
+    }
+
+    if(!ticking) {
+        ticking = false;
+    }
+
+    if(!mc) {
+        mc = new Hammer.Manager(el);
+    }
+
+    if(!resetElement) {
+        resetElement = function(){};
+    }
+
+    if(!requestElementUpdate) {
+        requestElementUpdate = function(){};
+    }
+
+    var onTap = function(ev) {
+
+        if(ev.target.nodeName === "BUTTON") {
+            return;
+        }
+
+        showOrHideCollapse(ev);
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            resetElement();
+        }, 200);
+        requestElementUpdate();
+    };
+
+    var showOrHideCollapse = function(ev) {
+        var moreText = document.querySelector
+        ("#card-" + el.id + "-textpand");
+
+        //hide
+        if (moreText && moreText.className === "collapse.in") {
+            moreText.className="collapse";
+            //show
+        } else if (moreText && moreText.className === "collapse") {
+            moreText.className = "collapse.in";
+        }
+    };
+
+    mc.add( new Hammer.Tap(
+        { threshold:15, pointers: 1, event: 'singletap' }) );
+    mc.on("singletap", onTap);
+}
 //function that makes an element pannable and swipable
 function makeElemPanSwipable(el) {
     var reqAnimationFrame = (function () {
@@ -42,6 +97,7 @@ function makeElemPanSwipable(el) {
         el.style.transform = value;
         ticking = false;
     };
+
     var requestElementUpdate = function() {
         if(!ticking) {
             reqAnimationFrame(updateElementTransform);
@@ -122,32 +178,6 @@ function makeElemPanSwipable(el) {
         toggleVisibility(acceptCallback, cancelCallback);
     };
 
-    var onTap = function(ev) {
-
-        if(ev.target.nodeName === "BUTTON") {
-            return;
-        }
-
-        showOrHideCollapse(ev);
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 200);
-        requestElementUpdate();
-    };
-
-    var showOrHideCollapse = function(ev) {
-        var moreText = document.querySelector
-        ("#card-" + el.id + "-textpand");
-
-        //hide
-        if (moreText && moreText.className === "collapse.in") {
-            moreText.className="collapse";
-        //show
-        } else if (moreText && moreText.className === "collapse") {
-            moreText.className = "collapse.in";
-        }
-    };
 
     var hideCard = function(ev){
     transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
@@ -163,18 +193,18 @@ function makeElemPanSwipable(el) {
 
     mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
     mc.add(new Hammer.Swipe({ threshold: 150, pointers: 1, velocity: 0.5 })).recognizeWith(mc.get('pan'));
-    mc.add( new Hammer.Tap({ threshold:15, pointers: 1, event: 'singletap' }) );
     mc.on("panstart", onPanStart);
     mc.on("panmove", onPanMove);
     mc.on("panend", onPanEnd);
     mc.on("swiperight", onSwipeRight);
     mc.on("swipeleft", onSwipeLeft);
-    mc.on("singletap", onTap);
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
             resetElement();
         }
     });
+    makeElemTappable(el, mc, timer, ticking,
+                     requestElementUpdate, resetElement);
     resetElement();
 }
 
