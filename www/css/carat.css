@@ -18,7 +18,10 @@ Taken from demo template. Partly in use.
   font-weight: 400;
   height: auto;
   overflow: hidden;
-    margin: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 0px;
+    margin-top: 0px;
   width: calc(100% - 16px);
   z-index: 0;
   position: relative;
