@@ -22,8 +22,8 @@ Taken from demo template. Partly in use.
   width: calc(100% - 16px);
   z-index: 0;
   position: relative;
-  background-color: darkgray;
-    background-image: url(../img/ic_close_white.png), url(../img/ic_close_white.png);
+  background-color: #E8E8E8;
+    background-image: url(../img/ic_close.png), url(../img/ic_hide.png);
     background-position:5%50%, 95%50%;
     background-repeat: no-repeat;
   border-radius: 2px;
