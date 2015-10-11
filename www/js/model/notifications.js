@@ -6,19 +6,28 @@ model.notifications = (function() {
     //
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
-    var makeNotification = function(title, icon, mainText,
-                                    secondaryText, classes,
-                                    timeDrain, id) {
 
+    var makeNotification = function(title, icon, label, packageName,
+                                    samples, classes,
+                                    timeDrain,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback) {
         return {
             item: {
                 title: title,
                 icon: icon,
-                mainText: mainText,
-                secondaryText: secondaryText,
+                label: label,
+                packageName: packageName,
+                samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
-                id: id
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback
             }
         };
     };
@@ -34,16 +43,6 @@ model.notifications = (function() {
             }
         };
     };
-    
-//    var makeSummaryGroup = function(name, timeDrain, entries) {      
-//        return {
-//            summaryGroup: {
-//                name: name,
-//                timeDrain: timeDrain,
-//                entries: entries
-//            }
-//        };
-//    };
 
     //summary model representation
     var makeSummary = function(title, hogEntries, bugEntries, id) {
@@ -58,14 +57,24 @@ model.notifications = (function() {
         };
     };
 
+    var makeStatistics = function(jscore) {
+
+        return {
+            statistics: {
+                jscore: jscore
+            }
+        };
+    };
+
     var purifySummaryEntries = function(arr) {
         return arr.map(function(entry) {
-            var icons = ["face", "favorite"];
-            var randomIcon =
-                    icons[Math.floor(Math.random() * icons.length)];
-            var cutName = entry.label.slice(0, 9);
+//            var icons = ["face", "favorite"];
+//            var randomIcon =
+//                    icons[Math.floor(Math.random() * icons.length)];
+            var cutLabel = entry.label.length > 9 ?
+                    entry.label.slice(0,8) : entry.label;
 
-            return makeSummaryEntry(cutName, entry.benefit, randomIcon);
+            return makeSummaryEntry(cutLabel, entry.benefit, entry.icon);
         });
     };
 
@@ -84,37 +93,51 @@ model.notifications = (function() {
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
-    var hogsBugsPurify = function(arr) {
+    var hogsBugsPurify = function(arr, appCloseCallback, appUninstallCallback) {
         return arr.map(function(elem) {
             var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
             var result =  makeNotification(elem.label,
-            							   elem.icon,
+                                           elem.icon,
+                                           elem.name,
                                            elem.name,
                                            "Samples: " + elem.samples,
                                            ["sleeker",
                                             "smaller-time-text"],
                                            elem.benefit,
-                                           idPrefix + "-" + elem.type);
+                                           elem.killable && elem.running,
+                                           elem.removable &&
+                                           !(elem.killable && elem.running),
+                                           idPrefix + "-" + elem.type,
+                                           appCloseCallback,
+                                           appUninstallCallback);
             return result;
         });
     };
 
 
     //clean up bugs data
-    var getBugs = function(bugsSource) {
-        var bugs = hogsBugsPurify(bugsSource);
+    var getBugs = function(bugsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback);
         return bugs;
     };
 
     //clean up hogs data
-    var getHogs = function(hogsSource) {
-        var hogs = hogsBugsPurify(hogsSource);
+    var getHogs = function(hogsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback);
         return hogs;
     };
 
     //nothing at the moment
     var getSystem = function() {
         return [];
+    };
+
+    var getStatistics = function(mainDataSource) {
+        var statistics = makeStatistics(Math.floor(mainDataSource.jscore * 100));
+
+        return statistics;
     };
 
 
@@ -124,6 +147,7 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem,
-        getSummary: getSummary
+        getSummary: getSummary,
+        getStatistics: getStatistics
     };
 })();

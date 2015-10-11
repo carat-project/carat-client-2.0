@@ -1,3 +1,58 @@
+function makeElemTappable(el, mc, timer, ticking, requestElementUpdate, resetElement) {
+
+    if(!timer) {
+        var dummyTimer;
+        timer = dummyTimer;
+        clearTimeout(timer);
+    }
+
+    if(!ticking) {
+        ticking = false;
+    }
+
+    if(!mc) {
+        mc = new Hammer.Manager(el);
+    }
+
+    if(!resetElement) {
+        resetElement = function(){};
+    }
+
+    if(!requestElementUpdate) {
+        requestElementUpdate = function(){};
+    }
+
+    var onTap = function(ev) {
+
+        if(ev.target.nodeName === "BUTTON") {
+            return;
+        }
+
+        showOrHideCollapse(ev);
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            resetElement();
+        }, 200);
+        requestElementUpdate();
+    };
+
+    var showOrHideCollapse = function(ev) {
+        var moreText = document.querySelector
+        ("#card-" + el.id + "-textpand");
+
+        //hide
+        if (moreText && moreText.className === "collapse.in") {
+            moreText.className="collapse";
+            //show
+        } else if (moreText && moreText.className === "collapse") {
+            moreText.className = "collapse.in";
+        }
+    };
+
+    mc.add( new Hammer.Tap(
+        { threshold:15, pointers: 1, event: 'singletap' }) );
+    mc.on("singletap", onTap);
+}
 //function that makes an element pannable and swipable
 function makeElemPanSwipable(el) {
     var reqAnimationFrame = (function () {
@@ -42,6 +97,7 @@ function makeElemPanSwipable(el) {
         el.style.transform = value;
         ticking = false;
     };
+
     var requestElementUpdate = function() {
         if(!ticking) {
             reqAnimationFrame(updateElementTransform);
@@ -49,15 +105,13 @@ function makeElemPanSwipable(el) {
         }
     };
 
-
+    //detects start movement with angle filter. If movement is sideways, moving starts
     var onPanStart = function(ev) {
         var angle = Math.abs(ev.angle);
         console.log("trying to start"  + angle);
 
-
         if (angle >= 90 && angle < 150)
             return;
-
         if (angle > 30 && angle < 90)
             return;
 
@@ -72,60 +126,48 @@ function makeElemPanSwipable(el) {
             if(el.classList.contains("animate")) {
                 el.classList.remove("animate");
             }
-
             transform.translate = {
                 x: START_X + ev.deltaX,
                 y: START_Y
             };
             requestElementUpdate();
         }
-
     };
 
 
 
     var onPanEnd = function(ev) {
         if (moving == true) {
-
-
-            //        transform.translate = {
-            //            x: START_X,
-            //            y: START_Y
-            //        };
-            //
-            //        requestElementUpdate();
             moving = false;
             console.log("end");
         }
     };
 
-    var onPan = function(ev) {
-        var angle = Math.abs(ev.angle);
-        console.log(angle);
-        if(el.classList.contains("animate")) {
-            el.classList.remove("animate");
-        }
-        transform.translate = {
-            x: START_X + ev.deltaX,
-            y: START_Y
-        };
-        requestElementUpdate();
-
-    };
+//    var onPan = function(ev) {
+//        var angle = Math.abs(ev.angle);
+//        console.log(angle);
+//        if(el.classList.contains("animate")) {
+//            el.classList.remove("animate");
+//        }
+//        transform.translate = {
+//            x: START_X + ev.deltaX,
+//            y: START_Y
+//        };
+//        requestElementUpdate();
+//
+//    };
 
     var onSwipeRight = function(ev) {
-        transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
-
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 300);
-        requestElementUpdate();
-        el.style.display='none';
+        hideCard(ev);
+        if (el.style.display==='none'){
+            createSnackbar('Card dismissed', 'Undo', function() {
+                el.style.display = 'inline';
+            }); //torkutetusta kortista snackbar ja palautusnappi
+        }
     };
 
     var onSwipeLeft = function(ev) {
-        onSwipeRight(ev);
+        hideCard(ev);
 
         var acceptCallback = function() {
             snooze(el.id);
@@ -136,38 +178,36 @@ function makeElemPanSwipable(el) {
         toggleVisibility(acceptCallback, cancelCallback);
     };
 
-    var onTap = function(ev) {
-        var moreText = document.querySelector("#card-" + el.id + "-textpand");
 
-        if (moreText && moreText.className === "collapse.in") {
-            moreText.className="collapse";
-        } else if (moreText && moreText.className === "collapse") {
-            moreText.className = "collapse.in";
-        }
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 200);
-        requestElementUpdate();
+    var hideCard = function(ev){
+    transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                resetElement();
+            }, 300);
+            requestElementUpdate();
+            el.style.display='none';
     };
 
 
     mc.add(new Hammer.Pan({ threshold: 5, pointers: 1, direction: Hammer.DIRECTION_HORIZONTAL}));
     mc.add(new Hammer.Swipe({ threshold: 150, pointers: 1, velocity: 0.5 })).recognizeWith(mc.get('pan'));
-    mc.add( new Hammer.Tap({ threshold:15, pointers: 1, event: 'singletap' }) );
     mc.on("panstart", onPanStart);
     mc.on("panmove", onPanMove);
     mc.on("panend", onPanEnd);
     mc.on("swiperight", onSwipeRight);
     mc.on("swipeleft", onSwipeLeft);
-    mc.on("singletap", onTap);
     mc.on("hammer.input", function(ev) {
         if(ev.isFinal) {
             resetElement();
         }
     });
+    makeElemTappable(el, mc, timer, ticking,
+                     requestElementUpdate, resetElement);
     resetElement();
 }
+
 
 function toggleElemVisibilityOn(id) {
     var elem = document.getElementById(id);

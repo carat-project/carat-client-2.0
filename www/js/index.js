@@ -48,14 +48,6 @@ var app = {
 
         // Start of the callback chain
         var displayData = function(){
-            carat.getJscore(displayJscore);
-        };
-
-        // Display jscore in a premade card in home tab
-        var displayJscore = function(jscore){
-            console.log("Received Data: jscore");
-            document.getElementById("jscore").innerHTML = "<h3>Your J-Score: "+jscore+"</h3>";
-
             carat.getHogs(displayHogs);
         };
 
@@ -63,7 +55,7 @@ var app = {
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
             //pass hogs to controller
-            itemCards.generateHogs(hogs);
+            itemCards.generateHogs(hogs, carat.killApp, carat.uninstallApp);
 
             carat.getBugs(function(bugs) {
                 return displayBugsAndSummary(bugs, hogs);
@@ -74,8 +66,19 @@ var app = {
         //NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){
             console.log("Received Data: bugs");
+
+            // Application information example, see console
+            for(var i in bugs){
+                console.log(
+                    bugs[i].label + "\n "
+                    + "running: "      + bugs[i].running    + "\n "
+                    + "killable: "     + bugs[i].killable   + "\n "
+                    + "removable: "    + bugs[i].removable  + "\n"
+                    );
+            }
+
             //pass bugs to controller
-            itemCards.generateBugs(bugs);
+            itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
 
             carat.getMainReports(displayMain);
@@ -83,6 +86,14 @@ var app = {
 
         // Handle main reports
         var displayMain = function(main){
+
+            var deviceInfo = {
+                modelName: device.model,
+                osVersion: device.platform + " " + device.version
+            };
+
+            itemCards.generateStatistics(main, deviceInfo);
+            console.log(main);
             console.log("Finished rendering");
             // ...
         };

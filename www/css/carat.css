@@ -3,6 +3,55 @@ Taken from demo template. Partly in use.
  */
 
 
+/*just for testing purposes*/
+.mdl-card-background {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  font-size: 16px;
+  font-weight: 400;
+  height: auto;
+  overflow: hidden;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+  width: calc(100% - 16px);
+  z-index: 0;
+  position: relative;
+  background-color: #E8E8E8;
+    background-image: url(../img/ic_close.png), url(../img/ic_hide.png);
+    background-position:5%50%, 95%50%;
+    background-repeat: no-repeat;
+  border-radius: 2px;
+  box-sizing: content-box; }
+
+/*just for testing purposes*/
+.mdl-card-front {
+  font-size: 16px;
+  font-weight: 400;
+  height: auto;
+  overflow: hidden;
+  width: calc(100%);
+ margin: 0px;
+  z-index: 3;
+  position:inherit;
+  background: rgb(255,255,255);
+  border-radius: 2px;
+  box-sizing: border-box; }
+
+.animate {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
 .carat_summaryCard_title_text {
     font-size: 18px;
     font-weight: 400;
@@ -29,17 +78,17 @@ Taken from demo template. Partly in use.
 
 .carat_summaryCard_first_group_title{
     font-weight: 400;
-    font-size: 14px;
+    font-size: 18px;
     color:dimgrey;
 }
 
 .carat_summaryCard_group_title{
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 400;
     color:dimgrey;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: solid;
+    border-top: solid;
     border-width: 1px;
     border-color:#E8E8E8;
 }
@@ -59,7 +108,8 @@ Taken from demo template. Partly in use.
 }
 
 .carat_summary_grid {
-padding-top: 20px;
+    padding-top: 15px;
+    padding-bottom: 20px;
 }
 
 .carat_summary_more_button {
@@ -310,7 +360,6 @@ _:-ms-input-placeholder, :root .carat-graph {
 
 .mdl-card.mint {
 	background-color: #b2dfdb;	
-	
 }
 
 .mdl-card.mint .mdl-card__supporting-text {
@@ -324,15 +373,20 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker {
-    margin-top: 4px;
-    margin-bottom: 4px;
+    z-index: 2;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
 }
 
 .mdl-card.sleeker div.carat-card__title {
     padding-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
+    display: inline-block;
 }
 
 .mdl-card.sleeker .mdl-card__supporting-text {
@@ -340,9 +394,11 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker .mdl-card__title-text {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: light;
   color: #616161;
+    display: block;
+    padding-left: 60px;
 }
 
 .mdl-card.sleeker div div span.button {
@@ -373,7 +429,11 @@ section.mdl-layout__tab-panel div.page-content {
 
 .mdl-card.sleeker .carat-card-time {
 	color: #bf360c;
-	font-size: 16px;	
+	font-size: 16px;
+    display: block;
+    text-align: left;
+    padding-left: 60px;
+    
 }
 	
 .mdl-card.sleeker .icon {
@@ -385,8 +445,18 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker div.mdl-card__icon img {
-    width: 35px;
-    height 35px;
+    width: 40px;
+    height 40px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+.mdl-card .expand {
+    display: inline;
+    position: absolute;
+    right: 15px;
+    color: #B8B8B8;
 }
 
 #bugs .bar {
@@ -403,13 +473,31 @@ section.mdl-layout__tab-panel div.page-content {
 		float: right;
 }
 
+#home .mdl-card__supporting-text {
+    padding: 10px 15px;
+}
+
+#home div.carat-card__title {
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+#home div.carat-card__title-text {
+  font-size: 20px;
+  font-weight: light;
+  color: #616161;
+    display: block;
+    padding-left: 10px;
+}
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;
 }
 
 .smaller-time-text > span.carat-card-time {
     font-size: 60%;
-    display: inline;
+    display: block;
 }
 
 [data-icon]:before {

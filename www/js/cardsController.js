@@ -1,4 +1,4 @@
-itemCards = (function(notificationsArray, panSwipeCallback) {
+itemCards = (function(notificationsArray, gestureCallbacks) {
     //                  ^dependency callbacks/objects
 
     var parseDomNode = function(htmlString) {
@@ -13,18 +13,32 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title"><div class="mdl-card__actions"><a class="mdl-card__more" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">+</a></div><div class="mdl-card__icon"></div><div class="mdl-card__title-text"></div><div class="mdl-layout-spacer"></div><span class="carat-card-time"></span></div><div class="mdl-card__supporting-text"><div class="collapse"></div></div></div>';
+        var htmlString = '<div class="mdl-card">' +
+						 	'<div class="carat-card__title">' +
+						 		'<div class="mdl-card__icon"></div>' +
+						 		'<div class="mdl-card__title-text">' +
+						 			'<div class="expand">' +
+						 				'<i class="material-icons">&#xE5CF;</i></div></div>' +
+						 		'<div class="carat-card-time"></div></div>' +
+						 	'<div class="mdl-card__supporting-text">' +
+				                '<div class="collapse">' +
+                                    '<div class="mdl-card__actions"></div></div></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
-        panSwipeCallback(domNode);
+        gestureCallbacks.panSwipefy(domNode);
 
         return domNode;
     };
 
     //summary card item template
     var getNewSummaryEntryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone"><div class="carat_summaryCard_app_icon"><i class="material-icons"></i></div><div class="carat_summaryCard_app_name"></div><div class="carat_summaryCard_app_time"></div></div>';
+        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">' +
+							'<div class="carat_summaryCard_app_icon">' +
+								'<div class="mdl-card__icon"></div>' +
+								'<i class="material-icons"></i></div>' +
+							'<div class="carat_summaryCard_app_name"></div>' +
+							'<div class="carat_summaryCard_app_time"></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
@@ -33,19 +47,58 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     //summary card template, still partly static
     var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp"><div class="carat-card__title" id="summary"><div class="mdl-card__title-text"></div></div><div class="mdl-card__supporting-text"><div class="carat_summaryCard_group_title">4 Bugs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">7 Hogs<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div class="carat_summaryCard_group_title">3 System notifications<span class="carat_summaryCard_group_title_summary_time">-1h 54min</span></div><div id="summaryGrid" class="carat_hide"><div class="mdl-grid carat_summary_grid"></div></div></div><div class="mdl-card__actions"><a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
+        var htmlString ='<div class="mdl-card mdl-shadow--2dp">' +
+							'<div class="carat-card__title" id="summary">' +
+								'<div class="mdl-card__title-text"></div></div>' +
+							'<div class="mdl-card__supporting-text">' +
+								'<div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div>' +
+								'<div id="bugSummaryGrid" class="carat_hide">' +
+									'<div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div>' +
+								'<div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div>' +
+								'<div id="hogSummaryGrid" class="carat_hide">' +
+									'<div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div>' +
+								'<div class="carat_summaryCard_group_title">0 System notifications</div></div>' +
+							'<div class="mdl-card__actions">' +
+								'<a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
 
-            
-//left the old template html if we decide to go backwards  
-        
-//            '<div class="mdl-card mdl-shadow--2dp"><div class="carat_summaryCard_title"><div class="carat_summaryCard_title_text mdl-card__title-text"><i class="material-icons carat_material-icons_arrow">&#xE5CE</i></div><div class="mdl-layout-spacer"></div></div><div class="mdl-card__supporting-text"><div class="mdl-grid"></div></div></div>';
-        
-
-
-        
         var domNode = parseDomNode(htmlString);
 
         return domNode;
+    };
+
+    var getNewStatisticsDomNodeTemplate = function() {
+
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
+                '<div class="carat-card__title">' +
+                '<i class="material-icons">announcement</i>' +
+                '<div id ="jscore" class="carat-card__title-text">' +
+                '<div class="expand">' +
+                '<i class="material-icons">&#xE5CF;</i></div></div>' +
+                '<div class="mdl-layout-spacer"></div>' +
+                '</div>' +
+                '<div class="mdl-card__supporting-text">' +
+                '<span class="collapse"></span>' +
+                '</div>' +
+                '</div>';
+
+        var domNode = parseDomNode(htmlString);
+
+        gestureCallbacks.onlyTapify(domNode);
+
+        return domNode;
+    };
+
+    //adds a swipe hint background to a card
+    //better to add this after doing everything else
+    //just in case it messes something up
+    var makeSwipeHintBackground = function(cardDom) {
+
+        var backgroundNode = document.createElement("div");
+        backgroundNode.classList.add("mdl-card-background");
+        backgroundNode.classList.add("mdl-shadow--2dp");
+        backgroundNode.appendChild(cardDom);
+
+        return backgroundNode;
     };
 
     //remove a node from dom
@@ -83,7 +136,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
     // append image to a node if image exists
     var appendImageOrRemoveNode = function(nodeMaybeTextified,
-                                          image) {
+                                           image) {
         if(!image) {
             trashANode(nodeMaybeTextified);
         } else {
@@ -105,7 +158,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         var titleNode = cardDomNode
-            .querySelector(".mdl-card__title-text");
+                .querySelector(".mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
     };
@@ -114,9 +167,8 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var injectIcon = function(cardDomNode, icon){
 
         var iconNode = cardDomNode
-            .querySelector(".mdl-card__icon");
+                .querySelector(".mdl-card__icon");
 
-        console.log("Icon node is "+iconNode);
         appendImageOrRemoveNode(iconNode, icon);
     };
 
@@ -128,7 +180,7 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         }
 
         var mainTextNode = cardDomNode
-            .querySelector(".mdl-card__supporting-text");
+                .querySelector(".mdl-card__supporting-text");
 
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
@@ -140,19 +192,51 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                        notificationId) {
 
         var secondaryTextNode = cardDomNode
-            .querySelector(".collapse");
+                .querySelector(".collapse, .collapse.in");
         var moreButton = cardDomNode
-            .querySelector(".mdl-card__more");
+                .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
 
 
         if(!secondaryText) {
             trashANode(secondaryTextNode);
-            trashANode(moreButton);
+            if(moreButton) {
+                trashANode(moreButton);
+            }
         } else {
             addNodeText(secondaryTextNode, secondaryText);
             secondaryTextNode.id = nodeId;
-            moreButton.href = "#" + nodeId;
+            //            moreButton.href = "#" + nodeId;
+        }
+    };
+
+    var injectMultiparagraphSecondaryText = function(cardDomNode,
+                                                     secondaryTextParagraphs,
+                                                     notificationId) {
+        var secondaryTextNode = cardDomNode
+                .querySelector(".collapse, .collapse.in");
+        var moreButton = cardDomNode
+                .querySelector(".mdl-card__more");
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        if(!secondaryTextParagraphs) {
+            trashANode(secondaryTextNode);
+            if(moreButton) {
+                trashANode(moreButton);
+            }
+        } else {
+            for(var paragraphKey in secondaryTextParagraphs) {
+                var paragraph = secondaryTextParagraphs[paragraphKey];
+                var paragraphNode = document.createElement("p");
+                var textNode = document.createTextNode(paragraph);
+
+                paragraphNode.appendChild(textNode);
+                console.log(paragraphNode);
+
+                secondaryTextNode.appendChild(paragraphNode);
+            }
+
+            secondaryTextNode.id = nodeId;
         }
     };
 
@@ -164,6 +248,58 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         for(var i = 0; i < classes.length; i++) {
             nodeClassList.add(classes[i]);
         }
+    };
+
+    //will add either close button or uninstall button,
+    //depending on whether the flags are set
+    var injectCloseOrUninstallButton = function(cardDomNode,
+                                                hasCloseButton,
+                                                hasUninstallButton,
+                                                packageName,
+                                                appCloseCallback,
+                                                appUninstallCallback) {
+
+        if(!hasCloseButton && !hasUninstallButton) {
+            return;
+        }
+
+        var buttonSpot = cardDomNode
+                .querySelector(".collapse, .collapse.in");
+
+        var button = document.createElement("button");
+
+        button.className ="mdl-button mdl-js-button mdl-button--raised";
+
+        var buttonText;
+
+        if(hasCloseButton) {
+            buttonText = document.createTextNode("Close");
+            button.appendChild(buttonText);
+
+            console.log(appCloseCallback);
+
+            button.addEventListener("click",  function(ev) {
+                appCloseCallback(packageName, function(state) {
+                    console.log("Killing app: " + state);
+                    cardDomNode.style.display = "none";
+                });
+            });
+        } else {
+            buttonText = document.createTextNode("Uninstall");
+            button.appendChild(buttonText);
+
+            button.addEventListener("click", function(ev){
+                appUninstallCallback(packageName, function(state) {
+                    console.log("Opening app details: " + state);
+
+                    // Setup this when we have dynamic onResume
+                    // cardDomNode.style.display = "none";
+                });
+            });
+        }
+
+        buttonSpot.appendChild(button);
+
     };
 
     //style the time drain or benefit text accordingly,
@@ -192,36 +328,38 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var injectTimeDrain = function(cardDomNode, timeDrain) {
 
         var timeDrainNode = cardDomNode
-            .querySelector(".carat-card-time");
+                .querySelector(".carat-card-time");
 
         makeTimeDrainText(timeDrainNode, timeDrain);
 
     };
-    
+
     //name of summary item
     var injectSummaryEntryName = function(summaryEntryDomNode,
                                           name) {
         var nameNode = summaryEntryDomNode
-            .querySelector(".carat_summaryCard_app_name");
+                .querySelector(".carat_summaryCard_app_name");
 
         appendTextOrRemoveNode(nameNode, name);
     };
 
     //add summary item icon (for example, facebook icon)
-    var injectSummaryEntryIcon = function(summaryEntryDomNode,
-                                          icon) {
-        var iconNode = summaryEntryDomNode
-            .querySelector("i.material-icons");
+    //useless, summary entry icon is injected using injectIcon
 
-        appendTextOrRemoveNode(iconNode, icon);
-    };
+    //    var injectSummaryEntryIcon = function(summaryEntryDomNode,
+    //                                          icon) {
+    //        var iconNode = summaryEntryDomNode
+    //                .querySelector("i.material-icons");
+    //
+    //        appendTextOrRemoveNode(iconNode, icon);
+    //    };
 
     //time drain or benefit of the item in question
     var injectSummaryEntryTimeDrain = function(
         summaryEntryDomNode, timeDrain) {
 
         var timeDrainNode = summaryEntryDomNode
-            .querySelector(".carat_summaryCard_app_time");
+                .querySelector(".carat_summaryCard_app_time");
 
         makeTimeDrainText(timeDrainNode, timeDrain);
     };
@@ -231,10 +369,37 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                       title) {
 
         var titleNode = summaryDomNode
-            .querySelector("div.mdl-card__title-text");
+                .querySelector("div.mdl-card__title-text");
 
         appendTextOrRemoveNode(titleNode, title);
     };
+
+    var injectSummaryBugHogCount = function(summaryDomNode,
+                                            count, bugOrHog) {
+
+        var bug = "bugTitleAndCount";
+        var hog = "hogTitleAndCount";
+        var countNode;
+
+        if (bugOrHog=="bug"){
+            countNode = summaryDomNode
+                .querySelector("#" + bug);
+        } else {
+            countNode = summaryDomNode
+                .querySelector("#" + hog);
+        }
+
+        appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
+    };
+
+    var injectJscore = function(statisticsDomNode,
+                                jscore) {
+        var spot = statisticsDomNode.querySelector("#jscore");
+
+        appendTextOrRemoveNode(spot, 'Your J-Score: ' + jscore);
+    };
+
+
 
     //implementation of the map function, because for
     //some reason the normal JS array map didn't work
@@ -252,7 +417,19 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                                           firstChild,
                                           concatees) {
 
-        for(var i = 0; i < concatees.length; i++) {
+        for(var i = concatees.length -1; i >= 0; i--) {
+            spot.insertBefore(concatees[i], firstChild);
+        }
+    };
+
+    //like homebrewConcatChildren with maximium number of concatees
+    var homebrewConcatChildrenWithMaxNumber = function(spot,
+                                                       firstChild,
+                                                       concatees, maxNumber) {
+
+        var limit = concatees.length <= maxNumber ?
+                concatees.length - 1 : concatees.length - maxNumber;
+        for(var i = concatees.length - 1; i >= limit; i--) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
@@ -264,26 +441,68 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         var entryFields = summaryEntryObject.summaryEntry;
 
         injectSummaryEntryName(domNode, entryFields.name);
-        injectSummaryEntryIcon(domNode, entryFields.icon);
+        injectIcon(domNode, entryFields.icon);
+
+        //        injectSummaryEntryIcon(domNode, entryFields.icon);
         injectSummaryEntryTimeDrain(domNode,
                                     entryFields.timeDrain);
 
         return domNode;
     };
 
-    //contructs summary card from summary model object
+    var makeStatisticsCard = function(statisticsObject,
+                                      deviceInfo,
+                                      statisticsDomNode) {
+        var statisticsCardId = "statistics-jscore";
+        console.log(deviceInfo.osVersion);
+
+        injectJscore(statisticsDomNode, statisticsObject.jscore);
+        injectIdToCard(statisticsDomNode, statisticsCardId);
+        var expandText = ["OS version: " + deviceInfo.osVersion,
+                          "Device model: " + deviceInfo.modelName,
+                          "J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices."];
+        injectMultiparagraphSecondaryText(statisticsDomNode,
+                                          expandText,
+                                          statisticsCardId);
+    };
+
+    //constructs summary card from summary model object
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
+        //summary title
         injectSummaryTitle(summaryDomNode,
                            summaryObject.title);
 
-        var summaryEntryNodes = homebrewMap(
-            summaryObject.bugEntries.concat(summaryObject.hogEntries), makeSummaryEntry);
-        var spot = summaryDomNode
-            .querySelector("div.mdl-grid");
-        homebrewConcatChildren(spot, spot.firstChild,
-                               summaryEntryNodes);
+        // all bugEntries
+        var summaryEntryBugNodes = homebrewMap(
+            summaryObject.bugEntries, makeSummaryEntry);
+
+        //Bug group title and amount of bugs
+        injectSummaryBugHogCount(summaryDomNode, summaryEntryBugNodes.length, "bug");
+
+        //adds bugs to grid
+        if(summaryEntryBugNodes.length != 0) {
+            var bugSpot = summaryDomNode
+                    .querySelector("#bugsGrid");
+            //dirty workaround, to be changed...
+            homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
+                                                summaryEntryBugNodes, 4);
+        }
+
+        var summaryEntryHogNodes = homebrewMap(
+            summaryObject.hogEntries, makeSummaryEntry);
+
+        //Hog group title and amount of hogs
+        injectSummaryBugHogCount(summaryDomNode, summaryEntryHogNodes.length, "hog");
+        //adds hogs to grid
+        if(summaryEntryHogNodes.length != 0) {
+            var hogSpot = summaryDomNode
+                    .querySelector("#hogsGrid");
+            //dirty workaround, to be changed...
+            homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
+                                                summaryEntryHogNodes, 4);
+        }
     };
 
     //make either an item card (hog or bug) or summary card
@@ -300,28 +519,42 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
-            injectMainText(newCardNode,
-                           itemData.mainText);
+            //            injectMainText(newCardNode,
+            //                           itemData.label);
             injectSecondaryText(newCardNode,
-                                itemData.secondaryText,
+                                itemData.samples,
                                 itemData.id);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
                             itemData.timeDrain);
             injectIdToCard(newCardNode, itemData.id);
+            injectCloseOrUninstallButton(newCardNode,
+                                         itemData.buttons.killButton,
+                                         itemData.buttons.removeButton,
+                                         itemData.packageName,
+                                         itemData.appCloseCallback,
+                                         itemData.appUninstallCallback);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
             }
+
         } else if(notificationObject.summary) {
 
             newCardNode = getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
-            console.log("NEWCARD: " + summaryData);
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
+        } else if(notificationObject.statistics) {
+
+            newCardNode = getNewStatisticsDomNodeTemplate();
+
+            var statisticsData = notificationObject.statistics;
+
+            makeStatisticsCard(statisticsData,
+                               notificationObject.deviceInfo, newCardNode);
         }
 
 
@@ -341,19 +574,26 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     //pass hogs source(data from server) to
     //model and get get a cleaned-up model object
     //to create cards from
-    var getHogsCards = function(hogsSource) {
+    var getHogsCards = function(hogsSource,
+                                appCloseCallback, appUninstallCallback) {
 
-        return homebrewMap(notificationsArray.getHogs(hogsSource),
+        return homebrewMap(notificationsArray
+                           .getHogs(hogsSource,
+                                    appCloseCallback, appUninstallCallback),
                            makeCardBasedOnModel);
     };
 
     //pass bugs source(data from server) to
     //model and get a cleaned-up model object
     //to create cards from
-    var getBugsCards = function(bugsSource) {
+    var getBugsCards = function(bugsSource,
+                                appCloseCallback, appUninstallCallback) {
 
-        var result =  homebrewMap(notificationsArray.getBugs(bugsSource),
-                           makeCardBasedOnModel);
+        var result =  homebrewMap(notificationsArray
+                                  .getBugs(bugsSource,
+                                           appCloseCallback,
+                                           appUninstallCallback),
+                                  makeCardBasedOnModel);
 
         return result;
     };
@@ -374,6 +614,15 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
                            makeCardBasedOnModel);
     };
 
+    var getStatisticsCard = function(mainDataSource, deviceInfo) {
+
+        var statisticsObject = notificationsArray
+                .getStatistics(mainDataSource);
+        statisticsObject.deviceInfo = deviceInfo;
+
+        return makeCardBasedOnModel(statisticsObject);
+    };
+
     //select the correct spot to enter the cards in each tab
     var selectCardsSpot = function(selector) {
 
@@ -386,11 +635,22 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     var generatePage = function(selector, nodeArray) {
 
         var rightSpot = selectCardsSpot(selector);
+
         var children = rightSpot.childNodes;
-        rightSpot.childNodes =
-            homebrewConcatChildren(rightSpot,
-                                   rightSpot.firstChild,
-                                   nodeArray);
+
+        if(selector === "#bugs" || selector === "#hogs") {
+            var withSwipeBackgrounds = nodeArray
+                    .map(makeSwipeHintBackground);
+            rightSpot.childNodes =
+                homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       withSwipeBackgrounds);
+        } else {
+            rightSpot.childNodes =
+                homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       nodeArray);
+        }
     };
 
     //generate home and system tab cards
@@ -401,19 +661,26 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
     };
 
     //receive bugs server data; create and add corresponding cards
-    var generateBugs = function(bugsSource) {
-        generatePage("#bugs", getBugsCards(bugsSource));
+    var generateBugs = function(bugsSource, appCloseCallback, appUninstallCallback) {
+        generatePage("#bugs", getBugsCards(bugsSource, appCloseCallback, appUninstallCallback));
     };
 
     //receive hogs server data; create and add corresponding cards
-    var generateHogs = function(hogsSource) {
-        generatePage("#hogs", getHogsCards(hogsSource));
+    var generateHogs = function(hogsSource, appCloseCallback, appUninstallCallback) {
+        generatePage("#hogs", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
     };
 
     //make summary card (and for the time being other cards in home tab)
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
         generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+        //calls summaryCard.js and opens summary entries grid
+        showOrHideActions();
+    };
+
+    var generateStatistics = function(mainDataSource, deviceInfo) {
+        generatePage("#home", [getStatisticsCard(mainDataSource,
+                                                 deviceInfo)]);
     };
 
     //public methods of the module
@@ -421,8 +688,10 @@ itemCards = (function(notificationsArray, panSwipeCallback) {
         generateCards: generateCards,
         generateBugs: generateBugs,
         generateHogs: generateHogs,
-        generateSummary: generateSummary
+        generateSummary: generateSummary,
+        generateStatistics: generateStatistics
     };
-})(model.notifications, makeElemPanSwipable); //dependencies
+})(model.notifications, {panSwipefy: makeElemPanSwipable,
+                         onlyTapify: makeElemTappable}); //dependencies
 
 itemCards.generateCards(); //bugs and hogs are generated elsewhere
