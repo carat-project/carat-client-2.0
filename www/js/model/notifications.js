@@ -90,12 +90,17 @@ model.notifications = (function() {
     var getGeneral = function() {
         return [];
     };
+	
+	// gives an id based on an app name
+	var makeIdFromAppName = function(appName, hogOrBug) {
+			var idPrefix = appName.replace(/-/g, "--").replace(/\./g, "-");
+			return idPrefix + "-" + hogOrBug;
+	};
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
     var hogsBugsPurify = function(arr, appCloseCallback, appUninstallCallback) {
         return arr.map(function(elem) {
-            var idPrefix = elem.name.replace(/-/g, "--").replace(/\./g, "-");
             var result =  makeNotification(elem.label,
                                            elem.icon,
                                            elem.name,
@@ -107,7 +112,7 @@ model.notifications = (function() {
                                            elem.killable && elem.running,
                                            elem.removable &&
                                            !(elem.killable && elem.running),
-                                           idPrefix + "-" + elem.type,
+                                           makeIdFromAppName(elem.name, elem.type),
                                            appCloseCallback,
                                            appUninstallCallback);
             return result;
@@ -148,6 +153,7 @@ model.notifications = (function() {
         getHogs: getHogs,
         getSystem: getSystem,
         getSummary: getSummary,
-        getStatistics: getStatistics
+        getStatistics: getStatistics,
+		makeIdFromAppName: makeIdFromAppName
     };
 })();

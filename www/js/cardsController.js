@@ -1,92 +1,6 @@
-itemCards = (function(notificationsArray, gestureCallbacks) {
+itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //                  ^dependency callbacks/objects
 
-    var parseDomNode = function(htmlString) {
-
-        var dummyDiv = document.createElement("div");
-        dummyDiv.innerHTML = htmlString;
-
-        var result = dummyDiv.firstChild;
-
-        return result;
-    };
-    //get template Dom-node for a card
-    var getNewItemDomNodeTemplate = function() {
-
-        var htmlString = '<div class="mdl-card">' +
-						 	'<div class="carat-card__title">' +
-						 		'<div class="mdl-card__icon"></div>' +
-						 		'<div class="mdl-card__title-text">' +
-						 			'<div class="expand">' +
-						 				'<i class="material-icons">&#xE5CF;</i></div></div>' +
-						 		'<div class="carat-card-time"></div></div>' +
-						 	'<div class="mdl-card__supporting-text">' +
-				                '<div class="collapse">' +
-                                    '<div class="mdl-card__actions"></div></div></div></div>';
-
-        var domNode = parseDomNode(htmlString);
-
-        gestureCallbacks.panSwipefy(domNode);
-
-        return domNode;
-    };
-
-    //summary card item template
-    var getNewSummaryEntryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-cell mdl-cell--2-col mdl-cell--1-col-phone">' +
-							'<div class="carat_summaryCard_app_icon">' +
-								'<div class="mdl-card__icon"></div>' +
-								'<i class="material-icons"></i></div>' +
-							'<div class="carat_summaryCard_app_name"></div>' +
-							'<div class="carat_summaryCard_app_time"></div></div>';
-
-        var domNode = parseDomNode(htmlString);
-
-        return domNode;
-    };
-
-    //summary card template, still partly static
-    var getNewSummaryDomNodeTemplate = function() {
-        var htmlString ='<div class="mdl-card mdl-shadow--2dp">' +
-							'<div class="carat-card__title" id="summary">' +
-								'<div class="mdl-card__title-text"></div></div>' +
-							'<div class="mdl-card__supporting-text">' +
-								'<div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div>' +
-								'<div id="bugSummaryGrid" class="carat_hide">' +
-									'<div class="mdl-grid carat_summary_grid" id="bugsGrid"></div></div>' +
-								'<div class="carat_summaryCard_group_title" id ="hogTitleAndCount"></div>' +
-								'<div id="hogSummaryGrid" class="carat_hide">' +
-									'<div class="mdl-grid carat_summary_grid" id="hogsGrid"></div></div>' +
-								'<div class="carat_summaryCard_group_title">0 System notifications</div></div>' +
-							'<div class="mdl-card__actions">' +
-								'<a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">More</a></div></div>';
-
-        var domNode = parseDomNode(htmlString);
-
-        return domNode;
-    };
-
-    var getNewStatisticsDomNodeTemplate = function() {
-
-        var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
-                '<div class="carat-card__title">' +
-                '<i class="material-icons">announcement</i>' +
-                '<div id ="jscore" class="carat-card__title-text">' +
-                '<div class="expand">' +
-                '<i class="material-icons">&#xE5CF;</i></div></div>' +
-                '<div class="mdl-layout-spacer"></div>' +
-                '</div>' +
-                '<div class="mdl-card__supporting-text">' +
-                '<span class="collapse"></span>' +
-                '</div>' +
-                '</div>';
-
-        var domNode = parseDomNode(htmlString);
-
-        gestureCallbacks.onlyTapify(domNode);
-
-        return domNode;
-    };
 
     //adds a swipe hint background to a card
     //better to add this after doing everything else
@@ -437,7 +351,7 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
     //creates summary entry dom node from summary entry model object
     var makeSummaryEntry = function(summaryEntryObject) {
 
-        var domNode = getNewSummaryEntryDomNodeTemplate();
+        var domNode = cardTemplates.getNewSummaryEntryDomNodeTemplate();
         var entryFields = summaryEntryObject.summaryEntry;
 
         injectSummaryEntryName(domNode, entryFields.name);
@@ -515,7 +429,10 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 
             var itemData = notificationObject.item;
 
-            newCardNode = getNewItemDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewItemDomNodeTemplate();
+
+            gestureCallbacks.panSwipefy(newCardNode);
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
@@ -542,14 +459,19 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 
         } else if(notificationObject.summary) {
 
-            newCardNode = getNewSummaryDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
         } else if(notificationObject.statistics) {
 
-            newCardNode = getNewStatisticsDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewStatisticsDomNodeTemplate();
+
+            gestureCallbacks
+                .onlyTapify(newCardNode);
 
             var statisticsData = notificationObject.statistics;
 
@@ -692,6 +614,7 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
         generateStatistics: generateStatistics
     };
 })(model.notifications, {panSwipefy: makeElemPanSwipable,
-                         onlyTapify: makeElemTappable}); //dependencies
+                         onlyTapify: makeElemTappable},
+   cardTemplates); //dependencies
 
 itemCards.generateCards(); //bugs and hogs are generated elsewhere
