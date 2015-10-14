@@ -1,5 +1,6 @@
-itemCards = (function(notificationsArray, gestureCallbacks) {
+itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //                  ^dependency callbacks/objects
+
 
     var parseDomNode = function(htmlString) {
 
@@ -88,6 +89,7 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 
         return domNode;
     };
+
 
     //adds a swipe hint background to a card
     //better to add this after doing everything else
@@ -446,7 +448,7 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
     //creates summary entry dom node from summary entry model object
     var makeSummaryEntry = function(summaryEntryObject) {
 
-        var domNode = getNewSummaryEntryDomNodeTemplate();
+        var domNode = cardTemplates.getNewSummaryEntryDomNodeTemplate();
         var entryFields = summaryEntryObject.summaryEntry;
 
         injectSummaryEntryName(domNode, entryFields.name);
@@ -524,7 +526,10 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 
             var itemData = notificationObject.item;
 
-            newCardNode = getNewItemDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewItemDomNodeTemplate();
+
+            gestureCallbacks.panSwipefy(newCardNode);
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
@@ -551,14 +556,19 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 
         } else if(notificationObject.summary) {
 
-            newCardNode = getNewSummaryDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewSummaryDomNodeTemplate();
 
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
         } else if(notificationObject.statistics) {
 
-            newCardNode = getNewStatisticsDomNodeTemplate();
+            newCardNode = cardTemplates
+                .getNewStatisticsDomNodeTemplate();
+
+            gestureCallbacks
+                .onlyTapify(newCardNode);
 
             var statisticsData = notificationObject.statistics;
 
@@ -701,6 +711,7 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
         generateStatistics: generateStatistics
     };
 })(model.notifications, {panSwipefy: makeElemPanSwipable,
-                         onlyTapify: makeElemTappable}); //dependencies
+                         onlyTapify: makeElemTappable},
+   cardTemplates); //dependencies
 
 itemCards.generateCards(); //bugs and hogs are generated elsewhere
