@@ -38,7 +38,8 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
 								'<div class="mdl-card__icon"></div>' +
 								'<i class="material-icons"></i></div>' +
 							'<div class="carat_summaryCard_app_name"></div>' +
-							'<div class="carat_summaryCard_app_time"></div></div>';
+							'<div class="carat_summaryCard_app_time"></div>' +
+							'<div class="mdl-card__actions"></div></div>';
 
         var domNode = parseDomNode(htmlString);
 
@@ -249,6 +250,14 @@ itemCards = (function(notificationsArray, gestureCallbacks) {
             nodeClassList.add(classes[i]);
         }
     };
+	
+	//adds a click event listener for element that gets user to right card using id
+	var linkifySummaryEntry =function(element, id) {
+		element.addEventListener("click", function(){
+    		window.location.href = "#" + id;
+		});
+			
+	}
 
     //will add either close button or uninstall button,
     //depending on whether the flags are set
