@@ -12,7 +12,7 @@ public class Constants {
     }
 
     public static enum ActionType {
-        INIT, JSCORE, MAIN, HOGS, BUGS, KILL, REMOVE, UNKNOWN;
+        INIT, JSCORE, MAIN, HOGS, BUGS, KILL, REMOVE, MEMORY, UNKNOWN;
         
         public static ActionType get(String action){
             if(action.equals("init"))       return INIT;
@@ -22,6 +22,7 @@ public class Constants {
             if(action.equals("bugs"))       return BUGS;
             if(action.equals("kill"))       return KILL;
             if(action.equals("uninstall"))  return REMOVE;
+            if(action.equals("memory"))     return MEMORY;
             return UNKNOWN;
         }
     }

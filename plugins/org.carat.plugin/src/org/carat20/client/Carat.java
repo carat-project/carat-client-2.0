@@ -7,6 +7,7 @@ import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import java.util.HashMap;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 import org.carat20.client.Constants.ActionType;
@@ -42,8 +43,7 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] bugReports;
 
     /**
-     * Initializes CordovaPlugin and gives early access to CordovaWebView.
-     * Creates ByteArrayOutputStream to avoid multiple object references.
+     * Initializes CordovaPlugin and gives an early access to CordovaWebView.
      * @param cordova Activity interface with access to application context
      * @param webView Main interface for interacting with Cordova webView
      */
@@ -56,15 +56,14 @@ public class Carat extends CordovaPlugin {
     }
 
     /**
-     * Provides an interface for cordova exec which accepts data requests and
-     * fulfills them by either utilizing the server or local storage. Callbacks
-     * are mostly used for passing reports to globally accessible Javascript
-     * objects. Initialize takes care of data and invokes dataready-event.
+     * Executes different tasks based on action calls from cordova exec.
+     * Tasks include plugin initialization, fetching data and handling
+     * processes. Data is returned to a callback function from webview.
      *
-     * @param action Determines the function call.
-     * @param args Optional information about the request, e.g. events.
-     * @param cb Used for returning data to callback functions.
-     * @return State boolean, which is true if an action gets executed.
+     * @param action Determines the task.
+     * @param args Optional action arguments.
+     * @param cb Used for returning data to webview.
+     * @return True when action is properly executed.
      */
     @Override
     public boolean execute(final String action, final JSONArray args, final CallbackContext cb) {
@@ -74,13 +73,14 @@ public class Carat extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable(){
             @Override
             public void run() {
-                // Action router
+                // Tasks
                 switch(ActionType.get(action)){
                     case INIT:      handleInit(cb);         break;
                     case JSCORE:    handleJscore(cb);       break;
                     case MAIN:      handleMain(cb);         break;
                     case HOGS:      handleHogs(cb);         break;
                     case BUGS:      handleBugs(cb);         break;
+                    case MEMORY:    handleMemory(cb);       break;
                     case KILL:      handleKill(cb, args);   break;
                     case REMOVE:    handleRem(cb, args);    break;
                     default: cb.error("No such action");
@@ -170,7 +170,107 @@ public class Carat extends CordovaPlugin {
         //...
     }
     
-    // JSON conversion
+    // Handle action
+    
+    // Init
+    private void handleInit(CallbackContext cb){
+         Log.v("Carat", "Initializing plugin");
+         prepareData();
+         cb.success();
+    }
+    
+    // Jscore
+    private void handleJscore(CallbackContext cc){
+        int jscore = (int)(storage.getMainReports().getJScore() * 100);
+        cc.success(jscore);
+    }
+    
+    // Main reports
+    private void handleMain(CallbackContext cb){
+        try{
+            mainReports = storage.getMainReports();
+            cb.success(convertToJSON(mainReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert main reports.", e);
+        }
+    }
+    
+    // Hog reports
+    private void handleHogs(CallbackContext cb){
+        try{
+            hogReports = storage.getHogReports();
+            cb.success(convertToJSON(hogReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert hog reports.", e);
+        }
+    }
+    
+    // Bug reports
+    private void handleBugs(CallbackContext cb){
+        try{
+            bugReports = storage.getBugReports();
+            cb.success(convertToJSON(bugReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert bug reports.", e);
+        }
+    }
+    
+    // Memory info
+    private void handleMemory(CallbackContext cb){
+        HashMap<String, Integer> memInfo = DeviceLibrary.getMemoryInfo();
+        if (memInfo == null) return;
+        Log.v("Carat", "memInfo is " + memInfo);
+        try{
+            int freeMem = memInfo.get("free");
+            int cachedMem = memInfo.get("cached");
+            
+            // MemoryInfo.availMem = MemFree + Cached 
+            int availMem = freeMem + cachedMem;
+            JSONObject result = new JSONObject()
+                .put("total", memInfo.get("total"))
+                .put("available", availMem)
+                .put("free", freeMem)
+                .put("cached", cachedMem)
+                .put("active", memInfo.get("active"))
+                .put("inactive", memInfo.get("inactive"));
+            cb.success(result);
+        } catch(JSONException e){
+            Log.v("Carat", "Failed to convert memory info", e);
+        }
+    }
+    
+    // Kill application
+    private void handleKill(CallbackContext cb, JSONArray args){
+        try{
+            String packageName = (String) args.get(0);
+            if(appService.killApp(packageName)){
+                cb.success("Success");
+            } else {
+                cb.error("Failed");
+            }
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to kill app, invalid package name.", e);
+        }
+        cb.error("Failed to kill app, invalid package name.");
+    }
+    
+    // Open application details to proceed with uninstalling
+    private void handleRem(CallbackContext cb, JSONArray args){
+        try{
+            String packageName = (String) args.get(0);
+            if(appService.openAppDetails(packageName)){
+                cb.success("Success");
+            } else {
+                cb.error("Failed");
+            }
+        } catch (JSONException e){
+             Log.v("Carat", "Failed to open app details, invalid package name.", e);
+        }
+        cb.success();
+    }
+    
+    
+    // Utility methods for converting data to JSON.
     
     /**
      * Creates a JSON array for hog or bug reports
@@ -226,81 +326,4 @@ public class Carat extends CordovaPlugin {
             .put("similarAppsWithout", r.similarAppsWithout);
         return results;
     }
-    
-    // Handle action
-    
-    // Init
-    private void handleInit(CallbackContext cb){
-         Log.v("Carat", "Initializing plugin");
-         DeviceLibrary.getMemoryInfo();
-         prepareData();
-         cb.success();
-    }
-    
-    // Jscore
-    private void handleJscore(CallbackContext cc){
-        int jscore = (int)(storage.getMainReports().getJScore() * 100);
-        cc.success(jscore);
-    }
-    
-    // Main reports
-    private void handleMain(CallbackContext cb){
-        try{
-            mainReports = storage.getMainReports();
-            cb.success(convertToJSON(mainReports));
-        } catch (JSONException e){
-            Log.v("Carat", "Failed to convert main reports.", e);
-        }
-    }
-    
-    // Hog reports
-    private void handleHogs(CallbackContext cb){
-        try{
-            hogReports = storage.getHogReports();
-            cb.success(convertToJSON(hogReports));
-        } catch (JSONException e){
-            Log.v("Carat", "Failed to convert hog reports.", e);
-        }
-    }
-    
-    // Bug reports
-    private void handleBugs(CallbackContext cb){
-        try{
-            bugReports = storage.getBugReports();
-            cb.success(convertToJSON(bugReports));
-        } catch (JSONException e){
-            Log.v("Carat", "Failed to convert bug reports.", e);
-        }
-    }
-    
-    // Kill application
-    private void handleKill(CallbackContext cb, JSONArray args){
-        try{
-            String packageName = (String) args.get(0);
-            if(appService.killApp(packageName)){
-                cb.success("Success");
-            } else {
-                cb.error("Failed");
-            }
-        } catch (JSONException e){
-            Log.v("Carat", "Failed to kill app, invalid package name.", e);
-        }
-        cb.error("Failed to kill app, invalid package name.");
-    }
-    
-    // Open application details to proceed with uninstalling
-    private void handleRem(CallbackContext cb, JSONArray args){
-        try{
-            String packageName = (String) args.get(0);
-            if(appService.openAppDetails(packageName)){
-                cb.success("Success");
-            } else {
-                cb.error("Failed");
-            }
-        } catch (JSONException e){
-             Log.v("Carat", "Failed to open app details, invalid package name.", e);
-        }
-        cb.success();
-    }
-    
 }

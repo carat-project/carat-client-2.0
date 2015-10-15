@@ -20,6 +20,9 @@ module.exports = {
     getBugs: function(callback){
         exec(callback, callback, service, "bugs", [""]);
     },
+    getMemoryInfo: function(callback){
+    	exec(callback, callback, service, "memory", [""]);
+    },
     killApp: function(packageName, callback){
         exec(callback, callback, service, "kill", [packageName]);
     },

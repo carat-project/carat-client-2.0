@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 
 /**
- * Provides device information.
+ * Provides device information and statistics.
  * @author Jonatan Hamberg
  */
 public class DeviceLibrary {
@@ -50,17 +50,12 @@ public class DeviceLibrary {
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
             int[] data = readLines(reader, 7);
-            Log.v("Carat", "Memory stats:"+
-                    "\n Total: "+data[0]+
-                    "\n Free: "+data[1]+
-                    "\n Cached: "+data[3]+
-                    "\n Active: "+data[5]+
-                    "\n Inactive: "+data[6]);
             result.put("total", data[0]);
             result.put("free", data[1]);
-            result.put("cached", data[2]);
-            result.put("active", data[4]);
-            result.put("inactive", data[5]);
+            result.put("cached", data[3]);
+            result.put("active", data[5]);
+            result.put("inactive", data[6]);
+            return result;
         } catch (IOException e) {
             Log.v("Carat", "Failed to read meminfo", e);
         }
@@ -76,6 +71,7 @@ public class DeviceLibrary {
             if(line == null) break;
             result[index] = Integer.parseInt(line.split("\\s+")[1]);
         }
+        reader.seek(0);
         return result;
     }
 }
