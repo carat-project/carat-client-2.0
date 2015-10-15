@@ -505,3 +505,7 @@ section.mdl-layout__tab-panel div.page-content {
   content: attr(data-icon);
   speak: none; /* Not to be trusted, but hey. */
 }
+
+.show-on-expand {
+    display: none;
+}

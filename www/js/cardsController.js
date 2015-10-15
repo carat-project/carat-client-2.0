@@ -240,7 +240,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //style the time drain or benefit text accordingly,
     //based on whether it was given as an integer or string
     var makeTimeDrainText = function(timeDrainNode,
-                                     timeDrain) {
+                                     timeDrain,
+                                     timeDrainError) {
         var timeDrainText;
 
         if(!timeDrain) {
@@ -253,19 +254,32 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             timeDrainText = timeDrain;
         }
 
+
         addNodeText(timeDrainNode, timeDrainText);
+
+        if(timeDrainError) {
+            var timeErrorElem = document.createElement("span");
+            var timeErrorText = document
+                    .createTextNode(timeDrainError);
+            timeErrorElem.appendChild(timeErrorText);
+            timeErrorElem.classList.add("show-on-expand");
+
+            timeDrainNode.appendChild(timeErrorElem);
+        }
 
         return timeDrainNode;
     };
 
     //inject time drain or benefit text to a node, styling
     //it correctly
-    var injectTimeDrain = function(cardDomNode, timeDrain) {
+    var injectTimeDrain = function(cardDomNode, timeDrain,
+                                   timeDrainError) {
 
         var timeDrainNode = cardDomNode
                 .querySelector(".carat-card-time");
 
-        makeTimeDrainText(timeDrainNode, timeDrain);
+        makeTimeDrainText(timeDrainNode, timeDrain,
+                          timeDrainError);
 
     };
 
@@ -466,7 +480,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
-                            itemData.timeDrain);
+                            itemData.timeDrain,
+                            itemData.timeDrainErrorString);
             injectIdToCard(newCardNode, itemData.id);
             injectCloseOrUninstallButton(newCardNode,
                                          itemData.buttons.killButton,

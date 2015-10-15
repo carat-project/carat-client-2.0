@@ -77,6 +77,8 @@ var app = {
                     );
             }
 
+            console.log(bugs, hogs);
+
             //pass bugs to controller
             itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
