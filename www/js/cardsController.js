@@ -162,14 +162,28 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             nodeClassList.add(classes[i]);
         }
     };
-	
-	//adds a click event listener for element that gets user to right card using id
-	var linkifySummaryEntry =function(element, id) {
-		element.addEventListener("click", function(){
-    		window.location.href = "#" + id;
-		});
-			
-	}
+
+	  //adds a click event listener for element
+    //that directs user to right card using id
+    var linkifySummaryEntry = function(element, nameTag, type) {
+
+        var tab;
+
+        if(type === "BUG") {
+            tab = "bugs-tab";
+        } else if(type === "HOG") {
+            tab = "hogs-tab";
+        } else {
+            return;
+        }
+
+        var elemId = notificationsArray.makeIdFromAppName(nameTag, type);
+
+        element.addEventListener("click", function() {
+            document.getElementById(tab).click();
+            window.location.hash = elemId;
+        });
+    };
 
     //will add either close button or uninstall button,
     //depending on whether the flags are set
@@ -367,6 +381,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         //        injectSummaryEntryIcon(domNode, entryFields.icon);
         injectSummaryEntryTimeDrain(domNode,
                                     entryFields.timeDrain);
+        linkifySummaryEntry(domNode, entryFields.nameTag, entryFields.type);
 
         return domNode;
     };

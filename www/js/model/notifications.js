@@ -33,11 +33,13 @@ model.notifications = (function() {
     };
 
     //summary item model representation
-    var makeSummaryEntry = function(name, timeDrain, icon) {
+    var makeSummaryEntry = function(name, nameTag, type, timeDrain, icon) {
 
         return {
             summaryEntry: {
                 name: name,
+                nameTag: nameTag,
+                type: type,
                 timeDrain: timeDrain,
                 icon: icon
             }
@@ -74,7 +76,8 @@ model.notifications = (function() {
             var cutLabel = entry.label.length > 9 ?
                     entry.label.slice(0,8) : entry.label;
 
-            return makeSummaryEntry(cutLabel, entry.benefit, entry.icon);
+            return makeSummaryEntry(cutLabel, entry.name, entry.type,
+                                    entry.benefit, entry.icon);
         });
     };
 
@@ -90,16 +93,17 @@ model.notifications = (function() {
     var getGeneral = function() {
         return [];
     };
-	
-	// gives an id based on an app name
-	var makeIdFromAppName = function(appName, hogOrBug) {
-			var idPrefix = appName.replace(/-/g, "--").replace(/\./g, "-");
-			return idPrefix + "-" + hogOrBug;
-	};
+
+    // gives an id based on an app name
+    var makeIdFromAppName = function(appName, hogOrBug) {
+        var idPrefix = appName.replace(/-/g, "--").replace(/\./g, "-");
+        return idPrefix + "-" + hogOrBug;
+    };
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
-    var hogsBugsPurify = function(arr, appCloseCallback, appUninstallCallback) {
+    var hogsBugsPurify = function(arr,
+                                  appCloseCallback, appUninstallCallback) {
         return arr.map(function(elem) {
             var result =  makeNotification(elem.label,
                                            elem.icon,
@@ -154,6 +158,6 @@ model.notifications = (function() {
         getSystem: getSystem,
         getSummary: getSummary,
         getStatistics: getStatistics,
-		makeIdFromAppName: makeIdFromAppName
+        makeIdFromAppName: makeIdFromAppName
     };
 })();

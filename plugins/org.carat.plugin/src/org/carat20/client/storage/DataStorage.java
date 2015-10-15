@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -35,13 +37,16 @@ public final class DataStorage {
     private final Context context;
     private final PackageManager pm;
 
+    private String uuid;
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
     private WeakReference<SimpleHogBug[]> bugReports;
 
-    private static final String MAINFILE = "carat-main.dat";
-    private static final String HOGFILE = "carat-hogs.dat";
-    private static final String BUGFILE = "carat-bugs.dat";
+    public static final String UUIDFILE = "carat-uuid.dat";
+    
+    public static final String MAINFILE = "carat-main.dat";
+    public static final String HOGFILE = "carat-hogs.dat";
+    public static final String BUGFILE = "carat-bugs.dat";
 
     /**
      * Constructs a storage used for writing and reading reports.
@@ -63,7 +68,10 @@ public final class DataStorage {
      * @return true if all references are null.
      */
     public boolean isEmpty(){
-        Log.v("Carat","Status | mainReports: "+mainReports+", hogReports: "+hogReports+", bugReports: "+bugReports);
+        Log.v("Carat","Storage:\n "
+                + "mainReports: "+ mainReports + "\n "
+                + "hogReports: " + hogReports + "\n "
+                + "bugReports: " + bugReports);
         return (mainReports == null 
                 && hogReports == null 
                 && bugReports == null);
@@ -77,6 +85,14 @@ public final class DataStorage {
         return !(mainReports == null 
                 || hogReports == null 
                 || bugReports == null);
+    }
+
+    /**
+     * Checks if uuid reference is null.
+     * @return true if uuid is null.
+     */
+    public boolean idEmpty(){
+        return (uuid == null);
     }
     
     /**
@@ -104,7 +120,17 @@ public final class DataStorage {
     }
     
     /**
-     * Provides main reports from a reference or from storage.
+     * Provides uuid from memory or storage.
+     * @return User identifier uuid.
+     */
+    public Reports getUuid() {
+        Log.v("Carat", "Getting main reports");
+        return (mainReports != null && mainReports.get() != null) ?
+                mainReports.get() : readMainReports();
+    }
+    
+    /**
+     * Provides main reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Main reports.
      */
@@ -115,7 +141,7 @@ public final class DataStorage {
     }
     
     /**
-     * Provides hog reports from a reference or from storage.
+     * Provides hog reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Hog reports.
      */    
@@ -126,7 +152,7 @@ public final class DataStorage {
     }
     
     /**
-     * Provides bug reports from a reference or from storage.
+     * Provides bug reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Bug reports.
      */
@@ -136,32 +162,48 @@ public final class DataStorage {
                 bugReports.get() : readBugReports();
     }
     
+    //Reads uuid from file.
+    private String readUuid() {
+        Log.v("Carat", "Reading uuid from disk");
+        String text = readText(UUIDFILE);
+        if(text == null) return null;
+        this.uuid = text;
+        return text;
+    }
     
     //Reads main reports from file.
     private Reports readMainReports() {
         Log.v("Carat", "Reading main reports from disk");
-        Object o = read(MAINFILE);
+        Object o = readObject(MAINFILE);
         if(o == null) return null;
-        mainReports = new WeakReference<Reports>((Reports) o);
+        this.mainReports = new WeakReference<Reports>((Reports) o);
         return (Reports) o;
     }
     
     //Reads hog reports from file.
     private SimpleHogBug[] readHogReports() {
         Log.v("Carat", "Reading hog reports from disk");
-        Object o = read(HOGFILE);
+        Object o = readObject(HOGFILE);
         if(o == null) return null;
-        hogReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
+        this.hogReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
     }
     
     //Reads bug reports from file.
     private SimpleHogBug[] readBugReports() {
         Log.v("Carat", "Reading bug reports from disk");
-        Object o = read(BUGFILE);
+        Object o = readObject(BUGFILE);
         if(o == null) return null;
-        bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
+        this.bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
+    }
+    
+    /**
+     * Initializes uuid and writes it to a file.
+     */
+    public void writeUuid(String uuid) {
+        this.uuid = uuid;
+        writeText(uuid, UUIDFILE);
     }
 
     /**
@@ -170,7 +212,7 @@ public final class DataStorage {
      */
     public void writeMainReports(Reports reports) {
         mainReports = new WeakReference<Reports>(reports);
-        write(reports, MAINFILE);
+        writeObject(reports, MAINFILE);
     }
 
     /**
@@ -182,7 +224,7 @@ public final class DataStorage {
         if(list != null){
             this.hogReports = new WeakReference<SimpleHogBug[]>(list);
         }
-        write(list, HOGFILE);
+        writeObject(list, HOGFILE);
     }
 
     /**
@@ -194,12 +236,12 @@ public final class DataStorage {
         if(list != null){
             this.bugReports = new WeakReference<SimpleHogBug[]>(list);
         }
-        write(list, BUGFILE);
+        writeObject(list, BUGFILE);
     }
 
     
-    // Save object to file
-    private void write(Object object, String fileName) {
+    // Write object to file
+    private void writeObject(Object object, String fileName) {
         FileOutputStream out = openOutputStream(fileName);
         Log.v("Carat", "Writing "+object.getClass()+" to "+fileName);
         try {
@@ -208,12 +250,24 @@ public final class DataStorage {
             stream.close();
             //Try with resources handles closing
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when writing object to disk");
+            Log.v("Carat", "Failed writing object in "+fileName);
+        }
+    }
+    
+    // Write text to file
+    private void writeText(String string, String fileName){
+        FileOutputStream out = openOutputStream(fileName);
+        try{
+            DataOutputStream stream = new DataOutputStream(out);
+            stream.writeUTF(string);
+            stream.close();
+        } catch(Throwable e){
+            Log.v("Carat"," Failed writing text in "+fileName);
         }
     }
 
     // Read object from file
-    private Object read(String fileName) {
+    private Object readObject(String fileName) {
         FileInputStream in = openInputStream(fileName);
         Log.v("Carat", "Reading from "+fileName);
         try {
@@ -222,7 +276,21 @@ public final class DataStorage {
             stream.close();
             return object;
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when reading object from disk");
+            Log.v("Carat", "Failed reading object from " + fileName);
+        }
+        return null;
+    }
+    
+    // Read string from file
+    private String readText(String fileName) {
+        FileInputStream in = openInputStream(fileName);
+        try {
+            DataInputStream stream = new DataInputStream(in);
+            String string = stream.readUTF();
+            stream.close();
+            return string;
+        } catch (Throwable th){
+            Log.v("Carat", "Failed reading text from " + fileName);
         }
         return null;
     }
@@ -234,7 +302,7 @@ public final class DataStorage {
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No report file to write to", e);
         } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for writing");
+            Log.v("Carat", "Failed opening " + fileName + " for writing");
         }
         return null;
     }
@@ -245,8 +313,8 @@ public final class DataStorage {
             return context.openFileInput(fileName);
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No reports to be read yet.");
-        } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for reading");
+        } catch (Throwable th) {
+            Log.v("Carat", "Failed opening " + fileName + " for reading");
         }
         return null;
     }

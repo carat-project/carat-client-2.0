@@ -7,11 +7,11 @@ import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
-import java.util.Arrays;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 import org.carat20.client.Constants.ActionType;
-import org.carat20.client.device.ApplicationService;
+import org.carat20.client.device.ApplicationLibrary;
+import org.carat20.client.device.DeviceLibrary;
 
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
@@ -33,7 +33,7 @@ public class Carat extends CordovaPlugin {
 
     private static DataStorage storage;
     private static CommunicationManager commManager;
-    private static ApplicationService appService;
+    private static ApplicationLibrary appService;
     private static Context context;
     private static Activity activity;
     
@@ -119,7 +119,7 @@ public class Carat extends CordovaPlugin {
         
         storage = new DataStorage(context);
         commManager = new CommunicationManager(storage, uuid);
-        appService = new ApplicationService(activity);
+        appService = new ApplicationLibrary(activity);
         
         cordova.getThreadPool().execute(new Runnable() {
             @Override
@@ -232,6 +232,7 @@ public class Carat extends CordovaPlugin {
     // Init
     private void handleInit(CallbackContext cb){
          Log.v("Carat", "Initializing plugin");
+         DeviceLibrary.getMemoryInfo();
          prepareData();
          cb.success();
     }

@@ -43,10 +43,22 @@ function makeElemTappable(el, mc, timer, ticking, requestElementUpdate, resetEle
         //hide
         if (moreText && moreText.className === "collapse.in") {
             moreText.className="collapse";
+            changeExpandArrow(ev);
             //show
         } else if (moreText && moreText.className === "collapse") {
             moreText.className = "collapse.in";
+            changeExpandArrow(ev);
         }
+    };
+    
+    //changes expand arrow, uses strange material design character in if statement
+    var changeExpandArrow = function(ev) {
+        var icon = el.querySelector("i.material-icons");
+        if (icon.innerHTML != "") {
+            icon.innerHTML = "&#xE5CF";
+        } else {
+            icon.innerHTML = "&#xE5CE";           
+        }        
     };
 
     mc.add( new Hammer.Tap(
