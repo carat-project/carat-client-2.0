@@ -16,12 +16,12 @@ import android.util.Log;
 import java.util.Arrays;
 
 /**
- * Obtain application information and perform tasks. Provides a kill method for
- * terminating running apps.
+ * Provides application information and performs tasks. 
+ * Tasks include killing apps and opening views.
  *
  * @author Jonatan Hamberg
  */
-public class ApplicationService {
+public class ApplicationLibrary {
 
     
     private final Activity activity;
@@ -34,7 +34,7 @@ public class ApplicationService {
      *
      * @param activity Cordova activity.
      */
-    public ApplicationService(Activity activity) {
+    public ApplicationLibrary(Activity activity) {
         this.activity = activity;
         this.context = activity.getApplicationContext();
         this.pm = context.getPackageManager();
