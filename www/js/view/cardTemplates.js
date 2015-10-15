@@ -85,11 +85,35 @@ cardTemplates = (function() {
         return domNode;
     };
 
+	// carat card template
+	var getNewCaratDomNodeTemplate = function() {
+		
+		var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
+                '<div class="carat-card__title">' +
+                '<div id ="chart" class="carat-card__title-text">' +
+                '<div class="expand">' +
+                '<i class="material-icons">&#xE5CF;</i></div></div>' +
+                '<div class="mdl-layout-spacer"></div>' +
+                '</div>' +
+				'</div class="chart">' +
+				'<canvas id="pieChart" width="400" height="400"></canvas>' +
+				'</div>' +
+				 '<div class="mdl-layout-spacer"></div>' +
+                '<div class="mdl-card__supporting-text">' +
+                '<span class="collapse">Carat info</span>' +
+                '</div>' +
+                '</div>';
+		var domNode = parseDomNode(htmlString);
+		
+        return domNode;
+	};
+	
     return {
         getNewItemDomNodeTemplate: getNewItemDomNodeTemplate,
         getNewSummaryDomNodeTemplate: getNewSummaryDomNodeTemplate,
         getNewSummaryEntryDomNodeTemplate: getNewSummaryEntryDomNodeTemplate,
-        getNewStatisticsDomNodeTemplate: getNewStatisticsDomNodeTemplate
+        getNewStatisticsDomNodeTemplate: getNewStatisticsDomNodeTemplate,
+		getNewCaratDomNodeTemplate: getNewCaratDomNodeTemplate
     };
 
 })();
