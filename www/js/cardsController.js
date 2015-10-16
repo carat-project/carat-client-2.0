@@ -435,9 +435,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         if(summaryEntryBugNodes.length != 0) {
             var bugSpot = summaryDomNode
                     .querySelector("#bugsGrid");
-            //dirty workaround, to be changed...
-            homebrewConcatChildrenWithMaxNumber(bugSpot, bugSpot.firstChild,
-                                                summaryEntryBugNodes, 4);
+            homebrewConcatChildren(bugSpot, bugSpot.firstChild,
+                                                summaryEntryBugNodes);
         }
 
         var summaryEntryHogNodes = homebrewMap(
@@ -449,9 +448,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         if(summaryEntryHogNodes.length != 0) {
             var hogSpot = summaryDomNode
                     .querySelector("#hogsGrid");
-            //dirty workaround, to be changed...
-            homebrewConcatChildrenWithMaxNumber(hogSpot, hogSpot.firstChild,
-                                                summaryEntryHogNodes, 4);
+            homebrewConcatChildren(hogSpot, hogSpot.firstChild,
+                                                summaryEntryHogNodes);
         }
     };
 

@@ -108,8 +108,10 @@ Taken from demo template. Partly in use.
 }
 
 .carat_summary_grid {
-    padding-top: 15px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    overflow: auto;
+    display: flex;
 }
 
 .carat_summary_more_button {
@@ -118,12 +120,18 @@ Taken from demo template. Partly in use.
     padding-bottom: 10px;
 }
 
+.carat_summary_item {
+    flex: none;
+}
+
 .carat_hide {
     display: none;
 }
 
+/*wrapper for summary items */
 .carat_show {
     display: inline-grid;
+    overflow: hidden;
 }
 
 
