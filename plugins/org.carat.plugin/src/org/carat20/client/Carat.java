@@ -14,17 +14,20 @@ import org.carat20.client.Constants.ActionType;
 import org.carat20.client.device.ApplicationLibrary;
 import org.carat20.client.device.DeviceLibrary;
 
+import static org.carat20.client.Constants.*;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
 import org.carat20.client.storage.SimpleHogBug;
 import org.carat20.client.thrift.Reports;
 import org.json.JSONObject;
 
+
 /**
- * This class acts as the middleware between Phonegap and native functions of
- * Carat. It contains methods necessary for calling the code from Javascript,
- * initializing the background process, refreshing/fetching data and providing
- * the requested data.
+ * This class acts as the middleware between Cordova and native functions of Carat. 
+ * It is responsible for initializing storages and routing requested data.
+ * Communication with javascript happens through the execute method.
+ * 
+ * @see <a href="http://cordova.apache.org/docs/en/5.0.0/">Cordova</a>.
  *
  * @author Jonatan Hamberg
  * @see CommunicationManager
@@ -43,7 +46,7 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] bugReports;
 
     /**
-     * Initializes CordovaPlugin and gives an early access to CordovaWebView.
+     * This initialization method gets executed before anything else
      * @param cordova Activity interface with access to application context
      * @param webView Main interface for interacting with Cordova webView
      */
@@ -283,7 +286,11 @@ public class Carat extends CordovaPlugin {
         JSONArray results = new JSONArray();
         for(SimpleHogBug s : reports){
             String packageName = s.getAppName();
-            if(!appService.isAppInstalled(packageName)) continue;
+            
+            //Ignore apps that are not installed or exceed the error limit.
+            if(!appService.isAppInstalled(packageName) 
+                    || s.getErrorRatio() > ERROR_LIMIT) continue;
+            
             JSONObject app = new JSONObject()
                 //Static
                 .put("type", s.getType())

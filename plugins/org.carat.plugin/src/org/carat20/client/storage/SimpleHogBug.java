@@ -232,6 +232,14 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
         double errorWo = getErrorWithout();
         return getBenefit(ev, error, evWo, errorWo);
     }
+    
+    public double getErrorRatio(){
+         int[] benefit = getBenefit();
+         double benefitSeconds = (benefit[0]*3600) + (benefit[1]*60) + benefit[2];
+         if(benefitSeconds == 0) benefitSeconds = Integer.MAX_VALUE;
+         double errorSeconds = benefit[3]*60 + benefit[4];
+         return (errorSeconds / benefitSeconds);
+    }
 
     public static int[] getBenefit(double ev, double error, double evWo, double errorWo) {
 	// Max battery life: What if the we swing entirely to the left end of

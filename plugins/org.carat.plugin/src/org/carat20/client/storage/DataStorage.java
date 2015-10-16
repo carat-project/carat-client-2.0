@@ -347,6 +347,8 @@ public final class DataStorage {
             if (priority == null || priority.length() == 0) {
                 priority = "Foreground app";
             }
+            double error = item.getError();
+            
             h.setAppPriority(priority);
             h.setExpectedValue(item.getExpectedValue());
             h.setExpectedValueWithout(item.getExpectedValueWithout());
