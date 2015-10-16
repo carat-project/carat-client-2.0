@@ -8,6 +8,7 @@ model.notifications = (function() {
     //always positive or zero (but displayed as negative or zero minutes)
 
     var sortedHogBugList;
+    var ellipsis = String.fromCharCode(8230);
 
     var makeNotification = function(title, icon, label, packageName,
                                     samples, classes,
@@ -95,7 +96,8 @@ model.notifications = (function() {
     var purifySummaryEntries = function(arr) {
         var entries = arr.map(function(entry) {
             var cutLabel = entry.label.length > 9 ?
-                    entry.label.slice(0,8) : entry.label;
+                    // Charcode 8230 is ellipsis
+                    entry.label.slice(0,6) + ellipsis : entry.label;
             var timeBenefit = splitTimeDrainString(entry.benefit)
                     .timeDrainPart;
 
@@ -137,8 +139,10 @@ model.notifications = (function() {
                                   appCloseCallback, appUninstallCallback) {
         var hogBugs = arr.map(function(elem) {
             var times = splitTimeDrainString(elem.benefit);
+            var label = elem.label.length > 20 ?
+                elem.label.slice(0,19) + ellipsis : elem.label;
 
-            var result =  makeNotification(elem.label,
+            var result =  makeNotification(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
