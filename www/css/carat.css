@@ -26,7 +26,7 @@ Taken from demo template. Partly in use.
   z-index: 0;
   position: relative;
   background-color: #E8E8E8;
-    background-image: url(../img/ic_close.png), url(../img/ic_hide.png);
+
     background-position:5%50%, 95%50%;
     background-repeat: no-repeat;
   border-radius: 2px;

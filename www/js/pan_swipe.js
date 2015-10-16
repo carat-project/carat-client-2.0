@@ -190,23 +190,26 @@ function makeElemTappable(el, mc, timer,
 
         var onSwipeRight = function(ev) {
             hideCard(ev);
+            snooze(el.id);
             if (el.style.display==='none'){
-                createSnackbar('Card dismissed', 'Undo', function() {
+                createSnackbar('Card permanently hidden', 'Undo', function() {
                     el.style.display = 'inline';
                 }); //torkutetusta kortista snackbar ja palautusnappi
             }
         };
 
         var onSwipeLeft = function(ev) {
-            hideCard(ev);
+        onSwipeRight(ev);
 
-            var acceptCallback = function() {
-                snooze(el.id);
-            };
-            var cancelCallback = function() {
-                cancel(el.id);
-            };
-            toggleVisibility(acceptCallback, cancelCallback);
+//            hideCard(ev);
+//
+//            var acceptCallback = function() {
+//                snooze(el.id);
+//            };
+//            var cancelCallback = function() {
+//                cancel(el.id);
+//            };
+//            toggleVisibility(acceptCallback, cancelCallback);
         };
 
 
