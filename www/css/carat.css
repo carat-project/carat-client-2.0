@@ -52,12 +52,30 @@ Taken from demo template. Partly in use.
     transition: all 0.3s;
 }
 
+.carat-card__title-text {
+  -webkit-align-self: flex-end;
+      -ms-flex-item-align: end;
+          align-self: flex-end;
+  color: inherit;
+  display: block;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: normal;
+  overflow: hidden;
+  -webkit-transform-origin: 149px 48px;
+      -ms-transform-origin: 149px 48px;
+          transform-origin: 149px 48px;
+  margin: 0; }
+
 .carat_summaryCard_title_text {
-    font-size: 18px;
-    font-weight: 400;
-    padding-left: 15px;
-    padding-top: 
-    color:dimgray;
+    font-size: 24px;
+    font-weight: 600;
+    padding-top: 10px;
+    color:#616161;
 }
 
 .carat_summaryCard_app_time {
@@ -497,7 +515,7 @@ section.mdl-layout__tab-panel div.page-content {
   font-weight: light;
   color: #616161;
     display: block;
-    padding-left: 10px;
+    padding-left: 0px;
 }
 .gray-title > .carat-card__title {
     background-color: #CFD8DC;

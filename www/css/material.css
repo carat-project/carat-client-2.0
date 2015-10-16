@@ -4177,25 +4177,6 @@ input.mdl-button[type="submit"] {
           transform-origin: 165px 56px;
   box-sizing: border-box; }
 
-.carat-card__title-text {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-  color: inherit;
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: normal;
-  overflow: hidden;
-  -webkit-transform-origin: 149px 48px;
-      -ms-transform-origin: 149px 48px;
-          transform-origin: 149px 48px;
-  margin: 0; }
-
 .carat-card-time {
   -webkit-align-self: flex-end;
       -ms-flex-item-align: end;
@@ -4242,27 +4223,6 @@ input.mdl-button[type="submit"] {
       -ms-transform-origin: 149px 48px;
           transform-origin: 149px 48px;
   margin: 0; }
-
-.carat-card__title-text {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-  color: inherit;
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: normal;
-  overflow: hidden;
-    padding-left: 15px;
-  -webkit-transform-origin: 149px 48px;
-      -ms-transform-origin: 149px 48px;
-          transform-origin: 149px 48px;
-  margin: 0; }
-
 
 .mdl-card__time {
   position: absolute;
