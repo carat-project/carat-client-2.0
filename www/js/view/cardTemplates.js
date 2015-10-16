@@ -69,7 +69,6 @@ cardTemplates = (function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title">' +
-                '<i class="material-icons">announcement</i>' +
                 '<div id ="jscore" class="carat-card__title-text">' +
                 '<div class="expand">' +
                 '<i class="material-icons">&#xE5CF;</i></div></div>' +
@@ -87,7 +86,7 @@ cardTemplates = (function() {
 
 	// carat card template
 	var getNewCaratDomNodeTemplate = function() {
-		
+
 		var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title">' +
                 '<div id ="chart" class="carat-card__title-text">' +
@@ -104,16 +103,16 @@ cardTemplates = (function() {
                 '</div>' +
                 '</div>';
 		var domNode = parseDomNode(htmlString);
-		
+
         return domNode;
 	};
-	
+
     return {
         getNewItemDomNodeTemplate: getNewItemDomNodeTemplate,
         getNewSummaryDomNodeTemplate: getNewSummaryDomNodeTemplate,
         getNewSummaryEntryDomNodeTemplate: getNewSummaryEntryDomNodeTemplate,
         getNewStatisticsDomNodeTemplate: getNewStatisticsDomNodeTemplate,
-		getNewCaratDomNodeTemplate: getNewCaratDomNodeTemplate
+        getNewCaratDomNodeTemplate: getNewCaratDomNodeTemplate
     };
 
 })();

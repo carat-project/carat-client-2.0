@@ -42,15 +42,18 @@ function makeElemTappable(el, mc, timer,
     var toggleShowOnExpand = function() {
         var togglees = el.querySelectorAll(".show-on-expand");
 
-        for(var key in togglees) {
-            var iteratee = togglees[key];
-            console.log(iteratee.style.display);
-            var currentStyle = iteratee.style
-                    .display.toLowerCase();
-            if(!currentStyle || currentStyle === 'none') {
+        if(togglees.length === 0) {
+            return;
+        }
+
+        for(var i = 0; i < togglees.length; i++) {
+            var iteratee = togglees[i];
+            if(!iteratee.style
+               || !iteratee.style.display
+               || iteratee.style.display === 'none') {
                 iteratee.style.display = 'initial';
             } else {
-                iteratee.style.display = 'none';
+                iteratee.style["display"] = 'none';
             }
         };
     };
