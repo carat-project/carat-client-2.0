@@ -199,7 +199,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
 
         var buttonSpot = cardDomNode
-                .querySelector(".collapse, .collapse.in");
+                .querySelector(".mdl-card__actions");
 
         var button = document.createElement("button");
 
@@ -233,8 +233,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             });
         }
 
+        changePaddingForButton(buttonSpot);
         buttonSpot.appendChild(button);
 
+    };
+    
+    var changePaddingForButton = function(cardDomNode) {
+      cardDomNode.style.padding = "0px 10px 10px";  
     };
 
     //style the time drain or benefit text accordingly,

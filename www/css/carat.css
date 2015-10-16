@@ -71,6 +71,10 @@ Taken from demo template. Partly in use.
           transform-origin: 149px 48px;
   margin: 0; }
 
+.carat_card_actions {
+    padding: 0px 0px 0px 0px;
+}
+
 .carat_summaryCard_title_text {
     font-size: 24px;
     font-weight: 600;
