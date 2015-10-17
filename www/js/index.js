@@ -40,7 +40,7 @@ var app = {
         console.log("Getting fresh data for uuid " +uuid);
         carat.clear(function(){
             carat.refreshData();
-            app.showProgress();
+            //app.showProgress();
         });
     },
 
@@ -57,7 +57,7 @@ var app = {
                 // Refresh existing data if needed
                 console.log("Getting data for existing uuid "+uuid);
                 carat.refreshData();
-                app.showProgress();
+                //app.showProgress();
             }
         });
     },
@@ -68,6 +68,7 @@ var app = {
 
         // Set up storage
         console.log("Initializing plugin");
+        app.showProgress();
         carat.setup(app.getUuid);
     },
 
@@ -116,21 +117,44 @@ var app = {
         // Handle main reports
         var displayMain = function(main){
 
-            var deviceInfo = {
-                modelName: device.model,
-                osVersion: device.platform + " " + device.version,
-                caratId: device.uuid
-            };
+            // Get memory info and generate statistics
+            var getMemoryInfo = function(uuid){
+                    carat.getMemoryInfo(function(meminfo){
 
-            itemCards.generateStatistics(main, deviceInfo);
-            document.getElementById("progress").innerHTML = "";
+                        // Convert from kiB to MiB
+                        var usedMemory = Math.round((meminfo.total - meminfo.available) / 1000);
+                        var totalMemory = Math.round(meminfo.total / 1000);
+                        var percentage = Math.floor((usedMemory/totalMemory)*100);
+                        var duration = main
 
-            console.log("Finished rendering");
-            console.log(device);
+                        var deviceInfo = {
+                            modelName: device.model,
+                            osVersion: device.platform + " " + device.version,
+                            caratId: uuid,
+                            memoryUsed: percentage + "%",
+                            memoryTotal: totalMemory + " MiB"
+                        };
+
+                        itemCards.generateStatistics(main, deviceInfo);
+
+                        // Remove progress indicator
+                        document.getElementById("progress").innerHTML = "";
+                        console.log("Finished rendering");
+                    });
+            }
+
+            // Get uuid for deviceInfo
+            carat.getUuid(function(uuid){
+                    if(uuid == null || !uuid) {
+                        uuid = "Default";
+                    }
+                    getMemoryInfo(uuid);
+            });
+
             // ...
         };
 
-        // Begin callback chain
+        // Begin the callback chain
         displayData();
     },
 
