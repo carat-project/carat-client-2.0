@@ -97,6 +97,18 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
+    
+    var injectJScoreText = function(cardDomNode, mainText) {
+
+        if(!mainText) {
+            return;
+        }
+
+        var mainTextNode = cardDomNode
+                .querySelector(".carat-Jscore-text");
+
+        appendTextOrRemoveNode(mainTextNode, mainText);
+    };
 
     //add additional text to a card, id is required for
     //the expand to work
@@ -297,17 +309,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         appendTextOrRemoveNode(nameNode, name);
     };
 
-    //add summary item icon (for example, facebook icon)
-    //useless, summary entry icon is injected using injectIcon
-
-    //    var injectSummaryEntryIcon = function(summaryEntryDomNode,
-    //                                          icon) {
-    //        var iconNode = summaryEntryDomNode
-    //                .querySelector("i.material-icons");
-    //
-    //        appendTextOrRemoveNode(iconNode, icon);
-    //    };
-
     //time drain or benefit of the item in question
     var injectSummaryEntryTimeDrain = function(
         summaryEntryDomNode, timeDrain) {
@@ -348,9 +349,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     var injectJscore = function(statisticsDomNode,
                                 jscore) {
-        var spot = statisticsDomNode.querySelector("#jscore");
+        var spot = statisticsDomNode.querySelector(".numberCircle");
 
-        appendTextOrRemoveNode(spot, 'Your J-Score: ' + jscore);
+        appendTextOrRemoveNode(spot, jscore);
     };
 
 
@@ -411,11 +412,21 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var statisticsCardId = "statistics-jscore";
         console.log(deviceInfo.osVersion);
 
+        injectTitle(statisticsDomNode, "My device");  
+        injectJScoreText(statisticsDomNode,
+                                          "Your device's energy efficiency is better than " + statisticsObject.jscore + 
+                            "% of similiar devices.");
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
-        var expandText = ["OS version: " + deviceInfo.osVersion,
+        var expandText = ["Battery duration: ",
+                          "Memory used: ",
+                          "Memory left: ",
+                          "Cpu usage: ",             
+                          "OS version: " + deviceInfo.osVersion,
                           "Device model: " + deviceInfo.modelName,
-                          "J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices."];
+                          "Carat id: " + deviceInfo.caratId,
+//                          "J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices."
+                         ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
@@ -505,6 +516,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var summaryData = notificationObject.summary;
             makeSummaryCard(summaryData, newCardNode);
             injectIdToCard(newCardNode, summaryData.id);
+        
         } else if(notificationObject.statistics) {
 
             newCardNode = cardTemplates
@@ -514,6 +526,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 .onlyTapify(newCardNode);
 
             var statisticsData = notificationObject.statistics;
+            console.log(statisticsData);
 
             makeStatisticsCard(statisticsData,
                                notificationObject.deviceInfo, newCardNode);

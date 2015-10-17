@@ -164,7 +164,51 @@ Taken from demo template. Partly in use.
     overflow: hidden;
 }
 
+.collapse {
+  display: none;
+  visibility: hidden;
+}
+.collapse.in {
+  display: block;
+  visibility: visible;
+    font-size: 16px;
+    line-height: normal;
+}
 
+.carat-card__supporting-text {
+  color: rgba(0,0,0, 0.54);
+  font-size: 13px;
+  line-height: normal;
+  overflow: hidden;
+  width: 90%; }
+
+.carat-Jscore-text {
+    padding-right: 30%;
+    padding-bottom: 10px;
+}
+
+p {
+      font-size: 16px;
+  line-height: normal;
+}
+
+.numberCircle {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    line-height: normal;
+    position: absolute;
+    left: 75%;
+    top: 60px;
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center !important;
+    vertical-align: middle !important;
+    
+    font-size: 32px;
+}
 
 
 

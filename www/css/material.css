@@ -4125,15 +4125,6 @@ input.mdl-button[type="submit"] {
           transform-origin: 165px 56px;
   box-sizing: border-box; }
 
-.collapse {
-  display: none;
-  visibility: hidden;
-}
-.collapse.in {
-  display: block;
-  visibility: visible;
-}
-
 .collapsing {
     position: relative;
     height: 0;
@@ -4254,12 +4245,11 @@ input.mdl-button[type="submit"] {
 
 .mdl-card__supporting-text {
   color: rgba(0,0,0, 0.54);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 18px;
   overflow: hidden;
   padding: 20px 20px;
   width: 90%; }
-}
 
 .carat-logo {
     padding-right: 15px;

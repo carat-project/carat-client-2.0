@@ -49,7 +49,7 @@ cardTemplates = (function() {
         var htmlString ='<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title" id="summary">' +
                 '<div class="mdl-card__title-text carat_summaryCard_title_text"></div></div>' +
-                '<div class="mdl-card__supporting-text">' +
+                '<div class="mdl-card__supporting-text carat-card__supporting-text">' +
                 '<div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div>' +
                 '<div id="bugSummaryGrid" class="carat_hide">' +
                 '<div class="carat_summary_grid" id="bugsGrid"></div></div>' +
@@ -69,13 +69,13 @@ cardTemplates = (function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title">' +
-                '<div id ="jscore" class="carat-card__title-text">' +
+                '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
                 '<div class="expand">' +
                 '<i class="material-icons">&#xE5CF;</i></div></div>' +
                 '<div class="mdl-layout-spacer"></div>' +
                 '</div>' +
                 '<div class="mdl-card__supporting-text">' +
-                '<span class="collapse"></span>' +
+                '<div class="carat-Jscore-text"></div><div class ="numberCircle"></div><span class="collapse"></span>' +
                 '</div>' +
                 '</div>';
 

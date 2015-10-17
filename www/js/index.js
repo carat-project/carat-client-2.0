@@ -118,13 +118,15 @@ var app = {
 
             var deviceInfo = {
                 modelName: device.model,
-                osVersion: device.platform + " " + device.version
+                osVersion: device.platform + " " + device.version,
+                caratId: device.uuid
             };
 
             itemCards.generateStatistics(main, deviceInfo);
             document.getElementById("progress").innerHTML = "";
 
             console.log("Finished rendering");
+            console.log(device);
             // ...
         };
 
