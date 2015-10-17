@@ -654,7 +654,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
 
     var generateStatistics = function(mainDataSource, deviceInfo) {
-        generatePage("#home", [getStatisticsCard(mainDataSource,
+        generatePage("#system", [getStatisticsCard(mainDataSource,
                                                  deviceInfo)]);
     };
 

@@ -72,7 +72,6 @@ cardTemplates = (function() {
                 '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
                 '<div class="expand">' +
                 '<i class="material-icons">&#xE5CF;</i></div></div>' +
-                '<div class="mdl-layout-spacer"></div>' +
                 '</div>' +
                 '<div class="mdl-card__supporting-text">' +
                 '<div class="carat-Jscore-text"></div><div class ="numberCircle"></div><span class="collapse"></span>' +
