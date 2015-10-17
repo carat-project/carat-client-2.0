@@ -3,6 +3,14 @@ Taken from demo template. Partly in use.
  */
 
 
+
+
+/* progress indicator */
+#progress {
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
 /*just for testing purposes*/
 .mdl-card-background {
   display: -webkit-box;

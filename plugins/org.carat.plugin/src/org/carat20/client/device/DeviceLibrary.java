@@ -18,6 +18,13 @@ public class DeviceLibrary {
     public static String getManufacturer() {
         return android.os.Build.MANUFACTURER;
     }
+    
+    /**
+     * @return Device model. 
+     */
+    public static String getModel() {
+        return android.os.Build.MODEL;
+    }
 
     /**
      * @return Operating system version. 

@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import org.carat20.client.Constants;
@@ -36,7 +38,7 @@ public final class DataStorage {
 
     private final Context context;
     private final PackageManager pm;
-
+    
     private String uuid;
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
@@ -57,7 +59,7 @@ public final class DataStorage {
         this.context = context;
         this.pm = context.getPackageManager();
         
-        //These might need to be optimized
+        // Read latest reports to memory
         readMainReports();
         readHogReports();
         readBugReports();
@@ -68,10 +70,6 @@ public final class DataStorage {
      * @return true if all references are null.
      */
     public boolean isEmpty(){
-        Log.v("Carat","Storage:\n "
-                + "mainReports: "+ mainReports + "\n "
-                + "hogReports: " + hogReports + "\n "
-                + "bugReports: " + bugReports);
         return (mainReports == null 
                 && hogReports == null 
                 && bugReports == null);
@@ -86,12 +84,21 @@ public final class DataStorage {
                 || hogReports == null 
                 || bugReports == null);
     }
+    
+    public void clearData(){
+        context.deleteFile(MAINFILE);
+        context.deleteFile(HOGFILE);
+        context.deleteFile(BUGFILE);
+        mainReports = null;
+        hogReports = null;
+        bugReports = null;
+    }
 
     /**
      * Checks if uuid reference is null.
      * @return true if uuid is null.
      */
-    public boolean idEmpty(){
+    public boolean uuidEmpty(){
         return (uuid == null);
     }
     
@@ -123,10 +130,8 @@ public final class DataStorage {
      * Provides uuid from memory or storage.
      * @return User identifier uuid.
      */
-    public Reports getUuid() {
-        Log.v("Carat", "Getting main reports");
-        return (mainReports != null && mainReports.get() != null) ?
-                mainReports.get() : readMainReports();
+    public String getUuid() {
+        return (uuid != null) ? uuid : readUuid();
     }
     
     /**
@@ -200,9 +205,11 @@ public final class DataStorage {
     
     /**
      * Initializes uuid and writes it to a file.
+     * @param uuid Uuid.
      */
     public void writeUuid(String uuid) {
         this.uuid = uuid;
+        context.deleteFile(UUIDFILE);
         writeText(uuid, UUIDFILE);
     }
 
@@ -243,7 +250,7 @@ public final class DataStorage {
     // Write object to file
     private void writeObject(Object object, String fileName) {
         FileOutputStream out = openOutputStream(fileName);
-        Log.v("Carat", "Writing "+object.getClass()+" to "+fileName);
+        Log.v("Carat", "Writing data to "+fileName);
         try {
             ObjectOutputStream stream = new ObjectOutputStream(out);
             stream.writeObject(object);

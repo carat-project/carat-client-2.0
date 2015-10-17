@@ -18,30 +18,69 @@
  */
 
 var app = {
-    // Construct controller
+    // This sets up our app
     initialize: function() {
         console.log("Initializing application");
         this.bindEvents();
     },
 
-    // Bind functions to their corresponding events
     bindEvents: function() {
         console.log("Binding events");
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.addEventListener('dataready', this.onDataReady, false);
+        document.addEventListener("deviceready", this.onDeviceReady, false);
+        document.addEventListener("dataready", this.onDataReady, false);
+
+        // Listener for changing uuid
+        var uuidButton = document.getElementById("changeUuid");
+        uuidButton.addEventListener("click", this.onUuidChange, false);
     },
 
+    // Clear and refresh storage data
+    getData: function(uuid){
+        // This fires the dataready event
+        console.log("Getting fresh data for uuid " +uuid);
+        carat.clear(function(){
+            carat.refreshData();
+            app.showProgress();
+        });
+    },
 
-    // These functions get called when device is ready
+    getUuid: function(status) {
+        console.log("Checking uuid status");
+        carat.getUuid(function(uuid){
+            // If uuid is empty
+            if(!uuid){
+                // Prompt the user for it
+                uuid = prompt("Enter your uuid:");
+                if(uuid == null) uuid="";
+                carat.setUuid(uuid, app.getData);
+            } else {
+                // Refresh existing data if needed
+                console.log("Getting data for existing uuid "+uuid);
+                carat.refreshData();
+                app.showProgress();
+            }
+        });
+    },
+
+    // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
 
-        // Start waiting for data after cordova has fully loaded
+        // Set up storage
         console.log("Initializing plugin");
-        carat.initialize();
+        carat.setup(app.getUuid);
     },
 
-    // Attempt at event driven async loading with a callback chain
+    onUuidChange: function(){
+        var newUuid = prompt("Enter new uuid:");
+
+        // Use a new uuid if provided
+        if(newUuid == null || !newUuid) return;
+        console.log("Changing uuid to " + newUuid);
+        carat.setUuid(newUuid, app.getData);
+    },
+
+    // Load objects asynchronously with callbacks
     onDataReady: function(){
         app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
@@ -54,7 +93,7 @@ var app = {
         // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
-            //pass hogs to controller
+            // Pass hogs to controller
             itemCards.generateHogs(hogs, carat.killApp, carat.uninstallApp);
 
             carat.getBugs(function(bugs) {
@@ -63,23 +102,11 @@ var app = {
         };
 
         // Create cards for bugs and append to system tab
-        //NOTE: temporary solution for generating summary card
+        // NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){
             console.log("Received Data: bugs");
 
-            // Application information example, see console
-            for(var i in bugs){
-                console.log(
-                    bugs[i].label + "\n "
-                    + "running: "      + bugs[i].running    + "\n "
-                    + "killable: "     + bugs[i].killable   + "\n "
-                    + "removable: "    + bugs[i].removable  + "\n"
-                    );
-            }
-
-            console.log(bugs, hogs);
-
-            //pass bugs to controller
+            // Pass bugs to controller
             itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
 
@@ -95,7 +122,8 @@ var app = {
             };
 
             itemCards.generateStatistics(main, deviceInfo);
-            console.log(main);
+            document.getElementById("progress").innerHTML = "";
+
             console.log("Finished rendering");
             // ...
         };
@@ -104,37 +132,17 @@ var app = {
         displayData();
     },
 
+    showProgress: function(){
+        var indicator = document.createElement("img");
+        indicator.src = "img/progress.gif";
+        indicator.alt = "Loading..";
+        indicator.width = "17";
+        indicator.height = "17";
+        document.getElementById("progress").appendChild(indicator);
+    },
+
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
-    },
-
-
-    // This should eventually be moved to a separate file.
-    // But for now, pretend we're react.
-    constructCardHTML: function(hogBug){
-        var cardHTML =
-                '<div class="mdl-card mdl-shadow--2dp"> ' +
-                '<div class="carat-card__title">' +
-                '<div class="mdl-card__title-text">' + hogBug.name + '</div>'+
-                '<div class="mdl-layout-spacer"></div>'+
-                '<span class="carat-card-time">' + hogBug.benefit + '</span>'+
-                '</div>'+
-                '<div class="mdl-card__supporting-text">'+
-                'Type: ' + hogBug.type +
-                '<div class="collapse"></div>'+
-                '</div>'+
-                '<div class="mdl-card__actions">'+
-                '<a class="mdl-card__more" '+
-                'role="button" '+
-                'data-toggle="collapse" '+
-                'aria-expanded="false" '+
-                'aria-controls="collapseExample">More</a>'+
-                '</div>'+
-                '</div>';
-
-        var card = document.createElement('div');
-        card.innerHTML = cardHTML;
-        return card;
     }
 };

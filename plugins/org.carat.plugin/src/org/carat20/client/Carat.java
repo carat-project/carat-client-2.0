@@ -44,6 +44,8 @@ public class Carat extends CordovaPlugin {
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
+    
+    private String uuid;
 
     /**
      * This initialization method gets executed before anything else
@@ -78,7 +80,10 @@ public class Carat extends CordovaPlugin {
             public void run() {
                 // Tasks
                 switch(ActionType.get(action)){
-                    case INIT:      handleInit(cb);         break;
+                    case SETUP:     handleSetup(cb);        break;
+                    case CLEAR:     handleClear(cb);        break;
+                    case REFRESH:   handleRefresh(cb);      break;
+                    case UUID:      handleUuid(cb, args);   break;
                     case JSCORE:    handleJscore(cb);       break;
                     case MAIN:      handleMain(cb);         break;
                     case HOGS:      handleHogs(cb);         break;
@@ -94,77 +99,6 @@ public class Carat extends CordovaPlugin {
     }
 
     /**
-     * Prepares context, storage and communication manager for use.
-     * This method should run before any calls to execute.
-     * 
-     * It works in the following manner:
-     * 1. Pull application context from Cordova, used for storage access.
-     * 2. Initialize storage and read reports from disk. Returns an exception 
-     * when no data has been fetched yet.
-     * 3. Create communication manager and refresh needed data. This is done 
-     * in a separate thread to avoid blocking WebCore.
-     * 
-     * Ideally the storage should contain all reports after these steps.
-     */
-    public void prepareData(){
-        Log.v("Carat", "Plugin is preparing data");
-        context = cordova.getActivity().getApplicationContext();
-        activity = cordova.getActivity();
-        
-        int appResId = cordova.getActivity().getResources().getIdentifier(
-                "uuid", 
-                "string", 
-                cordova.getActivity().getPackageName()
-        );
-        
-        String uuid = cordova.getActivity().getString(appResId);
-        Log.v("Carat", "Using uuid: "+uuid);
-        
-        storage = new DataStorage(context);
-        commManager = new CommunicationManager(storage, uuid);
-        appService = new ApplicationLibrary(activity);
-        
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                //No data
-                if(storage.isEmpty()){
-                    Log.v("Carat", "Storages are empty, refreshing all reports");
-                    commManager.refreshAllReports();
-                }
-                //Missing data
-                else if (!storage.isComplete()){
-                    Log.v("Carat", "Some storages are empty, refreshing");
-                    if(storage.getMainReports() == null) commManager.refreshMainReports();
-                    if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
-                    if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
-                } else {
-                    Log.v("Carat", "Storages are complete and ready to go");
-                }
-                //Forget about the bridge
-                cordova.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendEvent("dataready");
-                    }
-                });
-            }
-        });
-        Log.v("Carat", "Completed initialization phase");
-    }
-
-    /**
-     * Invokes a webview event.
-     * @param event String representation.
-     */
-    public void sendEvent(String event){
-        Log.v("Carat", "Sending " + event + " to webView");
-        webView.loadUrl(
-                "javascript:cordova.fireDocumentEvent('"+event+"');"
-        );
-    }
-
-    /**
      * Refresh data on resume
      * @param multitasking 
      */
@@ -175,11 +109,95 @@ public class Carat extends CordovaPlugin {
     
     // Handle action
     
-    // Init
-    private void handleInit(CallbackContext cb){
-         Log.v("Carat", "Initializing plugin");
-         prepareData();
-         cb.success();
+    // Setup
+    public void handleSetup(CallbackContext cb){
+        Log.v("Carat", "Setting up storage");
+        activity = cordova.getActivity();
+        context = activity.getApplicationContext();
+        storage = new DataStorage(context);
+        cb.success();
+    }
+    
+    // Clear storage
+    private void handleClear(CallbackContext cb){
+        Log.v("Carat", "Clearing storage..");
+        storage.clearData();
+        if(storage.isEmpty()){
+            cb.success();
+        } else {
+            Log.v("Carat", "Failed to clear storage.");
+        }
+    }
+    
+    // Refresh data in storages
+    private void handleRefresh(CallbackContext cb){
+        Log.v("Carat", "Refreshing data..");
+        uuid = storage.getUuid();
+        
+        // Use plugin.xml value if we have no uuid
+        if(uuid == null || uuid.isEmpty()){  
+            uuid = readConfig("uuid");
+            Log.v("Carat", "Using default uuid "+uuid);
+            storage.writeUuid(uuid);
+        } else {
+            Log.v("Carat", "Using custom uuid "+uuid);
+        }
+        
+        commManager = new CommunicationManager(storage, uuid);
+        appService = new ApplicationLibrary(activity);
+        
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                // No data
+                if(storage.isEmpty()){
+                    Log.v("Carat", "Storage is empty, fetching reports..");
+                    commManager.refreshAllReports();
+                }
+                // Missing data
+                else if (!storage.isComplete()){
+                    Log.v("Carat", "Storage is incomplete, fetching missing reports..");
+                    if(storage.getMainReports() == null) commManager.refreshMainReports();
+                    if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
+                    if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                } else {
+                    Log.v("Carat", "Storage is complete and ready to go");
+                }
+                // Send dataready event when storage is ready
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendEvent("dataready");
+                    }
+                });
+            }
+        });
+    }
+    
+    // Combined method for getting and setting uuid
+    private void handleUuid(CallbackContext cb, JSONArray args){
+        // Check args just in case
+        try {
+            uuid = (String) args.get(0);
+        } catch (JSONException e) {
+            uuid = "";
+        }
+        
+        // When no uuid is specified..
+        if(uuid.equals("get")){
+            // .. use the one in storage..
+            uuid = storage.getUuid();
+            // .. and if there is no uuid stored..
+            if(uuid == null || uuid.isEmpty()){
+                // .. return an empty string
+                cb.success("");
+            }
+        } else {
+            Log.v("Carat", "Saving uuid " + uuid +" in storage");
+            storage.writeUuid(uuid);
+        }
+        // Return uuid
+        cb.success(uuid);
     }
     
     // Jscore
@@ -270,6 +288,26 @@ public class Carat extends CordovaPlugin {
              Log.v("Carat", "Failed to open app details, invalid package name.", e);
         }
         cb.success();
+    }
+    
+    public String readConfig(String variable){
+        int appResId = activity.getResources().getIdentifier(
+                variable, 
+                "string", 
+                activity.getPackageName()
+        );
+        return activity.getString(appResId);
+    }
+    
+    /**
+     * Invokes a webview event.
+     * @param event String representation.
+     */
+    public void sendEvent(String event){
+        Log.v("Carat", "Sending " + event + " to webView");
+        webView.loadUrl(
+                "javascript:cordova.fireDocumentEvent('"+event+"');"
+        );
     }
     
     

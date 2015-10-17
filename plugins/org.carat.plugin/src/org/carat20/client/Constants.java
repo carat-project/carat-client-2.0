@@ -13,10 +13,14 @@ public class Constants {
     }
 
     public static enum ActionType {
-        INIT, JSCORE, MAIN, HOGS, BUGS, KILL, REMOVE, MEMORY, UNKNOWN;
+        SETUP, CLEAR, UUID, REFRESH, JSCORE, MAIN, HOGS, BUGS, 
+        KILL, REMOVE, MEMORY, UNKNOWN;
         
         public static ActionType get(String action){
-            if(action.equals("init"))       return INIT;
+            if(action.equals("setup"))      return SETUP;
+            if(action.equals("clear"))      return CLEAR;
+            if(action.equals("uuid"))       return UUID;
+            if(action.equals("refresh"))    return REFRESH;
             if(action.equals("jscore"))     return JSCORE;
             if(action.equals("main"))       return MAIN;
             if(action.equals("hogs"))       return HOGS;
