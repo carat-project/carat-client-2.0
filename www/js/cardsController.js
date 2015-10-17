@@ -412,16 +412,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var statisticsCardId = "statistics-jscore";
         console.log(deviceInfo.osVersion);
 
-        injectTitle(statisticsDomNode, "My device");  
+        injectTitle(statisticsDomNode, "My Device");
         injectJScoreText(statisticsDomNode,
-                                          "Your device's energy efficiency is better than " + statisticsObject.jscore + 
-                            "% of similiar devices.");
+                                          "Your device is more energy efficient than " + statisticsObject.jscore +
+                            "% of other devices measured by Carat.");
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = ["Battery duration: ",
-                          "Memory used: ",
-                          "Memory left: ",
-                          "Cpu usage: ",             
+                          "Memory used: " + deviceInfo.memoryUsed,
+                          "Memory total: " + deviceInfo.memoryTotal,
+                          "Cpu usage: -",
                           "OS version: " + deviceInfo.osVersion,
                           "Device model: " + deviceInfo.modelName,
                           "Carat id: " + deviceInfo.caratId,
