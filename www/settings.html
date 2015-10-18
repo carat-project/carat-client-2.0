@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/carat.css">
     <link rel="stylesheet" href="css/dialog.css">
     <link rel="stylesheet" href="css/snackbar.css">
+    <link rel="stylesheet" href="css/settings.css">
 </head>
 <body>
 
@@ -26,9 +27,13 @@
                 <!--back arrow-->
                 <button class="mdl-layout-icon mdl-button mdl-js-button mdl-button--icon" onclick="history.go(-1);">
                     <i class="material-icons">arrow_back</i>
+                    <!-- For IE9 or below. -->
+                    <i class="material-icons">&#xE5C4;</i>
                 </button>
+
+
                 <!--Title-->
-                <span class="mdl-layout-title">Settings</span>
+                <span class="mdl-layout-title" style="margin-left: 30px;">Settings</span>
             </div>
 
 
@@ -36,8 +41,64 @@
 
 
     </header>
+
+
+    <!--Settings-->
+    <div class="mdl-layout__content">
+
+        <!--wifi only-->
+    <div class="carat_settings_box">
+        <span class="mdl-switch__label">Wifi only</span>
+        <div class="checkbox_wrapper">
+        <label style="display:inline; position:absolute; right: 0px;"  class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="wifi">
+
+            <input type="checkbox" id="wifi" class="mdl-switch__input" />
+
+        </label>
+        </div>
+    </div>
+        <div class="carat_settings_line"></div>
+
+
+        <!--hide small impact-->
+
+        <div class="carat_settings_box">
+            <span class="mdl-switch__label">Hide apps with small impact</span>
+            <div class="checkbox_wrapper">
+            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="smallImpact">
+
+                <div class="checkbox_wrapper">
+                <input type="checkbox" id="smallImpact" class="mdl-switch__input"  checked/>
+                </div>
+            </label>
+            </div>
+        </div>
+        <div class="carat_settings_line"></div>
+
+        <!--share-->
+        <div class="carat_settings_box">
+
+                <span class="mdl-switch__label">Share...</span>
+
+        </div>
+        <div class="carat_settings_line"></div>
+        <!--send feedback-->
+
+        <div class="carat_settings_box">
+
+            <span class="mdl-switch__label">Send feedback</span>
+
+        </div>
+        <div class="carat_settings_line"></div>
+    </div>
+    </div>
+
+
 </div>
 
+
+
 <script type="text/javascript" src="js/appmenu.js"></script>
+<script type="text/javascript" src="js/material.min.js"></script>
 </body>
 </html>
