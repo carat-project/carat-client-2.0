@@ -9,13 +9,29 @@ function sendFeedback(){
 		});
 }
 
+//function appSettings(){
+//    var li = document.querySelector("#appSettings");
+//
+//       	li.addEventListener('click', function () {
+//        	window.location = "settings.html";
+//    		});
+//}
+
 function appSettings(){
-    var li = document.querySelector("#appSettings");
+    moveToPage('appSettings', 'settings.html');
+}
+
+
+function moveToPage(pagename, address){
+    var li = document.querySelector("#"+pagename);
 
        	li.addEventListener('click', function () {
-        	console.log("app settings clicked");
+        	window.location = address;
     		});
 }
 
+
+
 	sendFeedback();
 	appSettings();
+	backToIndex();
