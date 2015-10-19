@@ -63,18 +63,19 @@ function makeElemTappable(el, mc, timer,
             ("#card-" + el.id + "-textpand");
 
             $("#card-" + el.id + "-textpand").toggleClass("in");
+            changeExpandArrow(ev);
             /*
             //hide
             if (moreText && moreText.className === "collapse_in") {
                 moreText.className="collapse";
-                changeExpandArrow(ev);
+
                 //show
             } else if (moreText && moreText.className === "collapse") {
                 moreText.className = "collapse_in";
                 changeExpandArrow(ev);
             }*/
         };
-        
+
         //changes expand arrow, uses strange material design character in if statement
         var changeExpandArrow = function(ev) {
             var icon = el.querySelector("i.material-icons");
