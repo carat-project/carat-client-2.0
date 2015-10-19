@@ -67,6 +67,19 @@ var app = {
         app.receivedEvent('deviceready');
         FastClick.attach(document.body);
 
+
+        var navbar = $(".navlinks a")
+        // Animate tabs
+        navbar.on("click", function(e){
+            /*$(this).toggleClass("is-active");*/
+            $(".is-active").not($(e.id)).removeClass("is-active");
+            $(this).toggleClass("is-active");
+            e.preventDefault();
+            console.log("lel");
+            var index = $(this).index();
+            $(".tabs").attr("data-tab", index);
+        });
+
         // Set up storage
         console.log("Initializing plugin");
         app.showProgress();

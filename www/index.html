@@ -19,14 +19,7 @@
     <link rel="stylesheet" href="css/carat.css">
     <link rel="stylesheet" href="css/dialog.css">
     <link rel="stylesheet" href="css/snackbar.css">
-
-    <!--
-        <style>.animate {
-          -webkit-transition: all 0.3s;
-          -moz-transition: all 0.3s;
-          transition: all 0.3s;
-          } </style>
-    -->
+    <link rel="stylesheet" href="css/animation.css">
 
 </head>
 
@@ -57,7 +50,7 @@
 </div>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-                mdl-layout--fixed-tabs mdl-color--grey-200">
+                mdl-layout--fixed-tabs mdl-color--grey-200 wrapper">
 
     <header class="mdl-layout__header mdl-color--blue-grey-500">
         <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
@@ -82,7 +75,7 @@
 
 
         <!-- Tabs -->
-        <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
+        <div class="mdl-layout__tab-bar navlinks mdl-color--blue-grey-500">
             <a href="#home" class="mdl-layout__tab is-active" id="home-tab">Home</a>
             <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
             <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
@@ -91,10 +84,10 @@
 
       </header>
 
-      <main class="mdl-layout__content">
+      <main class="tabs inline" data-tab="0">
 
           <!-- Home view -->
-          <section class="mdl-layout__tab-panel is-active" id="home">
+        <section class="" id="home">
 
           <!-- Jscore card -->
             <div class="page-content">
@@ -102,7 +95,7 @@
         </section>
 
         <!-- Bugs tabs view -->
-        <section class="mdl-layout__tab-panel" id="bugs">
+        <section class="" id="bugs">
             <div class="page-content">
                 <!--<div class="bar bar-header">-->
                 <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
@@ -112,13 +105,13 @@
         </section>
 
         <!-- Hogs tab view -->
-        <section class="mdl-layout__tab-panel" id="hogs">
+        <section class="" id="hogs">
             <div class="page-content">
             </div>
 
             <!-- System tab view -->
         </section>
-        <section class="mdl-layout__tab-panel" id="system">
+        <section class="" id="system">
             <div class="page-content">
                 <!-- Debug content for CaratPlugin, move elsewhere -->
 
