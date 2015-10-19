@@ -65,6 +65,7 @@ var app = {
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        FastClick.attach(document.body);
 
         // Set up storage
         console.log("Initializing plugin");

@@ -10,8 +10,10 @@
     <title>Carat 2.0</title>
 
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/lib/fastclick.js"></script>
 
-    <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+    <!--- This was previously linked incorrectly, now it just looks weird
+    <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/material.css">
     <link rel="stylesheet" href="css/carat.css">
@@ -126,11 +128,12 @@
     </main>
 </div>
 
-<script type="text/javascript" src="js/hammer.min.js"></script>
-<script type="text/javascript" src="js/swipe.js"></script>
-<script src="js/pan_swipe.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="js/material.min.js"></script>
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="js/lib/hammer.min.js"></script>
+<script type="text/javascript" src="js/lib/material.min.js"></script>
+<script type="text/javascript" src="js/lib/chart.js"></script>
+
+<script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/model/notifications.js"></script>
 <script type="text/javascript" src="js/view/cardTemplates.js"></script>
 <script type="text/javascript" src="js/cardsController.js"></script>
@@ -139,11 +142,9 @@
 <script type="text/javascript" src="js/snooze.js"></script>
 <script type="text/javascript" src="js/appmenu.js"></script>
 <script type="text/javascript" src="js/snackbar.js"></script>
-<script type="text/javascript" src="js/chart.js"></script>
 
 <script type="text/javascript">
      app.initialize();
-
 </script>
 </body>
 
