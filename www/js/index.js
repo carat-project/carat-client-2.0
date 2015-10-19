@@ -70,7 +70,7 @@ var app = {
 
         var navbar = $(".navlinks a")
         // Animate tabs
-        navbar.on("click", function(e){
+        navbar.on("touchstart", function(e){
             /*$(this).toggleClass("is-active");*/
             $(".is-active").not($(e.id)).removeClass("is-active");
             $(this).toggleClass("is-active");
