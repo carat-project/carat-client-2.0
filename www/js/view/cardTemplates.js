@@ -74,7 +74,7 @@ cardTemplates = (function() {
                 '<i class="material-icons">&#xE5CF;</i></div></div>' +
                 '</div>' +
                 '<div class="mdl-card__supporting-text">' +
-                '<div class="carat-Jscore-text"></div><div class ="numberCircle"></div><span class="collapse"></span>' +
+                '<div class="carat-Jscore-text"></div><div class ="numberCircle"></div><div class="collapse"></div>' +
                 '</div>' +
                 '</div>';
 

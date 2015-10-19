@@ -211,14 +211,17 @@
 }
 
 .collapse {
-  display: none;
-  visibility: hidden;
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 0.05s;
+   /* force gpu acceleration */
+  -webkit-transform: translateZ(0);
+  -webkit-transition: max-height 0.05s;
+  -moz-transition: max-height 0.05s;
+  -o-transition: max-height 0.05s;
 }
 .collapse.in {
-  display: block;
-  visibility: visible;
-    font-size: 16px;
-    line-height: normal;
+  max-height: 1000px;
 }
 
 .carat-card__supporting-text {

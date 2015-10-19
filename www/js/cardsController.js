@@ -117,7 +117,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                        notificationId) {
 
         var secondaryTextNode = cardDomNode
-                .querySelector(".collapse, .collapse.in");
+                .querySelector(".collapse");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
@@ -139,7 +139,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                                      secondaryTextParagraphs,
                                                      notificationId) {
         var secondaryTextNode = cardDomNode
-                .querySelector(".collapse, .collapse.in");
+                .querySelector(".collapse");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
