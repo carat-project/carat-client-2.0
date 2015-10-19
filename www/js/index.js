@@ -75,7 +75,6 @@ var app = {
             $(".is-active").not($(e.id)).removeClass("is-active");
             $(this).toggleClass("is-active");
             e.preventDefault();
-            console.log("lel");
             var index = $(this).index();
             $(".tabs").attr("data-tab", index);
         });
