@@ -1,5 +1,5 @@
-function createChart() {
-		var ctx = document.getElementById("myChart").getContext("2d");
+function createChart(statisticsDataSource) {
+		var ctx = document.getElementById("chart").getContext("2d");
 		var data = [
     		{
         		value: 300,

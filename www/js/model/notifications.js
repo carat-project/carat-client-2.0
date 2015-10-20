@@ -75,6 +75,15 @@ model.notifications = (function() {
         };
     };
 
+	var makeCarat = function(chart) {
+		
+		return {
+			carat: {
+				chart: chart
+			}
+		};
+	};
+
     var splitTimeDrainString = function(timeDrainString) {
         var timeDrainSplit = timeDrainString.split("±", 2);
 
@@ -190,6 +199,12 @@ model.notifications = (function() {
         return statistics;
     };
 
+	var getCarat = function(statisticsDataSource) {
+	
+		var carat = makeCarat(createChart(statisticsDataSource));
+		
+		return carat;
+	}
 
     //public methods of the module
     return {
@@ -199,6 +214,7 @@ model.notifications = (function() {
         getSystem: getSystem,
         getSummary: getSummary,
         getStatistics: getStatistics,
+		getCarat: getCarat,
         makeIdFromAppName: makeIdFromAppName
     };
 })();

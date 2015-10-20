@@ -354,6 +354,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         appendTextOrRemoveNode(spot, jscore);
     };
 
+	var injectChart = function(caratDomnode,
+							   chart) {
+		var spot = caratDomNode.querySelector(".chart");
+		
+		appendTextOrRemoveNode(spot, chart);
+	};
 
 
     //implementation of the map function, because for
@@ -431,6 +437,19 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                           expandText,
                                           statisticsCardId);
     };
+
+	var makeCaratCard = function(caratDomNode,
+								 caratObject) {
+		var caratCardId = "carat-chart";	
+		
+		injectTitle(caratDomNode, "Carat");
+		injectChart(caratDomNode, caratObject.chart);
+		injectIdToCard(caratDomNode, caratCardId);
+		var expandText = "Carat is research project...";
+		injectMultiparagraphSecondaryText(caratDomNode,
+										  expandText,
+										  caratCardId);
+	}
 
     //constructs summary card from summary model object
     var makeSummaryCard = function(summaryObject,
@@ -530,8 +549,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             makeStatisticsCard(statisticsData,
                                notificationObject.deviceInfo, newCardNode);
-        }
-
+        } else if(notificationObject.carat) {
+			
+			newCardNode = cardTemplates
+				.getNewCaratDomNodeTemplate();
+				
+			var caratData = notificationObject.carat;
+			makeCaratCard(newCardNode, caratData);	
+		}
 
         return newCardNode;
     };
@@ -597,6 +622,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         return makeCardBasedOnModel(statisticsObject);
     };
+	
+	var getCaradCard = function(statisticsDataSource) {
+	
+		var caratObject = notificationsArray.getCarat(statisticsDataSource);
+		
+		return makeCardBasedOnModel(caratObject);
+	}
 
     //select the correct spot to enter the cards in each tab
     var selectCardsSpot = function(selector) {

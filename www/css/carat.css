@@ -611,14 +611,14 @@ section.mdl-layout__tab-panel div.page-content {
     padding-bottom: 0px;
 }
 
-#home div.carat-card__title {
+.carat-caratCard__title {
     padding-top: 5px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 5px;
     display: inline-block;
 }
-#home div.carat-card__title-text {
+.carat-caratCard__title-text {
   font-size: 20px;
   font-weight: light;
   color: #616161;
