@@ -97,10 +97,8 @@
           <section class="mdl-layout__tab-panel is-active" id="home">
 
           <!-- Jscore card -->
-            <div class="page-content">
-            </div>
-            
-            <div class="mdl-card mdl-shadow--2dp">
+              <div class="page-content">
+                  <div class="mdl-card mdl-shadow--2dp">
                 <div class="carat-caratCard__title">
                 	<div class="mdl-card__title-text carat_caratCard_title_text">
                 		<div class="expand">
@@ -109,11 +107,14 @@
                     </div>
                  </div>
                  <div class="carat-card__supporting-text">
-                    <canvas id="pieChart" width="200" height="200"></canvas> 
+                    <canvas id="chart" width="200" height="200"></canvas>
                     <div class="collapse">info</div>
                 </div>
 			</div>
-				
+
+            </div>
+
+
         </section>
 
         <!-- Bugs tabs view -->
@@ -146,7 +147,7 @@
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/lib/hammer.min.js"></script>
 <script type="text/javascript" src="js/lib/material.min.js"></script>
-<script type="text/javascript" src="js/lib/chart.js"></script>
+<script type="text/javascript" src="js/lib/chart.min.js"></script>
 
 <script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/model/notifications.js"></script>
@@ -157,6 +158,7 @@
 <script type="text/javascript" src="js/snooze.js"></script>
 <script type="text/javascript" src="js/appmenu.js"></script>
 <script type="text/javascript" src="js/snackbar.js"></script>
+<script type="text/javascript" src="js/caratCard.js"></script>
 
 <script type="text/javascript">
      app.initialize();

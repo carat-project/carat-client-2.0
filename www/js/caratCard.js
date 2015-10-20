@@ -19,8 +19,13 @@ function createChart(statisticsDataSource) {
         		highlight: "#5AD3D1",
         		label: "Green"
     		}
-    		
-		]
+		];
 
-		var pieChart = new Chart(ctx[0]).Pie(data, options);
+    var options = {
+        segmentShowStroke: true
+    };
+
+		var pieChart = new Chart(ctx).Pie(data, options);
 }
+
+createChart();
