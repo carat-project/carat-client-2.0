@@ -69,12 +69,12 @@ cardTemplates = (function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title">' +
-                '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
-                '<div class="expand">' +
-                '<i class="material-icons">&#xE5CF;</i></div></div>' +
+                    '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
+                        '<div class="expand">' +
+                            '<i class="material-icons">&#xE5CF;</i></div></div>' +
                 '</div>' +
                 '<div class="mdl-card__supporting-text">' +
-                '<div class="carat-Jscore-text"></div><div class ="numberCircle"></div><div class="collapse"></div>' +
+                '<div class="carat-Jscore-text"></div><div class ="numberCircle"><button class="mdl-button mdl-js-button mdl-button--icon" onclick="JscoreInfo()"><i class="material-icons">&#xE88E;</i></button></div><div class="collapse"></div>' +
                 '</div>' +
                 '</div>';
 

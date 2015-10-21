@@ -259,6 +259,13 @@ p {
     margin-bottom: 10px;
 }
 
+div.numberCircle > button {
+    position: relative;
+    left: 30px;
+    bottom: 77px;
+    color: darkgray;
+}
+
 
 
 html, body {

@@ -31,15 +31,32 @@
 </head>
 
 <body>
-
-<!-- dialog for closing card, pan_swipe.js -->
-<div class="overlay" id="popup-overlay"></div>
-<div class="modal" id="popup-modal">
+    
+<!-- dialog for everything needed -->
+    <div class="overlay" id="popup-overlay">
+        <div class="modal" id="popup-modal">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="carat-card__title">
+                    <div class="mdl-card__title-text"></div>
+                    <div class="mdl-layout-spacer"></div>
+                    <button class="mdl-button mdl-js-button mdl-button--icon" id="modalClose" onclick="closeModal()">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </button>
+                </div>
+                <div class="mdl-card__supporting-text">
+                </div>
+                <div class="mdl-card__actions">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!--<div class="modal" id="popup-modal">
     <div class="mdl-card mdl-shadow--2dp">
         <div class="carat-card__title">
             <div class="mdl-card__title-text">Don't show this card again?
+                <div class="mdl-layout-spacer"></div>
             </div>
-            <div class="mdl-layout-spacer"></div>
         </div>
         <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner
             and select "show hidden cards".
@@ -54,7 +71,7 @@
             </button>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
@@ -155,6 +172,7 @@
 <script type="text/javascript" src="js/cardsController.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/summaryCard.js"></script>
+<script type="text/javascript" src="js/dialog.js"></script>
 <script type="text/javascript" src="js/snooze.js"></script>
 <script type="text/javascript" src="js/appmenu.js"></script>
 <script type="text/javascript" src="js/snackbar.js"></script>
