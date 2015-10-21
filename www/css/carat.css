@@ -680,3 +680,8 @@ section.mdl-layout__tab-panel div.page-content {
 .show-on-expand {
     display: none;
 }
+
+.is-a-hog {
+    font-size: 110%;
+    color: #FF0000;
+}
