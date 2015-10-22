@@ -431,7 +431,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                           "OS version: " + deviceInfo.osVersion,
                           "Device model: " + deviceInfo.modelName,
                           "Carat id: " + deviceInfo.caratId,
-//                          "J-Score tells you how well your device is doing compared to others! It's a percentile: if it's 75, for instance, your battery is outperforming three quarters of similar devices."
                          ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,

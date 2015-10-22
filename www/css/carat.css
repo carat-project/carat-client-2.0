@@ -261,9 +261,16 @@ p {
 
 div.numberCircle > button {
     position: relative;
-    left: 30px;
-    bottom: 77px;
-    color: darkgray;
+    width: 60px !important;
+    height: 60px !important;
+    left: 45px;
+    bottom: 70px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    overflow: hidden;
+    outline:none;  
+    background-image:url(../img/ic_info_black_24dp_1x.png);
 }
 
 
