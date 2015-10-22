@@ -24,9 +24,9 @@ function showModal() {
     var overlay = document.querySelector("#popup-overlay");
     
     overlay.style.visibility = "visible";
-    overlay.style.display = "initial";
+    overlay.style.display = "flex";
     modal.style.visibility = "visible";
-    modal.style.display = "initial"; 
+    modal.style.display = "flex"; 
 
 } 
 
