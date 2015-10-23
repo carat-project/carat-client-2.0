@@ -102,7 +102,7 @@ var app = {
                 return displayBugsAndSummary(bugs, hogs);
             });
         };
-
+        
         // Create cards for bugs and append to system tab
         // NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){

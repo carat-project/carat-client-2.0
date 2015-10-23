@@ -504,8 +504,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
-            //            injectMainText(newCardNode,
-            //                           itemData.label);
+            injectMainText(newCardNode,
+                           itemData.textfield);
             injectSecondaryText(newCardNode,
                                 itemData.samples,
                                 itemData.id);
@@ -568,15 +568,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         
         var bugs = new Array();
         
-        for(i = bugsSource.length - 3; i <= bugsSource.length; i++) {
+        for(i = bugsSource.length - 2; i <= bugsSource.length; i++) {
             bugs.push(bugsSource[i-1]);
         };
         
         var result =  homebrewMap(notificationsArray
-                                  .getBugs(bugs,
+                                  .getWorstBugs(bugs,
                                            appCloseCallback,
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
+        
+        console.log(result);
         return result;
     };
 
@@ -648,7 +650,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //generate cards for each tab (tab id passed in "selector", cards
     //in "nodeArray")
-    var generatePage = function(selector, nodeArray, number) {
+    var generatePage = function(selector, nodeArray) {
 
         console.log("generatePage");
         var rightSpot = selectCardsSpot(selector);
@@ -661,12 +663,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
-                                       withSwipeBackgrounds);
-            
-        } else if (number) {
-            homebrewConcatChildrenWithMaxNumber(rightSpot,
-                                       rightSpot.firstChild,
-                                       nodeArray, 3);     
+                                       withSwipeBackgrounds);    
+       
         } else {
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
@@ -674,12 +672,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                        nodeArray);
         }
     };
-    
-    
 
     //generate home and system tab cards
     var generateCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
-        generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback),3);
+        generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback));
         generatePage("#system", getSystemCards());
     };
 

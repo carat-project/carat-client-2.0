@@ -599,6 +599,15 @@ section.mdl-layout__tab-panel div.page-content {
     top: 15px;
 }
 
+#home .mdl-card.sleeker {
+    z-index: 2;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+}
+
 .mdl-card .expand {
     display: inline;
     position: absolute;
