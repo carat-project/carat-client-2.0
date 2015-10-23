@@ -145,7 +145,7 @@ model.notifications = (function() {
     //function that cleans up data straight from native plugin
     //so it can be passed forward
     var hogsBugsPurify = function(arr,
-                                  appCloseCallback, appUninstallCallback) {
+                                  appCloseCallback, appUninstallCallback, styles) {
         var hogBugs = arr.map(function(elem) {
             var times = splitTimeDrainString(elem.benefit);
             var label = elem.label.length > 20 ?
@@ -156,8 +156,7 @@ model.notifications = (function() {
                                            elem.name,
                                            elem.name,
                                            "Samples: " + elem.samples,
-                                           ["sleeker",
-                                            "smaller-time-text"],
+                                           styles,
                                            times.timeDrainPart,
                                            times.timeDrainErrorPart,
                                            elem.killable && elem.running,
@@ -166,7 +165,7 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elem.type),
                                            appCloseCallback,
                                            appUninstallCallback);
-            console.log(result);
+
             return result;
         });
 
@@ -177,17 +176,26 @@ model.notifications = (function() {
     //clean up bugs data
     var getBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
-        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback);
+        var styles = ["sleeker", "smaller-time-text"];
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles);
         return bugs;
     };
 
     //clean up hogs data
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
-        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback);
+                var styles = ["sleeker", "smaller-time-text"];
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles);
         return hogs;
     };
 
+    var getWorstBugs = function(bugsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var styles = [];
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles);
+        return bugs;
+    };
+        
     //nothing at the moment
     var getSystem = function() {
         return [];
@@ -212,6 +220,7 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem,
+        getWorstBugs: getWorstBugs,
         getSummary: getSummary,
         getStatistics: getStatistics,
 		getCarat: getCarat,

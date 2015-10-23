@@ -563,10 +563,20 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //fetch correct models for the home tab and create corresponding cards
     //for them
-    var getHomeCards = function() {
-
-        var result = homebrewMap(notificationsArray.getGeneral(),
-                                 makeCardBasedOnModel);
+    var getHomeCards = function(bugsSource,
+                                appCloseCallback, appUninstallCallback) {
+        
+        var bugs = new Array();
+        
+        for(i = bugsSource.length - 3; i <= bugsSource.length; i++) {
+            bugs.push(bugsSource[i-1]);
+        };
+        
+        var result =  homebrewMap(notificationsArray
+                                  .getBugs(bugs,
+                                           appCloseCallback,
+                                           appUninstallCallback),
+                                  makeCardBasedOnModel);
         return result;
     };
 
@@ -638,8 +648,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //generate cards for each tab (tab id passed in "selector", cards
     //in "nodeArray")
-    var generatePage = function(selector, nodeArray) {
+    var generatePage = function(selector, nodeArray, number) {
 
+        console.log("generatePage");
         var rightSpot = selectCardsSpot(selector);
 
         var children = rightSpot.childNodes;
@@ -651,6 +662,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
                                        withSwipeBackgrounds);
+            
+        } else if (number) {
+            homebrewConcatChildrenWithMaxNumber(rightSpot,
+                                       rightSpot.firstChild,
+                                       nodeArray, 3);     
         } else {
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
@@ -658,11 +674,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                        nodeArray);
         }
     };
+    
+    
 
     //generate home and system tab cards
-    var generateCards = function() {
-
-        generatePage("#home", getHomeCards());
+    var generateCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
+        generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback),3);
         generatePage("#system", getSystemCards());
     };
 

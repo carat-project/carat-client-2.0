@@ -214,8 +214,10 @@
   max-height: 0px;
   overflow: hidden;
   transition: max-height 0.05s;
-   /* force gpu acceleration */
+/*
+    force gpu acceleration 
   -webkit-transform: translateZ(0);
+*/
   -webkit-transition: max-height 0.05s;
   -moz-transition: max-height 0.05s;
   -o-transition: max-height 0.05s;
