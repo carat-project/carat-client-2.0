@@ -62,6 +62,12 @@ var app = {
         });
     },
 
+    getCpuUsage: function(){
+        carat.getCpuUsage(function(usage){
+            document.getElementById("usage").innerHTML = usage +"%";
+        });
+    },
+
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
@@ -152,6 +158,11 @@ var app = {
                     }
                     getMemoryInfo(uuid);
             });
+
+            // Refresh CPU usage
+            document.getElementById("usage").innerHTML = "Loading..";
+            app.getCpuUsage();
+            setInterval(app.getCpuUsage, 4000);
 
             // ...
         };

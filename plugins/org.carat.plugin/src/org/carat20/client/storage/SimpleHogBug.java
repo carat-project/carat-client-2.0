@@ -1,8 +1,6 @@
 package org.carat20.client.storage;
 
 import android.app.ActivityManager.RunningAppProcessInfo;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.util.SparseArray;
 import java.io.Serializable;
 

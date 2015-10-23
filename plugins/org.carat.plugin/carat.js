@@ -36,6 +36,9 @@ module.exports = {
     getMemoryInfo: function(callback){
     	exec(callback, callback, service, "memory", [""]);
     },
+    getCpuUsage: function(callback){
+        exec(callback, callback, service, "cpu", [""]);
+    },
     killApp: function(packageName, callback){
         exec(callback, callback, service, "kill", [packageName]);
     },

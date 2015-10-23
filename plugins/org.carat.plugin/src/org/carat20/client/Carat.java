@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.HashMap;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
 import org.carat20.client.Constants.ActionType;
 import org.carat20.client.device.ApplicationLibrary;
 import org.carat20.client.device.DeviceLibrary;
@@ -63,16 +64,16 @@ public class Carat extends CordovaPlugin {
     /**
      * Executes different tasks based on action calls from cordova exec.
      * Tasks include plugin initialization, fetching data and handling
-     * processes. Data is returned to a callback function from webview.
+     * processes. Data is returned to a callback function in webview.
      *
-     * @param action Determines the task.
-     * @param args Optional action arguments.
-     * @param cb Used for returning data to webview.
+     * @param action action name
+     * @param args arguments
+     * @param cb cordova callbackcontext
      * @return True when action is properly executed.
      */
     @Override
     public boolean execute(final String action, final JSONArray args, final CallbackContext cb) {
-        Log.v("Carat", "Received action " + action);
+        Log.v("Carat", "Executing action: " + action);
         
         // Use threading to avoid blocking rendering
         cordova.getThreadPool().execute(new Runnable(){
@@ -91,6 +92,7 @@ public class Carat extends CordovaPlugin {
                     case MEMORY:    handleMemory(cb);       break;
                     case KILL:      handleKill(cb, args);   break;
                     case REMOVE:    handleRem(cb, args);    break;
+                    case CPU:       handleCPU(cb);          break;
                     default: cb.error("No such action");
                 }
             }
@@ -109,7 +111,10 @@ public class Carat extends CordovaPlugin {
     
     // Handle action
     
-    // Setup
+    /**
+     * Initializes application context and storage.
+     * @param cb Callback for sending success.
+     */
     public void handleSetup(CallbackContext cb){
         Log.v("Carat", "Setting up storage");
         activity = cordova.getActivity();
@@ -120,7 +125,7 @@ public class Carat extends CordovaPlugin {
     
     // Clear storage
     private void handleClear(CallbackContext cb){
-        Log.v("Carat", "Clearing storage..");
+        Log.v("Carat", "Clearing storage");
         storage.clearData();
         if(storage.isEmpty()){
             cb.success();
@@ -131,7 +136,7 @@ public class Carat extends CordovaPlugin {
     
     // Refresh data in storages
     private void handleRefresh(CallbackContext cb){
-        Log.v("Carat", "Refreshing data..");
+        Log.v("Carat", "Refreshing data");
         uuid = storage.getUuid();
         
         // Use plugin.xml value if we have no uuid
@@ -240,7 +245,6 @@ public class Carat extends CordovaPlugin {
     private void handleMemory(CallbackContext cb){
         HashMap<String, Integer> memInfo = DeviceLibrary.getMemoryInfo();
         if (memInfo == null) return;
-        Log.v("Carat", "memInfo is " + memInfo);
         try{
             int freeMem = memInfo.get("free");
             int cachedMem = memInfo.get("cached");
@@ -290,6 +294,24 @@ public class Carat extends CordovaPlugin {
         cb.success();
     }
     
+    // Get cpu usage while keeping callback
+    private void handleCPU(final CallbackContext cb){
+         cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                String cpuUsage = String.format("%.1f", DeviceLibrary.getCpuUsage(1000));
+                PluginResult result = new PluginResult(PluginResult.Status.OK, cpuUsage);
+                result.setKeepCallback(true); // Keep sending results
+                cb.sendPluginResult(result);
+            }
+         });
+    }
+    
+    /**
+     * Reads string values from plugin.xml.
+     * @param variable Key.
+     * @return Plugin.xml value.
+     */
     public String readConfig(String variable){
         int appResId = activity.getResources().getIdentifier(
                 variable, 
@@ -300,8 +322,8 @@ public class Carat extends CordovaPlugin {
     }
     
     /**
-     * Invokes a webview event.
-     * @param event String representation.
+     * Sends an event to javascript in webview
+     * @param event Event name.
      */
     public void sendEvent(String event){
         Log.v("Carat", "Sending " + event + " to webView");
@@ -314,10 +336,10 @@ public class Carat extends CordovaPlugin {
     // Utility methods for converting data to JSON.
     
     /**
-     * Creates a JSON array for hog or bug reports
-     * @param reports Hogs/bugs in a list
-     * @return JSONArray Containing each report as a JSONObject
-     * @throws JSONException Object or array cannot be created
+     * Creates a JSON array for hog or bug reports.
+     * @param reports Hogs/bugs in a list.
+     * @return JSONArray with reports as JSONObjects.
+     * @throws org.json.JSONException
      */
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
         Log.v("Carat", "Converting hog/bug reports to JSON");
@@ -353,9 +375,9 @@ public class Carat extends CordovaPlugin {
     
     /**
      * Creates a JSON object for main reports.
-     * @param r Main reports
-     * @return JSONObject containing main report data
-     * @throws JSONException Object cannot be created
+     * @param r Main reports.
+     * @return JSONObject containing main reports.
+     * @throws org.json.JSONException
      */
     public JSONObject convertToJSON(Reports r) throws JSONException{
         Log.v("Converting main reports to JSON", r.toString());
