@@ -220,7 +220,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var buttonText;
 
         if(hasCloseButton) {
-            buttonText = document.createTextNode("Close");
+            buttonText = document.createTextNode("Close app");
             button.appendChild(buttonText);
 
             console.log(appCloseCallback);
@@ -499,6 +499,38 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             newCardNode = cardTemplates
                 .getNewItemDomNodeTemplate();
+
+            gestureCallbacks.panSwipefy(newCardNode);
+
+            injectTitle(newCardNode, itemData.title);
+            injectIcon(newCardNode, itemData.icon);
+            injectMainText(newCardNode,
+                           itemData.textfield);
+            injectSecondaryText(newCardNode,
+                                itemData.samples,
+                                itemData.id);
+            injectClasses(newCardNode,
+                          itemData.classes);
+            injectTimeDrain(newCardNode,
+                            itemData.timeDrain,
+                            itemData.timeDrainErrorString);
+            injectIdToCard(newCardNode, itemData.id);
+            injectCloseOrUninstallButton(newCardNode,
+                                         itemData.buttons.killButton,
+                                         itemData.buttons.removeButton,
+                                         itemData.packageName,
+                                         itemData.appCloseCallback,
+                                         itemData.appUninstallCallback);
+
+            if(localStorage.getItem(itemData.id) === 'dismissed') {
+                newCardNode.style.display = 'none';
+            }
+            
+        } else if (notificationObject.worstBug) {
+            var itemData = notificationObject.worstBug;
+
+            newCardNode = cardTemplates
+                .getNewWorstBugTemplate();
 
             gestureCallbacks.panSwipefy(newCardNode);
 

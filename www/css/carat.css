@@ -599,6 +599,11 @@ section.mdl-layout__tab-panel div.page-content {
     top: 15px;
 }
 
+#home .mdl-card.sleeker .mdl-card__supporting-text {
+    padding-top: 15px;
+    padding-bottom: 25px;
+}
+
 #home .mdl-card.sleeker {
     z-index: 2;
     margin-top: 1px;

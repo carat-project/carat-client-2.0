@@ -37,6 +37,34 @@ model.notifications = (function() {
             }
         };
     };
+    
+        var makeWorstBug = function(title, icon, label, packageName,
+                                    samples, classes,
+                                    timeDrain,
+                                    timeDrainErrorString,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback, textfield) {
+        return {
+            worstBug: {
+                title: title,
+                icon: icon,
+                label: label,
+                packageName: packageName,
+                samples: samples,
+                classes: classes,
+                timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield
+            }
+        };
+    };
 
     //summary item model representation
     var makeSummaryEntry = function(name, nameTag, type, timeDrain,
@@ -163,7 +191,7 @@ model.notifications = (function() {
             
             if (elemType === "worstBug") {
 
-                result = makeNotification(label,
+                result = makeWorstBug(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
@@ -224,7 +252,7 @@ model.notifications = (function() {
     var getWorstBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
         var styles = ["sleeker", "smaller-time-text", "worstBug"];
-        var textfield = "This app uses significantly more energy on our device than on others. You might consider to update or remove it."
+        var textfield = "This app uses significantly more energy on your device than on others. You might consider to update or remove it."
         var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
         return bugs;
     };
