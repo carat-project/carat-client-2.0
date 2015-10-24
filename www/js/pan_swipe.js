@@ -195,10 +195,38 @@ function makeElemTappable(el, mc, timer,
         //    };
 
         var onSwipeRight = function(ev) {
+            if (el.classList.contains("worstBug")) {
+                var list = document.querySelectorAll(".worstBug");
+                
+                var elPlaceinList;
+                for (i=0; i < list.length; i++ ) {
+                    console.log(list[i]);
+                    if (list[i].id === el.id) {
+                        console.log("löytyi");
+                        elPlaceinList = i;
+                        break;
+                    }
+                }
+                
+                console.log("jatkuuko");
+                console.log(elPlaceinList);
+                if (elPlaceinList < list.length-1) {
+                    console.log("pitäisi aukee");
+                    list[elPlaceinList+1].style.display='inherit';
+                    list[elPlaceinList+1].style.visibility='visible';
+                    
+                } 
+                el.style.display='none';
+                el.style.visibility='hidden';
+
+                return;
+            }
+            
             hideCard(ev);
             snooze(el.id);
             if (el.style.display==='none'){
-                createSnackbar('Card permanently hidden', 'Undo', function() {
+                var name = el.querySelector(".mdl-card__title-text").innerHTML.split('<')[0];         
+                createSnackbar(name + ' hidden', 'Undo', function() {
                     el.style.display = 'inline';
                 }); //torkutetusta kortista snackbar ja palautusnappi
             }

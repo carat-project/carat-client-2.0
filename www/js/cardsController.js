@@ -486,7 +486,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                                 summaryEntryHogNodes);
         }
     };
-
+    
     //make either an item card (hog or bug) or summary card
     //from a model object that represents either one
     var makeCardBasedOnModel = function(notificationObject) {
@@ -578,7 +578,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
         
-        console.log(result);
+        result[0].style.display ='none';
+        result[1].style.display ='none';
+        
         return result;
     };
 

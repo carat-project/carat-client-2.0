@@ -146,13 +146,41 @@ model.notifications = (function() {
     //function that cleans up data straight from native plugin
     //so it can be passed forward
     var hogsBugsPurify = function(arr,
-                                  appCloseCallback, appUninstallCallback, styles, textfield) {
+                                  appCloseCallback, appUninstallCallback, styles, textfield, type) {
         var hogBugs = arr.map(function(elem) {
             var times = splitTimeDrainString(elem.benefit);
             var label = elem.label.length > 20 ?
                 elem.label.slice(0,19) + ellipsis : elem.label;
+            
+            var elemType = type;
+            if (elemType == "") {
+                elemType = elem.type;
+            };
+              
+            
+            var result;
+            
+            
+            if (elemType === "worstBug") {
 
-            var result =  makeNotification(label,
+                result = makeNotification(label,
+                                           elem.icon,
+                                           elem.name,
+                                           elem.name,
+                                           "",
+                                           styles,
+                                           times.timeDrainPart,
+                                           "",
+                                           elem.killable && elem.running,
+                                           elem.removable &&
+                                           !(elem.killable && elem.running),
+                                           makeIdFromAppName(elem.name, elemType),
+                                           appCloseCallback,
+                                           appUninstallCallback,
+                                           textfield);
+            } else {
+        
+            result =  makeNotification(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
@@ -163,10 +191,12 @@ model.notifications = (function() {
                                            elem.killable && elem.running,
                                            elem.removable &&
                                            !(elem.killable && elem.running),
-                                           makeIdFromAppName(elem.name, elem.type),
+                                           makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
                                            textfield);
+                
+            }
 
             return result;
         });
@@ -179,7 +209,7 @@ model.notifications = (function() {
     var getBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
         var styles = ["sleeker", "smaller-time-text"];
-        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, "");
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return bugs;
     };
 
@@ -187,15 +217,15 @@ model.notifications = (function() {
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
                 var styles = ["sleeker", "smaller-time-text"];
-        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, "");
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return hogs;
     };
 
     var getWorstBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
-        var styles = ["sleeker", "smaller-time-text"];
-        var textfield = "This app seems to be a bug... and so on"
-        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield);
+        var styles = ["sleeker", "smaller-time-text", "worstBug"];
+        var textfield = "This app uses significantly more energy on our device than on others. You might consider to update or remove it."
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
         return bugs;
     };
         
