@@ -1,1 +1,24 @@
-<p><%= test %></p>
+<div class="mdl-card sleeker smaller-time-text"
+     id="<%= id %>">
+    <div class="carat-card__title">
+        <div class="mdl-card__icon"><img src="<%= icon %>"></div>
+        <div class="mdl-card__title-text">
+            <%= label %>
+            <div class="expand">
+                <i class="material-icons">&#xE5CF;</i>
+            </div>
+        </div>
+        <div class="carat-card-time">
+            <%= benefit %>
+            <span class="show-on-expand">
+                <%= benefitError %>
+            </span>
+        </div>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <div class="collapse" id="card-<%= id %>-textpand">
+            <%= "Samples: " + samples %>
+        </div>
+    </div>
+    <div class="mdl-card__actions carat_card_actions"></div>
+</div>

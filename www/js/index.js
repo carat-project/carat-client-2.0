@@ -95,8 +95,8 @@ var app = {
         // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
+            console.log("HOGS --- ", hogs);
             // Pass hogs to controller
-            itemCards.generateHogs(hogs, carat.killApp, carat.uninstallApp);
 
             carat.getBugs(function(bugs) {
                 return displayBugsAndSummary(bugs, hogs);
@@ -109,7 +109,6 @@ var app = {
             console.log("Received Data: bugs");
 
             // Pass bugs to controller
-            itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
 
             carat.getMainReports(displayMain);
@@ -126,7 +125,7 @@ var app = {
                         var usedMemory = Math.round((meminfo.total - meminfo.available) / 1000);
                         var totalMemory = Math.round(meminfo.total / 1000);
                         var percentage = Math.floor((usedMemory/totalMemory)*100);
-                        var duration = main
+                        var duration = main;
 
                         var deviceInfo = {
                             modelName: device.model,
@@ -140,9 +139,13 @@ var app = {
 
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
+
+                        var masterView = new MasterView();
+                        masterView.render();
+
                         console.log("Finished rendering");
                     });
-            }
+            };
 
             // Get uuid for deviceInfo
             carat.getUuid(function(uuid){
