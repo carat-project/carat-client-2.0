@@ -136,6 +136,7 @@ var app = {
                         var duration = main
 
                         var deviceInfo = {
+                            batteryLife: main.batteryLife,
                             modelName: device.model,
                             osVersion: device.platform + " " + device.version,
                             caratId: uuid,

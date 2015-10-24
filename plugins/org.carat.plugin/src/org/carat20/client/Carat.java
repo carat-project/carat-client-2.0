@@ -380,6 +380,8 @@ public class Carat extends CordovaPlugin {
      * @throws org.json.JSONException
      */
     public JSONObject convertToJSON(Reports r) throws JSONException{
+        final String batteryLife = this.getBatteryLife(r);
+        
         Log.v("Converting main reports to JSON", r.toString());
         JSONObject results = new JSONObject()
             .put("jscore", r.getJScore())
@@ -390,7 +392,43 @@ public class Carat extends CordovaPlugin {
             .put("model",r.model)
             .put("modelWithout", r.modelWithout)
             .put("similarApps", r.similarApps)
-            .put("similarAppsWithout", r.similarAppsWithout);
+            .put("similarAppsWithout", r.similarAppsWithout)
+            .put("batteryLife", batteryLife);
         return results;
+    }
+    
+    // Calculate estimated battery life
+    private String getBatteryLife(Reports r) {
+        double batteryLife = 0;
+        double error = 0;
+        if(r.jScoreWith != null){
+            double exp = r.jScoreWith.expectedValue;
+            if(exp > 0.0){
+                batteryLife = 100 / exp;
+                error = 100 / (exp + r.jScoreWith.error);
+            } else if (r.getModel() != null){
+                exp = r.getModel().expectedValue;
+                if(exp > 0.0){
+                    batteryLife = 100/exp;
+                    error = 100 / (exp + r.getModel().error);
+                }
+            }
+        }
+        error = batteryLife - error;
+        int batteryHours = (int)(batteryLife / 3600);
+        batteryLife -= batteryHours * 3600;
+        int batteryMinutes = (int)(batteryLife / 60);
+        
+        int errorHours = 0;
+        int errorMinutes = 0;
+        if(error > 7200){
+            errorHours = (int)(error / 3600);
+            error -= errorHours * 3600;
+        }
+        errorMinutes = (int)(error / 60);
+        return batteryHours + "h "+
+               batteryMinutes+"m \u00B1 "+ 
+               (errorHours > 0 ? errorHours + "h ": "") + 
+               errorMinutes + " m"; 
     }
 }

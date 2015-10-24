@@ -424,7 +424,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                             "% of other devices measured by Carat.");
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
-        var expandText = ["Battery duration: ",
+        var expandText = ["Battery duration: " + deviceInfo.batteryLife,
                           "Memory used: " + deviceInfo.memoryUsed,
                           "Memory total: " + deviceInfo.memoryTotal,
                           "Cpu usage: -",
