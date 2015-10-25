@@ -28,6 +28,7 @@ var app = {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
         document.addEventListener("dataready", this.onDataReady, false);
+        document.addEventListener("statisticsready", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -64,7 +65,7 @@ var app = {
 
     getCpuUsage: function(){
         carat.getCpuUsage(function(usage){
-            document.getElementById("usage").innerHTML = usage +"%";
+            document.getElementById("cpu-usage").innerHTML = usage +"%";
         });
     },
 
@@ -160,16 +161,17 @@ var app = {
                     getMemoryInfo(uuid);
             });
 
-            // Refresh CPU usage
-            document.getElementById("usage").innerHTML = "Loading..";
-            app.getCpuUsage();
-            setInterval(app.getCpuUsage, 4000);
-
             // ...
         };
 
         // Begin the callback chain
         displayData();
+    },
+
+    // Set an interval for refreshing cpu usage
+    refreshCpuUsage: function() {
+        app.getCpuUsage();
+        setInterval(app.getCpuUsage, 4000);
     },
 
     showProgress: function(){

@@ -105,7 +105,8 @@ cardTemplates = (function() {
                             '<i class="material-icons">&#xE5CF;</i></div></div>' +
                 '</div>' +
                 '<div class="mdl-card__supporting-text">' +
-                '<div class="carat-Jscore-text"></div><div class ="numberCircle"><button class="info" onclick="JscoreInfo()"></button></div><div class="collapse"></div>' +
+                '<div class="carat-Jscore-text"></div><div class ="numberCircle"><button class="info" onclick="JscoreInfo()"></button></div><div class="collapse">'+
+                '<p>CPU usage: <span id="cpu-usage">-</span></p></div>' +
                 '</div>' +
                 '</div>';
 

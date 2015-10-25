@@ -162,7 +162,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 paragraphNode.appendChild(textNode);
                 console.log(paragraphNode);
 
-                secondaryTextNode.appendChild(paragraphNode);
+                secondaryTextNode.insertBefore(paragraphNode, secondaryTextNode.firstChild);
             }
 
             secondaryTextNode.id = nodeId;
@@ -443,17 +443,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                             "% of other devices measured by Carat.");
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
-        var expandText = ["Battery duration: " + deviceInfo.batteryLife,
-                          "Memory used: " + deviceInfo.memoryUsed,
-                          "Memory total: " + deviceInfo.memoryTotal,
-                          "Cpu usage: -",
-                          "OS version: " + deviceInfo.osVersion,
+        var expandText = ["Carat id: " + deviceInfo.caratId,
                           "Device model: " + deviceInfo.modelName,
-                          "Carat id: " + deviceInfo.caratId,
+                          "Memory total: " + deviceInfo.memoryTotal,
+                          "Memory used: " + deviceInfo.memoryUsed,
+                          "OS version: " + deviceInfo.osVersion,
+                          "Battery duration: " + deviceInfo.batteryLife,
                          ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
+        cordova.fireDocumentEvent("statisticsready");
     };
 
 	var makeCaratCard = function(caratDomNode,
