@@ -105,43 +105,41 @@
           <!-- Home view -->
           <section class="mdl-layout__tab-panel is-active" id="home">
 
-          <!-- Pie card -->
+              <!-- Pie card -->
               <div class="page-content">
                   <div class="mdl-card mdl-shadow--2dp">
-                <div class="carat-caratCard__title">
-                	<div class="mdl-card__title-text carat_caratCard_title_text">
-                		<div class="expand">
-                			<i class="material-icons">&#xE5CF;</i>
-                        </div>
-                    </div>
-                 </div>
-                 <div class="carat-card__supporting-text">
-                    <canvas id="chart" width="200" height="200"></canvas>
-                    <div class="collapse">info</div>
-                </div>
-			</div>
-            </div>
+                      <div class="carat-caratCard__title">
+                          <div class="mdl-card__title-text carat_caratCard_title_text">
+                              Global Statistics
+                          </div>
+                      </div>
+                      <div class="carat-card__supporting-text">
+                          <canvas id="chart"></canvas>
+                          <ul id="chart-legend"></ul>
+                      </div>
+                  </div>
+              </div>
 
-        </section>
+          </section>
 
-        <!-- Bugs tabs view -->
-        <section class="mdl-layout__tab-panel" id="bugs">
-            <div class="page-content">
-            </div>
-        </section>
+          <!-- Bugs tabs view -->
+          <section class="mdl-layout__tab-panel" id="bugs">
+              <div class="page-content">
+              </div>
+          </section>
 
-        <!-- Hogs tab view -->
-        <section class="mdl-layout__tab-panel" id="hogs">
-            <div class="page-content">
-            </div>
+          <!-- Hogs tab view -->
+          <section class="mdl-layout__tab-panel" id="hogs">
+              <div class="page-content">
+              </div>
 
-        <!-- System tab view -->
-        </section>
-        <section class="mdl-layout__tab-panel" id="system">
-            <div class="page-content">
-            </div>
-        </section>
-    </main>
+              <!-- System tab view -->
+          </section>
+          <section class="mdl-layout__tab-panel" id="system">
+              <div class="page-content">
+              </div>
+          </section>
+      </main>
 </div>
 
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
@@ -162,7 +160,7 @@
 <script type="text/javascript" src="js/caratCard.js"></script>
 
 <script type="text/javascript">
-     app.initialize();
+ app.initialize();
 </script>
 </body>
 
