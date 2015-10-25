@@ -1,14 +1,6 @@
-var HogBugCards = (function(template) {
+var HogBugCards = (function(template, utilities) {
 
     return function(dataOrigin, outputElemId, gestureCallback) {
-
-        var makeDomNode = function(htmlString) {
-
-            var dummyNode = document.createElement("div");
-            dummyNode.innerHTML = htmlString;
-
-            return dummyNode.firstChild;
-        };
 
         var dataSource = dataOrigin;
 
@@ -57,7 +49,7 @@ var HogBugCards = (function(template) {
         };
 
         var renderAsyncSource = function(sourceCallback) {
-            return function(onResultCallback, onNodesCallback) {
+            return function(onResultCallback, onModelsCallback) {
                 sourceCallback(function(data) {
                     var models = makeModels(data);
                     var result = renderTemplate(renderModels(models));
@@ -66,8 +58,8 @@ var HogBugCards = (function(template) {
                         onResultCallback(result);
                     }
 
-                    if(onNodesCallback) {
-                        onNodesCallback(models);
+                    if(onModelsCallback) {
+                        onModelsCallback(models);
                     }
                 });
             };
@@ -80,17 +72,15 @@ var HogBugCards = (function(template) {
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
 
-                var node = makeDomNode(renderedTemplate);
+                var node = utilities.makeDomNode(renderedTemplate);
                 docLocation.appendChild(node);
 
             }, function(models) {
 
                 var applyActions = function(model) {
-                    console.log(model.getFields());
                     var nodeId = model.getId();
 
                     var actualNode = document.getElementById(nodeId);
-                    console.log(nodeId, actualNode);
                     if(window.localStorage.getItem(nodeId)
                        === 'dismissed') {
                         actualNode.style.display = 'none';
@@ -116,4 +106,4 @@ var HogBugCards = (function(template) {
             setDataSource: setDataSource
         };
     };
-})(new EJS({url: 'js/template/hogBugListing.ejs'}));
+})(new EJS({url: 'js/template/hogBugListing.ejs'}), Utilities);

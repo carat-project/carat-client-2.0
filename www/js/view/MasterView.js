@@ -1,4 +1,4 @@
-var MasterView = (function(bugsView, hogsView) {
+var MasterView = (function(bugsView, hogsView, homeView) {
     return function() {
 
         var bugsRawData = [];
@@ -6,7 +6,7 @@ var MasterView = (function(bugsView, hogsView) {
 
         var bugsFetcherAsync = function(callback) {
 
-            if(!bugsRawData) {
+            if(bugsRawData.length < 1) {
                 window.carat.getBugs(function(bugs) {
 
                     bugsRawData = bugs;
@@ -19,7 +19,7 @@ var MasterView = (function(bugsView, hogsView) {
 
         var hogsFetcherAsync = function(callback) {
 
-            if(!hogsRawData) {
+            if(hogsRawData.length < 1) {
                 window.carat.getHogs(function(hogs) {
 
                     hogsRawData = hogs;
@@ -30,16 +30,30 @@ var MasterView = (function(bugsView, hogsView) {
             }
         };
 
+        var hogsAndBugsFetcherAsync = function(callback) {
+
+            bugsFetcherAsync(function(bugs) {
+                hogsFetcherAsync(function(hogs) {
+                    callback({
+                        bugs: bugs,
+                        hogs: hogs
+                    });
+                });
+            });
+        };
+
         bugsView.setDataSource(bugsFetcherAsync);
         hogsView.setDataSource(hogsFetcherAsync);
+        homeView.setDataSource(hogsAndBugsFetcherAsync);
 
         var render = function() {
             bugsView.renderInsert();
             hogsView.renderInsert();
+            homeView.renderInsert();
         };
 
         return {
             render: render
         };
     };
-})(new BugCards(), new HogCards());
+})(new BugCards(), new HogCards(), new HomeCards());
