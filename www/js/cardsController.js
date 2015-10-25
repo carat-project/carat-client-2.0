@@ -217,19 +217,20 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var buttonSpot = cardDomNode
                 .querySelector(".mdl-card__actions");
 
-        var button = document.createElement("button");
+        buttonSpot.className = "mdl-card__actions mdl-card--border";
 
-        button.className ="mdl-button mdl-js-button mdl-button--raised";
+        var buttonA = document.createElement("A");
+        buttonA.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
 
         var buttonText;
 
         if(hasCloseButton) {
             buttonText = document.createTextNode("Close app");
-            button.appendChild(buttonText);
+            buttonA.appendChild(buttonText);
 
             console.log(appCloseCallback);
 
-            button.addEventListener("click",  function(ev) {
+            buttonA.addEventListener("click",  function(ev) {
                 appCloseCallback(packageName, function(state) {
                     console.log("Killing app: " + state);
                     cardDomNode.style.display = "none";
@@ -237,9 +238,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             });
         } else {
             buttonText = document.createTextNode("Uninstall");
-            button.appendChild(buttonText);
+             buttonA.appendChild(buttonText);
 
-            button.addEventListener("click", function(ev){
+            buttonA.addEventListener("click", function(ev){
                 appUninstallCallback(packageName, function(state) {
                     console.log("Opening app details: " + state);
 
@@ -249,8 +250,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             });
         }
 
-        changePaddingForButton(buttonSpot);
-        buttonSpot.appendChild(button);
+//        changePaddingForButton(buttonSpot);
+        buttonSpot.appendChild(buttonA);
 
     };
     

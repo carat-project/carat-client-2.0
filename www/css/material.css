@@ -3754,7 +3754,9 @@ ul, ol {
   .mdl-button:active {
     background-color: rgba(158,158,158, 0.40); }
   .mdl-button.mdl-button--colored {
-    color: rgb(63,81,181); }
+    color: rgba(0,0,0, 0.5);
+     font-weight: bold;}
+
     .mdl-button.mdl-button--colored:focus:not(:active) {
       background-color: rgba(0,0,0, 0.12); }
 
@@ -4208,7 +4210,7 @@ input.mdl-button[type="submit"] {
   line-height: normal;
   width: 100%;
   background-color: transparent;
-  padding: 20px 20px;
+  padding: 5px 8px;
   box-sizing: border-box; }
   .mdl-card__actions.mdl-card--border {
     border-top: 1px solid rgba(0, 0, 0, 0.1); }
