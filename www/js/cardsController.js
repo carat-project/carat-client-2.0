@@ -608,7 +608,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //for them
     var getHomeCards = function(bugsSource,
                                 appCloseCallback, appUninstallCallback) {
-        
+                
         var bugs = new Array();
         
         for(i = bugsSource.length - 2; i <= bugsSource.length; i++) {
@@ -720,7 +720,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //generate home and system tab cards
     var generateCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
-        generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback));
+        if (bugsSource.length>0) {
+            generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback));
+        }
         generatePage("#system", getSystemCards());
     };
 
