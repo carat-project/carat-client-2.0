@@ -208,7 +208,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                                 hasUninstallButton,
                                                 packageName,
                                                 appCloseCallback,
-                                                appUninstallCallback) {
+                                                appUninstallCallback,
+                                                appName) {
 
         if(!hasCloseButton && !hasUninstallButton) {
             return;
@@ -219,28 +220,43 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         buttonSpot.className = "mdl-card__actions mdl-card--border";
 
-        var buttonA = document.createElement("A");
-        buttonA.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
-
-        var buttonText;
-
         if(hasCloseButton) {
-            buttonText = document.createTextNode("Close app");
-            buttonA.appendChild(buttonText);
+            var closeButton = document.createElement("span");
+            var closeLink = document.createElement("a");
+            closeLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
+
+            closeLink.innerHTML = "Close app";
+            closeButton.appendChild(closeLink);
 
             console.log(appCloseCallback);
 
-            buttonA.addEventListener("click",  function(ev) {
+            closeButton.addEventListener("click",  function(ev) {
+                var button = ev.target;
                 appCloseCallback(packageName, function(state) {
                     console.log("Killing app: " + state);
-                    cardDomNode.style.display = "none";
+                    if(state == "Success"){
+                        carat.showToast(appName+ " closed", function(state){
+                            trashANode(button);
+                        });
+                    } else {
+                        carat.showToast(appName + " couldn't be closed!", function(state){
+                            button.disabled = true;
+                        });
+                    }
                 });
             });
-        } else {
-            buttonText = document.createTextNode("Uninstall");
-             buttonA.appendChild(buttonText);
 
-            buttonA.addEventListener("click", function(ev){
+            buttonSpot.appendChild(closeButton);
+        }
+        if (hasUninstallButton) {
+            var uninstallButton = document.createElement("span");
+            var uninstallLink = document.createElement("a");
+            uninstallLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
+
+            uninstallLink.innerHTML = "Uninstall";
+            uninstallButton.appendChild(uninstallLink);
+
+            uninstallButton.addEventListener("click", function(ev){
                 appUninstallCallback(packageName, function(state) {
                     console.log("Opening app details: " + state);
 
@@ -248,11 +264,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                     // cardDomNode.style.display = "none";
                 });
             });
+
+            buttonSpot.appendChild(uninstallButton);
         }
-
-//        changePaddingForButton(buttonSpot);
-        buttonSpot.appendChild(buttonA);
-
     };
     
     var changePaddingForButton = function(cardDomNode) {
@@ -528,7 +542,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.buttons.removeButton,
                                          itemData.packageName,
                                          itemData.appCloseCallback,
-                                         itemData.appUninstallCallback);
+                                         itemData.appUninstallCallback,
+                                         itemData.title);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -563,7 +578,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.buttons.removeButton,
                                          itemData.packageName,
                                          itemData.appCloseCallback,
-                                         itemData.appUninstallCallback);
+                                         itemData.appUninstallCallback,
+                                         itemData.title);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';

@@ -203,8 +203,7 @@ model.notifications = (function() {
                                            times.timeDrainPart,
                                            "",
                                            elem.killable && elem.running,
-                                           elem.removable &&
-                                           !(elem.killable && elem.running),
+                                           elem.removable,
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
@@ -221,8 +220,7 @@ model.notifications = (function() {
                                            times.timeDrainPart,
                                            times.timeDrainErrorPart,
                                            elem.killable && elem.running,
-                                           elem.removable &&
-                                           !(elem.killable && elem.running),
+                                           elem.removable,
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,

@@ -7,6 +7,8 @@ import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 import java.util.HashMap;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
@@ -93,6 +95,7 @@ public class Carat extends CordovaPlugin {
                     case KILL:      handleKill(cb, args);   break;
                     case REMOVE:    handleRem(cb, args);    break;
                     case CPU:       handleCPU(cb);          break;
+                    case TOAST:     handleToast(cb, args);  break;
                     default: cb.error("No such action");
                 }
             }
@@ -307,6 +310,26 @@ public class Carat extends CordovaPlugin {
          });
     }
     
+    
+    // Show a toast message
+    private void handleToast(final CallbackContext cb, final JSONArray args){
+        try {
+            final String message = (String) args.get(0);
+            activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 20);
+                        toast.show();
+                        cb.success();
+                    }
+            });
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to show toast, no message");
+            cb.error("Failure");
+        }
+    }
+    
     /**
      * Reads string values from plugin.xml.
      * @param variable Key.
@@ -331,7 +354,6 @@ public class Carat extends CordovaPlugin {
                 "javascript:cordova.fireDocumentEvent('"+event+"');"
         );
     }
-    
     
     // Utility methods for converting data to JSON.
     

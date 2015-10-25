@@ -44,5 +44,8 @@ module.exports = {
     },
     uninstallApp: function(packageName, callback){
         exec(callback, callback, service, "uninstall", [packageName]);
+    },
+    showToast: function(message, callback){
+        exec(callback, callback, service, "toast", [message]);
     }
 };
