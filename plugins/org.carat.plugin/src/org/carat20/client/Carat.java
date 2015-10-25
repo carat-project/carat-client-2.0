@@ -352,7 +352,7 @@ public class Carat extends CordovaPlugin {
                     || s.getErrorRatio() > ERROR_LIMIT) continue;
             
             JSONObject app = new JSONObject()
-                //Static
+                // Static
                 .put("type", s.getType())
                 .put("label", s.getAppLabel())
                 .put("name", packageName)
@@ -365,6 +365,7 @@ public class Carat extends CordovaPlugin {
                 .put("icon", s.getAppIcon())
 
                  // Dynamic
+                .put("version", appService.getAppVersion(packageName))
                 .put("running", appService.isAppRunning(packageName))
                 .put("killable", appService.isAppKillable(packageName))
                 .put("removable", appService.isAppRemovable(packageName));

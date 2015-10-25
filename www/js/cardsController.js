@@ -118,18 +118,22 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         var secondaryTextNode = cardDomNode
                 .querySelector(".collapse");
+
+        var versionContainer = cardDomNode.querySelector("#version");
+        var samplesContainer = cardDomNode.querySelector("#samples");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
 
 
-        if(!secondaryText) {
+        if(!secondaryText || (!secondaryText.samples && !secondaryText.version)) {
             trashANode(secondaryTextNode);
             if(moreButton) {
                 trashANode(moreButton);
             }
         } else {
-            addNodeText(secondaryTextNode, secondaryText);
+            addNodeText(versionContainer, secondaryText.version);
+            addNodeText(samplesContainer, secondaryText.samples);
             secondaryTextNode.id = nodeId;
             //            moreButton.href = "#" + nodeId;
         }
@@ -507,7 +511,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectMainText(newCardNode,
                            itemData.textfield);
             injectSecondaryText(newCardNode,
-                                itemData.samples,
+                                {
+                                    samples: itemData.samples,
+                                    version: itemData.version
+                                },
                                 itemData.id);
             injectClasses(newCardNode,
                           itemData.classes);
@@ -539,7 +546,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectMainText(newCardNode,
                            itemData.textfield);
             injectSecondaryText(newCardNode,
-                                itemData.samples,
+                                {
+                                    samples: itemData.samples,
+                                    version: itemData.version
+                                },
                                 itemData.id);
             injectClasses(newCardNode,
                           itemData.classes);

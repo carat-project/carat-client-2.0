@@ -11,7 +11,7 @@ model.notifications = (function() {
     var ellipsis = String.fromCharCode(8230);
 
     var makeNotification = function(title, icon, label, packageName,
-                                    samples, classes,
+                                    version, samples, classes,
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
@@ -22,6 +22,7 @@ model.notifications = (function() {
                 icon: icon,
                 label: label,
                 packageName: packageName,
+                version: version,
                 samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
@@ -39,7 +40,7 @@ model.notifications = (function() {
     };
     
         var makeWorstBug = function(title, icon, label, packageName,
-                                    samples, classes,
+                                    version, samples, classes,
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
@@ -50,6 +51,7 @@ model.notifications = (function() {
                 icon: icon,
                 label: label,
                 packageName: packageName,
+                version: version,
                 samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
@@ -196,6 +198,7 @@ model.notifications = (function() {
                                            elem.name,
                                            elem.name,
                                            "",
+                                           "",
                                            styles,
                                            times.timeDrainPart,
                                            "",
@@ -212,6 +215,7 @@ model.notifications = (function() {
                                            elem.icon,
                                            elem.name,
                                            elem.name,
+                                           "Version: " + elem.version,
                                            "Samples: " + elem.samples,
                                            styles,
                                            times.timeDrainPart,
