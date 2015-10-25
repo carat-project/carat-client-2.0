@@ -62,14 +62,11 @@ public class ApplicationLibrary {
      * @return Application version.
      */
     public String getAppVersion(String packageName){
-        Log.v("Carat", "Getting package name");
         try{
             PackageInfo pak = pm.getPackageInfo(packageName, 0);
             if(pak.versionName == null){
-                Log.v("Carat", "versionName is null, returning "+pak.versionCode);
                 return Integer.toString(pak.versionCode);
             } else{
-                Log.v("Carat", "returning version name" + pak.versionName);
                 return pak.versionName;
             }
         } catch (NameNotFoundException e){
