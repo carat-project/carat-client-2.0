@@ -4,6 +4,15 @@
   margin-bottom: 5px;
 }
 
+.mdl-layout__header-row {
+  margin-left: -8px;
+}
+
+.mdl-layout-icon {
+  margin-top: 2px;
+  margin-left: 3px;
+}
+
 /*just for testing purposes*/
 .mdl-card-background {
   display: -webkit-box;
