@@ -627,8 +627,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 
         var bugs = new Array();
         
-        for(i = bugsSource.length - 2; i <= bugsSource.length; i++) {
-            bugs.push(bugsSource[i-1]);
+        for(i = 0; i < bugsSource.length; i++) {
+            bugs.push(bugsSource[i]);
         };
         
         var result =  homebrewMap(notificationsArray
@@ -636,9 +636,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                            appCloseCallback,
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
+
+        for (i=0; i<result.length-1; i++){
+            result[i].style.display="none";
+        }
         
-        result[0].style.display ='none';
-        result[1].style.display ='none';
         
         return result;
     };
