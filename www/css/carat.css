@@ -32,7 +32,6 @@
     margin-right: 8px;
     margin-bottom: 0px;
     margin-top: 0px;
-  width: calc(100% - 16px);
   z-index: 0;
   position: relative;
   background-color: #E8E8E8;
@@ -40,7 +39,7 @@
     background-position:5%50%, 95%50%;
     background-repeat: no-repeat;
   border-radius: 2px;
-  box-sizing: content-box; }
+}
 
 /*just for testing purposes*/
 .mdl-card-front {
