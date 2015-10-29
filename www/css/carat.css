@@ -673,3 +673,12 @@ section.mdl-layout__tab-panel div.page-content {
 .show-on-expand {
     display: none;
 }
+
+.mdl-button--colored.hog-bug-action {
+    color: rgba(0,0,0, 0.5);
+    font-weight: bold;
+}
+
+.mdl-card__actions.slimmer {
+    padding: 5px 8px;
+}

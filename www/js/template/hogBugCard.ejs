@@ -20,5 +20,28 @@
             <%= "Samples: " + samples %>
         </div>
     </div>
-    <div class="mdl-card__actions carat_card_actions"></div>
+    <div class="mdl-card__actions slimmer mdl-card--border">
+        <span>
+            <a class="mdl-button mdl-button--colored
+                      hog-bug-action mdl-js-button
+                      mdl-js-ripple-effect"
+               id="<%= closeId %>"
+               <% if(!killable) { %>
+               style="display: none;"
+               <% } %>>
+                Close app
+            </a>
+        </span>
+        <span>
+            <a class="mdl-button mdl-button--colored
+                      hog-bug-action mdl-js-button
+                      mdl-js-ripple-effect"
+               id="<%= uninstallId %>"
+               <% if(!uninstallable) { %>
+               style="display: none;"
+               <% } %>>
+                Uninstall
+            </a>
+        </span>
+    </div>
 </div>

@@ -26,7 +26,8 @@ function makeElemTappable(el, mc, timer,
 
     var onTap = function(ev) {
 
-        if(ev.target.nodeName === "BUTTON") {
+        if(ev.target.nodeName === "BUTTON"
+           || ev.target.nodeName === "A") {
             return;
         }
 
