@@ -254,7 +254,7 @@ model.notifications = (function() {
     var getWorstBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
         var styles = ["sleeker", "smaller-time-text", "worstBug"];
-        var textfield = "This app uses significantly more energy on your device than on others. You might consider to update or remove it."
+        var textfield = "This app uses a significant amount of more energy on your device compared to others. You might consider updating or removing it."
         var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
         return bugs;
     };
