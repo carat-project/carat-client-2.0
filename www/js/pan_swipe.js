@@ -199,10 +199,14 @@ function makeElemTappable(el, mc, timer,
                     }
                 }
                 
-                console.log(elPlaceinList);
                 if (elPlaceinList < list.length-1) {
+
                     list[elPlaceinList+1].style.display='inherit';
                     list[elPlaceinList+1].style.visibility='visible';
+                        list[elPlaceinList+1].style.opacity="0";
+                    setTimeout(function() {
+                        list[elPlaceinList+1].style.opacity="1";
+                    }, 1);                    
                     
                 } 
                 el.style.display='none';
