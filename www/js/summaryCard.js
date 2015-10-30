@@ -27,7 +27,8 @@ function showOrHideActions() {
             hogGrid.className="carat_show";
         }
         button.innerHTML=("Less");
-        button.href="#";   
+        button.href="#";
+        button.className="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
         } 
 } 
 

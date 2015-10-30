@@ -1,9 +1,15 @@
 package org.carat20.client.device;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import org.carat20.client.storage.DataStorage;
 
 /**
  * Provides device information and statistics.
@@ -11,7 +17,7 @@ import java.util.HashMap;
  * @author Jonatan Hamberg
  */
 public class DeviceLibrary {
-
+    
     /**
      * @return Device manufacturer.
      */
@@ -46,6 +52,35 @@ public class DeviceLibrary {
     public static String getBrand() {
         return android.os.Build.BRAND;
     }
+    
+    /**
+     * Show a local notification.
+     * @param title Title
+     * @param content Content
+     * @param context Application context
+     */
+    public static void showNotification(String title, String content, Context context){
+        Log.v("Carat", "Showing notification");
+        
+        // Get application launch intent
+        String mainPackage = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(mainPackage);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+        
+        // Build the notification
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(context.getApplicationInfo().icon) // This needs to be transparent
+                .setLargeIcon(DataStorage.getApplicationIcon(mainPackage, context))
+                .setContentTitle(title)
+                .setContentText(content);
+        notification.setContentIntent(pIntent);
+        notification.setAutoCancel(true);
+        
+        // Show the notification
+        NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nManager.notify(1, notification.build());
+    }
 
     /**
      * Fetch memory information from /proc/meminfo.
@@ -53,13 +88,12 @@ public class DeviceLibrary {
      * @return HashMap containing memory statistics.
      */
     public static HashMap<String, Integer> getMemoryInfo() {
-        Log.v("Carat","Reading memory info");
+        Log.v("Carat", "Reading memory info");
         HashMap<String, Integer> result = new HashMap<String, Integer>();
         RandomAccessFile reader;
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
             int[][] data = readLines(reader, 7, 2, "\\s+");
-            int[] total = data[0];
             result.put("total", data[0][1]);
             result.put("free", data[1][1]);
             result.put("cached", data[3][1]);
@@ -79,7 +113,7 @@ public class DeviceLibrary {
      * @return CPU usage percentage.
      */
     public static float getCpuUsage(int interval) {
-        Log.v("Carat","Reading cpu usage");
+        Log.v("Carat", "Reading cpu usage");
         try {
             RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
             int[] data = readLines(reader, 1, 10, "\\s+")[0];

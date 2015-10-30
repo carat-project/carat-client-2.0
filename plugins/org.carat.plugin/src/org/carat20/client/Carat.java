@@ -83,19 +83,25 @@ public class Carat extends CordovaPlugin {
             public void run() {
                 // Tasks
                 switch(ActionType.get(action)){
+                    // Management
                     case SETUP:     handleSetup(cb);        break;
                     case CLEAR:     handleClear(cb);        break;
                     case REFRESH:   handleRefresh(cb);      break;
                     case UUID:      handleUuid(cb, args);   break;
+                    
+                    // Data
                     case JSCORE:    handleJscore(cb);       break;
                     case MAIN:      handleMain(cb);         break;
                     case HOGS:      handleHogs(cb);         break;
                     case BUGS:      handleBugs(cb);         break;
                     case MEMORY:    handleMemory(cb);       break;
+                        
+                    // Actions
                     case KILL:      handleKill(cb, args);   break;
                     case REMOVE:    handleRem(cb, args);    break;
                     case CPU:       handleCPU(cb);          break;
                     case TOAST:     handleToast(cb, args);  break;
+                    case NOTIFY:    handleNotify(cb, args); break;
                     default: cb.error("No such action");
                 }
             }
@@ -310,7 +316,6 @@ public class Carat extends CordovaPlugin {
          });
     }
     
-    
     // Show a toast message
     private void handleToast(final CallbackContext cb, final JSONArray args){
         try {
@@ -326,6 +331,19 @@ public class Carat extends CordovaPlugin {
             });
         } catch (JSONException e){
             Log.v("Carat", "Failed to show toast, no message");
+            cb.error("Failure");
+        }
+    }
+    
+    // Show a local notification
+    private void handleNotify(CallbackContext cb, final JSONArray args){
+        try{
+            String title = args.getString(0);
+            String content = args.getString(1);
+            DeviceLibrary.showNotification(title, content, context);
+            cb.success();
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to show notification. Invalid parameters.");
             cb.error("Failure");
         }
     }
