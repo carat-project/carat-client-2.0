@@ -64,16 +64,6 @@ function makeElemTappable(el, mc, timer,
 
             $("#card-" + el.id + "-textpand").toggleClass("in");
             changeExpandArrow(ev);
-            /*
-            //hide
-            if (moreText && moreText.className === "collapse_in") {
-                moreText.className="collapse";
-
-                //show
-            } else if (moreText && moreText.className === "collapse") {
-                moreText.className = "collapse_in";
-                changeExpandArrow(ev);
-            }*/
         };
 
         //changes expand arrow, uses strange material design character in if statement
@@ -195,6 +185,8 @@ function makeElemTappable(el, mc, timer,
         //    };
 
         var onSwipeRight = function(ev) {
+            
+            // hides swiped bug and shows next bug 
             if (el.classList.contains("worstBug")) {
                 var list = document.querySelectorAll(".worstBug");
                 
@@ -202,16 +194,13 @@ function makeElemTappable(el, mc, timer,
                 for (i=0; i < list.length; i++ ) {
                     console.log(list[i]);
                     if (list[i].id === el.id) {
-                        console.log("löytyi");
                         elPlaceinList = i;
                         break;
                     }
                 }
                 
-                console.log("jatkuuko");
                 console.log(elPlaceinList);
                 if (elPlaceinList < list.length-1) {
-                    console.log("pitäisi aukee");
                     list[elPlaceinList+1].style.display='inherit';
                     list[elPlaceinList+1].style.visibility='visible';
                     
@@ -224,7 +213,10 @@ function makeElemTappable(el, mc, timer,
             
             hideCard(ev);
             snooze(el.id);
+            
             if (el.style.display==='none'){
+                
+                //name to snackbar
                 var name = el.querySelector(".mdl-card__title-text").innerHTML.split('<')[0];         
                 createSnackbar(name + ' hidden', 'Undo', function() {
                     el.style.display = 'inline';
@@ -233,17 +225,7 @@ function makeElemTappable(el, mc, timer,
         };
 
         var onSwipeLeft = function(ev) {
-        onSwipeRight(ev);
-
-//            hideCard(ev);
-//
-//            var acceptCallback = function() {
-//                snooze(el.id);
-//            };
-//            var cancelCallback = function() {
-//                cancel(el.id);
-//            };
-//            toggleVisibility(acceptCallback, cancelCallback);
+            onSwipeRight(ev);
         };
 
 

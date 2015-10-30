@@ -238,7 +238,7 @@ model.notifications = (function() {
     //clean up bugs data
     var getBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
-        var styles = ["sleeker", "smaller-time-text"];
+        var styles = ["sleeker", "smaller-time-text", "bug"];
         var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return bugs;
     };
@@ -246,7 +246,7 @@ model.notifications = (function() {
     //clean up hogs data
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
-                var styles = ["sleeker", "smaller-time-text"];
+                var styles = ["sleeker", "smaller-time-text", "hog"];
         var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return hogs;
     };

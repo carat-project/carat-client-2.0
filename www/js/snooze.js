@@ -1,31 +1,28 @@
 /*Function to dismiss card forever/snooze it*/
 
 function snooze(id){
-    toggleVisibilityOff();
-    localStorage.setItem(id, "dismissed");
+//    toggleVisibilityOff();
+    var element = document.getElementById(id);
+    console.log(id);
+    console.log(element);
+    if (element.classList.contains("bug")) {
+        localStorage.setItem(id, "bug_dismissed");
+    } else {
+        localStorage.setItem(id, "hog_dismissed");
+    }
+    
     console.log(localStorage.getItem(id));
 }
 
 function cancel(id){
-    toggleVisibilityOff();
+//    toggleVisibilityOff();
     var el = document.getElementById(id);
     el.style.display = 'inherit';
+//    el.style.backgroundColor='#F0F0F0';
+    el.style.opacity="0";
+//    el.classList.add("showHiddenCard");
+    setTimeout(function() {
+    el.style.opacity="1";
+    }, 1);
 }
 
-//function to show all snoozed cards again and remove from localstorage
-function cancelAll(){
-    
-    var li = document.querySelector("#showAllHiddenCards");
-    
-    li.addEventListener('click', function () {
-        var keys = Object.keys(localStorage);
-        i = keys.length;
-
-        while (i--) {
-            if (localStorage.getItem(keys[i]) == "dismissed") {
-                cancel(keys[i]);
-                localStorage.removeItem(keys[i]);
-            }
-        }
-    });
-}

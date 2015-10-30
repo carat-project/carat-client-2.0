@@ -33,6 +33,11 @@ var app = {
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
         uuidButton.addEventListener("click", this.onUuidChange, false);
+        
+        // Listener for menu
+        initializeListeners();
+        
+
     },
 
     // Clear and refresh storage data
