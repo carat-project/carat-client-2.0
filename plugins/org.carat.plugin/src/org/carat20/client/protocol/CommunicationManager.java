@@ -4,6 +4,7 @@ import android.util.Log;
 import org.carat20.client.storage.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
+import org.carat20.client.device.DeviceLibrary;
 import org.carat20.client.thrift.CaratService;
 import org.carat20.client.thrift.Feature;
 import org.carat20.client.thrift.HogBugReport;
@@ -32,10 +33,8 @@ public class CommunicationManager {
      */
     public CommunicationManager(DataStorage dataStorage, String uuid) {
         this.uuid = uuid;
-        
-        //Theseshould come from sampler
-        this.model = "GT-I9505";
-        this.os = "5.0.1";
+        this.model = DeviceLibrary.getProductName();
+        this.os = DeviceLibrary.getOsVersion();
         
         if(dataStorage == null){
             Log.v("Carat", "Failed to construct CommunicationManager, "

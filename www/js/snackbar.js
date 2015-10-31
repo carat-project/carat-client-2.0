@@ -3,10 +3,6 @@ var createSnackbar = (function() {
   // Any snackbar that is already shown
   var previous = null;
 
-/*
-TODO: add the action that returns card when you hit UNDO
-*/
-
   return function(message, actionText, action) {
     if (previous) {
       previous.dismiss();
@@ -35,7 +31,7 @@ TODO: add the action that returns card when you hit UNDO
       if (previous === this) {
         previous.dismiss();
       }
-    }.bind(snackbar), 5000);
+    }.bind(snackbar), 3000);
 
     snackbar.addEventListener('transitionend', function(event, elapsed) {
       if (event.propertyName === 'opacity' && this.style.opacity == 0) {

@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,14 +36,17 @@ public final class DataStorage {
 
     private final Context context;
     private final PackageManager pm;
-
+    
+    private String uuid;
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
     private WeakReference<SimpleHogBug[]> bugReports;
 
-    private static final String MAINFILE = "carat-main.dat";
-    private static final String HOGFILE = "carat-hogs.dat";
-    private static final String BUGFILE = "carat-bugs.dat";
+    public static final String UUIDFILE = "carat-uuid.dat";
+    
+    public static final String MAINFILE = "carat-main.dat";
+    public static final String HOGFILE = "carat-hogs.dat";
+    public static final String BUGFILE = "carat-bugs.dat";
 
     /**
      * Constructs a storage used for writing and reading reports.
@@ -52,7 +57,7 @@ public final class DataStorage {
         this.context = context;
         this.pm = context.getPackageManager();
         
-        //These might need to be optimized
+        // Read latest reports to memory
         readMainReports();
         readHogReports();
         readBugReports();
@@ -63,7 +68,6 @@ public final class DataStorage {
      * @return true if all references are null.
      */
     public boolean isEmpty(){
-        Log.v("Carat","Status | mainReports: "+mainReports+", hogReports: "+hogReports+", bugReports: "+bugReports);
         return (mainReports == null 
                 && hogReports == null 
                 && bugReports == null);
@@ -77,6 +81,23 @@ public final class DataStorage {
         return !(mainReports == null 
                 || hogReports == null 
                 || bugReports == null);
+    }
+    
+    public void clearData(){
+        context.deleteFile(MAINFILE);
+        context.deleteFile(HOGFILE);
+        context.deleteFile(BUGFILE);
+        mainReports = null;
+        hogReports = null;
+        bugReports = null;
+    }
+
+    /**
+     * Checks if uuid reference is null.
+     * @return true if uuid is null.
+     */
+    public boolean uuidEmpty(){
+        return (uuid == null);
     }
     
     /**
@@ -104,7 +125,15 @@ public final class DataStorage {
     }
     
     /**
-     * Provides main reports from a reference or from storage.
+     * Provides uuid from memory or storage.
+     * @return User identifier uuid.
+     */
+    public String getUuid() {
+        return (uuid != null) ? uuid : readUuid();
+    }
+    
+    /**
+     * Provides main reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Main reports.
      */
@@ -115,7 +144,7 @@ public final class DataStorage {
     }
     
     /**
-     * Provides hog reports from a reference or from storage.
+     * Provides hog reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Hog reports.
      */    
@@ -126,7 +155,7 @@ public final class DataStorage {
     }
     
     /**
-     * Provides bug reports from a reference or from storage.
+     * Provides bug reports from reference or storage.
      * Storage is used if references are not in memory.
      * @return Bug reports.
      */
@@ -136,32 +165,50 @@ public final class DataStorage {
                 bugReports.get() : readBugReports();
     }
     
+    //Reads uuid from file.
+    private String readUuid() {
+        Log.v("Carat", "Reading uuid from disk");
+        String text = readText(UUIDFILE);
+        if(text == null) return null;
+        this.uuid = text;
+        return text;
+    }
     
     //Reads main reports from file.
     private Reports readMainReports() {
         Log.v("Carat", "Reading main reports from disk");
-        Object o = read(MAINFILE);
+        Object o = readObject(MAINFILE);
         if(o == null) return null;
-        mainReports = new WeakReference<Reports>((Reports) o);
+        this.mainReports = new WeakReference<Reports>((Reports) o);
         return (Reports) o;
     }
     
     //Reads hog reports from file.
     private SimpleHogBug[] readHogReports() {
         Log.v("Carat", "Reading hog reports from disk");
-        Object o = read(HOGFILE);
+        Object o = readObject(HOGFILE);
         if(o == null) return null;
-        hogReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
+        this.hogReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
     }
     
     //Reads bug reports from file.
     private SimpleHogBug[] readBugReports() {
         Log.v("Carat", "Reading bug reports from disk");
-        Object o = read(BUGFILE);
+        Object o = readObject(BUGFILE);
         if(o == null) return null;
-        bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
+        this.bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
+    }
+    
+    /**
+     * Initializes uuid and writes it to a file.
+     * @param uuid Uuid.
+     */
+    public void writeUuid(String uuid) {
+        this.uuid = uuid;
+        context.deleteFile(UUIDFILE);
+        writeText(uuid, UUIDFILE);
     }
 
     /**
@@ -170,7 +217,7 @@ public final class DataStorage {
      */
     public void writeMainReports(Reports reports) {
         mainReports = new WeakReference<Reports>(reports);
-        write(reports, MAINFILE);
+        writeObject(reports, MAINFILE);
     }
 
     /**
@@ -182,7 +229,7 @@ public final class DataStorage {
         if(list != null){
             this.hogReports = new WeakReference<SimpleHogBug[]>(list);
         }
-        write(list, HOGFILE);
+        writeObject(list, HOGFILE);
     }
 
     /**
@@ -194,26 +241,38 @@ public final class DataStorage {
         if(list != null){
             this.bugReports = new WeakReference<SimpleHogBug[]>(list);
         }
-        write(list, BUGFILE);
+        writeObject(list, BUGFILE);
     }
 
     
-    // Save object to file
-    private void write(Object object, String fileName) {
+    // Write object to file
+    private void writeObject(Object object, String fileName) {
         FileOutputStream out = openOutputStream(fileName);
-        Log.v("Carat", "Writing "+object.getClass()+" to "+fileName);
+        Log.v("Carat", "Writing data to "+fileName);
         try {
             ObjectOutputStream stream = new ObjectOutputStream(out);
             stream.writeObject(object);
             stream.close();
             //Try with resources handles closing
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when writing object to disk");
+            Log.v("Carat", "Failed writing object in "+fileName);
+        }
+    }
+    
+    // Write text to file
+    private void writeText(String string, String fileName){
+        FileOutputStream out = openOutputStream(fileName);
+        try{
+            DataOutputStream stream = new DataOutputStream(out);
+            stream.writeUTF(string);
+            stream.close();
+        } catch(Throwable e){
+            Log.v("Carat"," Failed writing text in "+fileName);
         }
     }
 
     // Read object from file
-    private Object read(String fileName) {
+    private Object readObject(String fileName) {
         FileInputStream in = openInputStream(fileName);
         Log.v("Carat", "Reading from "+fileName);
         try {
@@ -222,7 +281,21 @@ public final class DataStorage {
             stream.close();
             return object;
         } catch (Throwable e) {
-            Log.v("Carat", "Exception when reading object from disk");
+            Log.v("Carat", "Failed reading object from " + fileName);
+        }
+        return null;
+    }
+    
+    // Read string from file
+    private String readText(String fileName) {
+        FileInputStream in = openInputStream(fileName);
+        try {
+            DataInputStream stream = new DataInputStream(in);
+            String string = stream.readUTF();
+            stream.close();
+            return string;
+        } catch (Throwable th){
+            Log.v("Carat", "Failed reading text from " + fileName);
         }
         return null;
     }
@@ -234,7 +307,7 @@ public final class DataStorage {
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No report file to write to", e);
         } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for writing");
+            Log.v("Carat", "Failed opening " + fileName + " for writing");
         }
         return null;
     }
@@ -245,8 +318,8 @@ public final class DataStorage {
             return context.openFileInput(fileName);
         } catch (FileNotFoundException e) {
             Log.v("Carat", "No reports to be read yet.");
-        } catch (Throwable e) {
-            Log.v("Carat", "Exception opening " + fileName + " for reading");
+        } catch (Throwable th) {
+            Log.v("Carat", "Failed opening " + fileName + " for reading");
         }
         return null;
     }
@@ -273,12 +346,16 @@ public final class DataStorage {
             
             // Device specific application icon and label
             h.setAppLabel(this.getApplicationLabel(packageName));
-            h.setAppIcon(this.getApplicationIcon(packageName));
+            Bitmap icon = DataStorage.getApplicationIcon(packageName, context);
+            String icon64 = DataStorage.base64Encode(icon, 48, 48);
+            h.setAppIcon(icon64);
             
             String priority = item.getAppPriority();
             if (priority == null || priority.length() == 0) {
                 priority = "Foreground app";
             }
+            double error = item.getError();
+            
             h.setAppPriority(priority);
             h.setExpectedValue(item.getExpectedValue());
             h.setExpectedValueWithout(item.getExpectedValueWithout());
@@ -316,34 +393,47 @@ public final class DataStorage {
     }
     
     /**
-     * Return base64 encoded icon PNG from a package.
-     * @param packageName Package name.
-     * @return Base 64 encoded PNG or an empty string.
+     * Returns application icon as a bitmap.
+     * @param packageName Application package name
+     * @return Icon as a bitmap
      */
-    private String getApplicationIcon(String packageName){
+    public static Bitmap getApplicationIcon(String packageName, Context context){
         try{
             Drawable d = context.getPackageManager().getApplicationIcon(packageName);
-            return "data:image/png;base64,"+ encodeIcon(d);
+            return getBitmap(d);
         } catch (PackageManager.NameNotFoundException e){
-            return "";
+            return null;
         }
     }
     /**
-     * Converts a drawable resource to a base64 encoded bitmap.
-     * @param icon Drawable image resource.
-     * @return Base64 representation of PNG compressed bitmap.
+     * Converts a drawable resource to a bitmap.
+     * @param image Drawable image
+     * @return Bitmap
      */
-    public static String encodeIcon(Drawable icon){
-            if(icon == null) return "";
-            
-            BitmapDrawable bmDrawable = ((BitmapDrawable) icon);
-            Bitmap bitmap = bmDrawable.getBitmap();
-            
-            bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48, true);
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            byte[] bitmapByte = outStream.toByteArray();
-
-            return Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+    public static Bitmap getBitmap(Drawable image){
+            if(image == null) return null;
+            BitmapDrawable bmDrawable = ((BitmapDrawable) image);
+            return bmDrawable.getBitmap();
+    }
+    
+    /**
+     * Compresses and scales a bitmap encoding it base64.
+     * Negative and zero rescaling values are ignored.
+     * @param bitmap Bitmap
+     * @param width Rescale width
+     * @param height Rescale height
+     * @return Base64 encoded bitmap
+     */
+    public static String base64Encode(Bitmap bitmap, int width, int height){
+        if(bitmap == null) return "";
+        if(width > 0 && height > 0){
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        }
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+        byte[] bitmapByte = outStream.toByteArray();
+        String base64 = Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+        
+        return "data:image/png;base64,"+ base64;
     }
 }

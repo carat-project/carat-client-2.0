@@ -10,34 +10,46 @@
     <title>Carat 2.0</title>
 
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/lib/fastclick.js"></script>
 
-    <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+    <!--- This was previously linked incorrectly, now it just looks weird
+    <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/material.css">
     <link rel="stylesheet" href="css/carat.css">
     <link rel="stylesheet" href="css/dialog.css">
     <link rel="stylesheet" href="css/snackbar.css">
 
-    <!--
-        <style>.animate {
-          -webkit-transition: all 0.3s;
-          -moz-transition: all 0.3s;
-          transition: all 0.3s;
-          } </style>
-    -->
 
 </head>
 
 <body>
-
-<!-- dialog for closing card, pan_swipe.js -->
-<div class="overlay" id="popup-overlay"></div>
-<div class="modal" id="popup-modal">
+    
+<!-- dialog for everything needed -->
+    <div class="overlay" id="popup-overlay">
+        <div class="modal" id="popup-modal">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="carat-card__title">
+                    <div class="mdl-card__title-text"></div>
+                    <div class="mdl-layout-spacer"></div>
+                    <button class="mdl-button mdl-js-button mdl-button--icon" id="modalClose" onclick="closeModal()">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </button>
+                </div>
+                <div class="mdl-card__supporting-text">
+                </div>
+                <div class="mdl-card__actions">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<!--<div class="modal" id="popup-modal">
     <div class="mdl-card mdl-shadow--2dp">
         <div class="carat-card__title">
             <div class="mdl-card__title-text">Don't show this card again?
+                <div class="mdl-layout-spacer"></div>
             </div>
-            <div class="mdl-layout-spacer"></div>
         </div>
         <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner
             and select "show hidden cards".
@@ -52,37 +64,39 @@
             </button>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
 
     <header class="mdl-layout__header mdl-color--blue-grey-500">
+        <img class="mdl-layout-icon" src="img/icon.png"></img>
         <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
             <!-- Title -->
             <span>Carat 2.0</span>
+            <span id="progress"></span>
+            <span id="usage"></span>
 
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="HiddenCards"
-                    onclick="cancelAll()">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="HiddenCards">
-                <li class="mdl-menu__item" id="showAllHiddenCards">Show hidden cards</li>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="menu">
+                <li class="mdl-menu__item" id="showHiddenBugCards">Show hidden bugs</li>
+                <li class="mdl-menu__item" id="showHiddenHogCards">Show hidden hogs</li>
                 <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
+                <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                 <li class="mdl-menu__item" id="appSettings">Settings</li>
             </ul>
 
         </div>
 
-
-
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-            <a href="#home" class="mdl-layout__tab is-active">Home</a>
-            <a href="#bugs" class="mdl-layout__tab">Bugs</a>
-            <a href="#hogs" class="mdl-layout__tab">Hogs</a>
-            <a href="#system" class="mdl-layout__tab">System</a>
+            <a href="#home" class="mdl-layout__tab is-active" id="home-tab">Home</a>
+            <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
+            <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
+            <a href="#system" class="mdl-layout__tab" id="system-tab">Stats</a>
         </div>
 
       </header>
@@ -92,54 +106,62 @@
           <!-- Home view -->
           <section class="mdl-layout__tab-panel is-active" id="home">
 
-          <!-- Jscore card -->
-            <div class="page-content">
-            </div>
-        </section>
+              <!-- Pie card -->
+              <div class="page-content">
+                  <div class="mdl-card mdl-shadow--2dp">
+                      <div class="carat-caratCard__title">
+                          <div class="mdl-card__title-text carat_caratCard_title_text">
+                              Global Statistics
+                          </div>
+                      </div>
+                      <div class="carat-card__supporting-text">
+                          <canvas id="chart"></canvas>
+                          <ul id="chart-legend"></ul>
+                      </div>
+                  </div>
+              </div>
 
-        <!-- Bugs tabs view -->
-        <section class="mdl-layout__tab-panel" id="bugs">
-            <div class="page-content">
-                <!--<div class="bar bar-header">-->
-                <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
-                <!--<div class="mdl-layout-spacer"></div>-->
-                <!--</div>-->
-            </div>
-        </section>
+          </section>
 
-        <!-- Hogs tab view -->
-        <section class="mdl-layout__tab-panel" id="hogs">
-            <div class="page-content">
-            </div>
+          <!-- Bugs tabs view -->
+          <section class="mdl-layout__tab-panel" id="bugs">
+              <div class="page-content mdl-grid">
+              </div>
+          </section>
 
-            <!-- System tab view -->
-        </section>
-        <section class="mdl-layout__tab-panel" id="system">
-            <div class="page-content">
-                <!-- Debug content for CaratPlugin, move elsewhere -->
+          <!-- Hogs tab view -->
+          <section class="mdl-layout__tab-panel" id="hogs">
+              <div class="page-content mdl-grid">
+              </div>
 
-                <!-- End of debug content -->
-            </div>
-        </section>
-    </main>
+              <!-- System tab view -->
+          </section>
+          <section class="mdl-layout__tab-panel" id="system">
+              <div class="page-content">
+              </div>
+          </section>
+      </main>
 </div>
 
-<script type="text/javascript" src="js/hammer.min.js"></script>
-<script type="text/javascript" src="js/swipe.js"></script>
-<script src="js/pan_swipe.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="js/material.min.js"></script>
+<script type="text/javascript" src="js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="js/lib/hammer.min.js"></script>
+<script type="text/javascript" src="js/lib/material.min.js"></script>
+<script type="text/javascript" src="js/lib/chart.min.js"></script>
+
+<script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/model/notifications.js"></script>
 <script type="text/javascript" src="js/view/cardTemplates.js"></script>
 <script type="text/javascript" src="js/cardsController.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/summaryCard.js"></script>
+<script type="text/javascript" src="js/dialog.js"></script>
 <script type="text/javascript" src="js/snooze.js"></script>
 <script type="text/javascript" src="js/appmenu.js"></script>
 <script type="text/javascript" src="js/snackbar.js"></script>
-<script type="text/javascript">
-     app.initialize();
+<script type="text/javascript" src="js/caratCard.js"></script>
 
+<script type="text/javascript">
+ app.initialize();
 </script>
 </body>
 

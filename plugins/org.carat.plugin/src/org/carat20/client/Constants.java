@@ -2,26 +2,35 @@ package org.carat20.client;
 
 public class Constants {
 
-    public static final String APP_NAME = "Carat";
+    public static final String CARAT = "Carat";
     public static final int IMPORTANCE_SUGGESTION = 123456789;
     public static final int IMPORTANCE_PERCEPTIBLE = 130;
+    public static final double ERROR_LIMIT = (double) 2/3;
 
-    // Used for bugs and hogs, and EnergyDetails sub-screen (previously known as drawing)
     public static enum Type {
-        OS, MODEL, HOG, BUG, SIMILAR, JSCORE, OTHER, BRIGHTNESS, WIFI, MOBILEDATA
+        OS, MODEL, HOG, BUG, SIMILAR, JSCORE, OTHER, BRIGHTNESS, 
+        WIFI, MOBILEDATA;
     }
 
     public static enum ActionType {
-        INIT, JSCORE, MAIN, HOGS, BUGS, KILL, REMOVE, UNKNOWN;
+        SETUP, CLEAR, UUID, REFRESH, JSCORE, MAIN, HOGS, BUGS, 
+        KILL, REMOVE, MEMORY, UNKNOWN, CPU, TOAST, NOTIFY;
         
         public static ActionType get(String action){
-            if(action.equals("init"))       return INIT;
+            if(action.equals("setup"))      return SETUP;
+            if(action.equals("clear"))      return CLEAR;
+            if(action.equals("uuid"))       return UUID;
+            if(action.equals("refresh"))    return REFRESH;
             if(action.equals("jscore"))     return JSCORE;
             if(action.equals("main"))       return MAIN;
             if(action.equals("hogs"))       return HOGS;
             if(action.equals("bugs"))       return BUGS;
             if(action.equals("kill"))       return KILL;
             if(action.equals("uninstall"))  return REMOVE;
+            if(action.equals("memory"))     return MEMORY;
+            if(action.equals("cpu"))        return CPU;
+            if(action.equals("toast"))      return TOAST;
+            if(action.equals("notify"))     return NOTIFY;
             return UNKNOWN;
         }
     }

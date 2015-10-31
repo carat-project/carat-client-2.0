@@ -7,38 +7,78 @@ model.notifications = (function() {
     //timeDrain: how much the item reduces battery life in minutes,
     //always positive or zero (but displayed as negative or zero minutes)
 
+    var sortedHogBugList;
+    var ellipsis = String.fromCharCode(8230);
+
     var makeNotification = function(title, icon, label, packageName,
-                                    samples, classes,
+                                    version, samples, classes,
                                     timeDrain,
+                                    timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback) {
+                                    id, appCloseCallback, appUninstallCallback, textfield) {
         return {
             item: {
                 title: title,
                 icon: icon,
                 label: label,
                 packageName: packageName,
+                version: version,
                 samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
                 buttons: {
                     killButton: killButton,
                     removeButton: removeButton
                 },
                 id: id,
                 appCloseCallback: appCloseCallback,
-                appUninstallCallback: appUninstallCallback
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield
+            }
+        };
+    };
+    
+        var makeWorstBug = function(title, icon, label, packageName,
+                                    version, samples, classes,
+                                    timeDrain,
+                                    timeDrainErrorString,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback, textfield) {
+        return {
+            worstBug: {
+                title: title,
+                icon: icon,
+                label: label,
+                packageName: packageName,
+                version: version,
+                samples: samples,
+                classes: classes,
+                timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield
             }
         };
     };
 
     //summary item model representation
-    var makeSummaryEntry = function(name, timeDrain, icon) {
+    var makeSummaryEntry = function(name, nameTag, type, timeDrain,
+                                    expectedFigure, icon) {
 
         return {
             summaryEntry: {
                 name: name,
+                nameTag: nameTag,
+                type: type,
                 timeDrain: timeDrain,
+                expectedFigure: expectedFigure,
                 icon: icon
             }
         };
@@ -66,74 +106,159 @@ model.notifications = (function() {
         };
     };
 
-    var purifySummaryEntries = function(arr) {
-        return arr.map(function(entry) {
-//            var icons = ["face", "favorite"];
-//            var randomIcon =
-//                    icons[Math.floor(Math.random() * icons.length)];
-            var cutLabel = entry.label.length > 9 ?
-                    entry.label.slice(0,8) : entry.label;
+	var makeCarat = function(chart) {
+		
+		return {
+			carat: {
+				chart: chart
+			}
+		};
+	};
 
-            return makeSummaryEntry(cutLabel, entry.benefit, entry.icon);
+    var splitTimeDrainString = function(timeDrainString) {
+        var timeDrainSplit = timeDrainString.split("±", 2);
+
+        var timeDrainPart;
+        var timeDrainErrorPart;
+
+        if(timeDrainSplit.length === 2) {
+            timeDrainPart = timeDrainSplit[0];
+            timeDrainErrorPart = "±" + timeDrainSplit[1];
+        } else {
+            timeDrainPart = timeDrainString;
+            timeDrainErrorPart = "";
+        }
+
+        return {timeDrainPart: timeDrainPart,
+                timeDrainErrorPart: timeDrainErrorPart};
+    };
+
+    var purifySummaryEntries = function(arr) {
+        var entries = arr.map(function(entry) {
+            var cutLabel = entry.label.length > 9 ?
+                    // Charcode 8230 is ellipsis
+                    entry.label.slice(0,6) + ellipsis : entry.label;
+            var timeBenefit = splitTimeDrainString(entry.benefit)
+                    .timeDrainPart;
+
+            return makeSummaryEntry(cutLabel, entry.name, entry.type,
+                                    timeBenefit,
+                                    entry.expected, entry.icon);
         });
+
+
+        entries.sort(function(fst, snd) {
+            return snd.expectedFigure - fst.expectedFigure;
+        });
+
+        return entries;
     };
 
     //currently dummy data
     var getSummary = function(hogsSource, bugsSource) {
 
         return [makeSummary("Summary",
-                           purifySummaryEntries(hogsSource),
-                           purifySummaryEntries(bugsSource),
-                           "summary-0")];
+                            purifySummaryEntries(hogsSource),
+                            purifySummaryEntries(bugsSource),
+                            "summary-0")];
     };
 
     var getGeneral = function() {
         return [];
     };
-	
-	// gives an id based on an app name
-	var makeIdFromAppName = function(appName, hogOrBug) {
-			var idPrefix = appName.replace(/-/g, "--").replace(/\./g, "-");
-			return idPrefix + "-" + hogOrBug;
-	};
+
+    // gives an id based on an app name
+    var makeIdFromAppName = function(appName, hogOrBug) {
+        var idPrefix = appName.replace(/-/g, "--").replace(/\./g, "-");
+        return idPrefix + "-" + hogOrBug;
+    };
 
     //function that cleans up data straight from native plugin
     //so it can be passed forward
-    var hogsBugsPurify = function(arr, appCloseCallback, appUninstallCallback) {
-        return arr.map(function(elem) {
-            var result =  makeNotification(elem.label,
+    var hogsBugsPurify = function(arr,
+                                  appCloseCallback, appUninstallCallback, styles, textfield, type) {
+        var hogBugs = arr.map(function(elem) {
+            var times = splitTimeDrainString(elem.benefit);
+            var label = elem.label.length > 20 ?
+                elem.label.slice(0,19) + ellipsis : elem.label;
+            
+            var elemType = type;
+            if (elemType == "") {
+                elemType = elem.type;
+            };
+              
+            
+            var result;
+            
+            
+            if (elemType === "worstBug") {
+
+                result = makeWorstBug(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
-                                           "Samples: " + elem.samples,
-                                           ["sleeker",
-                                            "smaller-time-text"],
-                                           elem.benefit,
+                                           "",
+                                           "",
+                                           styles,
+                                           times.timeDrainPart,
+                                           "",
                                            elem.killable && elem.running,
-                                           elem.removable &&
-                                           !(elem.killable && elem.running),
-                                           makeIdFromAppName(elem.name, elem.type),
+                                           elem.removable,
+                                           makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
-                                           appUninstallCallback);
+                                           appUninstallCallback,
+                                           textfield);
+            } else {
+        
+            result =  makeNotification(label,
+                                           elem.icon,
+                                           elem.name,
+                                           elem.name,
+                                           "Version: " + elem.version,
+                                           "Samples: " + elem.samples,
+                                           styles,
+                                           times.timeDrainPart,
+                                           times.timeDrainErrorPart,
+                                           elem.killable && elem.running,
+                                           elem.removable,
+                                           makeIdFromAppName(elem.name, elemType),
+                                           appCloseCallback,
+                                           appUninstallCallback,
+                                           textfield);
+                
+            }
+
             return result;
         });
-    };
 
+
+        return hogBugs;
+    };
 
     //clean up bugs data
     var getBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
-        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback);
+        var styles = ["sleeker", "smaller-time-text", "bug"];
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return bugs;
     };
 
     //clean up hogs data
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
-        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback);
+                var styles = ["sleeker", "smaller-time-text", "hog"];
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return hogs;
     };
 
+    var getWorstBugs = function(bugsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var styles = ["sleeker", "smaller-time-text", "worstBug"];
+        var textfield = "This app uses a significant amount of more energy on your device compared to others. You might consider updating or removing it."
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
+        return bugs;
+    };
+        
     //nothing at the moment
     var getSystem = function() {
         return [];
@@ -145,6 +270,12 @@ model.notifications = (function() {
         return statistics;
     };
 
+	var getCarat = function(statisticsDataSource) {
+	
+		var carat = makeCarat(createChart(statisticsDataSource));
+		
+		return carat;
+	}
 
     //public methods of the module
     return {
@@ -152,8 +283,10 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem,
+        getWorstBugs: getWorstBugs,
         getSummary: getSummary,
         getStatistics: getStatistics,
-		makeIdFromAppName: makeIdFromAppName
+		getCarat: getCarat,
+        makeIdFromAppName: makeIdFromAppName
     };
 })();

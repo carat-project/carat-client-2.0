@@ -1,0 +1,28 @@
+.carat_settings_line {
+    border-top: solid;
+    border-width: 1px;
+    border-color:#E8E8E8;
+}
+
+.carat_settings_box {
+     position:relative;
+     color:#616161;
+}
+
+.checkbox_wrapper{
+    position:absolute;
+    top:30%;
+    right: 14px;
+}
+
+.fill-box {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    padding: 15px 24px;
+    line-height: 24px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #616161;important!
+
+}

@@ -1,12 +1,25 @@
 var exec = require("cordova/exec"),
     service = "CaratPlugin";
 
+var generic = function(d) {
+	return;
+};
+
 module.exports = {
-    initialize: function(){
-        var callback = function(d) {
-            return;
-        };
-        exec(callback, callback, service, "init", [""]);
+    setup: function(callback){
+        exec(callback, callback, service, "setup", [""]);
+    },
+    clear: function(callback){
+    	exec(callback, callback, service, "clear", [""]);
+    },
+    getUuid: function(callback){
+    	exec(callback, callback, service,"uuid", ["get"]);
+    },
+    setUuid: function(uuid, callback){
+    	exec(callback, callback, service, "uuid", [uuid]);
+    },
+    refreshData: function(){
+    	exec(generic, generic, service, "refresh", [""]);
     },
     getJscore: function(callback) {
         exec(callback, callback, service, "jscore", [""]);
@@ -20,10 +33,22 @@ module.exports = {
     getBugs: function(callback){
         exec(callback, callback, service, "bugs", [""]);
     },
+    getMemoryInfo: function(callback){
+    	exec(callback, callback, service, "memory", [""]);
+    },
+    getCpuUsage: function(callback){
+        exec(callback, callback, service, "cpu", [""]);
+    },
     killApp: function(packageName, callback){
         exec(callback, callback, service, "kill", [packageName]);
     },
     uninstallApp: function(packageName, callback){
         exec(callback, callback, service, "uninstall", [packageName]);
+    },
+    showToast: function(message, callback){
+        exec(callback, callback, service, "toast", [message]);
+    },
+    showNotification: function(title, message, callback){
+        exec(callback, callback, service, "notify", [title, message]);
     }
 };

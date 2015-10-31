@@ -7,6 +7,7 @@ import android.content.Context;
 import static android.content.Context.ACTIVITY_SERVICE;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -16,12 +17,12 @@ import android.util.Log;
 import java.util.Arrays;
 
 /**
- * Obtain application information and perform tasks. Provides a kill method for
- * terminating running apps.
+ * Provides application information and performs tasks. 
+ * Tasks include killing apps and opening views.
  *
  * @author Jonatan Hamberg
  */
-public class ApplicationService {
+public class ApplicationLibrary {
 
     
     private final Activity activity;
@@ -34,7 +35,7 @@ public class ApplicationService {
      *
      * @param activity Cordova activity.
      */
-    public ApplicationService(Activity activity) {
+    public ApplicationLibrary(Activity activity) {
         this.activity = activity;
         this.context = activity.getApplicationContext();
         this.pm = context.getPackageManager();
@@ -44,7 +45,7 @@ public class ApplicationService {
     /**
      * Returns application information used for flags.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return ApplicationInfo
      */
     public ApplicationInfo getAppInfo(String packageName) {
@@ -55,11 +56,27 @@ public class ApplicationService {
         }
         return null;
     }
+    
+    /**
+     * @param packageName Package name.
+     * @return Application version.
+     */
+    public String getAppVersion(String packageName){
+        try{
+            PackageInfo pak = pm.getPackageInfo(packageName, 0);
+            if(pak.versionName == null){
+                return Integer.toString(pak.versionCode);
+            } else{
+                return pak.versionName;
+            }
+        } catch (NameNotFoundException e){
+            Log.v("Carat", "No version found for " + packageName);
+            return "";
+        }
+    }
 
     /**
-     * Returns whether the application is installed on device.
-     *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application is installed.
      */
     public boolean isAppInstalled(String packageName) {
@@ -72,7 +89,7 @@ public class ApplicationService {
     }
 
     /**
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if the application is running.
      */
     public boolean isAppRunning(String packageName) {
@@ -86,7 +103,7 @@ public class ApplicationService {
     }
 
     /**
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application can be uninstalled.
      */
     public boolean isAppRemovable(String packageName) {
@@ -101,7 +118,7 @@ public class ApplicationService {
      * Determines if process belonging to package can be terminated. Checks if
      * package is a system app, persistent or blacklisted.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application can be killed.
      */
     public boolean isAppKillable(String packageName) {
@@ -119,7 +136,7 @@ public class ApplicationService {
     /**
      * Terminates processes belonging to the package.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application was terminated.
      */
     public boolean killApp(String packageName) {

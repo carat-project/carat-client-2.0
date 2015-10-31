@@ -3754,7 +3754,9 @@ ul, ol {
   .mdl-button:active {
     background-color: rgba(158,158,158, 0.40); }
   .mdl-button.mdl-button--colored {
-    color: rgb(63,81,181); }
+    color: rgba(0,0,0, 0.5);
+     font-weight: bold;}
+
     .mdl-button.mdl-button--colored:focus:not(:active) {
       background-color: rgba(0,0,0, 0.12); }
 
@@ -4125,15 +4127,6 @@ input.mdl-button[type="submit"] {
           transform-origin: 165px 56px;
   box-sizing: border-box; }
 
-.collapse {
-  display: none;
-  visibility: hidden;
-}
-.collapse.in {
-  display: block;
-  visibility: visible;
-}
-
 .collapsing {
     position: relative;
     height: 0;
@@ -4147,78 +4140,6 @@ input.mdl-button[type="submit"] {
     -webkit-transition-property: height, visibility;
     -o-transition-property: height, visibility;
     transition-property: height, visibility;
-}
-
-.carat-card__title {
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  color: rgb(0,0,0);
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: stretch;
-  -webkit-justify-content: stretch;
-      -ms-flex-pack: stretch;
-          justify-content: stretch;
-  line-height: normal;
-  padding-top: 30px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 5px;
-
-  -webkit-perspective-origin: 165px 56px;
-          perspective-origin: 165px 56px;
-  -webkit-transform-origin: 165px 56px;
-      -ms-transform-origin: 165px 56px;
-          transform-origin: 165px 56px;
-  box-sizing: border-box; }
-
-.carat-card__title-text {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-  color: inherit;
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: normal;
-  overflow: hidden;
-  -webkit-transform-origin: 149px 48px;
-      -ms-transform-origin: 149px 48px;
-          transform-origin: 149px 48px;
-  margin: 0; }
-
-.carat-card-time {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-    text-align:right;
-    padding-right: 25px;
-  color: #ff0000;
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  font-size: 20px;
-  font-weight: 100;
-  line-height: normal;
-  overflow: hidden;
-
-  margin: 0; }
-
-.carat-version {
-    display: block;
-    font-size: 14px;
-    color: darkgray;
 }
 
 .mdl-card__title.mdl-card--border {
@@ -4242,27 +4163,6 @@ input.mdl-button[type="submit"] {
       -ms-transform-origin: 149px 48px;
           transform-origin: 149px 48px;
   margin: 0; }
-
-.carat-card__title-text {
-  -webkit-align-self: flex-end;
-      -ms-flex-item-align: end;
-          align-self: flex-end;
-  color: inherit;
-  display: block;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: normal;
-  overflow: hidden;
-    padding-left: 15px;
-  -webkit-transform-origin: 149px 48px;
-      -ms-transform-origin: 149px 48px;
-          transform-origin: 149px 48px;
-  margin: 0; }
-
 
 .mdl-card__time {
   position: absolute;
@@ -4294,12 +4194,11 @@ input.mdl-button[type="submit"] {
 
 .mdl-card__supporting-text {
   color: rgba(0,0,0, 0.54);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 18px;
   overflow: hidden;
   padding: 20px 20px;
   width: 90%; }
-}
 
 .carat-logo {
     padding-right: 15px;
@@ -4311,7 +4210,7 @@ input.mdl-button[type="submit"] {
   line-height: normal;
   width: 100%;
   background-color: transparent;
-  padding: 20px 20px;
+  padding: 5px 8px;
   box-sizing: border-box; }
   .mdl-card__actions.mdl-card--border {
     border-top: 1px solid rgba(0, 0, 0, 0.1); }
@@ -8374,7 +8273,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   border-radius: 14px;
   cursor: pointer; }
   .mdl-switch.is-checked .mdl-switch__track {
-    background: rgba(63,81,181, 0.5); }
+    background: rgba(96,125,139, 0.5); }
   .mdl-switch.is-disabled .mdl-switch__track {
     background: rgba(0,0,0, 0.12);
     cursor: auto; }
@@ -8396,7 +8295,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   -webkit-transition-property: left;
           transition-property: left; }
   .mdl-switch.is-checked .mdl-switch__thumb {
-    background: rgb(63,81,181);
+    background: rgb(96,125,139);
     left: 16px;
     box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 1px 8px 0 rgba(0, 0, 0, 0.12); }
   .mdl-switch.is-disabled .mdl-switch__thumb {
@@ -8420,8 +8319,8 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     box-shadow: 0 0 0px 20px rgba(0, 0, 0, 0.1);
     background-color: rgba(0, 0, 0, 0.1); }
   .mdl-switch.is-focused.is-checked .mdl-switch__focus-helper {
-    box-shadow: 0 0 0px 20px rgba(63,81,181, 0.26);
-    background-color: rgba(63,81,181, 0.26); }
+    box-shadow: 0 0 0px 20px rgba(96,125,139, 0.26);
+    background-color: rgba(96,125,139, 0.26); }
 
 .mdl-switch__label {
   position: relative;
@@ -8453,7 +8352,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   -webkit-transition-property: left;
           transition-property: left; }
   .mdl-switch__ripple-container .mdl-ripple {
-    background: rgb(63,81,181); }
+    background: rgb(96,125,139);}
   .mdl-switch.is-disabled .mdl-switch__ripple-container {
     cursor: auto; }
   .mdl-switch.is-disabled .mdl-switch__ripple-container .mdl-ripple {
@@ -8461,7 +8360,6 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   .mdl-switch.is-checked .mdl-switch__ripple-container {
     cursor: auto;
     left: 2px; }
-
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
