@@ -78,12 +78,12 @@
             <span id="usage"></span>
 
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu" onclick="listenMenu();">
                 <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="menu">
-                <li class="mdl-menu__item" id="showHiddenBugCards">Show hidden bugs</li>
-                <li class="mdl-menu__item" id="showHiddenHogCards">Show hidden hogs</li>
+                <li class="mdl-menu__item" id="showHiddenBugCards" disabled="true">Show hidden bugs</li>
+                <li class="mdl-menu__item" id="showHiddenHogCards" disabled="true">Show hidden hogs</li>
                 <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
                 <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                 <li class="mdl-menu__item" id="appSettings">Settings</li>

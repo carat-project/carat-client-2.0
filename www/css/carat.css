@@ -220,18 +220,28 @@
 
 .collapse {
   max-height: 0px;
+/*    height:auto;*/
   overflow: hidden;
-  transition: max-height 0.05s;
+/*    -webkit-transform: scaleY(0);*/
+            -webkit-transition: all 0.3s;
+
+/*  transition: max-height 1.35s ease-in;*/
 /*
     force gpu acceleration 
   -webkit-transform: translateZ(0);
 */
-  -webkit-transition: max-height 0.05s;
+
+/*  -webkit-transition: max-height 1.35s ease-in;*/
+/*
   -moz-transition: max-height 0.05s;
   -o-transition: max-height 0.05s;
+*/
 }
 .collapse.in {
   max-height: 1000px;
+/*    -webkit-transform: scaleY(1);*/
+/*    transition: all 0.3s ease-in;*/
+
 }
 
 .carat-card__supporting-text {
@@ -710,6 +720,11 @@ section.mdl-layout__tab-panel div.page-content {
 
 .show-on-expand {
     display: none;
+/*
+    -webkit-transition:opacity 0.15s ease-in-out;
+    transition:opacity 0.15s ease-in-out;
+*/
+
 }
 
 .is-a-hog {

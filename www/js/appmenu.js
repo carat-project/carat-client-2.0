@@ -9,17 +9,40 @@ function initializeListeners() {
 //        cancelAll();
 //    });
                              
-    var cancelB = document.querySelector("#showHiddenBugCards");
-    cancelB.addEventListener('click', function () {
+    var cancelBugSnooze = document.querySelector("#showHiddenBugCards");
+    cancelBugSnooze.addEventListener('click', function () {
         cancelBug();
     });
     
-    var cancelH = document.querySelector("#showHiddenHogCards");
-    cancelH.addEventListener('click', function () {
+    var cancelHogSnooze = document.querySelector("#showHiddenHogCards");
+    cancelHogSnooze.addEventListener('click', function () {
         cancelHog();
-    });                             
-                             
+    }); 
 }
+    
+ function listenMenu () {
+     disableMenuItem();
+}
+
+
+function disableMenuItem(){
+    var bugtab = document.querySelector("#bugs-tab");
+    var hogtab = document.querySelector("#hogs-tab");
+    
+    bugmenuitem = document.querySelector("#showHiddenBugCards");
+    hogmenuitem = document.querySelector("#showHiddenHogCards");
+         
+        bugmenuitem.setAttribute("disabled", true);
+        hogmenuitem.setAttribute("disabled", true);
+    
+    if (bugtab.classList.contains("is-active")) {
+        bugmenuitem.removeAttribute("disabled");
+    } else if (hogtab.classList.contains("is-active")) {
+        hogmenuitem.removeAttribute("disabled");
+
+    }
+}
+
 //
 //function cancelAll(){ 
 //        var keys = Object.keys(localStorage);
