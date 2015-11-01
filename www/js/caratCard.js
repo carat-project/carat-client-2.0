@@ -25,6 +25,17 @@ function createChart(statisticsDataSource, observations) {
     };
 
     var options = {
+					inGraphDataAnglePosition: 2,
+					inGraphDataRadiusPosition: 3  ,
+					inGraphDataPaddingRadius : -8,
+					inGraphDataRotate : "inRadiusAxisRotateLabels",
+					inGraphDataFontColor : "white",
+					inGraphDataFontSize : 16,
+					inGraphDataAlign : "to-center",
+					inGraphDataVAlign : "to-center",
+					graphTitleSpaceAfter : 0,
+					footNoteSpaceBefore : 0 ,
+					inGraphDataTmpl: "<%=v1%>"
     };
 
     console.log(options);
@@ -119,3 +130,4 @@ var fetchAndRenderChart = function() {
 
 console.log("DATA: ",fetchAndRenderChart());
 
+	
