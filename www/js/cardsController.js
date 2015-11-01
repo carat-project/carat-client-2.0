@@ -9,6 +9,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var backgroundNode = document.createElement("div");
         backgroundNode.classList.add("mdl-card-background");
         backgroundNode.classList.add("mdl-shadow--2dp");
+        backgroundNode.classList.add("mdl-cell");
+        backgroundNode.classList.add("mdl-cell--4-col");
         backgroundNode.appendChild(cardDom);
 
         return backgroundNode;
@@ -443,12 +445,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                             "% of other devices measured by Carat.");
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
-        var expandText = ["Carat id: " + deviceInfo.caratId,
+        var expandText = [
+                          "OS version: " + deviceInfo.osVersion,
                           "Device model: " + deviceInfo.modelName,
                           "Memory total: " + deviceInfo.memoryTotal,
                           "Memory used: " + deviceInfo.memoryUsed,
-                          "OS version: " + deviceInfo.osVersion,
                           "Battery duration: " + deviceInfo.batteryLife,
+                          "Carat id: " + deviceInfo.caratId,
                          ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
@@ -627,8 +630,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 
         var bugs = new Array();
         
-        for(i = bugsSource.length - 2; i <= bugsSource.length; i++) {
-            bugs.push(bugsSource[i-1]);
+        for(i = 0; i < bugsSource.length; i++) {
+            bugs.push(bugsSource[i]);
         };
         
         var result =  homebrewMap(notificationsArray
@@ -636,9 +639,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                            appCloseCallback,
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
+
+        for (i=0; i<result.length-1; i++){
+            result[i].style.display="none";
+        }
         
-        result[0].style.display ='none';
-        result[1].style.display ='none';
         
         return result;
     };

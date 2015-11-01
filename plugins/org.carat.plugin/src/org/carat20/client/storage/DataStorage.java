@@ -346,7 +346,9 @@ public final class DataStorage {
             
             // Device specific application icon and label
             h.setAppLabel(this.getApplicationLabel(packageName));
-            h.setAppIcon(this.getApplicationIcon(packageName));
+            Bitmap icon = DataStorage.getApplicationIcon(packageName, context);
+            String icon64 = DataStorage.base64Encode(icon, 48, 48);
+            h.setAppIcon(icon64);
             
             String priority = item.getAppPriority();
             if (priority == null || priority.length() == 0) {
@@ -391,34 +393,47 @@ public final class DataStorage {
     }
     
     /**
-     * Return base64 encoded icon PNG from a package.
-     * @param packageName Package name.
-     * @return Base 64 encoded PNG or an empty string.
+     * Returns application icon as a bitmap.
+     * @param packageName Application package name
+     * @return Icon as a bitmap
      */
-    private String getApplicationIcon(String packageName){
+    public static Bitmap getApplicationIcon(String packageName, Context context){
         try{
             Drawable d = context.getPackageManager().getApplicationIcon(packageName);
-            return "data:image/png;base64,"+ encodeIcon(d);
+            return getBitmap(d);
         } catch (PackageManager.NameNotFoundException e){
-            return "";
+            return null;
         }
     }
     /**
-     * Converts a drawable resource to a base64 encoded bitmap.
-     * @param icon Drawable image resource.
-     * @return Base64 representation of PNG compressed bitmap.
+     * Converts a drawable resource to a bitmap.
+     * @param image Drawable image
+     * @return Bitmap
      */
-    public static String encodeIcon(Drawable icon){
-            if(icon == null) return "";
-            
-            BitmapDrawable bmDrawable = ((BitmapDrawable) icon);
-            Bitmap bitmap = bmDrawable.getBitmap();
-            
-            bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48, true);
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            byte[] bitmapByte = outStream.toByteArray();
-
-            return Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+    public static Bitmap getBitmap(Drawable image){
+            if(image == null) return null;
+            BitmapDrawable bmDrawable = ((BitmapDrawable) image);
+            return bmDrawable.getBitmap();
+    }
+    
+    /**
+     * Compresses and scales a bitmap encoding it base64.
+     * Negative and zero rescaling values are ignored.
+     * @param bitmap Bitmap
+     * @param width Rescale width
+     * @param height Rescale height
+     * @return Base64 encoded bitmap
+     */
+    public static String base64Encode(Bitmap bitmap, int width, int height){
+        if(bitmap == null) return "";
+        if(width > 0 && height > 0){
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        }
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+        byte[] bitmapByte = outStream.toByteArray();
+        String base64 = Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+        
+        return "data:image/png;base64,"+ base64;
     }
 }

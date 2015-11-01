@@ -47,5 +47,8 @@ module.exports = {
     },
     showToast: function(message, callback){
         exec(callback, callback, service, "toast", [message]);
+    },
+    showNotification: function(title, message, callback){
+        exec(callback, callback, service, "notify", [title, message]);
     }
 };

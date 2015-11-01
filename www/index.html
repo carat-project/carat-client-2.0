@@ -78,12 +78,12 @@
             <span id="usage"></span>
 
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="HiddenCards"
-                    onclick="cancelAll()">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu" onclick="listenMenu();">
                 <i class="material-icons">more_vert</i>
             </button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="HiddenCards">
-                <li class="mdl-menu__item" id="showAllHiddenCards">Show hidden cards</li>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="menu">
+                <li class="mdl-menu__item" id="showHiddenBugCards" disabled="true">Show hidden bugs</li>
+                <li class="mdl-menu__item" id="showHiddenHogCards" disabled="true">Show hidden hogs</li>
                 <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
                 <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                 <li class="mdl-menu__item" id="appSettings">Settings</li>
@@ -125,13 +125,13 @@
 
           <!-- Bugs tabs view -->
           <section class="mdl-layout__tab-panel" id="bugs">
-              <div class="page-content">
+              <div class="page-content mdl-grid">
               </div>
           </section>
 
           <!-- Hogs tab view -->
           <section class="mdl-layout__tab-panel" id="hogs">
-              <div class="page-content">
+              <div class="page-content mdl-grid">
               </div>
 
               <!-- System tab view -->
