@@ -732,4 +732,12 @@ section.mdl-layout__tab-panel div.page-content {
     color: #FF0000;
 }
 
+.mdl-menu__container, .mdl-menu__outline {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        -o-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
  
