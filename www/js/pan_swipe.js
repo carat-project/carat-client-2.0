@@ -32,11 +32,6 @@ function makeElemTappable(el, mc, timer,
 
         showOrHideCollapse(ev);
         toggleShowOnExpand();
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 200);
-        requestElementUpdate();
     };
 
     var toggleShowOnExpand = function() {
@@ -59,11 +54,14 @@ function makeElemTappable(el, mc, timer,
     };
 
         var showOrHideCollapse = function(ev) {
-            var moreText = document.querySelector
-            ("#card-" + el.id + "-textpand");
-
-            $("#card-" + el.id + "-textpand").toggleClass("in");
-            changeExpandArrow(ev);
+       
+            if (el.id =="statistics-jscore"){
+                $("#card-" + el.id + "-textpand").toggleClass("in_large");
+            
+            } else {
+                $("#card-" + el.id + "-textpand").toggleClass("in");
+                changeExpandArrow(ev);
+            }
         };
 
         //changes expand arrow, uses strange material design character in if statement
