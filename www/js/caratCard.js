@@ -26,11 +26,15 @@ function createChart(statisticsDataSource, observations) {
 
     var options = {
       inGraphDataShow : true,
-      inGraphDataAnglePosition : 2,
-	  inGraphDataRadiusPosition: [2, 3, 2],
-	  inGraphDataFontSize : 13,
+      //inGraphDataAnglePosition : 2,
+//	  inGraphDataRadiusPosition: [2, 3, 2],
+	  inGraphDataFontSize : 11,
 	  inGraphDataAlign : "center",
 	  inGraphDataVAlign : "middle",
+	  inGraphDataRotate : "inRadiusAxisRotateLabels",
+	  inGraphDataFontColor : "white",
+inGraphDataAnglePosition : 2,
+inGraphDataRadiusPosition: 2,
 	  inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
 	  
 				};
