@@ -731,7 +731,12 @@ section.mdl-layout__tab-panel div.page-content {
 .sleeker > .mdl-card--border {
     border-top: 1px solid rgba(0, 0, 0, 0.1); 
 }
-    
 
+.canvas-container {
+    width: 100%;
+    text-align: center;
+}
 
- 
+.canvas-container canvas {
+    display: inline;
+}
