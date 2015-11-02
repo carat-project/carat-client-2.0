@@ -122,7 +122,9 @@ cardTemplates = (function() {
                 			'<div class="carat-caratCard__title">' +
                 				'<div class="mdl-card__title-text carat_caratCard_title_text">' +
                 					'<div class="expand">' +
+                					'<button class="mdl-button mdl-js-button mdl-button--icon">' +
                 						'<i class="material-icons">&#xE5CF;</i>' +
+                					'</button>' +
                        				'</div>' +
                     			'</div>' +
                  			'</div>' +

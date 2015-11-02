@@ -446,12 +446,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = [
-                          "OS version: " + deviceInfo.osVersion,
-                          "Device model: " + deviceInfo.modelName,
-                          "Memory total: " + deviceInfo.memoryTotal,
-                          "Memory used: " + deviceInfo.memoryUsed,
-                          "Battery duration: " + deviceInfo.batteryLife,
                           "Carat id: " + deviceInfo.caratId,
+                          "Memory used: " + deviceInfo.memoryUsed,
+                          "Memory total: " + deviceInfo.memoryTotal,
+                          "Battery duration: " + deviceInfo.batteryLife,
+                          "Device model: " + deviceInfo.modelName,
+                          "OS version: " + deviceInfo.osVersion,
                          ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
