@@ -37,10 +37,6 @@ var HomeCards = (function(utilities) {
 
         var dataSource = defaultDataSource;
 
-        var setDataSource = function(freshDataSource) {
-            dataSource = freshDataSource;
-        };
-
         var renderAsyncSource = function(sourceCallback) {
 
             return function(onResultCallback, onModelCallback) {
@@ -61,9 +57,15 @@ var HomeCards = (function(utilities) {
             };
         };
 
-        var renderAsync = (function(sourceCallback) {
-            return renderAsyncSource(sourceCallback);
+        var renderAsync = (function(source) {
+            return renderAsyncSource(source);
         })(dataSource);
+
+        var setDataSource = function(freshDataSource) {
+            dataSource = freshDataSource;
+            renderAsync = renderAsyncSource(freshDataSource);
+        };
+
 
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {

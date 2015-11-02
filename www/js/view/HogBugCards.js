@@ -4,9 +4,6 @@ var HogBugCards = (function(template, utilities, buttonActions) {
 
         var dataSource = dataOrigin;
 
-        var setDataSource = function(freshDataSource) {
-            dataSource = freshDataSource;
-        };
 
         var docLocation = document.getElementById(outputElemId);
 
@@ -40,6 +37,7 @@ var HogBugCards = (function(template, utilities, buttonActions) {
         };
 
         var renderModels = function(categories) {
+            console.log(categories);
 
             var morphToHTML = function(model) {
                 return model.render();
@@ -69,9 +67,12 @@ var HogBugCards = (function(template, utilities, buttonActions) {
             };
         };
 
-        var renderAsync = (function(sourceCallback) {
-            return renderAsyncSource(sourceCallback);
-        })(dataSource);
+        var renderAsync = renderAsync(dataSource);
+
+        var setDataSource = function(freshDataSource) {
+            dataSource = freshDataSource;
+            renderAsync = renderAsyncSource(freshDataSource);
+        };
 
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
@@ -131,12 +132,11 @@ var HogBugCards = (function(template, utilities, buttonActions) {
         };
 
         return {
-            renderAsync: renderAsync,
             renderInsert: renderInsert,
             setDataSource: setDataSource
         };
     };
 })(new EJS({url: 'js/template/hogBugListing.ejs'}),
    Utilities,
-   {close: carat.killApp,
-    uninstall: carat.uninstallApp});
+   {close: window.carat.killApp,
+    uninstall: window.carat.uninstallApp});

@@ -134,13 +134,13 @@ var app = {
                             memoryUsed: percentage + "%",
                             memoryTotal: totalMemory + " MiB"
                         };
-
-                        itemCards.generateStatistics(main, deviceInfo);
+                        console.log(main, deviceInfo);
 
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
 
                         var masterView = new MasterView();
+                        console.log(masterView);
                         masterView.render();
 
                         console.log("Finished rendering");
