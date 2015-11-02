@@ -16,7 +16,7 @@ function createChart(statisticsDataSource, observations) {
         for(var key in data) {
 
             var percentageString = countPercentage(data[key].value) + "% ";
-            var li = makeLi(data[key].color, percentageString + data[key].label);
+            var li = makeLi(data[key].color, percentageString + data[key].title);
             result += li;
         }
 
@@ -25,28 +25,21 @@ function createChart(statisticsDataSource, observations) {
     };
 
     var options = {
-					inGraphDataAnglePosition: 2,
-					inGraphDataRadiusPosition: 3  ,
-					inGraphDataPaddingRadius : -8,
-					inGraphDataRotate : "inRadiusAxisRotateLabels",
-					inGraphDataFontColor : "white",
-					inGraphDataFontSize : 16,
-					inGraphDataAlign : "to-center",
-					inGraphDataVAlign : "to-center",
-					graphTitleSpaceAfter : 0,
-					footNoteSpaceBefore : 0 ,
-					inGraphDataTmpl: "<%=v1%>"
-    };
+      inGraphDataShow : true,
+      inGraphDataAnglePosition : 2,
+	  inGraphDataRadiusPosition: [2, 3, 2],
+	  inGraphDataFontSize : 13,
+	  inGraphDataAlign : "center",
+	  inGraphDataVAlign : "middle",
+	  inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
+	  
+				};
 
     console.log(options);
 
-		var pieChart = new Chart(ctx).Pie(statisticsDataSource);
+		var pieChart = new Chart(ctx).Pie(statisticsDataSource, options);
     console.log(pieChart);
-    var legendPlace = document.getElementById("chart-legend");
-    console.log(legendPlace);
-    var legend = makeLegend(statisticsDataSource);
-    console.log(legend, legendPlace);
-    legendPlace.innerHTML = legend;
+    
 }
 
 
@@ -59,7 +52,7 @@ var fetchAndRenderChart = function() {
                 return {
                     color: color,
                     highlight: highlight,
-                    label: label,
+                    title: label,
                     value: value
                 };
             };
