@@ -466,7 +466,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 		injectTitle(caratDomNode, "Carat");
 		injectChart(caratDomNode, caratObject.chart);
 		injectIdToCard(caratDomNode, caratCardId);
-		var expandText = "Carat is research project...";
+		var expandText = "Carat is a free app that tells you what is using up the battery of your mobile device, whether that's normal, and what you can do about it. After running Carat for about a week, you will start to receive personalized recommendations for improving your battery life. Carat is a research project based out of the AMP Lab in the EECS Department at UC Berkeley, collaborating with the University of Helsinki.";
 		injectMultiparagraphSecondaryText(caratDomNode,
 										  expandText,
 										  caratCardId);
