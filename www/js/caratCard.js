@@ -16,8 +16,9 @@ function createChart(statisticsDataSource, observations) {
         for(var key in data) {
 
             var percentageString = countPercentage(data[key].value) + "% ";
-            var li = makeLi(data[key].color, percentageString + data[key].title);
-            result += li;
+			var li = makeLi(data[key].color, percentageString + data[key].title);
+			
+		    result += li;
         }
 
         return result;
@@ -26,11 +27,15 @@ function createChart(statisticsDataSource, observations) {
 
     var options = {
       inGraphDataShow : true,
-      inGraphDataAnglePosition : 2,
-	  inGraphDataRadiusPosition: [2, 3, 2],
-	  inGraphDataFontSize : 13,
+      //inGraphDataAnglePosition : 2,
+//	  inGraphDataRadiusPosition: [2, 3, 2],
+	  inGraphDataFontSize : 11,
 	  inGraphDataAlign : "center",
 	  inGraphDataVAlign : "middle",
+	  inGraphDataRotate : "inRadiusAxisRotateLabels",
+	  inGraphDataFontColor : "white",
+inGraphDataAnglePosition : 2,
+inGraphDataRadiusPosition: 2,
 	  inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
 	  
 				};
@@ -58,7 +63,7 @@ var fetchAndRenderChart = function() {
             };
         };
 
-        var wellBehaved = template("#46BFBD", "#5AD3D1");
+        var wellBehaved = template("#66BB6A", "#4CAF50");
         var hog = template("#F7464A", "#FF5A5E");
         var bug = template("#FDB45C", "#FFC870");
 
@@ -78,7 +83,7 @@ var fetchAndRenderChart = function() {
             result.total += observation.value;
 
             if(observation.key === "well-behaved") {
-                result.regions.push(wellBehaved(observation.value, observation.key));
+                result.regions.push(wellBehaved(observation.value, "fine"));
             } else if(observation.key === "hogs") {
                 result.regions.push(hog(observation.value, observation.key));
             } else if(observation.key === "bugs") {
