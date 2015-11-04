@@ -31,7 +31,6 @@ function makeElemTappable(el, mc, timer,
         }
 
         showOrHideCollapse(ev);
-        toggleShowOnExpand();
     };
 
     var toggleShowOnExpand = function() {
@@ -44,11 +43,11 @@ function makeElemTappable(el, mc, timer,
         for(var i = 0; i < togglees.length; i++) {
             var iteratee = togglees[i];
             if(!iteratee.style
-               || !iteratee.style.display
-               || iteratee.style.display === 'none') {
-                iteratee.style.display = 'initial';
+               || !iteratee.style.visibility
+               || iteratee.style.visibility === 'hidden') {
+                iteratee.style.visibility = 'visible';
             } else {
-                iteratee.style["display"] = 'none';
+                iteratee.style["visibility"] = 'hidden';
             }
         };
     };
@@ -60,8 +59,8 @@ function makeElemTappable(el, mc, timer,
             
             } else {
                 $("#card-" + el.id + "-textpand").toggleClass("in");
-                changeExpandArrow(ev);
             }
+            changeExpandArrow(ev);
         };
 
         //changes expand arrow, uses strange material design character in if statement
@@ -71,7 +70,9 @@ function makeElemTappable(el, mc, timer,
                 icon.innerHTML = "&#xE5CF";
             } else {
                 icon.innerHTML = "&#xE5CE";           
-            }        
+            }
+                    toggleShowOnExpand();
+
         };
 
         mc.add( new Hammer.Tap(

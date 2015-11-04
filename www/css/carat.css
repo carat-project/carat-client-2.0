@@ -1,4 +1,5 @@
 /* progress indicator */
+
 #progress {
   margin-left: 10px;
   margin-bottom: 5px;
@@ -221,11 +222,11 @@
 .collapse {
     max-height: 0px;
     overflow: hidden;
-    -webkit-transition: ease-in-out 0.4s;
+    -webkit-transition: ease-in 0.2s;
 }
 .collapse.in {
     max-height: 100px;
-    -webkit-transition: ease-in-out 0.4s;
+    -webkit-transition: ease-in 0.4s;
 }
 
 .collapse.in_large {
@@ -285,8 +286,10 @@ div.numberCircle > button {
 
 
 html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+    overflow: hidden;
 }
+
 .carat-avatar {
   width: 48px;
   height: 48px;
@@ -739,4 +742,8 @@ section.mdl-layout__tab-panel div.page-content {
 
 .canvas-container canvas {
     display: inline;
+}
+
+.worstBug {
+    overflow: hidden;
 }
