@@ -283,11 +283,12 @@ div.numberCircle > button {
     background-image:url(../img/ic_info_black_24dp_1x.png);
 }
 
-
+.page-content {
+    overflow: hidden;
+}
 
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
-    overflow: hidden;
 }
 
 .carat-avatar {
@@ -536,6 +537,7 @@ section.mdl-layout__tab-panel div.page-content {
     margin-left: 0px;
     margin-right: 0px;
     width: 100%;
+    overflow:hidden; 
 }
 
 .mdl-card.sleeker div.carat-card__title {
