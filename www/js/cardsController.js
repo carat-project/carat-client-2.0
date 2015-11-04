@@ -170,6 +170,31 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             secondaryTextNode.id = nodeId;
         }
     };
+    
+    var injectParagraphSecondaryText = function(cardDomNode,
+                                                     secondaryTextParagraph,
+                                                     notificationId) {
+        var secondaryTextNode = cardDomNode
+                .querySelector(".collapse");
+
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        if(!secondaryTextParagraph) {
+            trashANode(secondaryTextNode);
+            
+        } else {
+            var paragraphNode = document.createElement("p");
+            var textNode = document.createTextNode(secondaryTextParagraph);
+            paragraphNode.appendChild(textNode);
+            console.log(paragraphNode);
+
+                secondaryTextNode.appendChild(paragraphNode);
+            }
+
+            secondaryTextNode.id = nodeId;
+        
+    };
+
 
     //inject css style classes to card
     var injectClasses = function(cardDomNode, classes) {
@@ -556,14 +581,54 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var itemData = notificationObject.worstBug;
 
             newCardNode = cardTemplates
-                .getNewWorstBugTemplate();
+                .getNewWorstBugHogTemplate();
 
             gestureCallbacks.panSwipefy(newCardNode);
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           itemData.textfield);
+                           "Update or Uninstall - Unexpectedly heavy use of energy.");
+            injectParagraphSecondaryText(newCardNode,
+                           itemData.textfield, itemData.id);
+            injectSecondaryText(newCardNode,
+                                {
+                                    samples: itemData.samples,
+                                    version: itemData.version
+                                },
+                                itemData.id);
+            injectClasses(newCardNode,
+                          itemData.classes);
+            injectTimeDrain(newCardNode,
+                            itemData.timeDrain,
+                            itemData.timeDrainErrorString);
+            injectIdToCard(newCardNode, itemData.id);
+            injectCloseOrUninstallButton(newCardNode,
+                                         itemData.buttons.killButton,
+                                         itemData.buttons.removeButton,
+                                         itemData.packageName,
+                                         itemData.appCloseCallback,
+                                         itemData.appUninstallCallback,
+                                         itemData.title);
+
+            if(localStorage.getItem(itemData.id) === 'dismissed') {
+                newCardNode.style.display = 'none';
+            }
+            
+        } else if (notificationObject.worstHog) {
+            var itemData = notificationObject.worstHog;
+
+            newCardNode = cardTemplates
+                .getNewWorstBugHogTemplate();
+
+            gestureCallbacks.panSwipefy(newCardNode);
+
+            injectTitle(newCardNode, itemData.title);
+            injectIcon(newCardNode, itemData.icon);
+            injectMainText(newCardNode,
+                           "Close or Uninstall - Increased energy use.");
+            injectParagraphSecondaryText(newCardNode,
+                           itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
@@ -625,20 +690,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //fetch correct models for the home tab and create corresponding cards
     //for them
-    var getHomeCards = function(bugsSource,
+    var getHomeCards = function(bugOrHogSource, bugorHogSelector,
                                 appCloseCallback, appUninstallCallback) {
                 
-        var bugs = new Array();
+        var bugsOrHogs = new Array();
         
-        for(i = 0; i < bugsSource.length; i++) {
-            bugs.push(bugsSource[i]);
+        for(i = 0; i < bugOrHogSource.length; i++) {
+            bugsOrHogs.push(bugOrHogSource[i]);
         };
         
-        var result =  homebrewMap(notificationsArray
-                                  .getWorstBugs(bugs,
+        var result;
+        
+        if (bugorHogSelector == "bug") {        
+            result = homebrewMap(notificationsArray
+                                  .getWorstBugs(bugsOrHogs,
                                            appCloseCallback,
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
+        } else {
+            result = homebrewMap(notificationsArray
+                                  .getWorstHogs(bugsOrHogs,
+                                           appCloseCallback,
+                                           appUninstallCallback),
+                                  makeCardBasedOnModel);
+        }
 
         for (i=0; i<result.length-1; i++){
             result[i].style.display="none";
@@ -740,9 +815,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
 
     //generate home and system tab cards
-    var generateCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
-        if (bugsSource.length>0) {
-            generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback));
+    var generateCards = function(bugsSource, hogsSource, appCloseCallback, appUninstallCallback) {
+        if (typeof hogsSource !== 'undefined' && hogsSource.length>0) {
+            generatePage("#home", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
+        }
+        if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
+            generatePage("#home", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
         generatePage("#system", getSystemCards());
     };

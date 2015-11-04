@@ -67,6 +67,35 @@ model.notifications = (function() {
             }
         };
     };
+    
+    var makeWorstHog = function(title, icon, label, packageName,
+                                    version, samples, classes,
+                                    timeDrain,
+                                    timeDrainErrorString,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback, textfield) {
+        return {
+            worstHog: {
+                title: title,
+                icon: icon,
+                label: label,
+                packageName: packageName,
+                version: version,
+                samples: samples,
+                classes: classes,
+                timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield
+            }
+        };
+    };
 
     //summary item model representation
     var makeSummaryEntry = function(name, nameTag, type, timeDrain,
@@ -197,18 +226,36 @@ model.notifications = (function() {
                                            elem.icon,
                                            elem.name,
                                            elem.name,
-                                           "",
-                                           "",
+                                           "Version: " + elem.version,
+                                           "Samples: " + elem.samples,
                                            styles,
                                            times.timeDrainPart,
-                                           "",
+                                           times.timeDrainErrorPart,
                                            elem.killable && elem.running,
                                            elem.removable,
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
                                            textfield);
-            } else {
+                
+            } else if (elemType === "worstHog") {
+
+                result = makeWorstHog(label,
+                                           elem.icon,
+                                           elem.name,
+                                           elem.name,
+                                           "Version: " + elem.version,
+                                           "Samples: " + elem.samples,
+                                           styles,
+                                           times.timeDrainPart,
+                                           times.timeDrainErrorPart,
+                                           elem.killable && elem.running,
+                                           elem.removable,
+                                           makeIdFromAppName(elem.name, elemType),
+                                           appCloseCallback,
+                                           appUninstallCallback,
+                                           textfield);
+            }else {
         
             result =  makeNotification(label,
                                            elem.icon,
@@ -258,6 +305,14 @@ model.notifications = (function() {
         var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
         return bugs;
     };
+    
+        var getWorstHogs = function(hogsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var styles = ["sleeker", "smaller-time-text", "worstHog"];
+        var textfield = "This app has increased energy use, across all carat users. It isn't specific to your device or your usage or your running instance. Closing this app and keeping it closed will result in improved battery life."
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstHog");
+        return hogs;
+    };
         
     //nothing at the moment
     var getSystem = function() {
@@ -284,6 +339,7 @@ model.notifications = (function() {
         getHogs: getHogs,
         getSystem: getSystem,
         getWorstBugs: getWorstBugs,
+        getWorstHogs: getWorstHogs,
         getSummary: getSummary,
         getStatistics: getStatistics,
 		getCarat: getCarat,

@@ -39,14 +39,14 @@ cardTemplates = (function() {
     };
     
         //get template Dom-node for a card
-    var getNewWorstBugTemplate = function() {
+    var getNewWorstBugHogTemplate = function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                 '<div class="carat-card__title">' +
                 '<div class="mdl-card__icon"></div>' +
                 '<div class="mdl-card__title-text">' +
                 '<div class="expand">' +
-                '<i class="material-icons">&#xE5CD;</i></div></div>' +
+                '<i class="material-icons">&#xE5CF;</i></div></div>' +
                 '<div class="carat-card-time"></div></div>' +
                 '<div class="mdl-card__supporting-text">' +
                 '<div class="collapse">' +
@@ -140,7 +140,7 @@ cardTemplates = (function() {
 
     return {
         getNewItemDomNodeTemplate: getNewItemDomNodeTemplate,
-        getNewWorstBugTemplate: getNewWorstBugTemplate,
+        getNewWorstBugHogTemplate: getNewWorstBugHogTemplate,
         getNewSummaryDomNodeTemplate: getNewSummaryDomNodeTemplate,
         getNewSummaryEntryDomNodeTemplate: getNewSummaryEntryDomNodeTemplate,
         getNewStatisticsDomNodeTemplate: getNewStatisticsDomNodeTemplate,

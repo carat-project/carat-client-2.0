@@ -222,10 +222,10 @@
 .collapse {
     max-height: 0px;
     overflow: hidden;
-    -webkit-transition: ease-in 0.2s;
+    -webkit-transition: ease-in 0.4s;
 }
 .collapse.in {
-    max-height: 100px;
+    max-height: 200px;
     -webkit-transition: ease-in 0.4s;
 }
 
@@ -614,14 +614,28 @@ section.mdl-layout__tab-panel div.page-content {
     padding-bottom: 25px;
 }
 
+#home .mdl-card.sleeker .mdl-card__supporting-text .collapse.in {
+    padding-bottom: 0px;
+}
+
 #home .mdl-card.sleeker {
     z-index: 2;
-    margin-top: 1px;
-    margin-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     margin-left: 8px;
     margin-right: 8px;
     width: calc(100% - 16px);
 }
+
+#home .mdl-card.sleeker p {
+    padding-top: 8px;
+    -webkit-margin-after: 0em;
+}
+
+#home .mdl-card.sleeker #version {
+    padding-top: 8px;
+}
+
 
 .mdl-card .expand {
     display: inline;
@@ -744,6 +758,4 @@ section.mdl-layout__tab-panel div.page-content {
     display: inline;
 }
 
-.worstBug {
-    overflow: hidden;
-}
+

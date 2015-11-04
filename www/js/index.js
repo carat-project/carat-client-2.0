@@ -123,7 +123,7 @@ var app = {
             // Pass bugs to controller
             itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
-            itemCards.generateCards(bugs);
+            itemCards.generateCards(bugs, hogs);
 
             carat.getMainReports(displayMain);
         };

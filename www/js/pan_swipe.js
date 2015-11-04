@@ -186,8 +186,15 @@ function makeElemTappable(el, mc, timer,
         var onSwipeRight = function(ev) {
             
             // hides swiped bug and shows next bug 
-            if (el.classList.contains("worstBug")) {
-                var list = document.querySelectorAll(".worstBug");
+            if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {
+                
+                var list
+                
+                if (el.classList.contains("worstBug")){
+                    list = document.querySelectorAll(".worstBug");
+                } else {
+                    list = document.querySelectorAll(".worstHog");
+                }
                 
                 var elPlaceinList;
                 for (i=0; i < list.length; i++ ) {
