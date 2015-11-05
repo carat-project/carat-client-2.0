@@ -136,12 +136,10 @@ var app = {
                         };
                         console.log(main, deviceInfo);
 
+                        var master = new MasterView();
+                        master.render();
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
-
-                        var masterView = new MasterView();
-                        console.log(masterView);
-                        masterView.render();
 
                         console.log("Finished rendering");
                     });

@@ -1,4 +1,5 @@
-var MasterView = (function(bugsView, hogsView, homeView, statsView) {
+var MasterView = (function(bugsView, hogsView,
+                           homeView, statsView) {
     return function() {
 
         var bugsRawData = [];
@@ -160,4 +161,6 @@ var MasterView = (function(bugsView, hogsView, homeView, statsView) {
             render: render
         };
     };
-})(new BugCards(), new HogCards(), new HomeCards(), new StatsCards());
+})(new BugCards(), new HogCards(),
+   new HomeCards(), new StatsCards());
+

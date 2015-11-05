@@ -59,7 +59,8 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
 
-    <header class="mdl-layout__header mdl-color--blue-grey-500">
+    <header class="mdl-layout__header mdl-color--blue-grey-500"
+            id="header-bar">
         <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
             <!-- Title -->
             <span>Carat 2.0</span>
@@ -89,28 +90,28 @@
             <a href="#system" class="mdl-layout__tab" id="system-tab">Stats</a>
         </div>
 
-      </header>
+    </header>
 
-      <main class="mdl-layout__content">
+    <main class="mdl-layout__content">
 
-          <!-- Home view -->
-          <section class="mdl-layout__tab-panel is-active" id="home">
+        <!-- Home view -->
+        <section class="mdl-layout__tab-panel is-active" id="home">
 
-          <!-- Jscore card -->
-              <div class="page-content">
-                  <div class="mdl-card mdl-shadow--2dp">
-                <div class="carat-caratCard__title">
-                	<div class="mdl-card__title-text carat_caratCard_title_text">
-                		<div class="expand">
-                			<i class="material-icons">&#xE5CF;</i>
+            <!-- Jscore card -->
+            <div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="carat-caratCard__title">
+                        <div class="mdl-card__title-text carat_caratCard_title_text">
+                            <div class="expand">
+                                <i class="material-icons">&#xE5CF;</i>
+                            </div>
                         </div>
                     </div>
-                 </div>
-                 <div class="carat-card__supporting-text">
-                    <canvas id="chart" width="200" height="200"></canvas>
-                    <div class="collapse">info</div>
+                    <div class="carat-card__supporting-text">
+                        <canvas id="chart" width="200" height="200"></canvas>
+                        <div class="collapse">info</div>
+                    </div>
                 </div>
-			</div>
 
             </div>
 
@@ -119,10 +120,10 @@
 
         <!-- Bugs tabs view -->
         <section class="mdl-layout__tab-panel" id="bugs">
-                <!--<div class="bar bar-header">-->
-                <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
-                <!--<div class="mdl-layout-spacer"></div>-->
-                <!--</div>-->
+            <!--<div class="bar bar-header">-->
+            <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
+            <!--<div class="mdl-layout-spacer"></div>-->
+            <!--</div>-->
         </section>
 
         <!-- Hogs tab view -->
@@ -167,7 +168,7 @@
 <script type="text/javascript" src="js/caratCard.js"></script>
 
 <script type="text/javascript">
-     app.initialize();
+ app.initialize();
 </script>
 </body>
 

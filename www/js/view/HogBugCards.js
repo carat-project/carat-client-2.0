@@ -67,7 +67,7 @@ var HogBugCards = (function(template, utilities, buttonActions) {
             };
         };
 
-        var renderAsync = renderAsync(dataSource);
+        var renderAsync = renderAsyncSource(dataSource);
 
         var setDataSource = function(freshDataSource) {
             dataSource = freshDataSource;
