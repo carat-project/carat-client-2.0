@@ -2,6 +2,7 @@ package org.carat20.client;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
@@ -40,8 +41,10 @@ public class Carat extends CordovaPlugin {
 
     private static DataStorage storage;
     private static CommunicationManager commManager;
-    private static ApplicationLibrary appService;
+    private static ApplicationLibrary applicationLibrary;
+    private static DeviceLibrary deviceLibrary;
     private static Context context;
+    private static Intent intent;
     private static Activity activity;
     
     private Reports mainReports;
@@ -128,7 +131,10 @@ public class Carat extends CordovaPlugin {
         Log.v("Carat", "Setting up storage");
         activity = cordova.getActivity();
         context = activity.getApplicationContext();
+        intent = activity.getIntent();
         storage = new DataStorage(context);
+        applicationLibrary = new ApplicationLibrary(activity);
+        deviceLibrary = new DeviceLibrary(context, intent);
         cb.success();
     }
     
@@ -158,7 +164,6 @@ public class Carat extends CordovaPlugin {
         }
         
         commManager = new CommunicationManager(storage, uuid);
-        appService = new ApplicationLibrary(activity);
         
         cordova.getThreadPool().execute(new Runnable() {
             @Override
@@ -277,7 +282,7 @@ public class Carat extends CordovaPlugin {
     private void handleKill(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
-            if(appService.killApp(packageName)){
+            if(applicationLibrary.killApp(packageName)){
                 cb.success("Success");
             } else {
                 cb.error("Failed");
@@ -292,7 +297,7 @@ public class Carat extends CordovaPlugin {
     private void handleRem(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
-            if(appService.openAppDetails(packageName)){
+            if(applicationLibrary.openAppDetails(packageName)){
                 cb.success("Success");
             } else {
                 cb.error("Failed");
@@ -305,7 +310,17 @@ public class Carat extends CordovaPlugin {
     
     // Get cpu usage while keeping callback
     private void handleCPU(final CallbackContext cb){
-         cordova.getThreadPool().execute(new Runnable() {
+        /*Log.v("Carat", "Battery temperature: "+ deviceLibrary.getBatteryTemperature()+"\n"+
+                "Battery health: "+deviceLibrary.getBatteryHealth()+"\n"+
+                "WiFi signal strength: "+deviceLibrary.getWifiSignalStrength()+"\n"+
+                "WiFi status: "+deviceLibrary.getWifiStatus()+"\n"+
+                "Network type: "+deviceLibrary.getMobileDataActivity()+"\n"+
+                "Mobile network type: "+deviceLibrary.getMobileNetworkType()+"\n"+
+                "Mobile data activity: "+deviceLibrary.getMobileDataActivity()+"\n"+
+                "CPU Usage: "+ DeviceLibrary.getCpuUsage(1000)+"\n"+
+                "Screen brightness " +deviceLibrary.getScreenBrightness()+"\n"+
+                "Distance traveled " + deviceLibrary.getDistanceTraveled());*/
+        cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 String cpuUsage = String.format("%.1f", DeviceLibrary.getCpuUsage(1000));
@@ -313,7 +328,7 @@ public class Carat extends CordovaPlugin {
                 result.setKeepCallback(true); // Keep sending results
                 cb.sendPluginResult(result);
             }
-         });
+        });
     }
     
     // Show a toast message
@@ -340,7 +355,7 @@ public class Carat extends CordovaPlugin {
         try{
             String title = args.getString(0);
             String content = args.getString(1);
-            DeviceLibrary.showNotification(title, content, context);
+            DeviceLibrary.showNotification(title, content);
             cb.success();
         } catch (JSONException e){
             Log.v("Carat", "Failed to show notification. Invalid parameters.");
@@ -388,7 +403,7 @@ public class Carat extends CordovaPlugin {
             String packageName = s.getAppName();
             
             //Ignore apps that are not installed or exceed the error limit.
-            if(!appService.isAppInstalled(packageName) 
+            if(!applicationLibrary.isAppInstalled(packageName) 
                     || s.getErrorRatio() > ERROR_LIMIT) continue;
             
             JSONObject app = new JSONObject()
@@ -405,10 +420,10 @@ public class Carat extends CordovaPlugin {
                 .put("icon", s.getAppIcon())
 
                  // Dynamic
-                .put("version", appService.getAppVersion(packageName))
-                .put("running", appService.isAppRunning(packageName))
-                .put("killable", appService.isAppKillable(packageName))
-                .put("removable", appService.isAppRemovable(packageName));
+                .put("version", applicationLibrary.getAppVersion(packageName))
+                .put("running", applicationLibrary.isAppRunning(packageName))
+                .put("killable", applicationLibrary.isAppKillable(packageName))
+                .put("removable", applicationLibrary.isAppRemovable(packageName));
             results.put(app);
         }
         return results;
