@@ -64,8 +64,8 @@ var fetchAndRenderChart = function() {
         };
 
         var wellBehaved = template("#66BB6A", "#4CAF50");
-        var hog = template("#F7464A", "#FF5A5E");
-        var bug = template("#FDB45C", "#FFC870");
+        var hog = template("#FDB45C", "#FFC870");
+        var bug = template("#F7464A", "#FF5A5E");
 
         if(!rawData["android-apps"]) {
             return [];
