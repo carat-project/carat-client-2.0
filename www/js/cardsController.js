@@ -259,6 +259,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             closeButton.addEventListener("click",  function(ev) {
                 var button = ev.target;
+				console.log("rivi 262 errori", packageName);
                 appCloseCallback(packageName, function(state) {
                     console.log("Killing app: " + state);
                     if(state == "Success"){

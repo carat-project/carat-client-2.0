@@ -1,5 +1,5 @@
-function createChart(statisticsDataSource, observations) {
-		var ctx = document.getElementById("chart").getContext("2d");
+function createChart(statisticsDataSource, observations, id) {
+	var ctx = document.getElementById(id).getContext("2d");
 
     var makeLegend = function(data) {
 
@@ -116,7 +116,7 @@ var fetchAndRenderChart = function() {
         }
         console.log(filtered);
 
-        createChart(filtered.regions, filtered.total);
+        createChart(filtered.regions, filtered.total, "chart");
 
         return true;
     };
@@ -127,5 +127,91 @@ var fetchAndRenderChart = function() {
 };
 
 console.log("DATA: ",fetchAndRenderChart());
+	
+var fetchAndRenderVersionChart = function() {
 
+    var filterData = function(rawData) {
+
+        var template = function(color, highlight) {
+            return function(value, label) {
+                return {
+                    color: color,
+                    highlight: highlight,
+                    title: label,
+                    value: value
+                };
+            };
+        };
+		
+		var other = template("#F7464A", "#FF5A5E");
+		var two = template("#F7464A", "#FF5A5E");
+		var three= template("#F7464A", "#FF5A5E");
+		var four = template("#F7464A", "#FF5A5E");
+		var five = template("#F7464A", "#FF5A5E");
+
+        if(!rawData["Android"]) {
+            return [];
+        }
+
+        var android = rawData["Android"];
+        console.log(android);
+
+        var result = {regions: [], total: 0};
+
+		for(var version in android) {
+
+			console.log(version);
+			
+            result.total += version.value;
+
+            if(version.key === "Other") {
+                result.regions.push(other(version.value, "other"));
+            } else if(version.key.charAt(0) === "2") {
+                result.regions.push(two(version.value, version.key));
+            } else if(version.key.charAt(0) === "3") {
+                result.regions.push(three(version.value, version.key));
+            } else if(version.key.charAt(0) === "4") {
+                result.regions.push(four(version.value, version.key));
+            } else if(version.key.charAt(0) === "5") {
+                result.regions.push(five(version.value, version.key));
+            }
+        }
+
+        return result;
+	};
+	
+	
+	var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+
+        if(req.readyState !== this.DONE) {
+            return false;
+        }
+
+        if(req.status !== 200) {
+            return false;
+        }
+
+        var asObject = JSON.parse(req.responseText);
+        console.log(req.responseText);
+
+        var filtered = filterData(asObject);
+
+        if(!filtered || filtered.length < 1) {
+            return false;
+        }
+        console.log(filtered);
+
+        createChart(filtered.regions, filtered.total, "testChart");
+
+        return true;
+    };
+	
+	req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
+             true);
+    req.send();
+};
+
+console.log("DATA: ",fetchAndRenderVersionChart());
 	
