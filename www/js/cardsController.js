@@ -429,7 +429,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
-
+    
     //like homebrewConcatChildren with maximium number of concatees
     var homebrewConcatChildrenWithMaxNumber = function(spot,
                                                        firstChild,
@@ -502,9 +502,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
-        //summary title
-        injectSummaryTitle(summaryDomNode,
-                           summaryObject.title);
+//        //summary title
+//        injectSummaryTitle(summaryDomNode,
+//                           summaryObject.title);
 
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
@@ -627,7 +627,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           "Close or Uninstall - Increased energy use.");
+                           "Close or Uninstall - Increased use of energy.");
             injectParagraphSecondaryText(newCardNode,
                            itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
@@ -691,7 +691,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //fetch correct models for the home tab and create corresponding cards
     //for them
-    var getHomeCards = function(bugOrHogSource, bugorHogSelector,
+    var getHomeCards = function(bugOrHogSource, bugOrHogSelector,
                                 appCloseCallback, appUninstallCallback) {
                 
         var bugsOrHogs = new Array();
@@ -702,7 +702,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         
         var result;
         
-        if (bugorHogSelector == "bug") {        
+        if (bugOrHogSelector == "bug") {        
             result = homebrewMap(notificationsArray
                                   .getWorstBugs(bugsOrHogs,
                                            appCloseCallback,
@@ -795,18 +795,25 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var generatePage = function(selector, nodeArray) {
 
         console.log("generatePage");
-        var rightSpot = selectCardsSpot(selector);
-
-        var children = rightSpot.childNodes;
-
+        
+        var rightSpot;
+        if(selector==='#suggestions' || selector==='#summary') {
+            rightSpot = document.querySelector(selector);
+            homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       nodeArray);
+            
+        } else {
+        rightSpot = selectCardsSpot(selector);
+        }
+        
         if(selector === "#bugs" || selector === "#hogs") {
             var withSwipeBackgrounds = nodeArray
                     .map(makeSwipeHintBackground);
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
-                                       withSwipeBackgrounds);    
-       
+                                       withSwipeBackgrounds);           
         } else {
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
@@ -818,10 +825,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //generate home and system tab cards
     var generateCards = function(bugsSource, hogsSource, appCloseCallback, appUninstallCallback) {
         if (typeof hogsSource !== 'undefined' && hogsSource.length>0) {
-            generatePage("#home", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
+            generatePage("#suggestions", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
         }
         if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
-            generatePage("#home", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
+            generatePage("#suggestions", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
         generatePage("#system", getSystemCards());
     };
@@ -839,7 +846,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //make summary card (and for the time being other cards in home tab)
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
-        generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+        generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
         //calls summaryCard.js and opens summary entries grid
         showOrHideActions();
     };

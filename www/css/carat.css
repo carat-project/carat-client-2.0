@@ -760,4 +760,17 @@ section.mdl-layout__tab-panel div.page-content {
     display: inline;
 }
 
+.carat-module {
+    padding-top: 16px;
+    padding-bottom: 4px;
+}
+
+.carat-module-title {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;  
+    margin-left: 8px;
+    color: dimgray;
+}
+
 
