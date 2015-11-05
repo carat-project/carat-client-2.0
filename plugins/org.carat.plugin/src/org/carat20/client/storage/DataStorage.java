@@ -41,12 +41,14 @@ public final class DataStorage {
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
     private WeakReference<SimpleHogBug[]> bugReports;
+    private WeakReference<EVTree> settingsTree;
 
     public static final String UUIDFILE = "carat-uuid.dat";
     
     public static final String MAINFILE = "carat-main.dat";
     public static final String HOGFILE = "carat-hogs.dat";
     public static final String BUGFILE = "carat-bugs.dat";
+    public static final String SETTINGSTREE = "carat-settings.dat";
 
     /**
      * Constructs a storage used for writing and reading reports.
@@ -61,6 +63,7 @@ public final class DataStorage {
         readMainReports();
         readHogReports();
         readBugReports();
+        readSettingsTree();
     }
     
     /**
@@ -70,7 +73,8 @@ public final class DataStorage {
     public boolean isEmpty(){
         return (mainReports == null 
                 && hogReports == null 
-                && bugReports == null);
+                && bugReports == null
+                && settingsTree == null);
     }
     
     /**
@@ -80,16 +84,19 @@ public final class DataStorage {
     public boolean isComplete(){
         return !(mainReports == null 
                 || hogReports == null 
-                || bugReports == null);
+                || bugReports == null
+                || settingsTree == null);
     }
     
     public void clearData(){
         context.deleteFile(MAINFILE);
         context.deleteFile(HOGFILE);
         context.deleteFile(BUGFILE);
+        context.deleteFile(SETTINGSTREE);
         mainReports = null;
         hogReports = null;
         bugReports = null;
+        settingsTree = null;
     }
 
     /**
@@ -122,6 +129,10 @@ public final class DataStorage {
      */
     public boolean bugsEmpty(){
         return (bugReports == null);
+    }
+    
+    public boolean settingsEmpty(){
+        return (settingsTree == null);
     }
     
     /**
@@ -165,6 +176,12 @@ public final class DataStorage {
                 bugReports.get() : readBugReports();
     }
     
+    public EVTree getSettingsTree() {
+        Log.v("Carat", "Getting settings tree");
+        return (settingsTree != null && settingsTree.get() != null) ?
+                settingsTree.get() : readSettingsTree();
+    }
+    
     //Reads uuid from file.
     private String readUuid() {
         Log.v("Carat", "Reading uuid from disk");
@@ -199,6 +216,14 @@ public final class DataStorage {
         if(o == null) return null;
         this.bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
+    }
+    
+    private EVTree readSettingsTree(){
+       Log.v("Carat", "Reading settings from disk");
+       Object o = readObject(SETTINGSTREE);
+       if(o == null) return null;
+       this.settingsTree = new WeakReference<EVTree>((EVTree) o);
+       return (EVTree) o;
     }
     
     /**
@@ -243,7 +268,11 @@ public final class DataStorage {
         }
         writeObject(list, BUGFILE);
     }
-
+    
+    public void writeSettingsTree(EVTree tree){
+        this.settingsTree = new WeakReference<EVTree>(tree);
+        writeObject(tree, SETTINGSTREE);
+    }
     
     // Write object to file
     private void writeObject(Object object, String fileName) {

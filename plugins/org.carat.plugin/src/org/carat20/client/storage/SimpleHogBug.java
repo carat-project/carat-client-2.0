@@ -22,7 +22,6 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     // the server, and showing them in the process list.
     private static final SparseArray<String> importanceToString = new SparseArray<String>();
 
-    private String appPackage;
     private String appIcon;
     
     static {

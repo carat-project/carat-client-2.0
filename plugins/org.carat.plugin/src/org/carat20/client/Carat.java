@@ -22,7 +22,9 @@ import static org.carat20.client.Constants.*;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
 import org.carat20.client.storage.SimpleHogBug;
+import org.carat20.client.storage.SimpleSettings;
 import org.carat20.client.thrift.Reports;
+import org.carat20.client.utility.Range;
 import org.json.JSONObject;
 
 
@@ -50,6 +52,7 @@ public class Carat extends CordovaPlugin {
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
+    private SimpleSettings[] settingsReports;
     
     private String uuid;
 
@@ -98,6 +101,7 @@ public class Carat extends CordovaPlugin {
                     case HOGS:      handleHogs(cb);         break;
                     case BUGS:      handleBugs(cb);         break;
                     case MEMORY:    handleMemory(cb);       break;
+                    case SETTINGS:  handleSettings(cb);     break;
                         
                     // Actions
                     case KILL:      handleKill(cb, args);   break;
@@ -179,6 +183,7 @@ public class Carat extends CordovaPlugin {
                     if(storage.getMainReports() == null) commManager.refreshMainReports();
                     if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
                     if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                    if(storage.getBugReports() == null) commManager.refreshSettings();
                 } else {
                     Log.v("Carat", "Storage is complete and ready to go");
                 }
@@ -252,6 +257,18 @@ public class Carat extends CordovaPlugin {
             cb.success(convertToJSON(bugReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert bug reports.", e);
+        }
+    }
+    
+    
+    
+    private void handleSettings(CallbackContext cb){
+        try {
+            HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
+            settingsReports = storage.getSettingsTree().getSuggestions(deviceInfo);
+            cb.success(convertToJSON(settingsReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert settings.", e);
         }
     }
     
@@ -425,6 +442,29 @@ public class Carat extends CordovaPlugin {
                 .put("killable", applicationLibrary.isAppKillable(packageName))
                 .put("removable", applicationLibrary.isAppRemovable(packageName));
             results.put(app);
+        }
+        return results;
+    }
+    
+    public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
+        JSONArray results = new JSONArray();
+        for(SimpleSettings s : settings){
+            JSONObject setting = new JSONObject()
+            .put("label", s.getLabel())
+            .put("benefit", s.getBenefitText())
+            .put("entropy", s.getEntropy())
+            .put("samples", s.getSamples());
+                    
+             Object value = s.getValue();
+             if(value instanceof Range){
+                 Range valueRange = (Range) value;
+                 JSONObject range = new JSONObject()
+                         .put("min", valueRange.getMin())
+                         .put("max", valueRange.getMax());
+                 setting.put("value", range);
+             } else setting.put("value", value);
+             
+            results.put(setting);
         }
         return results;
     }
