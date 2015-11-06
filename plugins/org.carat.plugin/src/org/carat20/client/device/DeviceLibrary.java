@@ -154,7 +154,7 @@ public class DeviceLibrary {
         if (cm == null) return "unknown";
         NetworkInfo i = cm.getActiveNetworkInfo();
         if (i == null) return "unknown";
-        return i.getTypeName();
+        return i.getTypeName().toLowerCase();
     }
     
     /**
