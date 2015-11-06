@@ -4,10 +4,6 @@
 
 function initializeListeners() {
     var cancelA = document.querySelector("#showAllHiddenCards");
-    
-//    cancelA.addEventListener('click', function () {
-//        cancelAll();
-//    });
                              
     var cancelBugSnooze = document.querySelector("#showHiddenBugCards");
     cancelBugSnooze.addEventListener('click', function () {
@@ -17,12 +13,33 @@ function initializeListeners() {
     var cancelHogSnooze = document.querySelector("#showHiddenHogCards");
     cancelHogSnooze.addEventListener('click', function () {
         cancelHog();
-    }); 
+    });
+    
+    //listeners for tabs
+    var tabs = document.querySelectorAll(".mdl-layout__tab");  
+    for (i=0; i<tabs.length; i++) {
+        tabs[i].addEventListener("click", function(){
+        removeHighlight(); 
+        });
+    }    
 }
     
  function listenMenu () {
      disableMenuItem();
 }
+
+function removeHighlight() {
+    var restored = document.querySelectorAll(".restored");
+   
+    if (restored !== null) {
+        i = restored.length;
+        while (i--) {
+            restored[i].classList.remove("restored");
+        }
+    }
+
+}
+
 
 
 function disableMenuItem(){

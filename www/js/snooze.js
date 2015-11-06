@@ -12,9 +12,11 @@ function snooze(id){
 // function to show card again, cancel snooze
 function cancel(id){
     var el = document.getElementById(id);
+    
     el.style.display = 'inherit';
     el.style.opacity="0";
     setTimeout(function() {
-    el.style.opacity="1";
+    el.style.opacity="1";     
     }, 1);
+    el.classList.add("restored");
 }

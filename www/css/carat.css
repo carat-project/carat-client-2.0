@@ -540,6 +540,11 @@ section.mdl-layout__tab-panel div.page-content {
     overflow:hidden; 
 }
 
+.restored {
+/*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
+    background-color: rgb(240,248,248);
+}
+
 .mdl-card.sleeker div.carat-card__title {
     padding-top: 15px;
     padding-left: 15px;
@@ -771,6 +776,9 @@ section.mdl-layout__tab-panel div.page-content {
     text-transform: uppercase;  
     margin-left: 8px;
     color: dimgray;
+}
+
+.worstBug, .worstHog {
 }
 
 
