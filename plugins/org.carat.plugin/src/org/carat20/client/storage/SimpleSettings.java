@@ -1,5 +1,6 @@
 package org.carat20.client.storage;
 
+import android.util.Log;
 import java.io.Serializable;
 
 /**
@@ -10,11 +11,14 @@ public class SimpleSettings implements Serializable, Comparable {
     
     private String label;
     private Object value;
-    private Object current;
     private double ev;
     private double entropy;
     private double samples;
     private double err;
+    
+    private double evWithout;
+    private double errWithout;
+    private Object valueWithout;
 
     public String getLabel() {
         return label;
@@ -63,14 +67,45 @@ public class SimpleSettings implements Serializable, Comparable {
     public void setErr(double err) {
         this.err = err;
     }
-    
-    public String getBenefitText(){
-        return getBenefitText(ev, err);
+
+    public double getEvWithout() {
+        return evWithout;
+    }
+
+    public void setEvWithout(double evWithout) {
+        this.evWithout = evWithout;
+    }
+
+    public double getErrWithout() {
+        return errWithout;
+    }
+
+    public void setErrWithout(double errWithout) {
+        this.errWithout = errWithout;
+    }
+
+    public Object getValueWithout() {
+        return valueWithout;
+    }
+
+    public void setValueWithout(Object valueWithout) {
+        this.valueWithout = valueWithout;
     }
     
+    public String getBenefitText(){
+        return getBenefitText(ev, err, evWithout, errWithout);
+    }
+    
+    public double getErrorRatio(){
+         int[] benefit = getBenefit(ev, err, evWithout, errWithout);
+         double benefitSeconds = (benefit[0]*3600) + (benefit[1]*60) + benefit[2];
+         if(benefitSeconds == 0) benefitSeconds = Integer.MAX_VALUE;
+         double errorSeconds = benefit[3]*60 + benefit[4];
+         return (errorSeconds / benefitSeconds);
+    }
 
-    public static String getBenefitText(double ev, double err) {
-        int[] benefit = getBenefit(ev, err);
+    public static String getBenefitText(double ev, double err, double evWithout, double errWithout) {
+        int[] benefit = getBenefit(ev, err, evWithout, errWithout);
         int hours = benefit[0];
         int min = benefit[1];
         int sec = benefit[2];
@@ -96,16 +131,36 @@ public class SimpleSettings implements Serializable, Comparable {
         return b.toString();
     }
 
-    public static int[] getBenefit(double ev, double error){
-        double benefit = 100.0 / ev;
+     public static int[] getBenefit(double ev, double error, double evWo, double errorWo) {
+        double blMax = 100.0 / (ev - error);
+        double blMaxWo = 100.0 / (evWo - errorWo);
 
-        if (benefit < 0) return new int[]{0, 0, 0, 0, 0};
+        double blMin = 100.0 / (ev + error);
+        double blMinWo = 100.0 / (evWo + errorWo);
+
+        double ebMin = blMinWo - blMax;
+        double ebMax = blMaxWo - blMin;
+        
+        double benefit = 100.0 / evWo - 100.0 / ev;
+
+        if (benefit < 0) {
+            return new int[]{0, 0, 0, 0, 0};
+        }
+
+        double maxError = benefit - ebMin;
+        if (ebMax - benefit > maxError) {
+            maxError = ebMax - benefit;
+        }
+
         int min = (int) (benefit / 60);
         int hours = (int) (min / 60);
         benefit -= min * 60;
         min -= hours * 60;
-        
-        return new int[]{hours, min, (int) benefit, 0, 0};
+
+        int errorMins = (int) (maxError / 60);
+        maxError -= errorMins * 60;
+
+        return new int[]{hours, min, (int) benefit, errorMins, (int) maxError};
     }
 
     @Override

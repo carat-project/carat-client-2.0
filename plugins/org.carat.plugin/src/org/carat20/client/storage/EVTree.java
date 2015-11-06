@@ -49,33 +49,29 @@ public class EVTree implements Serializable{
     }
     
     
-    /**
-     * Gets a list of suggestions based on device information.
-     * @param info Device information
-     * @return List of suggestions
-     */
+   /*
     public SimpleSettings[] getSuggestions(HashMap<String, Object> info){
         List<SimpleSettings> results = new LinkedList<SimpleSettings>();
         
         // Loop through suggested nodes
         ArrayList<EVNode> suggestedNodes = this.getSuggestedNodes(info);
         for(EVNode node : suggestedNodes){
-            SimpleSettings s = new SimpleSettings();
-            s.setLabel(node.getSplit());
-            s.setEntropy(node.getEntropy());
-            s.setErr(node.getErr());
-            s.setEv(node.getEv());
-            s.setSamples(node.getCount());
-            s.setValue(node.getValue());
-            results.add(s);
+            SimpleSettings suggestion = new SimpleSettings();
+            suggestion.setLabel(node.getSplit());
+            suggestion.setEntropy(node.getEntropy());
+            suggestion.setErr(node.getErr());
+            suggestion.setEv(node.getEv());
+            suggestion.setSamples(node.getCount());
+            suggestion.setValue(node.getValue());
+            results.add(suggestion);
         }
         
         return results.toArray(new SimpleSettings[results.size()]);
-    }
+    }*/
         
     // Gets a list of suggested nodes
-    public ArrayList<EVNode> getSuggestedNodes(HashMap<String, Object> info) {
-        ArrayList<EVNode> suggestions = new ArrayList<EVNode>();
+    public SimpleSettings[] getSuggestions(HashMap<String, Object> info) {
+        List<SimpleSettings> results = new LinkedList<SimpleSettings>();
         EVNode node = root;
         TreeSet<EVNode> children;
         
@@ -90,13 +86,6 @@ public class EVTree implements Serializable{
             for(EVNode child : children){
                Object nodeValue = child.getValue();
                
-               String temp;
-               if(nodeValue instanceof Range){
-                   temp = ((Range) nodeValue).getMin() + "-" + ((Range) nodeValue).getMax();
-                   if(deviceValue instanceof Integer){
-                   }
-               } else temp = (String) nodeValue;
-               
                // Device value matches the node value
                if((nodeValue instanceof Range 
                        && deviceValue instanceof Integer
@@ -105,9 +94,26 @@ public class EVTree implements Serializable{
                        && deviceValue instanceof String 
                        && ((String) nodeValue).equalsIgnoreCase((String)deviceValue))){
                    
+                   
                    // Compare matching node to best
-                   if(best.getEv() < child.getEv()){
-                       suggestions.add(best);
+                   // Ignore "other" for now
+                   if((best.getEv() < child.getEv()) 
+                           && !(best.getValue() instanceof String 
+                           && ((String) best.getValue()).equalsIgnoreCase("other"))){
+                        
+                        SimpleSettings setting = new SimpleSettings();
+                        setting.setLabel(best.getSplit());
+                        setting.setEntropy(best.getEntropy());
+                        setting.setErrWithout(best.getErr());
+                        setting.setEvWithout(best.getEv());
+                        setting.setSamples(best.getCount());
+                        setting.setValueWithout(best.getValue());
+                        
+                        setting.setValue(deviceValue);
+                        setting.setErr(child.getErr());
+                        setting.setEv(child.getEv());
+                        
+                        results.add(setting);
                    }
                    // Traverse down
                    node = child;
@@ -117,8 +123,7 @@ public class EVTree implements Serializable{
             // No matching child found
             if(node == old) break;
         }
-        
-        return suggestions;
+        return results.toArray(new SimpleSettings[results.size()]);
     }
     
     // Recursively prints the tree as a list

@@ -21,6 +21,7 @@ import org.carat20.client.device.DeviceLibrary;
 import static org.carat20.client.Constants.*;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
+import org.carat20.client.storage.EVTree;
 import org.carat20.client.storage.SimpleHogBug;
 import org.carat20.client.storage.SimpleSettings;
 import org.carat20.client.thrift.Reports;
@@ -265,7 +266,11 @@ public class Carat extends CordovaPlugin {
     private void handleSettings(CallbackContext cb){
         try {
             HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
-            settingsReports = storage.getSettingsTree().getSuggestions(deviceInfo);
+            if(deviceInfo == null) return;
+            EVTree tree = storage.getSettingsTree();
+            if(tree == null) return;
+            settingsReports = tree.getSuggestions(deviceInfo);
+            if(settingsReports == null) return;
             cb.success(convertToJSON(settingsReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert settings.", e);
@@ -327,16 +332,6 @@ public class Carat extends CordovaPlugin {
     
     // Get cpu usage while keeping callback
     private void handleCPU(final CallbackContext cb){
-        /*Log.v("Carat", "Battery temperature: "+ deviceLibrary.getBatteryTemperature()+"\n"+
-                "Battery health: "+deviceLibrary.getBatteryHealth()+"\n"+
-                "WiFi signal strength: "+deviceLibrary.getWifiSignalStrength()+"\n"+
-                "WiFi status: "+deviceLibrary.getWifiStatus()+"\n"+
-                "Network type: "+deviceLibrary.getMobileDataActivity()+"\n"+
-                "Mobile network type: "+deviceLibrary.getMobileNetworkType()+"\n"+
-                "Mobile data activity: "+deviceLibrary.getMobileDataActivity()+"\n"+
-                "CPU Usage: "+ DeviceLibrary.getCpuUsage(1000)+"\n"+
-                "Screen brightness " +deviceLibrary.getScreenBrightness()+"\n"+
-                "Distance traveled " + deviceLibrary.getDistanceTraveled());*/
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -449,21 +444,20 @@ public class Carat extends CordovaPlugin {
     public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
         JSONArray results = new JSONArray();
         for(SimpleSettings s : settings){
+            //if(s.getErrorRatio() > ERROR_LIMIT) continue;
+            
             JSONObject setting = new JSONObject()
             .put("label", s.getLabel())
-            .put("benefit", s.getBenefitText())
-            .put("entropy", s.getEntropy())
-            .put("samples", s.getSamples());
-                    
-             Object value = s.getValue();
+            .put("current", s.getValue());
+            Object value = s.getValueWithout();
              if(value instanceof Range){
                  Range valueRange = (Range) value;
                  JSONObject range = new JSONObject()
                          .put("min", valueRange.getMin())
                          .put("max", valueRange.getMax());
-                 setting.put("value", range);
-             } else setting.put("value", value);
-             
+                 setting.put("changeTo", range);
+             } else setting.put("changeTo", value)    
+            .put("benefit", s.getBenefitText());
             results.put(setting);
         }
         return results;
