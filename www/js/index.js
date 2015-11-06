@@ -86,6 +86,8 @@ var app = {
     onDataReady: function(){
         app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
+        var master = new MasterView();
+        master.render();
 
         // Start of the callback chain
         var displayData = function(){
@@ -136,8 +138,6 @@ var app = {
                         };
                         console.log(main, deviceInfo);
 
-                        var master = new MasterView();
-                        master.render();
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
 

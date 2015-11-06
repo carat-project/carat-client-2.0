@@ -1,4 +1,5 @@
-var MasterView = (function(bugsView, hogsView,
+var MasterView = (function(headerView, mainView,
+                           bugsView, hogsView,
                            homeView, statsView) {
     return function() {
 
@@ -151,6 +152,8 @@ var MasterView = (function(bugsView, hogsView,
         statsView.setDataSource(myDeviceFetcherAsync);
 
         var render = function() {
+            headerView.renderInsert();
+            mainView.renderInsert();
             bugsView.renderInsert();
             hogsView.renderInsert();
             homeView.renderInsert();
@@ -161,6 +164,7 @@ var MasterView = (function(bugsView, hogsView,
             render: render
         };
     };
-})(new BugCards(), new HogCards(),
+})(new Headerbar(), new MainContent(),
+   new BugCards(), new HogCards(),
    new HomeCards(), new StatsCards());
 

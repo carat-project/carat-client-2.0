@@ -7,6 +7,7 @@ var MainContent = (function(template, parentId, utilities) {
 
         var renderInsert = function() {
             var node = utilities.makeDomNode(renderTemplate());
+            console.log(node);
             document.getElementById(parentId).appendChild(node);
         };
 

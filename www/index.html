@@ -57,86 +57,8 @@
 </div>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-                mdl-layout--fixed-tabs mdl-color--grey-200">
-
-    <header class="mdl-layout__header mdl-color--blue-grey-500"
-            id="header-bar">
-        <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
-            <!-- Title -->
-            <span>Carat 2.0</span>
-            <span id="progress"></span>
-
-            <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="HiddenCards"
-                    onclick="cancelAll()">
-                <i class="material-icons">more_vert</i>
-            </button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="HiddenCards">
-                <li class="mdl-menu__item" id="showAllHiddenCards">Show hidden cards</li>
-                <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
-                <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
-                <li class="mdl-menu__item" id="appSettings">Settings</li>
-            </ul>
-
-        </div>
-
-
-
-        <!-- Tabs -->
-        <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-            <a href="#home" class="mdl-layout__tab is-active" id="home-tab">Home</a>
-            <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
-            <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
-            <a href="#system" class="mdl-layout__tab" id="system-tab">Stats</a>
-        </div>
-
-    </header>
-
-    <main class="mdl-layout__content">
-
-        <!-- Home view -->
-        <section class="mdl-layout__tab-panel is-active" id="home">
-
-            <!-- Jscore card -->
-            <div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp">
-                    <div class="carat-caratCard__title">
-                        <div class="mdl-card__title-text carat_caratCard_title_text">
-                            <div class="expand">
-                                <i class="material-icons">&#xE5CF;</i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carat-card__supporting-text">
-                        <canvas id="chart" width="200" height="200"></canvas>
-                        <div class="collapse">info</div>
-                    </div>
-                </div>
-
-            </div>
-
-
-        </section>
-
-        <!-- Bugs tabs view -->
-        <section class="mdl-layout__tab-panel" id="bugs">
-            <!--<div class="bar bar-header">-->
-            <!--<h6 class="title">Hogs <span class="button" aria-hidden="true" data-role="button" data-icon="ⓘ"></span></h6>-->
-            <!--<div class="mdl-layout-spacer"></div>-->
-            <!--</div>-->
-        </section>
-
-        <!-- Hogs tab view -->
-        <section class="mdl-layout__tab-panel" id="hogs">
-        </section>
-        <section class="mdl-layout__tab-panel" id="system">
-            <div class="page-content">
-                <!-- Debug content for CaratPlugin, move elsewhere -->
-
-                <!-- End of debug content -->
-            </div>
-        </section>
-    </main>
+            mdl-layout--fixed-tabs mdl-color--grey-200"
+     id="main-screen">
 </div>
 
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
@@ -147,6 +69,8 @@
 
 <script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/helper/Utilities.js"></script>
+<script type="text/javascript" src="js/view/MainContent.js"></script>
+<script type="text/javascript" src="js/view/Headerbar.js"></script>
 <script type="text/javascript" src="js/model/HogBug.js"></script>
 <script type="text/javascript" src="js/view/HogBugCards.js"></script>
 <script type="text/javascript" src="js/view/HogCards.js"></script>
