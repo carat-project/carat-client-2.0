@@ -15,8 +15,8 @@ function createChart(statisticsDataSource, observations, id) {
 
         for(var key in data) {
 
-            var percentageString = countPercentage(data[key].value) + "% ";
-			var li = makeLi(data[key].color, percentageString + data[key].title);
+            var percentageString = countPercentage(data[key].value) + "%";
+			var li = makeLi(data[key].color, data[key].title + ": " + percentageString);
 			
 		    result += li;
         }
@@ -36,15 +36,24 @@ function createChart(statisticsDataSource, observations, id) {
 	  inGraphDataFontColor : "white",
 inGraphDataAnglePosition : 2,
 inGraphDataRadiusPosition: 2,
+		segmentShowStroke : false,
 	  inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
 	  
 				};
 
     console.log(options);
 
-		var pieChart = new Chart(ctx).Pie(statisticsDataSource, options);
-    console.log(pieChart);
+	var pieChart = new Chart(ctx).Pie(statisticsDataSource, options);
     
+	console.log(pieChart);
+    
+	//if ( id === "AndroidVersionChart") {
+//		var legendPlace = document.getElementById("chart-legend");
+//    	console.log(legendPlace);
+//    	var legend = makeLegend(statisticsDataSource);
+//    	console.log(legend, legendPlace);
+//    	legendPlace.innerHTML = legend;
+//	}
 }
 
 
@@ -116,7 +125,7 @@ var fetchAndRenderChart = function() {
         }
         console.log(filtered);
 
-        createChart(filtered.regions, filtered.total, "chart");
+        createChart(filtered.regions, filtered.total, "HogBugChart");
 
         return true;
     };
@@ -192,11 +201,12 @@ var fetchAndRenderVersionChart = function() {
             }
         }
 		
-		result.regions.push(other(sumOther, "other"));
-        result.regions.push(two(sumTwo, "2"));
-		result.regions.push(three(sumThree, "3"));
-		result.regions.push(four(sumFour, "4"));
-		result.regions.push(five(sumFive, "5"));
+		result.regions.push(other(sumOther, "Other"));
+        result.regions.push(two(sumTwo, "Version 2"));
+		result.regions.push(three(sumThree, "Version 3"));
+		result.regions.push(five(sumFive, "Version 5"));
+		result.regions.push(four(sumFour, "Version 4"));
+		
 		
 		return result;
 	};
@@ -224,7 +234,7 @@ var fetchAndRenderVersionChart = function() {
         }
         console.log(filtered);
 
-        createChart(filtered.regions, filtered.total, "testChart");
+        createChart(filtered.regions, filtered.total, "AndroidVersionChart");
 
         return true;
     };
