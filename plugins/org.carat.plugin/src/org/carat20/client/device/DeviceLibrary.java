@@ -83,6 +83,22 @@ public class DeviceLibrary {
         return android.os.Build.BRAND;
     }
     
+    public HashMap<String, Object> getDeviceInfo(){
+        return new HashMap<String, Object>() {{
+            put("batteryTemperature", getBatteryTemperature());
+            put("batteryHealth", getBatteryHealth());
+            put("wifiSignalStrength", getWifiSignalStrength());
+            put("wifiStatus", getWifiStatus());
+            put("networkType", getNetworkType());
+            put("mobileNetworkType", getMobileNetworkType());
+            put("mobileDataActivity", getMobileDataActivity());
+            put("mobileDataStatus", getMobileDataStatus());
+            put("cpuUsage", (int) getCpuUsage(1000));
+            put("screenBrightness", getScreenBrightness());
+            put("distanceTraveled", (int) getDistanceTraveled());
+        }};
+    }
+    
     /**
      * @return Battery temperature
      */
@@ -138,7 +154,7 @@ public class DeviceLibrary {
         if (cm == null) return "unknown";
         NetworkInfo i = cm.getActiveNetworkInfo();
         if (i == null) return "unknown";
-        return i.getTypeName();
+        return i.getTypeName().toLowerCase();
     }
     
     /**
@@ -183,7 +199,7 @@ public class DeviceLibrary {
     /**
      * @return Data state
      */
-    public String getDataState() {
+    public String getMobileDataStatus() {
 	int dataState = telManager.getDataState();
 	switch (dataState) {
             case TelephonyManager.DATA_CONNECTED: return "connected";
@@ -212,7 +228,7 @@ public class DeviceLibrary {
      * @return Distance between current location and last snapshot
      */
     public double getDistanceTraveled(){
-        Location location = null;
+        Location location;
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         
         Criteria low = new Criteria();

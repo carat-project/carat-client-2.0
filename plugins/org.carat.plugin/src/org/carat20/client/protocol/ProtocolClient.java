@@ -1,6 +1,9 @@
 package org.carat20.client.protocol;
 
 import android.util.Log;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.URL;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -62,6 +65,19 @@ public class ProtocolClient {
         if (outputProtocol != null) {
             TTransport outputTransport = outputProtocol.getTransport();
             if (outputTransport != null) outputTransport.close();
+        }
+    }
+    
+    public static Object getObjectFromURL(String location){
+         try {
+            URL url = new URL(location);
+            InputStream in = url.openStream();
+            ObjectInputStream ois = new ObjectInputStream(in);
+            Object result = ois.readObject();
+            return result;
+        } catch (Exception e) {
+            Log.v("Carat", "Error refreshing settings", e);
+            return null;
         }
     }
 }

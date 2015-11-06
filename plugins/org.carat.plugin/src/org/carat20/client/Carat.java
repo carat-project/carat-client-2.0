@@ -21,8 +21,11 @@ import org.carat20.client.device.DeviceLibrary;
 import static org.carat20.client.Constants.*;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
+import org.carat20.client.storage.EVTree;
 import org.carat20.client.storage.SimpleHogBug;
+import org.carat20.client.storage.SimpleSettings;
 import org.carat20.client.thrift.Reports;
+import org.carat20.client.utility.Range;
 import org.json.JSONObject;
 
 
@@ -50,6 +53,7 @@ public class Carat extends CordovaPlugin {
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
+    private SimpleSettings[] settingsReports;
     
     private String uuid;
 
@@ -98,6 +102,7 @@ public class Carat extends CordovaPlugin {
                     case HOGS:      handleHogs(cb);         break;
                     case BUGS:      handleBugs(cb);         break;
                     case MEMORY:    handleMemory(cb);       break;
+                    case SETTINGS:  handleSettings(cb);     break;
                         
                     // Actions
                     case KILL:      handleKill(cb, args);   break;
@@ -179,6 +184,7 @@ public class Carat extends CordovaPlugin {
                     if(storage.getMainReports() == null) commManager.refreshMainReports();
                     if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
                     if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                    if(storage.getBugReports() == null) commManager.refreshSettings();
                 } else {
                     Log.v("Carat", "Storage is complete and ready to go");
                 }
@@ -255,6 +261,22 @@ public class Carat extends CordovaPlugin {
         }
     }
     
+    
+    
+    private void handleSettings(CallbackContext cb){
+        try {
+            HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
+            if(deviceInfo == null) return;
+            EVTree tree = storage.getSettingsTree();
+            if(tree == null) return;
+            settingsReports = tree.getSuggestions(deviceInfo);
+            if(settingsReports == null) return;
+            cb.success(convertToJSON(settingsReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert settings.", e);
+        }
+    }
+    
     // Memory info
     private void handleMemory(CallbackContext cb){
         HashMap<String, Integer> memInfo = DeviceLibrary.getMemoryInfo();
@@ -310,16 +332,6 @@ public class Carat extends CordovaPlugin {
     
     // Get cpu usage while keeping callback
     private void handleCPU(final CallbackContext cb){
-        /*Log.v("Carat", "Battery temperature: "+ deviceLibrary.getBatteryTemperature()+"\n"+
-                "Battery health: "+deviceLibrary.getBatteryHealth()+"\n"+
-                "WiFi signal strength: "+deviceLibrary.getWifiSignalStrength()+"\n"+
-                "WiFi status: "+deviceLibrary.getWifiStatus()+"\n"+
-                "Network type: "+deviceLibrary.getMobileDataActivity()+"\n"+
-                "Mobile network type: "+deviceLibrary.getMobileNetworkType()+"\n"+
-                "Mobile data activity: "+deviceLibrary.getMobileDataActivity()+"\n"+
-                "CPU Usage: "+ DeviceLibrary.getCpuUsage(1000)+"\n"+
-                "Screen brightness " +deviceLibrary.getScreenBrightness()+"\n"+
-                "Distance traveled " + deviceLibrary.getDistanceTraveled());*/
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
@@ -425,6 +437,28 @@ public class Carat extends CordovaPlugin {
                 .put("killable", applicationLibrary.isAppKillable(packageName))
                 .put("removable", applicationLibrary.isAppRemovable(packageName));
             results.put(app);
+        }
+        return results;
+    }
+    
+    public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
+        JSONArray results = new JSONArray();
+        for(SimpleSettings s : settings){
+            //if(s.getErrorRatio() > ERROR_LIMIT) continue;
+            
+            JSONObject setting = new JSONObject()
+            .put("label", s.getLabel())
+            .put("current", s.getValue());
+            Object value = s.getValueWithout();
+             if(value instanceof Range){
+                 Range valueRange = (Range) value;
+                 JSONObject range = new JSONObject()
+                         .put("min", valueRange.getMin())
+                         .put("max", valueRange.getMax());
+                 setting.put("changeTo", range);
+             } else setting.put("changeTo", value)    
+            .put("benefit", s.getBenefitText());
+            results.put(setting);
         }
         return results;
     }

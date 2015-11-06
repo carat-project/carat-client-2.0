@@ -114,7 +114,7 @@ var app = {
                 return displayBugsAndSummary(bugs, hogs);
             });
         };
-        
+
         // Create cards for bugs and append to system tab
         // NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){
@@ -164,6 +164,12 @@ var app = {
                         uuid = "Default";
                     }
                     getMemoryInfo(uuid);
+            });
+
+
+            // Display setting suggestions for debugging
+            carat.getSettings(function(settings){
+                console.log(JSON.stringify(settings));
             });
 
             // ...
