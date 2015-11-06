@@ -149,11 +149,11 @@ var fetchAndRenderVersionChart = function() {
 		var four = template("#F7464A", "#FF5A5E");
 		var five = template("#F7464A", "#FF5A5E");
 
-        if(!rawData["Android"]) {
+        if(!rawData.All.Android) {
             return [];
         }
 
-        var android = rawData["Android"];
+        var android = rawData.All.Android;
         console.log(android);
 
         var result = {regions: [], total: 0};
@@ -162,18 +162,27 @@ var fetchAndRenderVersionChart = function() {
 
 			console.log(version);
 			
-            result.total += version.value;
+			var sumDevices = function(devices) {
+				var summary = 0;
+				for(var device in devices) {
+						summary += devices[device];
+				}
+				
+			 return summary;	
+			}
+			var sum = sumDevices(android[version]);
+            result.total += sum;
 
-            if(version.key === "Other") {
-                result.regions.push(other(version.value, "other"));
-            } else if(version.key.charAt(0) === "2") {
-                result.regions.push(two(version.value, version.key));
-            } else if(version.key.charAt(0) === "3") {
-                result.regions.push(three(version.value, version.key));
-            } else if(version.key.charAt(0) === "4") {
-                result.regions.push(four(version.value, version.key));
-            } else if(version.key.charAt(0) === "5") {
-                result.regions.push(five(version.value, version.key));
+            if(version === "Other") {
+                result.regions.push(other(sum, "other"));
+            } else if(version.charAt(0) === "2") {
+                result.regions.push(two(sum, "2"));
+            } else if(version.charAt(0) === "3") {
+                result.regions.push(three(sum, "3"));
+            } else if(version.charAt(0) === "4") {
+                result.regions.push(four(sum, "4"));
+            } else if(version.charAt(0) === "5") {
+                result.regions.push(five(sum, "5"));
             }
         }
 
