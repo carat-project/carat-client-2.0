@@ -66,11 +66,19 @@ function makeElemTappable(el, mc, timer,
         //changes expand arrow, uses strange material design character in if statement
         var changeExpandArrow = function(ev) {
             var icon = el.querySelector("i.material-icons");
-            if (icon.innerHTML != "") {
+            var iconNode = $(icon);
+            if(iconNode.hasClass("normal-icon")){
+                iconNode.removeClass("normal-icon");
+                iconNode.addClass("rotated-icon");
+            } else {
+                iconNode.removeClass("rotated-icon");
+                iconNode.addClass("normal-icon");
+            }
+            /*if (icon.innerHTML != "") {
                 icon.innerHTML = "&#xE5CF";
             } else {
-                icon.innerHTML = "&#xE5CE";           
-            }
+                icon.innerHTML = "&#xE5CE";
+            }*/
                     toggleShowOnExpand();
 
         };

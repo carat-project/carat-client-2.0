@@ -1,9 +1,35 @@
 
-/* = PROGRESS BAR = */
+/* = EXPAND BUTTON = */
 
-.carat-color--yellow-orange {
-  background-color: rgb(247, 167, 27) !important;
+.expand-button {
+  width: 40px;
+  height: 30px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+  text-align: center;
+  vertical-align: middle;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B !important;
 }
+
+.rotated-icon {
+  -webkit-transform: scaleY(1);
+  transition: transform 0.5s ease;
+}
+
+.normal-icon {
+  -webkit-transform: scaleY(-1);
+  transition: transform 0.5s ease;
+}
+
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* = PROGRESS BAR = */
 
 .progressBar {
   position: relative;
@@ -34,6 +60,53 @@
 #progress {
   margin-left: 10px;
   margin-bottom: 5px;
+}
+
+/* = JSCORE CIRCLE = */
+
+.outerCircle {
+  position: relative;
+  border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  z-index: 2;
+  background: #FBE2B6;
+}
+
+.innerCircle {
+    position: absolute;
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    top: 50%;
+    left: 50%;
+    margin: -31px 0px 0px -31px;
+    background: #FFF;
+    color: #000;
+    font-size: 30px;
+    vertical-align: middle;
+}
+
+.numberCircle {
+  position: absolute;
+  top: 37.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+div.numberCircle > button {
+    position: relative;
+    width: 60px !important;
+    height: 60px !important;
+    left: 60px;
+    bottom: 50px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    overflow: hidden;
+    outline:none;
+    background-image:url(../img/ic_info_black_24dp_1x.png);
 }
 
 /* = OTHER = */
@@ -269,16 +342,16 @@
 .collapse {
     max-height: 0px;
     overflow: hidden;
-    -webkit-transition: ease-in 0.4s;
+   /* -webkit-transition: ease-in 0.4s;*/
 }
 .collapse.in {
     max-height: 200px;
-    -webkit-transition: ease-in 0.4s;
+   /* -webkit-transition: ease-in 0.4s;*/
 }
 
 .collapse.in_large {
   max-height: 600px;
-    -webkit-transition: ease-in-out 0.6s;
+    /*-webkit-transition: ease-in-out 0.6s;*/
 }
 
 .carat-card__supporting-text {
@@ -303,53 +376,6 @@ p {
   position: absolute;
   right: 10%;
   top: 68px;
-}
-
-/* = JSCORE CIRCLE = */
-
-.outerCircle {
-  position: relative;
-  border-radius: 50%;
-  width: 68px;
-  height: 68px;
-  z-index: 2;
-  background: #FBE2B6;
-}
-
-.innerCircle {
-    position: absolute;
-    border-radius: 50%;
-    width: 62px;
-    height: 62px;
-    top: 50%;
-    left: 50%;
-    margin: -31px 0px 0px -31px;
-    background: #FFF;
-    color: #000;
-    font-size: 30px;
-    vertical-align: middle;
-}
-
-.numberCircle {
-  position: absolute;
-  top: 37.5%;
-  text-align: center;
-  vertical-align: middle;
-}
-
-
-div.numberCircle > button {
-    position: relative;
-    width: 60px !important;
-    height: 60px !important;
-    left: 60px;
-    bottom: 50px;
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    overflow: hidden;
-    outline:none;
-    background-image:url(../img/ic_info_black_24dp_1x.png);
 }
 
 .page-content {
