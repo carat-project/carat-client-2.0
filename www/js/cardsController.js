@@ -326,8 +326,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var timeErrorElem = document.createElement("span");
             var timeErrorText = document
                     .createTextNode(timeDrainError);
+
             timeErrorElem.appendChild(timeErrorText);
-            timeErrorElem.classList.add("show-on-expand");
+            timeErrorElem.classList.add("benefit-error");
 
             timeDrainNode.appendChild(timeErrorElem);
         }
