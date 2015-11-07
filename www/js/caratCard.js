@@ -245,4 +245,113 @@ var fetchAndRenderVersionChart = function() {
 };
 
 console.log("DATA: ",fetchAndRenderVersionChart());
+
+var fetchAndRenderDeviceChart = function() {
+
+    var filterData = function(rawData) {
+
+        var template = function(color, highlight) {
+            return function(value, label) {
+                return {
+                    color: color,
+                    highlight: highlight,
+                    title: label,
+                    value: value
+                };
+            };
+        };
+		
+		var other = template("#E91E63", "#EC407A");
+		var samsungGalaxy = template("#3F51B5", "#5C6BC0");
+		var htc= template("#00BCD4", "#26C6DA");
+		var nexus = template("#8BC34A", "#FFCA28");
+		var droid = template("#FFC107", "#FFCA28");
+		
+
+        if(!rawData.All.Android) {
+            return [];
+        }
+
+        var android = rawData.All.Android;
+        console.log(android);
+
+        var result = {regions: [], total: 0};
+		
+		var sumOther = 0;
+		var sumSamsungGalaxy = 0;
+		var sumHtc = 0;
+		var sumNexus = 0;
+		var sumDroid = 0;
+
+		for(var version in android) {
+
+			console.log(version);
+			
+			for (var device in version) {
+				
+				console.log(device);
+				
+				result.total += version[device];
+				
+				if (device === "Other") {
+					sumOther += version[device];
+				} else if (device.indexOf("Samsung Galaxy" || "Epic" || "GT-I8190" || "SPH-L710" || "SM-N9005" || "SCH-I545") > -1) {
+					sumSamsungGalaxy += version[device];
+				} else if (device.indexOf("Nexus") > -1) {
+					sumNexus += version[device];
+				} else if (device.indexOf("HTC" || "ADR" || "PC") > -1) {
+					sumHtc += version[device];
+				} else if (device.indexOf("DROID") > -1) {
+					sumDroid += version[device];
+				} else {
+					sumOther += version[device];
+				}
+			}
+
+        }
+		
+		result.regions.push(other(sumOther, "Other"));
+        result.regions.push(htc(sumHtc, "HTC"));
+		result.regions.push(nexus(sumNexus, "Nexus"));
+		result.regions.push(droid(sumDroid, "DROID"));
+		result.regions.push(samsungGalaxy(sumSamsungGalaxy, "Samsung Galaxy"));
+		
+		
+		return result;
+	};
 	
+	
+	var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+
+        if(req.readyState !== this.DONE) {
+            return false;
+        }
+
+        if(req.status !== 200) {
+            return false;
+        }
+
+        var asObject = JSON.parse(req.responseText);
+        console.log(req.responseText);
+
+        var filtered = filterData(asObject);
+
+        if(!filtered || filtered.length < 1) {
+            return false;
+        }
+        console.log(filtered);
+
+        createChart(filtered.regions, filtered.total, "DeviceChart");
+
+        return true;
+    };
+	
+	req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
+             true);
+    req.send();
+};
+
+console.log("DATA: ",fetchAndRenderDeviceChart());
+		
