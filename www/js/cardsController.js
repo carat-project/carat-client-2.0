@@ -403,12 +403,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var color;
         if(degree <= 180){
             degree = 90+degree;
-            color= "#E0E0E0";
+            color= "#FBE2B6";
         } else  {
             degree = degree-90;
-            color = "#B1B1B1";
+            color = "#F7A71B";
         }
-        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #B1B1B1 50%, transparent 50%)";
+        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #F7A71B 50%, transparent 50%)";
 
         appendTextOrRemoveNode(spot, jscore);
     };

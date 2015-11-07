@@ -1,6 +1,10 @@
 
 /* = PROGRESS BAR = */
 
+.carat-color--yellow-orange {
+  background-color: rgb(247, 167, 27) !important;
+}
+
 .progressBar {
   position: relative;
   display: inline-block;
@@ -295,7 +299,7 @@ p {
   width: 68px;
   height: 68px;
   z-index: 2;
-  background: #E0E0E0;
+  background: #FBE2B6;
 }
 
 .innerCircle {
@@ -306,9 +310,9 @@ p {
     top: 50%;
     left: 50%;
     margin: -31px 0px 0px -31px;
-    background: #F0F0F0;
-    color: #666;
-    font-size: 40px;
+    background: #FFF;
+    color: #000;
+    font-size: 30px;
     vertical-align: middle;
 }
 

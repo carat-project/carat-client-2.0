@@ -168,18 +168,16 @@ var app = {
                     }
                     getMemoryInfo(uuid);
             });
-
-
-            // Display setting suggestions for debugging
-            carat.getSettings(function(settings){
-                console.log(JSON.stringify(settings));
-            });
-
             // ...
         };
 
         // Begin the callback chain
         displayData();
+
+        // Display setting suggestions for debugging
+        carat.getSettings(function(settings){
+            console.log(JSON.stringify(settings));
+        });
     },
 
     // Set an interval for refreshing cpu usage
