@@ -62,17 +62,31 @@
   font-weight: 400;
   height: auto;
   overflow: hidden;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 0px;
+    margin-right: 0px;
     margin-bottom: 0px;
     margin-top: 0px;
-  z-index: 0;
+  z-index: 2;
+  padding-left: 8px;
+  padding-right: 8px;
   position: relative;
-  background-color: #E8E8E8;
+  /*background-color: #E8E8E8;*/
 
-    background-position:5%50%, 95%50%;
+   /* background-position:5%50%, 95%50%;*/
     background-repeat: no-repeat;
-  border-radius: 2px;
+  /*border-radius: 2px;*/
+}
+
+@media screen and (orientation:landscape) {
+   .mdl-card-background {
+    width: auto;
+   }
+}
+
+@media screen and (orientation:portrait) {
+   .mdl-card-background {
+    width: 100%;
+   }
 }
 
 /*just for testing purposes*/
@@ -339,6 +353,7 @@ div.numberCircle > button {
 }
 
 .page-content {
+    padding: 0px !important;
     overflow: hidden;
 }
 

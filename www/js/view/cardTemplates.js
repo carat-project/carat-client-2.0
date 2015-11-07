@@ -13,7 +13,7 @@ cardTemplates = (function() {
     //get template Dom-node for a card
     var getNewItemDomNodeTemplate = function() {
 
-        var htmlString = '<div class="mdl-card">' +
+        var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                             '<div class="carat-card__title">' +
                                 '<div class="mdl-card__icon"></div>' +
                                 '<div class="mdl-card__title-text">' +

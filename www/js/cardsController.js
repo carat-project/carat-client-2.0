@@ -8,7 +8,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         var backgroundNode = document.createElement("div");
         backgroundNode.classList.add("mdl-card-background");
-        backgroundNode.classList.add("mdl-shadow--2dp");
+        //backgroundNode.classList.add("mdl-shadow--2dp");
         backgroundNode.classList.add("mdl-cell");
         backgroundNode.classList.add("mdl-cell--4-col");
         backgroundNode.appendChild(cardDom);
