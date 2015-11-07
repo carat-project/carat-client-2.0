@@ -398,6 +398,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var injectJscore = function(statisticsDomNode,
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
+        var circle = statisticsDomNode.querySelector(".outerCircle");
+        var degree = jscore*3.6;
+        var color;
+        if(degree <= 180){
+            degree = 90+degree;
+            color= "#E0E0E0";
+        } else  {
+            degree = degree-90;
+            color = "#B1B1B1";
+        }
+        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #B1B1B1 50%, transparent 50%)";
 
         appendTextOrRemoveNode(spot, jscore);
     };

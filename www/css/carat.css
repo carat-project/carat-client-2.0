@@ -281,34 +281,56 @@ p {
   line-height: normal;
 }
 
-.numberCircle {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    line-height: normal;
+.circleContainer {
+  position: absolute;
+  right: 10%;
+  top: 68px;
+}
+
+/* = JSCORE CIRCLE = */
+
+.outerCircle {
+  position: relative;
+  border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  z-index: 2;
+  background: #E0E0E0;
+}
+
+.innerCircle {
     position: absolute;
-    right: 10%;
-    top: 68px;
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    top: 50%;
+    left: 50%;
+    margin: -31px 0px 0px -31px;
     background: #F0F0F0;
     color: #666;
-    text-align: center !important;
-    vertical-align: middle !important; 
     font-size: 40px;
-    margin-bottom: 10px;
+    vertical-align: middle;
 }
+
+.numberCircle {
+  position: absolute;
+  top: 37.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
 
 div.numberCircle > button {
     position: relative;
     width: 60px !important;
     height: 60px !important;
-    left: 45px;
-    bottom: 70px;
+    left: 60px;
+    bottom: 50px;
     background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
     overflow: hidden;
-    outline:none;  
+    outline:none;
     background-image:url(../img/ic_info_black_24dp_1x.png);
 }
 

@@ -116,8 +116,14 @@ cardTemplates = (function() {
                             '</div>' +
                             '<div class="mdl-card__supporting-text">' +
                                 '<div class="carat-Jscore-text"></div>'+
-                                '<div class ="numberCircle">'+
-                                    '<button class="info" onclick="JscoreInfo()"></button>'+
+                                '<div class="circleContainer">'+
+                                    '<div class="outerCircle">'+
+                                        '<div class="innerCircle">'+
+                                            '<div class="numberCircle">'+
+                                                '<button class="info" onclick="JscoreInfo()"></button>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'+
                                 '</div>'+
                                 '<div class="collapse">'+
                                     '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "Calculating..")+'</div>'+
