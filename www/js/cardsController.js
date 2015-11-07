@@ -158,7 +158,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         } else {
             for(var paragraphKey in secondaryTextParagraphs) {
                 var paragraph = secondaryTextParagraphs[paragraphKey];
-                var paragraphNode = document.createElement("p");
+                var paragraphNode = document.createElement("div");
+                paragraphNode.style.marginBottom = "6px";
                 var textNode = document.createTextNode(paragraph);
 
                 paragraphNode.appendChild(textNode);
@@ -482,7 +483,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
-        cordova.fireDocumentEvent("statisticsready");
     };
 
 	var makeCaratCard = function(caratDomNode,

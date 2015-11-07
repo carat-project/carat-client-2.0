@@ -96,19 +96,34 @@ cardTemplates = (function() {
         return domNode;
     };
 
+    var progressBar = function(barId, initialText) {
+        return '<div id="'+barId+'" class="progressBar">'+
+                    '<span>'+initialText+'</span>'+
+                    '<div></div>'
+                '</div>'
+    }
+
+
     var getNewStatisticsDomNodeTemplate = function() {
 
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
-                '<div class="carat-card__title">' +
-                    '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
-                        '<div class="expand">' +
-                            '<i class="material-icons">&#xE5CF;</i></div></div>' +
-                '</div>' +
-                '<div class="mdl-card__supporting-text">' +
-                '<div class="carat-Jscore-text"></div><div class ="numberCircle"><button class="info" onclick="JscoreInfo()"></button></div><div class="collapse">'+
-                '<p>CPU usage: <span id="cpu-usage">-</span></p></div>' +
-                '</div>' +
-                '</div>';
+                            '<div class="carat-card__title">' +
+                                '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
+                                    '<div class="expand">' +
+                                        '<i class="material-icons">&#xE5CF;</i>'+
+                                    '</div>'+
+                                '</div>' +
+                            '</div>' +
+                            '<div class="mdl-card__supporting-text">' +
+                                '<div class="carat-Jscore-text"></div>'+
+                                '<div class ="numberCircle">'+
+                                    '<button class="info" onclick="JscoreInfo()"></button>'+
+                                '</div>'+
+                                '<div class="collapse">'+
+                                    '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "Calculating..")+'</div>'+
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
 
         var domNode = parseDomNode(htmlString);
 

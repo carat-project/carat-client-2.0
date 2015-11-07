@@ -28,7 +28,7 @@ var app = {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
         document.addEventListener("dataready", this.onDataReady, false);
-        document.addEventListener("statisticsready", this.refreshCpuUsage, false);
+        document.addEventListener("renderfinished", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -68,9 +68,11 @@ var app = {
         });
     },
 
-    getCpuUsage: function(){
+    getCpuUsage: function(progressText, progressLoad){
         carat.getCpuUsage(function(usage){
-            document.getElementById("cpu-usage").innerHTML = usage +"%";
+            usage = usage + "%";
+            progressText.innerHTML = usage;
+            progressLoad.style.width = usage;
         });
     },
 
@@ -155,6 +157,7 @@ var app = {
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
                         console.log("Finished rendering");
+                        cordova.fireDocumentEvent("renderfinished");
                     });
             }
 
@@ -181,8 +184,14 @@ var app = {
 
     // Set an interval for refreshing cpu usage
     refreshCpuUsage: function() {
-        app.getCpuUsage();
-        setInterval(app.getCpuUsage, 4000);
+
+        var progressText = document.querySelector("#cpuProgressBar > span");
+        var progressLoad = document.querySelector("#cpuProgressBar > div");
+
+        app.getCpuUsage(progressText, progressLoad);
+        setInterval(function(){
+            app.getCpuUsage(progressText, progressLoad);
+        }, 2000);
     },
 
     showProgress: function(){
