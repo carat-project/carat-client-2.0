@@ -612,7 +612,7 @@ section.mdl-layout__tab-panel div.page-content {
 
 .restored {
 /*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
-    background-color: rgb(240,248,248);
+    background-color: rgb(255,255,255);
 }
 
 .mdl-card.sleeker div.carat-card__title {
