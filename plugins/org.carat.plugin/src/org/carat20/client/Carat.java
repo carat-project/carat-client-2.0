@@ -1,14 +1,19 @@
 package org.carat20.client;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 import java.util.HashMap;
 import org.apache.cordova.CordovaInterface;
@@ -66,6 +71,14 @@ public class Carat extends CordovaPlugin {
     public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
         Log.v("Carat", "Plugin is initializing");
         super.initialize(cordova, webView);
+        Carat.activity = cordova.getActivity();
+        Window window = activity.getWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+        }
         
         // ...
     }

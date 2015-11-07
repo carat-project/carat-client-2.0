@@ -33,11 +33,9 @@ var app = {
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
         uuidButton.addEventListener("click", this.onUuidChange, false);
-        
+
         // Listener for menu
         initializeListeners();
-        
-
     },
 
     // Clear and refresh storage data
@@ -176,7 +174,17 @@ var app = {
 
         // Display setting suggestions for debugging
         carat.getSettings(function(settings){
-            console.log(JSON.stringify(settings));
+            if((typeof settings !== "undefined") && (settings !== null)){
+                var suggestion = settings[0];
+                var benefit = suggestion.benefit
+                var length =  benefit.indexOf("±");
+                var benefit = benefit.substr(0, length-1);
+
+                carat.showNotification("Change to "+suggestion.changeTo, "Benefit: "+benefit, function(success){
+                    console.log("Showing placeholder notification for a system setting");
+                });
+            }
+            //console.log(JSON.stringify(settings));
         });
     },
 
