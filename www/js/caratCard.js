@@ -1,5 +1,5 @@
 function createChart(statisticsDataSource, observations, id) {
-	var ctx = document.getElementById(id).getContext("2d");
+    var ctx = document.getElementById(id).getContext("2d");
 
     var makeLegend = function(data) {
 
@@ -16,9 +16,9 @@ function createChart(statisticsDataSource, observations, id) {
         for(var key in data) {
 
             var percentageString = countPercentage(data[key].value) + "%";
-			var li = makeLi(data[key].color, data[key].title + ": " + percentageString);
-			
-		    result += li;
+            var li = makeLi(data[key].color, data[key].title + ": " + percentageString);
+
+            result += li;
         }
 
         return result;
@@ -26,34 +26,34 @@ function createChart(statisticsDataSource, observations, id) {
     };
 
     var options = {
-      inGraphDataShow : true,
-      //inGraphDataAnglePosition : 2,
-//	  inGraphDataRadiusPosition: [2, 3, 2],
-	  inGraphDataFontSize : 11,
-	  inGraphDataAlign : "center",
-	  inGraphDataVAlign : "middle",
-	  inGraphDataRotate : "inRadiusAxisRotateLabels",
-	  inGraphDataFontColor : "white",
-inGraphDataAnglePosition : 2,
-inGraphDataRadiusPosition: 2,
-		segmentShowStroke : false,
-	  inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
-	  
-				};
+        inGraphDataShow : true,
+        //inGraphDataAnglePosition : 2,
+        //	  inGraphDataRadiusPosition: [2, 3, 2],
+        inGraphDataFontSize : 11,
+        inGraphDataAlign : "center",
+        inGraphDataVAlign : "middle",
+        inGraphDataRotate : "inRadiusAxisRotateLabels",
+        inGraphDataFontColor : "white",
+        inGraphDataAnglePosition : 2,
+        inGraphDataRadiusPosition: 2,
+        segmentShowStroke : false,
+        inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
+
+    };
 
     console.log(options);
 
-	var pieChart = new Chart(ctx).Pie(statisticsDataSource, options);
-    
-	console.log(pieChart);
-    
-	//if ( id === "AndroidVersionChart") {
-//		var legendPlace = document.getElementById("chart-legend");
-//    	console.log(legendPlace);
-//    	var legend = makeLegend(statisticsDataSource);
-//    	console.log(legend, legendPlace);
-//    	legendPlace.innerHTML = legend;
-//	}
+    var pieChart = new Chart(ctx).Pie(statisticsDataSource, options);
+
+    console.log(pieChart);
+
+    //if ( id === "AndroidVersionChart") {
+    //		var legendPlace = document.getElementById("chart-legend");
+    //    	console.log(legendPlace);
+    //    	var legend = makeLegend(statisticsDataSource);
+    //    	console.log(legend, legendPlace);
+    //    	legendPlace.innerHTML = legend;
+    //	}
 }
 
 
@@ -136,7 +136,7 @@ var fetchAndRenderChart = function() {
 };
 
 console.log("DATA: ",fetchAndRenderChart());
-	
+
 var fetchAndRenderVersionChart = function() {
 
     var filterData = function(rawData) {
@@ -151,12 +151,12 @@ var fetchAndRenderVersionChart = function() {
                 };
             };
         };
-		
-		var other = template("#E91E63", "#EC407A");
-		var two = template("#3F51B5", "#5C6BC0");
-		var three= template("#00BCD4", "#26C6DA");
-		var four = template("#8BC34A", "#9CCC65");
-		var five = template("#FFC107", "#FFCA28");
+
+        var other = template("#E91E63", "#EC407A");
+        var two = template("#3F51B5", "#5C6BC0");
+        var three= template("#00BCD4", "#26C6DA");
+        var four = template("#8BC34A", "#9CCC65");
+        var five = template("#FFC107", "#FFCA28");
 
         if(!rawData.All.Android) {
             return [];
@@ -166,26 +166,26 @@ var fetchAndRenderVersionChart = function() {
         console.log(android);
 
         var result = {regions: [], total: 0};
-		
-		var sumOther = 0;
-		var sumTwo = 0;
-		var sumThree = 0;
-		var sumFour = 0;
-		var sumFive = 0;
 
-		for(var version in android) {
+        var sumOther = 0;
+        var sumTwo = 0;
+        var sumThree = 0;
+        var sumFour = 0;
+        var sumFive = 0;
 
-			console.log(version);
-			
-			var sumDevices = function(devices) {
-				var summary = 0;
-				for(var device in devices) {
-						summary += devices[device];
-				}
-				
-			 return summary;	
-			}
-			var sum = sumDevices(android[version]);
+        for(var version in android) {
+
+            console.log(version);
+
+            var sumDevices = function(devices) {
+                var summary = 0;
+                for(var device in devices) {
+                    summary += devices[device];
+                }
+
+                return summary;
+            }
+            var sum = sumDevices(android[version]);
             result.total += sum;
 
             if(version === "Other") {
@@ -200,19 +200,19 @@ var fetchAndRenderVersionChart = function() {
                 sumFive += sum;
             }
         }
-		
-		result.regions.push(other(sumOther, "Other"));
+
+        result.regions.push(other(sumOther, "Other"));
         result.regions.push(two(sumTwo, "Version 2"));
-		result.regions.push(three(sumThree, "Version 3"));
-		result.regions.push(five(sumFive, "Version 5"));
-		result.regions.push(four(sumFour, "Version 4"));
-		
-		
-		return result;
-	};
-	
-	
-	var req = new XMLHttpRequest();
+        result.regions.push(three(sumThree, "Version 3"));
+        result.regions.push(five(sumFive, "Version 5"));
+        result.regions.push(four(sumFour, "Version 4"));
+
+
+        return result;
+    };
+
+
+    var req = new XMLHttpRequest();
 
     req.onreadystatechange = function() {
 
@@ -225,7 +225,6 @@ var fetchAndRenderVersionChart = function() {
         }
 
         var asObject = JSON.parse(req.responseText);
-        console.log(req.responseText);
 
         var filtered = filterData(asObject);
 
@@ -238,8 +237,8 @@ var fetchAndRenderVersionChart = function() {
 
         return true;
     };
-	
-	req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
+
+    req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
              true);
     req.send();
 };
@@ -260,13 +259,13 @@ var fetchAndRenderDeviceChart = function() {
                 };
             };
         };
-		
-		var other = template("#E91E63", "#EC407A");
-		var samsungGalaxy = template("#3F51B5", "#5C6BC0");
-		var htc= template("#00BCD4", "#26C6DA");
-		var nexus = template("#8BC34A", "#FFCA28");
-		var droid = template("#FFC107", "#FFCA28");
-		
+
+        var other = template("#E91E63", "#EC407A");
+        var samsungGalaxy = template("#3F51B5", "#5C6BC0");
+        var htc= template("#00BCD4", "#26C6DA");
+        var nexus = template("#8BC34A", "#FFCA28");
+        var droid = template("#FFC107", "#FFCA28");
+
 
         if(!rawData.All.Android) {
             return [];
@@ -276,52 +275,54 @@ var fetchAndRenderDeviceChart = function() {
         console.log(android);
 
         var result = {regions: [], total: 0};
-		
-		var sumOther = 0;
-		var sumSamsungGalaxy = 0;
-		var sumHtc = 0;
-		var sumNexus = 0;
-		var sumDroid = 0;
 
-		for(var version in android) {
+        var sumOther = 0;
+        var sumSamsungGalaxy = 0;
+        var sumHtc = 0;
+        var sumNexus = 0;
+        var sumDroid = 0;
 
-			console.log(version);
-			
-			for (var device in version) {
-				
-				console.log(device);
-				
-				result.total += version[device];
-				
-				if (device === "Other") {
-					sumOther += version[device];
-				} else if (device.indexOf("Samsung Galaxy" || "Epic" || "GT-I8190" || "SPH-L710" || "SM-N9005" || "SCH-I545") > -1) {
-					sumSamsungGalaxy += version[device];
-				} else if (device.indexOf("Nexus") > -1) {
-					sumNexus += version[device];
-				} else if (device.indexOf("HTC" || "ADR" || "PC") > -1) {
-					sumHtc += version[device];
-				} else if (device.indexOf("DROID") > -1) {
-					sumDroid += version[device];
-				} else {
-					sumOther += version[device];
-				}
-			}
+        for(var version in android) {
+
+            console.log(version);
+
+            var androidVersion = android[version];
+
+            for (var device in androidVersion) {
+
+
+                result.total += androidVersion[device];
+
+                if (device === "Other") {
+                    sumOther += androidVersion[device];
+                } else if (device.indexOf("Samsung Galaxy" || "Epic" || "GT-I8190" || "SPH-L710" || "SM-N9005" || "SCH-I545") > -1) {
+                    sumSamsungGalaxy += androidVersion[device];
+                } else if (device.indexOf("Nexus") > -1) {
+                    sumNexus += androidVersion[device];
+                } else if (device.indexOf("HTC" || "ADR" || "PC") > -1) {
+                    sumHtc += androidVersion[device];
+                } else if (device.indexOf("DROID") > -1) {
+                    sumDroid += androidVersion[device];
+                } else {
+                    sumOther += androidVersion[device];
+                }
+            }
 
         }
-		
-		result.regions.push(other(sumOther, "Other"));
+
+        result.regions.push(other(sumOther, "Other"));
         result.regions.push(htc(sumHtc, "HTC"));
-		result.regions.push(nexus(sumNexus, "Nexus"));
-		result.regions.push(droid(sumDroid, "DROID"));
-		result.regions.push(samsungGalaxy(sumSamsungGalaxy, "Samsung Galaxy"));
-		
-		
-		return result;
-	};
-	
-	
-	var req = new XMLHttpRequest();
+        result.regions.push(nexus(sumNexus, "Nexus"));
+        result.regions.push(droid(sumDroid, "DROID"));
+        result.regions.push(samsungGalaxy(sumSamsungGalaxy, "Samsung Galaxy"));
+
+
+        console.log(result);
+        return result;
+    };
+
+
+    var req = new XMLHttpRequest();
 
     req.onreadystatechange = function() {
 
@@ -334,7 +335,6 @@ var fetchAndRenderDeviceChart = function() {
         }
 
         var asObject = JSON.parse(req.responseText);
-        console.log(req.responseText);
 
         var filtered = filterData(asObject);
 
@@ -347,11 +347,10 @@ var fetchAndRenderDeviceChart = function() {
 
         return true;
     };
-	
-	req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
+
+	  req.open("GET", "http://carat.cs.helsinki.fi/statistics-data/shares.json",
              true);
     req.send();
 };
 
 console.log("DATA: ",fetchAndRenderDeviceChart());
-		
