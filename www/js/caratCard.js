@@ -29,7 +29,7 @@ function createChart(statisticsDataSource, observations, id) {
         inGraphDataShow : true,
         //inGraphDataAnglePosition : 2,
         //	  inGraphDataRadiusPosition: [2, 3, 2],
-        inGraphDataFontSize : 11,
+        inGraphDataFontSize : 8,
         inGraphDataAlign : "center",
         inGraphDataVAlign : "middle",
         inGraphDataRotate : "inRadiusAxisRotateLabels",
@@ -47,13 +47,13 @@ function createChart(statisticsDataSource, observations, id) {
 
     console.log(pieChart);
 
-    //if ( id === "AndroidVersionChart") {
-    //		var legendPlace = document.getElementById("chart-legend");
-    //    	console.log(legendPlace);
-    //    	var legend = makeLegend(statisticsDataSource);
-    //    	console.log(legend, legendPlace);
-    //    	legendPlace.innerHTML = legend;
-    //	}
+   
+    		var legendPlace = document.getElementById(id + "-legend");
+        	console.log(legendPlace);
+        	var legend = makeLegend(statisticsDataSource);
+        	console.log(legend, legendPlace);
+        	legendPlace.innerHTML = legend;
+    	
 }
 
 
@@ -152,11 +152,11 @@ var fetchAndRenderVersionChart = function() {
             };
         };
 
-        var other = template("#E91E63", "#EC407A");
-        var two = template("#3F51B5", "#5C6BC0");
-        var three= template("#00BCD4", "#26C6DA");
-        var four = template("#8BC34A", "#9CCC65");
-        var five = template("#FFC107", "#FFCA28");
+        var other = template("#F7464A", "#FF5A5E");
+        var two = template("#FDB45C", "#FFC870");
+        var three= template("#7E57C2", "#5C6BC0");
+        var four = template("#66BB6A", "#4CAF50");
+        var five = template("#00BCD4", "#26C6DA");
 
         if(!rawData.All.Android) {
             return [];
@@ -260,11 +260,11 @@ var fetchAndRenderDeviceChart = function() {
             };
         };
 
-        var other = template("#E91E63", "#EC407A");
-        var samsungGalaxy = template("#3F51B5", "#5C6BC0");
-        var htc= template("#00BCD4", "#26C6DA");
-        var nexus = template("#8BC34A", "#FFCA28");
-        var droid = template("#FFC107", "#FFCA28");
+        var other = template("#66BB6A", "#4CAF50");
+        var samsungGalaxy = template("#FDB45C", "#FFC870");
+        var htc= template("#7E57C2", "#5C6BC0");
+        var nexus = template("#F7464A", "#FF5A5E");
+        var droid = template("#00BCD4", "#26C6DA");
 
 
         if(!rawData.All.Android) {
