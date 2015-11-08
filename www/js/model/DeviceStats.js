@@ -1,4 +1,4 @@
-var DeviceStats = (function(template) {
+module.exports.DeviceStats = (function(template) {
 
     return function(data) {
 

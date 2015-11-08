@@ -1,4 +1,6 @@
-var Headerbar = (function(template, elemId, parentId, utilities) {
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.Headerbar = (function(template, elemId, parentId, utilities) {
     return function() {
 
         var renderTemplate = function() {
@@ -27,7 +29,9 @@ var Headerbar = (function(template, elemId, parentId, utilities) {
         };
 
         return {
-            renderInsert: renderInsert
+            renderInsert: renderInsert,
+            hide: hide,
+            show: show
         };
     };
 })(new EJS({url: 'js/template/headerbar.ejs'}), "header-bar",

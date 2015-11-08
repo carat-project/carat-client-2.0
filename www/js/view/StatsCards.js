@@ -1,4 +1,7 @@
-var StatsCards = (function(gestureCallback, utilities) {
+var DeviceStats = require("../model/DeviceStats.js").DeviceStats;
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.StatsCards = (function(gestureCallback, utilities) {
 
     return function() {
 

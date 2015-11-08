@@ -1,4 +1,4 @@
-var Utilities = (function() {
+module.exports.Utilities = (function() {
 
     var makeIdFromAppName = function(appName,
                                      hogOrBug,

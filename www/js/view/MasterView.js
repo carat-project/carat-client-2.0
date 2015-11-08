@@ -1,6 +1,13 @@
-var MasterView = (function(headerView, mainView,
-                           bugsView, hogsView,
-                           homeView, statsView) {
+var HogCards = require("./HogCards.js").HogCards;
+var BugCards = require("./BugCards.js").BugCards;
+var HomeCards = require("./HomeCards.js").HomeCards;
+var StatsCards = require("./StatsCards.js").StatsCards;
+var Headerbar = require("./Headerbar.js").Headerbar;
+var MainContent = require("./MainContent.js").MainContent;
+
+MasterView = (function(headerView, mainView,
+                       bugsView, hogsView,
+                       homeView, statsView) {
     return function() {
 
         var bugsRawData = [];
@@ -152,19 +159,22 @@ var MasterView = (function(headerView, mainView,
         statsView.setDataSource(myDeviceFetcherAsync);
 
         var render = function() {
-            headerView.renderInsert();
-            mainView.renderInsert();
             bugsView.renderInsert();
             hogsView.renderInsert();
             homeView.renderInsert();
             statsView.renderInsert();
         };
 
+        var renderBase = function() {
+            headerView.renderInsert();
+            mainView.renderInsert();
+        };
+
         return {
-            render: render
+            render: render,
+            renderBase: renderBase
         };
     };
 })(new Headerbar(), new MainContent(),
    new BugCards(), new HogCards(),
    new HomeCards(), new StatsCards());
-

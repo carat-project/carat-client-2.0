@@ -1,4 +1,7 @@
-var SummaryContainer = (function(template, utilities) {
+var SummaryEntry = require("./SummaryEntry.js").SummaryEntry;
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.SummaryContainer = (function(template, utilities) {
 
     return function(bugs, hogs) {
 

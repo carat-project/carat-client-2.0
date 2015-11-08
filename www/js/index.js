@@ -86,8 +86,8 @@ var app = {
     onDataReady: function(){
         app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
-        var master = new MasterView();
-        master.render();
+        var masterView = new MasterView();
+        masterView.render();
 
         // Start of the callback chain
         var displayData = function(){

@@ -1,4 +1,7 @@
-var HogBugCards = (function(template, utilities, buttonActions) {
+var HogBug = require("../model/HogBug.js").HogBug;
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.HogBugCards = (function(template, utilities, buttonActions) {
 
     return function(dataOrigin, outputElemId, gestureCallback) {
 
@@ -130,6 +133,8 @@ var HogBugCards = (function(template, utilities, buttonActions) {
                 }
             });
         };
+
+        console.log(window.carat.killApp);
 
         return {
             renderInsert: renderInsert,

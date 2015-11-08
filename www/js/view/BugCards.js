@@ -1,4 +1,6 @@
-var BugCards = function(bugsSource) {
+var HogBugCards = require("./HogBugCards.js").HogBugCards;
+
+module.exports.BugCards = function(bugsSource) {
 
     if(!bugsSource) {
         bugsSource = window.carat.getBugs;

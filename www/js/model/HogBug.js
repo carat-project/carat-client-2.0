@@ -1,4 +1,6 @@
-var HogBug = (function(template, utilities) {
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.HogBug = (function(template, utilities) {
 
     return function(data) {
 

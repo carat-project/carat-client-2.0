@@ -1,4 +1,7 @@
-var HomeCards = (function(utilities) {
+var SummaryContainer = require("../model/SummaryContainer.js").SummaryContainer;
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.HomeCards = (function(utilities) {
     return function() {
 
         var docLocation = document.querySelector("#home .page-content");

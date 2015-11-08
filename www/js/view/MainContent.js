@@ -1,4 +1,6 @@
-var MainContent = (function(template, parentId, utilities) {
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.MainContent = (function(template, parentId, utilities) {
     return function() {
 
         var renderTemplate = function() {

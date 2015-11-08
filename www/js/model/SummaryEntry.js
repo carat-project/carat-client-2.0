@@ -1,4 +1,6 @@
-var SummaryEntry = (function(template, utilities) {
+var Utilities = require("../helper/Utilities.js").Utilities;
+
+module.exports.SummaryEntry = (function(template, utilities) {
     return function(data) {
 
         var cutLabel = function(labelToCut) {
