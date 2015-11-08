@@ -105,7 +105,7 @@ function sendFeedback(){
     var li = document.querySelector("#sendFeedback");
 
    	li.addEventListener('click', function () {
-    	alert("Your socks stink");
+    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
 		});
 }
 
