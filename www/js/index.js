@@ -17,6 +17,8 @@
  * under the License.
  */
 
+var backPressed = false;
+
 var app = {
     // This sets up our app
     initialize: function() {
@@ -77,9 +79,27 @@ var app = {
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        // Specify back button behavior
+        document.addEventListener("backbutton", function(e){
+            if(window.location.href.indexOf("index.html")){
+                if(backPressed){
+                    navigator.app.exitApp();
+                } else {
+                    carat.showToast("Press back again to exit");
+                    backPressed = true;
+                    setTimeout(function(){
+                        backPressed = false
+                    }, 4000);
+                }
+            }
+            navigator.app.backHistory();
+        }, false);
+
+        // Attempt at making taps faster
         FastClick.attach(document.body);
 
-        // Set up storage
+        // Start setting up plugin
         console.log("Initializing plugin");
         app.showProgress();
         carat.setup(app.getUuid);
@@ -174,7 +194,7 @@ var app = {
 
         // Display setting suggestions for debugging
         carat.getSettings(function(settings){
-            if((typeof settings !== "undefined") && (settings !== null)){
+            if((typeof settings !== "undefined") && (settings !== null) && (settings.length > 0)){
                 var suggestion = settings[0];
                 var benefit = suggestion.benefit
                 var length =  benefit.indexOf("±");

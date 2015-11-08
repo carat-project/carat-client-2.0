@@ -130,6 +130,10 @@ function moveToPage(pagename, address){
     		});
 }
 
+function handleSetting(e) {
+    console.log($(e));
+    $(e).find("label").toggleClass("is-checked");
+}
 
 
 	sendFeedback();

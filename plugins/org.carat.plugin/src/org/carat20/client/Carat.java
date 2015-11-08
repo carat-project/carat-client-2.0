@@ -5,12 +5,14 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -360,11 +362,15 @@ public class Carat extends CordovaPlugin {
     private void handleToast(final CallbackContext cb, final JSONArray args){
         try {
             final String message = (String) args.get(0);
+            Display display = activity.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            final int offset = (int)(size.y*0.05);
             activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 20);
+                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
                         toast.show();
                         cb.success();
                     }
