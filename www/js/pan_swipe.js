@@ -31,12 +31,6 @@ function makeElemTappable(el, mc, timer,
         }
 
         showOrHideCollapse(ev);
-        toggleShowOnExpand();
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 200);
-        requestElementUpdate();
     };
 
     var toggleShowOnExpand = function() {
@@ -49,31 +43,44 @@ function makeElemTappable(el, mc, timer,
         for(var i = 0; i < togglees.length; i++) {
             var iteratee = togglees[i];
             if(!iteratee.style
-               || !iteratee.style.display
-               || iteratee.style.display === 'none') {
-                iteratee.style.display = 'initial';
+               || !iteratee.style.visibility
+               || iteratee.style.visibility === 'hidden') {
+                iteratee.style.visibility = 'visible';
             } else {
-                iteratee.style["display"] = 'none';
+                iteratee.style["visibility"] = 'hidden';
             }
         };
     };
 
         var showOrHideCollapse = function(ev) {
-            var moreText = document.querySelector
-            ("#card-" + el.id + "-textpand");
-
-            $("#card-" + el.id + "-textpand").toggleClass("in");
+       
+            if (el.id =="statistics-jscore"){
+                $("#card-" + el.id + "-textpand").toggleClass("in_large");
+            
+            } else {
+                $("#card-" + el.id + "-textpand").toggleClass("in");
+            }
             changeExpandArrow(ev);
         };
 
         //changes expand arrow, uses strange material design character in if statement
         var changeExpandArrow = function(ev) {
             var icon = el.querySelector("i.material-icons");
-            if (icon.innerHTML != "") {
+            var iconNode = $(icon);
+            if(iconNode.hasClass("normal-icon")){
+                iconNode.removeClass("normal-icon");
+                iconNode.addClass("rotated-icon");
+            } else {
+                iconNode.removeClass("rotated-icon");
+                iconNode.addClass("normal-icon");
+            }
+            /*if (icon.innerHTML != "") {
                 icon.innerHTML = "&#xE5CF";
             } else {
-                icon.innerHTML = "&#xE5CE";           
-            }        
+                icon.innerHTML = "&#xE5CE";
+            }*/
+                    toggleShowOnExpand();
+
         };
 
         mc.add( new Hammer.Tap(
@@ -187,8 +194,15 @@ function makeElemTappable(el, mc, timer,
         var onSwipeRight = function(ev) {
             
             // hides swiped bug and shows next bug 
-            if (el.classList.contains("worstBug")) {
-                var list = document.querySelectorAll(".worstBug");
+            if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {
+                
+                var list
+                
+                if (el.classList.contains("worstBug")){
+                    list = document.querySelectorAll(".worstBug");
+                } else {
+                    list = document.querySelectorAll(".worstHog");
+                }
                 
                 var elPlaceinList;
                 for (i=0; i < list.length; i++ ) {
@@ -203,7 +217,7 @@ function makeElemTappable(el, mc, timer,
 
                     list[elPlaceinList+1].style.display='inherit';
                     list[elPlaceinList+1].style.visibility='visible';
-                        list[elPlaceinList+1].style.opacity="0";
+                    list[elPlaceinList+1].style.opacity="0";
                     setTimeout(function() {
                         list[elPlaceinList+1].style.opacity="1";
                     }, 1);                    

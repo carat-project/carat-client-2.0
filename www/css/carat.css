@@ -1,8 +1,126 @@
-/* progress indicator */
+
+/* = BENEFIT ERROR = */
+
+.benefit-error {
+  color: #B5B5B5;
+  font-size: 13px;
+  line-height: 10px;
+  position:relative;
+  top: -1px;
+}
+
+
+/* = EXPAND BUTTON = */
+
+.expand-button {
+  width: 40px;
+  height: 30px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+  text-align: center;
+  vertical-align: middle;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B !important;
+}
+
+.rotated-icon {
+  -webkit-transform: scaleY(-1);
+  transition: transform 0.5s ease;
+}
+
+.normal-icon {
+  -webkit-transform: scaleY(1);
+  transition: transform 0.5s ease;
+}
+
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* = PROGRESS BAR = */
+
+.progressBar {
+  position: relative;
+  display: inline-block;
+  top: 2px;
+  left: 2px;
+  width: 100px;
+  height: 13px;
+  background-color: #F0F0F0;
+}
+
+.progressBar > span {
+  position: absolute;
+  top: -1px;
+  left: 40%;
+  font-size: 10px;
+  color: #000;
+}
+
+.progressBar > div {
+  width: 0%; /* initial value */
+  height: 100%;
+  background-color: #66BB6A;
+}
+
+/* = PROGRESS INDICATOR = */
+
 #progress {
   margin-left: 10px;
   margin-bottom: 5px;
 }
+
+/* = JSCORE CIRCLE = */
+
+.outerCircle {
+  position: relative;
+  border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  z-index: 2;
+  background: #FBE2B6;
+}
+
+.innerCircle {
+    position: absolute;
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    top: 50%;
+    left: 50%;
+    margin: -31px 0px 0px -31px;
+    background: #FFF;
+    color: #000;
+    font-size: 30px;
+    vertical-align: middle;
+}
+
+.numberCircle {
+  position: absolute;
+  top: 37.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+div.numberCircle > button {
+    position: relative;
+    width: 60px !important;
+    height: 60px !important;
+    left: 60px;
+    bottom: 50px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    overflow: hidden;
+    outline:none;
+    background-image:url(../img/ic_info_black_24dp_1x.png);
+}
+
+/* = OTHER = */
 
 .mdl-layout__header-row {
   margin-left: -8px;
@@ -28,17 +146,31 @@
   font-weight: 400;
   height: auto;
   overflow: hidden;
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 0px;
+    margin-right: 0px;
     margin-bottom: 0px;
     margin-top: 0px;
-  z-index: 0;
+  z-index: 2;
+  padding-left: 8px;
+  padding-right: 8px;
   position: relative;
-  background-color: #E8E8E8;
+  /*background-color: #E8E8E8;*/
 
-    background-position:5%50%, 95%50%;
+   /* background-position:5%50%, 95%50%;*/
     background-repeat: no-repeat;
-  border-radius: 2px;
+  /*border-radius: 2px;*/
+}
+
+@media screen and (orientation:landscape) {
+   .mdl-card-background {
+    width: auto;
+   }
+}
+
+@media screen and (orientation:portrait) {
+   .mdl-card-background {
+    width: 100%;
+   }
 }
 
 /*just for testing purposes*/
@@ -106,7 +238,8 @@
   line-height: normal;
   overflow: hidden;
 
-  margin: 0; }
+  margin: 0; 
+}
 
 .carat-version {
     display: block;
@@ -139,7 +272,7 @@
 
 .carat_summaryCard_title_text {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 400;
     padding-top: 10px;
     color:#616161;
 }
@@ -219,19 +352,19 @@
 }
 
 .collapse {
-  max-height: 0px;
-  overflow: hidden;
-  transition: max-height 0.05s;
-/*
-    force gpu acceleration 
-  -webkit-transform: translateZ(0);
-*/
-  -webkit-transition: max-height 0.05s;
-  -moz-transition: max-height 0.05s;
-  -o-transition: max-height 0.05s;
+    font-size: 15px !important;
+    max-height: 0px;
+    overflow: hidden;
+   /* -webkit-transition: ease-in 0.4s;*/
 }
 .collapse.in {
-  max-height: 1000px;
+    max-height: 200px;
+   /* -webkit-transition: ease-in 0.4s;*/
+}
+
+.collapse.in_large {
+  max-height: 600px;
+    /*-webkit-transition: ease-in-out 0.6s;*/
 }
 
 .carat-card__supporting-text {
@@ -252,42 +385,21 @@ p {
   line-height: normal;
 }
 
-.numberCircle {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    line-height: normal;
-    position: absolute;
-    right: 10%;
-    top: 68px;
-    background: #F0F0F0;
-    color: #666;
-    text-align: center !important;
-    vertical-align: middle !important; 
-    font-size: 40px;
-    margin-bottom: 10px;
+.circleContainer {
+  position: absolute;
+  right: 10%;
+  top: 68px;
 }
 
-div.numberCircle > button {
-    position: relative;
-    width: 60px !important;
-    height: 60px !important;
-    left: 45px;
-    bottom: 70px;
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
+.page-content {
+    padding: 0px !important;
     overflow: hidden;
-    outline:none;  
-    background-image:url(../img/ic_info_black_24dp_1x.png);
 }
-
-
 
 html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
+    font-family: 'Roboto', 'Helvetica', sans-serif;
 }
+
 .carat-avatar {
   width: 48px;
   height: 48px;
@@ -522,6 +634,10 @@ _:-ms-input-placeholder, :root .carat-graph {
 	text-align: center;
 }
 
+.mdl-layout__tab {
+  font-weight: bolder;
+}
+
 section.mdl-layout__tab-panel div.page-content {
     margin-top: 8px;
     margin-bottom: 8px;
@@ -534,6 +650,12 @@ section.mdl-layout__tab-panel div.page-content {
     margin-left: 0px;
     margin-right: 0px;
     width: 100%;
+    overflow:hidden; 
+}
+
+.restored {
+/*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
+    background-color: rgb(255,255,255);
 }
 
 .mdl-card.sleeker div.carat-card__title {
@@ -612,14 +734,28 @@ section.mdl-layout__tab-panel div.page-content {
     padding-bottom: 25px;
 }
 
+#home .mdl-card.sleeker .mdl-card__supporting-text .collapse.in {
+    padding-bottom: 0px;
+}
+
 #home .mdl-card.sleeker {
     z-index: 2;
-    margin-top: 1px;
-    margin-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 8px;
     margin-left: 8px;
     margin-right: 8px;
     width: calc(100% - 16px);
 }
+
+#home .mdl-card.sleeker p {
+    padding-top: 8px;
+    -webkit-margin-after: 0em;
+}
+
+#home .mdl-card.sleeker #version {
+    padding-top: 8px;
+}
+
 
 .mdl-card .expand {
     display: inline;
@@ -699,7 +835,7 @@ section.mdl-layout__tab-panel div.page-content {
     font-size: 24px;
     font-weight: 600;
     padding-top: 10px;
-    color:#616161;
+    color: #616161;
 }
 
 [data-icon]:before {
@@ -709,7 +845,11 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .show-on-expand {
-    display: none;
+/*    display: none;*/
+/*
+    -webkit-transition:opacity 0.15s ease-in-out;
+    transition:opacity 0.15s ease-in-out;
+*/
 }
 
 .is-a-hog {
@@ -717,4 +857,41 @@ section.mdl-layout__tab-panel div.page-content {
     color: #FF0000;
 }
 
- 
+.mdl-menu__container, .mdl-menu__outline {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility: hidden;
+        -o-backface-visibility: hidden;
+        backface-visibility: hidden;
+}
+
+.sleeker > .mdl-card--border {
+    border-top: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+.canvas-container {
+    width: 100%;
+    text-align: center;
+}
+
+.canvas-container canvas {
+    display: inline;
+}
+
+.carat-module {
+    padding-top: 16px;
+    padding-bottom: 4px;
+}
+
+.carat-module-title {
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;  
+    margin-left: 8px;
+    color: dimgray;
+}
+
+.worstBug, .worstHog {
+}
+
+

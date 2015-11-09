@@ -17,6 +17,8 @@
  * under the License.
  */
 
+var backPressed = false;
+
 var app = {
     // This sets up our app
     initialize: function() {
@@ -28,16 +30,14 @@ var app = {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
         document.addEventListener("dataready", this.onDataReady, false);
-        document.addEventListener("statisticsready", this.refreshCpuUsage, false);
+        document.addEventListener("renderfinished", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
         uuidButton.addEventListener("click", this.onUuidChange, false);
-        
+
         // Listener for menu
         initializeListeners();
-        
-
     },
 
     // Clear and refresh storage data
@@ -68,18 +68,38 @@ var app = {
         });
     },
 
-    getCpuUsage: function(){
+    getCpuUsage: function(progressText, progressLoad){
         carat.getCpuUsage(function(usage){
-            document.getElementById("cpu-usage").innerHTML = usage +"%";
+            usage = usage + "%";
+            progressText.innerHTML = usage;
+            progressLoad.style.width = usage;
         });
     },
 
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        // Specify back button behavior
+        document.addEventListener("backbutton", function(e){
+            if(window.location.href.indexOf("index.html")){
+                if(backPressed){
+                    navigator.app.exitApp();
+                } else {
+                    carat.showToast("Press back again to exit");
+                    backPressed = true;
+                    setTimeout(function(){
+                        backPressed = false
+                    }, 4000);
+                }
+            }
+            navigator.app.backHistory();
+        }, false);
+
+        // Attempt at making taps faster
         FastClick.attach(document.body);
 
-        // Set up storage
+        // Start setting up plugin
         console.log("Initializing plugin");
         app.showProgress();
         carat.setup(app.getUuid);
@@ -114,7 +134,7 @@ var app = {
                 return displayBugsAndSummary(bugs, hogs);
             });
         };
-        
+
         // Create cards for bugs and append to system tab
         // NOTE: temporary solution for generating summary card
         var displayBugsAndSummary = function(bugs, hogs){
@@ -123,7 +143,7 @@ var app = {
             // Pass bugs to controller
             itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
-            itemCards.generateCards(bugs);
+            itemCards.generateCards(bugs, hogs);
 
             carat.getMainReports(displayMain);
         };
@@ -155,6 +175,7 @@ var app = {
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
                         console.log("Finished rendering");
+                        cordova.fireDocumentEvent("renderfinished");
                     });
             }
 
@@ -165,18 +186,38 @@ var app = {
                     }
                     getMemoryInfo(uuid);
             });
-
             // ...
         };
 
         // Begin the callback chain
         displayData();
+
+        // Display setting suggestions for debugging
+        carat.getSettings(function(settings){
+            if((typeof settings !== "undefined") && (settings !== null) && (settings.length > 0)){
+                var suggestion = settings[0];
+                var benefit = suggestion.benefit
+                var length =  benefit.indexOf("±");
+                var benefit = benefit.substr(0, length-1);
+
+                carat.showNotification("Change to "+suggestion.changeTo, "Benefit: "+benefit, function(success){
+                    console.log("Showing placeholder notification for a system setting");
+                });
+            }
+            //console.log(JSON.stringify(settings));
+        });
     },
 
     // Set an interval for refreshing cpu usage
     refreshCpuUsage: function() {
-        app.getCpuUsage();
-        setInterval(app.getCpuUsage, 4000);
+
+        var progressText = document.querySelector("#cpuProgressBar > span");
+        var progressLoad = document.querySelector("#cpuProgressBar > div");
+
+        app.getCpuUsage(progressText, progressLoad);
+        setInterval(function(){
+            app.getCpuUsage(progressText, progressLoad);
+        }, 2000);
     },
 
     showProgress: function(){

@@ -8,20 +8,21 @@
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
     <title>Carat 2.0</title>
 
-    <link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/material.css">
     <link rel="stylesheet" href="css/carat.css">
     <link rel="stylesheet" href="css/dialog.css">
     <link rel="stylesheet" href="css/snackbar.css">
     <link rel="stylesheet" href="css/settings.css">
+    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 </head>
 <body>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
 
-    <header class="mdl-layout__header mdl-color--blue-grey-500">
+    <header class="mdl-layout__header mdl-color--orange-500">
 
             <div class="mdl-layout__header-row" style="padding-left: 2%;">
                 <!--back arrow-->
@@ -47,32 +48,32 @@
     <div class="mdl-layout__content">
 
         <!--wifi only-->
-    <div class="carat_settings_box">
+    <div class="carat_settings_box" id="wifiSetting" onclick="handleSetting(this);">
         <span class="fill-box">Wifi only</span>
         <div class="checkbox_wrapper">
-        <label style="display:inline; position:absolute; right: 0px;"  class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="wifi">
-
-            <input type="checkbox" id="wifi" class="mdl-switch__input" />
-
-        </label>
+            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="wifi">
+                <div class="checkbox_wrapper">
+                    <input type="checkbox" id="wifi" class="mdl-switch__input"/>
+                </div>
+            </label>
         </div>
     </div>
-        <div class="carat_settings_line"></div>
+    <div class="carat_settings_line"></div>
 
 
         <!--hide small impact-->
 
-        <div class="carat_settings_box">
-            <span class="fill-box">Hide apps with small impact</span>
+        <div class="carat_settings_box" id="impactSetting" onclick="handleSetting(this);">
+            <span class="fill-box"> Hide apps with small impact</span>
             <div class="checkbox_wrapper">
             <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="smallImpact">
-
                 <div class="checkbox_wrapper">
-                <input type="checkbox" id="smallImpact" class="mdl-switch__input"  checked/>
+                    <input type="checkbox" id="smallImpact" class="mdl-switch__input"/>
                 </div>
             </label>
             </div>
         </div>
+
         <div class="carat_settings_line"></div>
 
         <!--share-->

@@ -1,13 +1,21 @@
 package org.carat20.client;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.os.Build;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 import java.util.HashMap;
 import org.apache.cordova.CordovaInterface;
@@ -20,8 +28,11 @@ import org.carat20.client.device.DeviceLibrary;
 import static org.carat20.client.Constants.*;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
+import org.carat20.client.storage.EVTree;
 import org.carat20.client.storage.SimpleHogBug;
+import org.carat20.client.storage.SimpleSettings;
 import org.carat20.client.thrift.Reports;
+import org.carat20.client.utility.Range;
 import org.json.JSONObject;
 
 
@@ -40,13 +51,16 @@ public class Carat extends CordovaPlugin {
 
     private static DataStorage storage;
     private static CommunicationManager commManager;
-    private static ApplicationLibrary appService;
+    private static ApplicationLibrary applicationLibrary;
+    private static DeviceLibrary deviceLibrary;
     private static Context context;
+    private static Intent intent;
     private static Activity activity;
     
     private Reports mainReports;
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
+    private SimpleSettings[] settingsReports;
     
     private String uuid;
 
@@ -59,6 +73,14 @@ public class Carat extends CordovaPlugin {
     public void initialize(final CordovaInterface cordova, final CordovaWebView webView) {
         Log.v("Carat", "Plugin is initializing");
         super.initialize(cordova, webView);
+        Carat.activity = cordova.getActivity();
+        Window window = activity.getWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+        }
         
         // ...
     }
@@ -95,6 +117,7 @@ public class Carat extends CordovaPlugin {
                     case HOGS:      handleHogs(cb);         break;
                     case BUGS:      handleBugs(cb);         break;
                     case MEMORY:    handleMemory(cb);       break;
+                    case SETTINGS:  handleSettings(cb);     break;
                         
                     // Actions
                     case KILL:      handleKill(cb, args);   break;
@@ -128,7 +151,10 @@ public class Carat extends CordovaPlugin {
         Log.v("Carat", "Setting up storage");
         activity = cordova.getActivity();
         context = activity.getApplicationContext();
+        intent = activity.getIntent();
         storage = new DataStorage(context);
+        applicationLibrary = new ApplicationLibrary(activity);
+        deviceLibrary = new DeviceLibrary(context, intent);
         cb.success();
     }
     
@@ -158,7 +184,6 @@ public class Carat extends CordovaPlugin {
         }
         
         commManager = new CommunicationManager(storage, uuid);
-        appService = new ApplicationLibrary(activity);
         
         cordova.getThreadPool().execute(new Runnable() {
             @Override
@@ -174,6 +199,7 @@ public class Carat extends CordovaPlugin {
                     if(storage.getMainReports() == null) commManager.refreshMainReports();
                     if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
                     if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                    if(storage.getBugReports() == null) commManager.refreshSettings();
                 } else {
                     Log.v("Carat", "Storage is complete and ready to go");
                 }
@@ -250,6 +276,22 @@ public class Carat extends CordovaPlugin {
         }
     }
     
+    
+    
+    private void handleSettings(CallbackContext cb){
+        try {
+            HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
+            if(deviceInfo == null) return;
+            EVTree tree = storage.getSettingsTree();
+            if(tree == null) return;
+            settingsReports = tree.getSuggestions(deviceInfo);
+            if(settingsReports == null) return;
+            cb.success(convertToJSON(settingsReports));
+        } catch (JSONException e){
+            Log.v("Carat", "Failed to convert settings.", e);
+        }
+    }
+    
     // Memory info
     private void handleMemory(CallbackContext cb){
         HashMap<String, Integer> memInfo = DeviceLibrary.getMemoryInfo();
@@ -277,7 +319,7 @@ public class Carat extends CordovaPlugin {
     private void handleKill(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
-            if(appService.killApp(packageName)){
+            if(applicationLibrary.killApp(packageName)){
                 cb.success("Success");
             } else {
                 cb.error("Failed");
@@ -292,7 +334,7 @@ public class Carat extends CordovaPlugin {
     private void handleRem(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
-            if(appService.openAppDetails(packageName)){
+            if(applicationLibrary.openAppDetails(packageName)){
                 cb.success("Success");
             } else {
                 cb.error("Failed");
@@ -305,7 +347,7 @@ public class Carat extends CordovaPlugin {
     
     // Get cpu usage while keeping callback
     private void handleCPU(final CallbackContext cb){
-         cordova.getThreadPool().execute(new Runnable() {
+        cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
                 String cpuUsage = String.format("%.1f", DeviceLibrary.getCpuUsage(1000));
@@ -313,18 +355,22 @@ public class Carat extends CordovaPlugin {
                 result.setKeepCallback(true); // Keep sending results
                 cb.sendPluginResult(result);
             }
-         });
+        });
     }
     
     // Show a toast message
     private void handleToast(final CallbackContext cb, final JSONArray args){
         try {
             final String message = (String) args.get(0);
+            Display display = activity.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            final int offset = (int)(size.y*0.05);
             activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 20);
+                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
                         toast.show();
                         cb.success();
                     }
@@ -340,7 +386,7 @@ public class Carat extends CordovaPlugin {
         try{
             String title = args.getString(0);
             String content = args.getString(1);
-            DeviceLibrary.showNotification(title, content, context);
+            DeviceLibrary.showNotification(title, content);
             cb.success();
         } catch (JSONException e){
             Log.v("Carat", "Failed to show notification. Invalid parameters.");
@@ -388,7 +434,7 @@ public class Carat extends CordovaPlugin {
             String packageName = s.getAppName();
             
             //Ignore apps that are not installed or exceed the error limit.
-            if(!appService.isAppInstalled(packageName) 
+            if(!applicationLibrary.isAppInstalled(packageName) 
                     || s.getErrorRatio() > ERROR_LIMIT) continue;
             
             JSONObject app = new JSONObject()
@@ -405,11 +451,33 @@ public class Carat extends CordovaPlugin {
                 .put("icon", s.getAppIcon())
 
                  // Dynamic
-                .put("version", appService.getAppVersion(packageName))
-                .put("running", appService.isAppRunning(packageName))
-                .put("killable", appService.isAppKillable(packageName))
-                .put("removable", appService.isAppRemovable(packageName));
+                .put("version", applicationLibrary.getAppVersion(packageName))
+                .put("running", applicationLibrary.isAppRunning(packageName))
+                .put("killable", applicationLibrary.isAppKillable(packageName))
+                .put("removable", applicationLibrary.isAppRemovable(packageName));
             results.put(app);
+        }
+        return results;
+    }
+    
+    public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
+        JSONArray results = new JSONArray();
+        for(SimpleSettings s : settings){
+            //if(s.getErrorRatio() > ERROR_LIMIT) continue;
+            
+            JSONObject setting = new JSONObject()
+            .put("label", s.getLabel())
+            .put("current", s.getValue());
+            Object value = s.getValueWithout();
+             if(value instanceof Range){
+                 Range valueRange = (Range) value;
+                 JSONObject range = new JSONObject()
+                         .put("min", valueRange.getMin())
+                         .put("max", valueRange.getMax());
+                 setting.put("changeTo", range);
+             } else setting.put("changeTo", value)    
+            .put("benefit", s.getBenefitText());
+            results.put(setting);
         }
         return results;
     }

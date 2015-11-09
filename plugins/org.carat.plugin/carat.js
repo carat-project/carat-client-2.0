@@ -33,6 +33,9 @@ module.exports = {
     getBugs: function(callback){
         exec(callback, callback, service, "bugs", [""]);
     },
+    getSettings: function(callback){
+        exec(callback, callback, service, "settings", [""]);
+    },
     getMemoryInfo: function(callback){
     	exec(callback, callback, service, "memory", [""]);
     },

@@ -8,7 +8,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         var backgroundNode = document.createElement("div");
         backgroundNode.classList.add("mdl-card-background");
-        backgroundNode.classList.add("mdl-shadow--2dp");
+        //backgroundNode.classList.add("mdl-shadow--2dp");
         backgroundNode.classList.add("mdl-cell");
         backgroundNode.classList.add("mdl-cell--4-col");
         backgroundNode.appendChild(cardDom);
@@ -158,7 +158,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         } else {
             for(var paragraphKey in secondaryTextParagraphs) {
                 var paragraph = secondaryTextParagraphs[paragraphKey];
-                var paragraphNode = document.createElement("p");
+                var paragraphNode = document.createElement("div");
+                paragraphNode.style.marginBottom = "6px";
                 var textNode = document.createTextNode(paragraph);
 
                 paragraphNode.appendChild(textNode);
@@ -170,6 +171,31 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             secondaryTextNode.id = nodeId;
         }
     };
+    
+    var injectParagraphSecondaryText = function(cardDomNode,
+                                                     secondaryTextParagraph,
+                                                     notificationId) {
+        var secondaryTextNode = cardDomNode
+                .querySelector(".collapse");
+
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        if(!secondaryTextParagraph) {
+            trashANode(secondaryTextNode);
+            
+        } else {
+            var paragraphNode = document.createElement("p");
+            var textNode = document.createTextNode(secondaryTextParagraph);
+            paragraphNode.appendChild(textNode);
+            console.log(paragraphNode);
+
+                secondaryTextNode.appendChild(paragraphNode);
+            }
+
+            secondaryTextNode.id = nodeId;
+        
+    };
+
 
     //inject css style classes to card
     var injectClasses = function(cardDomNode, classes) {
@@ -234,6 +260,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             closeButton.addEventListener("click",  function(ev) {
                 var button = ev.target;
+				console.log("rivi 262 errori", packageName);
                 appCloseCallback(packageName, function(state) {
                     console.log("Killing app: " + state);
                     if(state == "Success"){
@@ -299,8 +326,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var timeErrorElem = document.createElement("span");
             var timeErrorText = document
                     .createTextNode(timeDrainError);
+
             timeErrorElem.appendChild(timeErrorText);
-            timeErrorElem.classList.add("show-on-expand");
+            timeErrorElem.classList.add("benefit-error");
 
             timeDrainNode.appendChild(timeErrorElem);
         }
@@ -371,6 +399,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var injectJscore = function(statisticsDomNode,
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
+        var circle = statisticsDomNode.querySelector(".outerCircle");
+        var degree = jscore*3.6;
+        var color;
+        if(degree <= 180){
+            degree = 90+degree;
+            color= "#FBE2B6";
+        } else  {
+            degree = degree-90;
+            color = "#F7A71B";
+        }
+        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #F7A71B 50%, transparent 50%)";
 
         appendTextOrRemoveNode(spot, jscore);
     };
@@ -403,7 +442,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             spot.insertBefore(concatees[i], firstChild);
         }
     };
-
+    
     //like homebrewConcatChildren with maximium number of concatees
     var homebrewConcatChildrenWithMaxNumber = function(spot,
                                                        firstChild,
@@ -446,17 +485,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = [
-                          "OS version: " + deviceInfo.osVersion,
-                          "Device model: " + deviceInfo.modelName,
-                          "Memory total: " + deviceInfo.memoryTotal,
-                          "Memory used: " + deviceInfo.memoryUsed,
-                          "Battery duration: " + deviceInfo.batteryLife,
                           "Carat id: " + deviceInfo.caratId,
+                          "Memory used: " + deviceInfo.memoryUsed,
+                          "Memory total: " + deviceInfo.memoryTotal,
+                          "Battery duration: " + deviceInfo.batteryLife,
+                          "Device model: " + deviceInfo.modelName,
+                          "OS version: " + deviceInfo.osVersion,
                          ];
         injectMultiparagraphSecondaryText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
-        cordova.fireDocumentEvent("statisticsready");
     };
 
 	var makeCaratCard = function(caratDomNode,
@@ -466,7 +504,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 		injectTitle(caratDomNode, "Carat");
 		injectChart(caratDomNode, caratObject.chart);
 		injectIdToCard(caratDomNode, caratCardId);
-		var expandText = "Carat is research project...";
+		var expandText = "Carat is a free app that tells you what is using up the battery of your mobile device, whether that's normal, and what you can do about it. After running Carat for about a week, you will start to receive personalized recommendations for improving your battery life. Carat is a research project based out of the AMP Lab in the EECS Department at UC Berkeley, collaborating with the University of Helsinki.";
 		injectMultiparagraphSecondaryText(caratDomNode,
 										  expandText,
 										  caratCardId);
@@ -476,9 +514,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var makeSummaryCard = function(summaryObject,
                                    summaryDomNode) {
 
-        //summary title
-        injectSummaryTitle(summaryDomNode,
-                           summaryObject.title);
+//        //summary title
+//        injectSummaryTitle(summaryDomNode,
+//                           summaryObject.title);
 
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
@@ -556,14 +594,54 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var itemData = notificationObject.worstBug;
 
             newCardNode = cardTemplates
-                .getNewWorstBugTemplate();
+                .getNewWorstBugHogTemplate();
 
             gestureCallbacks.panSwipefy(newCardNode);
 
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           itemData.textfield);
+                           "Update or Uninstall - Unexpectedly heavy use of energy.");
+            injectParagraphSecondaryText(newCardNode,
+                           itemData.textfield, itemData.id);
+            injectSecondaryText(newCardNode,
+                                {
+                                    samples: itemData.samples,
+                                    version: itemData.version
+                                },
+                                itemData.id);
+            injectClasses(newCardNode,
+                          itemData.classes);
+            injectTimeDrain(newCardNode,
+                            itemData.timeDrain,
+                            itemData.timeDrainErrorString);
+            injectIdToCard(newCardNode, itemData.id);
+            injectCloseOrUninstallButton(newCardNode,
+                                         itemData.buttons.killButton,
+                                         itemData.buttons.removeButton,
+                                         itemData.packageName,
+                                         itemData.appCloseCallback,
+                                         itemData.appUninstallCallback,
+                                         itemData.title);
+
+            if(localStorage.getItem(itemData.id) === 'dismissed') {
+                newCardNode.style.display = 'none';
+            }
+            
+        } else if (notificationObject.worstHog) {
+            var itemData = notificationObject.worstHog;
+
+            newCardNode = cardTemplates
+                .getNewWorstBugHogTemplate();
+
+            gestureCallbacks.panSwipefy(newCardNode);
+
+            injectTitle(newCardNode, itemData.title);
+            injectIcon(newCardNode, itemData.icon);
+            injectMainText(newCardNode,
+                           "Close or Uninstall - Increased use of energy.");
+            injectParagraphSecondaryText(newCardNode,
+                           itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
@@ -625,20 +703,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //fetch correct models for the home tab and create corresponding cards
     //for them
-    var getHomeCards = function(bugsSource,
+    var getHomeCards = function(bugOrHogSource, bugOrHogSelector,
                                 appCloseCallback, appUninstallCallback) {
                 
-        var bugs = new Array();
+        var bugsOrHogs = new Array();
         
-        for(i = 0; i < bugsSource.length; i++) {
-            bugs.push(bugsSource[i]);
+        for(i = 0; i < bugOrHogSource.length; i++) {
+            bugsOrHogs.push(bugOrHogSource[i]);
         };
         
-        var result =  homebrewMap(notificationsArray
-                                  .getWorstBugs(bugs,
+        var result;
+        
+        if (bugOrHogSelector == "bug") {        
+            result = homebrewMap(notificationsArray
+                                  .getWorstBugs(bugsOrHogs,
                                            appCloseCallback,
                                            appUninstallCallback),
                                   makeCardBasedOnModel);
+        } else {
+            result = homebrewMap(notificationsArray
+                                  .getWorstHogs(bugsOrHogs,
+                                           appCloseCallback,
+                                           appUninstallCallback),
+                                  makeCardBasedOnModel);
+        }
 
         for (i=0; i<result.length-1; i++){
             result[i].style.display="none";
@@ -719,18 +807,25 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var generatePage = function(selector, nodeArray) {
 
         console.log("generatePage");
-        var rightSpot = selectCardsSpot(selector);
-
-        var children = rightSpot.childNodes;
-
+        
+        var rightSpot;
+        if(selector==='#suggestions' || selector==='#summary') {
+            rightSpot = document.querySelector(selector);
+            homebrewConcatChildren(rightSpot,
+                                       rightSpot.firstChild,
+                                       nodeArray);
+            
+        } else {
+        rightSpot = selectCardsSpot(selector);
+        }
+        
         if(selector === "#bugs" || selector === "#hogs") {
             var withSwipeBackgrounds = nodeArray
                     .map(makeSwipeHintBackground);
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
-                                       withSwipeBackgrounds);    
-       
+                                       withSwipeBackgrounds);           
         } else {
             rightSpot.childNodes =
                 homebrewConcatChildren(rightSpot,
@@ -740,9 +835,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
 
     //generate home and system tab cards
-    var generateCards = function(bugsSource, appCloseCallback, appUninstallCallback) {
-        if (bugsSource.length>0) {
-            generatePage("#home", getHomeCards(bugsSource, appCloseCallback, appUninstallCallback));
+    var generateCards = function(bugsSource, hogsSource, appCloseCallback, appUninstallCallback) {
+        if (typeof hogsSource !== 'undefined' && hogsSource.length>0) {
+            generatePage("#suggestions", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
+        }
+        if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
+            generatePage("#suggestions", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
         generatePage("#system", getSystemCards());
     };
@@ -760,7 +858,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //make summary card (and for the time being other cards in home tab)
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
-        generatePage("#home", getSummaryCard(hogsSource, bugsSource));
+        generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
         //calls summaryCard.js and opens summary entries grid
         showOrHideActions();
     };

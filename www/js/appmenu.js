@@ -4,22 +4,62 @@
 
 function initializeListeners() {
     var cancelA = document.querySelector("#showAllHiddenCards");
-    
-//    cancelA.addEventListener('click', function () {
-//        cancelAll();
-//    });
                              
-    var cancelB = document.querySelector("#showHiddenBugCards");
-    cancelB.addEventListener('click', function () {
+    var cancelBugSnooze = document.querySelector("#showHiddenBugCards");
+    cancelBugSnooze.addEventListener('click', function () {
         cancelBug();
     });
     
-    var cancelH = document.querySelector("#showHiddenHogCards");
-    cancelH.addEventListener('click', function () {
+    var cancelHogSnooze = document.querySelector("#showHiddenHogCards");
+    cancelHogSnooze.addEventListener('click', function () {
         cancelHog();
-    });                             
-                             
+    });
+    
+    //listeners for tabs
+    var tabs = document.querySelectorAll(".mdl-layout__tab");  
+    for (i=0; i<tabs.length; i++) {
+        tabs[i].addEventListener("click", function(){
+        removeHighlight(); 
+        });
+    }    
 }
+    
+ function listenMenu () {
+     disableMenuItem();
+}
+
+function removeHighlight() {
+    var restored = document.querySelectorAll(".restored");
+   
+    if (restored !== null) {
+        i = restored.length;
+        while (i--) {
+            restored[i].classList.remove("restored");
+        }
+    }
+
+}
+
+
+
+function disableMenuItem(){
+    var bugtab = document.querySelector("#bugs-tab");
+    var hogtab = document.querySelector("#hogs-tab");
+    
+    bugmenuitem = document.querySelector("#showHiddenBugCards");
+    hogmenuitem = document.querySelector("#showHiddenHogCards");
+         
+        bugmenuitem.setAttribute("disabled", true);
+        hogmenuitem.setAttribute("disabled", true);
+    
+    if (bugtab.classList.contains("is-active")) {
+        bugmenuitem.removeAttribute("disabled");
+    } else if (hogtab.classList.contains("is-active")) {
+        hogmenuitem.removeAttribute("disabled");
+
+    }
+}
+
 //
 //function cancelAll(){ 
 //        var keys = Object.keys(localStorage);
@@ -65,7 +105,7 @@ function sendFeedback(){
     var li = document.querySelector("#sendFeedback");
 
    	li.addEventListener('click', function () {
-    	alert("Your socks stink");
+    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
 		});
 }
 
@@ -90,6 +130,10 @@ function moveToPage(pagename, address){
     		});
 }
 
+function handleSetting(e) {
+    console.log($(e));
+    $(e).find("label").toggleClass("is-checked");
+}
 
 
 	sendFeedback();

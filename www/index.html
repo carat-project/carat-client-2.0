@@ -44,32 +44,10 @@
         </div>
     </div>
     
-<!--<div class="modal" id="popup-modal">
-    <div class="mdl-card mdl-shadow--2dp">
-        <div class="carat-card__title">
-            <div class="mdl-card__title-text">Don't show this card again?
-                <div class="mdl-layout-spacer"></div>
-            </div>
-        </div>
-        <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner
-            and select "show hidden cards".
-        </div>
-
-        <div class="mdl-card__actions">
-            <button id="popup-accept-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                    onclick="">Don't show
-            </button>
-            <button id="popup-cancel-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                    onclick="">Cancel
-            </button>
-        </div>
-    </div>
-</div>-->
-
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
                 mdl-layout--fixed-tabs mdl-color--grey-200">
 
-    <header class="mdl-layout__header mdl-color--blue-grey-500">
+    <header class="mdl-layout__header mdl-color--orange-500">
         <img class="mdl-layout-icon" src="img/icon.png"></img>
         <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
             <!-- Title -->
@@ -78,12 +56,12 @@
             <span id="usage"></span>
 
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="menu" onclick="listenMenu();">
                 <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="menu">
-                <li class="mdl-menu__item" id="showHiddenBugCards">Show hidden bugs</li>
-                <li class="mdl-menu__item" id="showHiddenHogCards">Show hidden hogs</li>
+                <li class="mdl-menu__item" id="showHiddenBugCards" disabled="true">Show hidden bugs</li>
+                <li class="mdl-menu__item" id="showHiddenHogCards" disabled="true">Show hidden hogs</li>
                 <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
                 <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                 <li class="mdl-menu__item" id="appSettings">Settings</li>
@@ -92,7 +70,7 @@
         </div>
 
         <!-- Tabs -->
-        <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
+        <div class="mdl-layout__tab-bar mdl-color--orange-500">
             <a href="#home" class="mdl-layout__tab is-active" id="home-tab">Home</a>
             <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
             <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
@@ -106,20 +84,19 @@
           <!-- Home view -->
           <section class="mdl-layout__tab-panel is-active" id="home">
 
-              <!-- Pie card -->
-              <div class="page-content">
-                  <div class="mdl-card mdl-shadow--2dp">
-                      <div class="carat-caratCard__title">
-                          <div class="mdl-card__title-text carat_caratCard_title_text">
-                              Global Statistics
-                          </div>
-                      </div>
-                      <div class="carat-card__supporting-text">
-                          <canvas id="chart"></canvas>
-                          <ul id="chart-legend"></ul>
-                      </div>
+              
+              <div class="page-content">  
+                  <div class="carat-module">
+                      <div class="carat-module-title">Summary:</div>
+                          <div class="carat-module-content" id="summary"></div>
+                  </div>
+                  
+                  <div class="carat-module">
+                      <div class="carat-module-title">Suggested actions:</div>
+                          <div class="carat-module-content" id="suggestions"></div>
                   </div>
               </div>
+              
 
           </section>
 
@@ -138,6 +115,41 @@
           </section>
           <section class="mdl-layout__tab-panel" id="system">
               <div class="page-content">
+              <!-- Pie card -->
+               	<div class="mdl-card mdl-shadow--2dp">
+                      <div class="carat-caratCard__title">
+                          <div class="mdl-card__title-text carat_summaryCard_title_text">
+                              Global Statistics
+                          </div>
+                      </div>
+                      <div class="carat-card__supporting-text">
+                          <div class="canvas-container">
+                          	  <p> Apps in your device </p>
+                              <canvas width="300" height="200" id="HogBugChart"></canvas>
+                              <ul id="HogBugChart-legend"></ul>
+                              <p> Android versions using Carat </p>
+                              <canvas width"300" height="200" id="AndroidVersionChart"></canvas>
+                              <ul id="AndroidVersionChart-legend"></ul>
+                              <p> Android devices using Carat </p>
+                              <canvas width="300" height="200" id="DeviceChart"></canvas>
+                              <ul id="DeviceChart-legend"></ul>
+                          </div>
+                          
+                      </div>
+                </div>
+              <!-- System settings card -->
+              	<div class="mdl-card mdl-shadow--2dp">
+                      <div class="carat-caratCard__title">
+                          <div class="mdl-card__title-text carat_caratCard_title_text">
+                              System settings
+                          </div>
+                      </div>
+                      <div class="carat-card__supporting-text">
+                          <div class="settings">
+                              
+                          </div>
+                      </div>
+                </div>
               </div>
           </section>
       </main>
@@ -146,7 +158,7 @@
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/lib/hammer.min.js"></script>
 <script type="text/javascript" src="js/lib/material.min.js"></script>
-<script type="text/javascript" src="js/lib/chart.min.js"></script>
+<script type="text/javascript" src="js/lib/chartNew.js"></script>
 
 <script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/model/notifications.js"></script>
