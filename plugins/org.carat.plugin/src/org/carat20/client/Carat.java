@@ -454,7 +454,8 @@ public class Carat extends CordovaPlugin {
                 .put("version", applicationLibrary.getAppVersion(packageName))
                 .put("running", applicationLibrary.isAppRunning(packageName))
                 .put("killable", applicationLibrary.isAppKillable(packageName))
-                .put("removable", applicationLibrary.isAppRemovable(packageName));
+                .put("removable", applicationLibrary.isAppRemovable(packageName))
+                .put("system", applicationLibrary.isAppSystem(packageName));
             results.put(app);
         }
         return results;
