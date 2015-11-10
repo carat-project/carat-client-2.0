@@ -190,7 +190,7 @@ div.numberCircle > button {
   overflow: hidden;
     margin-left: 0px;
     margin-right: 0px;
-    margin-bottom: 0px;
+    margin-bottom: 3px;
     margin-top: 0px;
   z-index: 2;
   padding-left: 8px;
