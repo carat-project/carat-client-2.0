@@ -1,3 +1,45 @@
+/* = ACTION BUTTON */
+
+.action-button {
+  margin-right: 5px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 11px;
+  vertical-align: middle;
+  padding: 8px 14px 8px 14px;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B;
+  box-shadow: 1px 1px 0px #C0C0C0;
+}
+
+.action-info {
+  display: inline-block;
+  float: right;
+  text-transform: uppercase;
+  text-align: right;
+  padding-top: 8px;
+  padding-right: 10px;
+}
+
+.action-info-text {
+  color: rgb(177, 177, 177);
+  padding: 1px 0px 0px 3px;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.action-button:disabled {
+  background-color: #E0E0E0;
+  border-color: #E0E0E0;
+  box-shadow: 1px 1px 0px #B0B0B0;
+  color: #B0B0B0;
+}
 
 /* = BENEFIT ERROR = */
 
@@ -23,7 +65,7 @@
   vertical-align: middle;
   border: 2px solid #F7A71B;
   border-radius: 4px;
-  background-color: #F7A71B !important;
+  background-color: #F7A71B;
 }
 
 .rotated-icon {

@@ -15,7 +15,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system) {
         return {
             item: {
                 title: title,
@@ -34,7 +34,8 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system
             }
         };
     };
@@ -44,7 +45,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system) {
         return {
             worstBug: {
                 title: title,
@@ -63,7 +64,8 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system
             }
         };
     };
@@ -73,7 +75,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system) {
         return {
             worstHog: {
                 title: title,
@@ -92,7 +94,8 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system
             }
         };
     };
@@ -236,7 +239,8 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
-                                           textfield);
+                                           textfield,
+                                           elem.system);
                 
             } else if (elemType === "worstHog") {
 
@@ -254,7 +258,8 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
-                                           textfield);
+                                           textfield,
+                                           elem.system);
             }else {
         
             result =  makeNotification(label,
@@ -271,7 +276,8 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
-                                           textfield);
+                                           textfield,
+                                           elem.system);
                 
             }
 
