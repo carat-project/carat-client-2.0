@@ -116,13 +116,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //the expand to work
     var injectSecondaryText = function(cardDomNode,
                                        secondaryText,
-                                       notificationId) {
+                                       notificationId, type) {
 
         var secondaryTextNode = cardDomNode
                 .querySelector(".collapse");
 
         var versionContainer = cardDomNode.querySelector("#version");
         var samplesContainer = cardDomNode.querySelector("#samples");
+        var popularityContainer = cardDomNode.querySelector("#popularity");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
@@ -134,8 +135,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 trashANode(moreButton);
             }
         } else {
-            addNodeText(versionContainer, secondaryText.version);
-            addNodeText(samplesContainer, secondaryText.samples);
+            addNodeText(versionContainer, "Version: " + secondaryText.version);
+            addNodeText(samplesContainer, "Samples: " + secondaryText.samples)
+            if(type != "BUG") {
+                addNodeText(popularityContainer, "Found in " + secondaryText.popularity +"% of devices.");
+            }
             secondaryTextNode.id = nodeId;
             //            moreButton.href = "#" + nodeId;
         }
@@ -237,67 +241,55 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                                 packageName,
                                                 appCloseCallback,
                                                 appUninstallCallback,
-                                                appName) {
-
-        if(!hasCloseButton && !hasUninstallButton) {
-            return;
-        }
+                                                appName,
+                                                isSystem) {
 
         var buttonSpot = cardDomNode
                 .querySelector(".mdl-card__actions");
 
         buttonSpot.className = "mdl-card__actions mdl-card--border";
 
-        if(hasCloseButton) {
-            var closeButton = document.createElement("span");
-            var closeLink = document.createElement("a");
-            closeLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
-
-            closeLink.innerHTML = "Close app";
-            closeButton.appendChild(closeLink);
-
-            console.log(appCloseCallback);
-
-            closeButton.addEventListener("click",  function(ev) {
-                var button = ev.target;
-				console.log("rivi 262 errori", packageName);
-                appCloseCallback(packageName, function(state) {
-                    console.log("Killing app: " + state);
-                    if(state == "Success"){
-                        carat.showToast(appName+ " closed", function(state){
-                            trashANode(button);
-                        });
-                    } else {
-                        carat.showToast(appName + " couldn't be closed!", function(state){
-                            button.disabled = true;
-                        });
-                    }
-                });
+        // Todo: Use a template for action button
+        // Show a popup when i-button is clicked
+        var closeButton = document.createElement("button");
+        closeButton.className = "action-button";
+        if(!hasCloseButton) closeButton.disabled = true;
+        closeButton.innerHTML = "Kill";
+        closeButton.onclick = function(event){
+            var button = event.target;
+            appCloseCallback(packageName, function(state){
+                closeButton.disabled = true;
+                if(state == "Success") {
+                    carat.showToast(appName + " closed");
+                } else {
+                    carat.showToast(appName + " couldn't be closed!");
+                }
             });
+        };
 
-            buttonSpot.appendChild(closeButton);
-        }
-        if (hasUninstallButton) {
-            var uninstallButton = document.createElement("span");
-            var uninstallLink = document.createElement("a");
-            uninstallLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
-
-            uninstallLink.innerHTML = "Uninstall";
-            uninstallButton.appendChild(uninstallLink);
-
-            uninstallButton.addEventListener("click", function(ev){
-                appUninstallCallback(packageName, function(state) {
-                    console.log("Opening app details: " + state);
-
-                    // Setup this when we have dynamic onResume
-                    // cardDomNode.style.display = "none";
-                });
+        var uninstallButton = document.createElement("button");
+        uninstallButton.className = "action-button";
+        if(!hasUninstallButton) uninstallButton.disabled = true;
+        uninstallButton.innerHTML = "Remove";
+        uninstallButton.onclick = function(event){
+            var button = event.target;
+            appUninstallCallback(packageName, function(state){
+                console.log("Opened " + appName + " dialog");
             });
+        };
 
-            buttonSpot.appendChild(uninstallButton);
+        buttonSpot.appendChild(closeButton);
+        buttonSpot.appendChild(uninstallButton);
+
+        if(isSystem){
+            var systemInfo = document.createElement("div");
+            systemInfo.className = "action-info";
+            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+            "<div class='action-info-text'>System app</span>";
+            buttonSpot.appendChild(systemInfo);
         }
     };
-    
+
     var changePaddingForButton = function(cardDomNode) {
       cardDomNode.style.padding = "0px 10px 10px";  
     };
@@ -569,9 +561,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -584,7 +577,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -607,9 +601,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -622,7 +617,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
@@ -645,9 +641,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -660,7 +657,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';

@@ -437,24 +437,28 @@ public class Carat extends CordovaPlugin {
             if(!applicationLibrary.isAppInstalled(packageName) 
                     || s.getErrorRatio() > ERROR_LIMIT) continue;
             
+            int samples = s.getSamples();
+            int samplesWithout = s.getSamplesWithout();
+            double samplesPercentage = 100 *(samples / (double)(samples + samplesWithout));
+            String popularity = String.format("%.3f",  samplesPercentage);
+            
             JSONObject app = new JSONObject()
-                // Static
                 .put("type", s.getType())
                 .put("label", s.getAppLabel())
                 .put("name", packageName)
                 .put("benefit",s.getBenefitText())
                 .put("priority",s.getAppPriority())
-                .put("samples", s.getSamples())
-                .put("samplesWithout", s.getSamplesWithout())
-                .put("expected", s.getExpectedValue())
-                .put("expectedWithout", s.getExpectedValueWithout())
-                .put("icon", s.getAppIcon())
-
-                 // Dynamic
+                .put("samples", samples)
+                .put("samplesWithout", samplesWithout)
+                .put("popularity", popularity)
+                    
                 .put("version", applicationLibrary.getAppVersion(packageName))
                 .put("running", applicationLibrary.isAppRunning(packageName))
                 .put("killable", applicationLibrary.isAppKillable(packageName))
-                .put("removable", applicationLibrary.isAppRemovable(packageName));
+                .put("removable", applicationLibrary.isAppRemovable(packageName))
+                .put("system", applicationLibrary.isAppSystem(packageName))
+                    
+                .put("icon", s.getAppIcon());
             results.put(app);
         }
         return results;

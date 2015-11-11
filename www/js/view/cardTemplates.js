@@ -29,6 +29,7 @@ cardTemplates = (function() {
                                 '<div class="collapse">'+
                                     '<div id="version"></div>' +
                                     '<div id="samples"></div>' +
+                                    '<div id="popularity"></div>' +
                                 '</div>'+
                             '</div>'+
                             '<div class="mdl-card__actions carat_card_actions"></div>'+
@@ -54,6 +55,7 @@ cardTemplates = (function() {
                 '<div class="collapse">' +
                 '<div id="version"></div>' +
                 '<div id="samples"></div>' +
+                '<div id="popularity"></div>' +
                 '</div></div><div class="mdl-card__actions carat_card_actions"></div></div>';
 
         var domNode = parseDomNode(htmlString);
