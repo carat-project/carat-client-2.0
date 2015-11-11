@@ -116,13 +116,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //the expand to work
     var injectSecondaryText = function(cardDomNode,
                                        secondaryText,
-                                       notificationId) {
+                                       notificationId, type) {
 
         var secondaryTextNode = cardDomNode
                 .querySelector(".collapse");
 
         var versionContainer = cardDomNode.querySelector("#version");
         var samplesContainer = cardDomNode.querySelector("#samples");
+        var popularityContainer = cardDomNode.querySelector("#popularity");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
@@ -134,8 +135,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 trashANode(moreButton);
             }
         } else {
-            addNodeText(versionContainer, secondaryText.version);
-            addNodeText(samplesContainer, secondaryText.samples);
+            addNodeText(versionContainer, "Version: " + secondaryText.version);
+            addNodeText(samplesContainer, "Samples: " + secondaryText.samples)
+            if(type != "BUG") {
+                addNodeText(popularityContainer, "Found in " + secondaryText.popularity +"% of devices.");
+            }
             secondaryTextNode.id = nodeId;
             //            moreButton.href = "#" + nodeId;
         }
@@ -557,9 +561,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -596,9 +601,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -635,9 +641,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
