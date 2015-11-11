@@ -867,6 +867,8 @@ MasterView = (function(headerView, mainView,
    new BugCards(), new HogCards(),
    new HomeCards(), new StatsCards());
 
+module.exports.MasterView = MasterView;
+
 },{"./BugCards.js":6,"./Headerbar.js":7,"./HogCards.js":9,"./HomeCards.js":10,"./MainContent.js":11,"./StatsCards.js":13}],13:[function(require,module,exports){
 var DeviceStats = require("../model/DeviceStats.js").DeviceStats;
 var Utilities = require("../helper/Utilities.js").Utilities;

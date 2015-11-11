@@ -178,3 +178,5 @@ MasterView = (function(headerView, mainView,
 })(new Headerbar(), new MainContent(),
    new BugCards(), new HogCards(),
    new HomeCards(), new StatsCards());
+
+module.exports.MasterView = MasterView;
