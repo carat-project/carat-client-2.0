@@ -354,3 +354,5 @@ var fetchAndRenderDeviceChart = function() {
 };
 
 console.log("DATA: ",fetchAndRenderDeviceChart());
+
+

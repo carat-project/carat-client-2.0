@@ -20,7 +20,31 @@
     <link rel="stylesheet" href="css/dialog.css">
     <link rel="stylesheet" href="css/snackbar.css">
 
-
+	<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer",
+	{
+		
+		data: [
+		{
+			type: "pie",
+			showInLegend: false,
+			legendText: "{indexLabel}",
+			dataPoints: [
+				{ y: 4181563, indexLabel: "Samsung Galaxy" },
+				{ y: 2175498, indexLabel: "Other" },
+				{ y: 3125844, indexLabel: "HTC" },
+				{ y: 1176121, indexLabel: "Motorola"},
+				{ y: 1727161, indexLabel: "DROID" },
+				{ y: 4303364, indexLabel: "Nexus"},
+				{ y: 1717786, indexLabel: "iPhone"}
+			]
+		}
+		]
+	});
+	chart.render();
+}
+</script>
 </head>
 
 <body>
@@ -133,6 +157,8 @@
                               <p> Android devices using Carat </p>
                               <canvas width="300" height="200" id="DeviceChart"></canvas>
                               <ul id="DeviceChart-legend"></ul>
+                              <p> miltä viivakortti näyttää </p>
+                              <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                           </div>
                           
                       </div>
@@ -159,6 +185,7 @@
 <script type="text/javascript" src="js/lib/hammer.min.js"></script>
 <script type="text/javascript" src="js/lib/material.min.js"></script>
 <script type="text/javascript" src="js/lib/chartNew.js"></script>
+<script type="text/javascript" src="js/lib/canvasjs.min.js"></script>
 
 <script type="text/javascript" src="js/pan_swipe.js"></script>
 <script type="text/javascript" src="js/model/notifications.js"></script>
