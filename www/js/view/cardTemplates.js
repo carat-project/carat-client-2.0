@@ -85,6 +85,19 @@ cardTemplates = (function() {
 //                '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
 //                '<div class="expand"><i class="material-icons">&#xE5CE;</i></div></div></div>' +
                 '<div class="mdl-card__supporting-text carat-card__supporting-text">' +
+                '<div class="ScoreAndBattery">' + 
+                    '<div class="carat-Jscore-text"></div>'+
+                    '<div class="carat-battery-text"></div>'+
+                    '<div class="circleContainer">'+
+                        '<div class="outerCircle">'+
+                            '<div class="innerCircle">'+
+                                '<div class="numberCircle">'+
+                                    '<button class="info" onclick="JscoreInfo()"></button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>' + 
                 '<div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div>' +
                 '<div id="bugSummaryGrid" class="carat_hide">' +
                 '<div class="carat_summary_grid" id="bugsGrid"></div></div>' +

@@ -117,6 +117,12 @@
 
 /* = JSCORE CIRCLE = */
 
+#home .circleContainer {
+  position: absolute;
+  right: 10%;
+  top: 28px;
+}
+
 .outerCircle {
   position: relative;
   border-radius: 50%;
@@ -934,6 +940,18 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .worstBug, .worstHog {
+}
+
+.ScoreAndBattery {
+color: rgba(0,0,0, 0.54);
+font-size: 16px;
+line-height: 18px;
+}
+
+.ScoreAndBattery .carat-Jscore-text {
+    padding-right: 30%;
+    padding-bottom: 20px;
+    padding-top: 32px;
 }
 
 

@@ -100,6 +100,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
     
+    //tää pois ku summarykortti toimii
     var injectJScoreText = function(cardDomNode, mainText) {
 
         if(!mainText) {
@@ -111,6 +112,19 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
+    
+        var injectBatteryText = function(cardDomNode, mainText) {
+
+        if(!mainText) {
+            return;
+        }
+
+        var mainTextNode = cardDomNode
+                .querySelector(".carat-battery-text");
+
+        appendTextOrRemoveNode(mainTextNode, mainText);
+    };
+    
 
     //add additional text to a card, id is required for
     //the expand to work
@@ -384,13 +398,18 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             countNode = summaryDomNode
                 .querySelector("#" + hog);
         }
-
+        if (count == 1) {
+            appendTextOrRemoveNode(countNode, count + " " + bugOrHog);
+        } else {
         appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
+        }
     };
 
     var injectJscore = function(statisticsDomNode,
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
+        console.log("jsco");
+        console.log(jscore);
         var circle = statisticsDomNode.querySelector(".outerCircle");
         var degree = jscore*3.6;
         var color;
@@ -509,7 +528,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 //        //summary title
 //        injectSummaryTitle(summaryDomNode,
 //                           summaryObject.title);
-
+        
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
             summaryObject.bugEntries, makeSummaryEntry);
@@ -537,6 +556,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             homebrewConcatChildren(hogSpot, hogSpot.firstChild,
                                                 summaryEntryHogNodes);
         }
+    };
+    
+    var injectSummaryStatistics = function(summaryStatisticsObject, deviceinfo) {
+                
+        var statsSpot = document.querySelector(".ScoreAndBattery");
+        injectJscore(statsSpot, summaryStatisticsObject.jscore);
+        injectJScoreText(statsSpot,
+                         "Your device is more energy efficient than " + summaryStatisticsObject.jscore +
+                         "% of other devices measured by Carat.");
+        injectBatteryText(statsSpot, deviceinfo.batteryLife);
+            
     };
     
     //make either an item card (hog or bug) or summary card
@@ -686,6 +716,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             makeStatisticsCard(statisticsData,
                                notificationObject.deviceInfo, newCardNode);
+            
+            
         } else if(notificationObject.carat) {
 			
 			newCardNode = cardTemplates
@@ -777,6 +809,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                            makeCardBasedOnModel);
     };
 
+    // gets stats to summarycard from notifications.js
+    var getSummaryStatistics = function(mainDataSource, deviceInfo) {
+        var statisticsObject = notificationsArray
+                .getStatistics(mainDataSource);
+        statisticsObject.deviceInfo = deviceInfo;
+
+        //injects stats to summarycard
+        return injectSummaryStatistics(statisticsObject.statistics, statisticsObject.deviceInfo);
+    };
+    
     var getStatisticsCard = function(mainDataSource, deviceInfo) {
 
         var statisticsObject = notificationsArray
@@ -806,6 +848,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         console.log("generatePage");
         
+        //creates separately suggestions and summarycard
         var rightSpot;
         if(selector==='#suggestions' || selector==='#summary') {
             rightSpot = document.querySelector(selector);
@@ -840,7 +883,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
             generatePage("#suggestions", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
-        generatePage("#system", getSystemCards());
+//        generatePage("#system", getSystemCards());
     };
 
     //receive bugs server data; create and add corresponding cards
@@ -858,8 +901,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var generateSummary = function(hogsSource, bugsSource) {
         generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
         //calls summaryCard.js and opens summary entries grid
-        showOrHideActions();
+//        showOrHideActions();
     };
+    
+    var generateSummaryStatistics = function(mainDataSource, deviceInfo) {
+        getSummaryStatistics(mainDataSource, deviceInfo);
+    }
 
     var generateStatistics = function(mainDataSource, deviceInfo) {
         generatePage("#system", [getStatisticsCard(mainDataSource,
@@ -872,6 +919,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         generateBugs: generateBugs,
         generateHogs: generateHogs,
         generateSummary: generateSummary,
+        generateSummaryStatistics: generateSummaryStatistics,
         generateStatistics: generateStatistics
     };
 })(model.notifications, {panSwipefy: makeElemPanSwipable,
