@@ -8,7 +8,7 @@ function createChart(statisticsDataSource, observations, id) {
         };
 
         var makeLi =  function(color, label) {
-            return '<ul style="list-style:none"><li margin-right: 7px"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;display:inline-block;background-color:'+ color +';"></span>' + label + '</li></ul>';
+            return '<li style="margin-left: 7px;float:left;"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;;float:left;display:inline-block;background-color:'+ color +';"></span>' + label + '</li></ul>';
         };
 
         var result = "";
