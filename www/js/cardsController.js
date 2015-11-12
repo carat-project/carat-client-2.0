@@ -231,25 +231,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
 
-	  //adds a click event listener for element
-    //that directs user to right card using id
+    // Adds a click listener to summary items
+    // Relocates user to a corresponding card
     var linkifySummaryEntry = function(element, nameTag, type) {
+        // Only handle links to hog/bug tabs
+        if(type != "HOG" && type != "BUG") return;
 
-        var tab;
-
-        if(type === "BUG") {
-            tab = "bugs-tab";
-        } else if(type === "HOG") {
-            tab = "hogs-tab";
-        } else {
-            return;
-        }
-
+        // Get tab and element ids
+        var tabId = type.toLowerCase() + "s-tab";
         var elemId = notificationsArray.makeIdFromAppName(nameTag, type);
 
+        // Handles clicks on summary items
         element.addEventListener("click", function() {
-            document.getElementById(tab).click();
+            // Move to the correct tab and card
+            document.getElementById(tabId).click();
             window.location.hash = elemId;
+
+            // Get the div containing expandable content
+            var expandId = "card-"+elemId+"-textpand";
+            var expand = $("#"+expandId);
+
+            // Expand if not already expanded
+            if(!expand.hasClass("in")){
+                expand.addClass("in");
+            }
         });
     };
 
