@@ -8,7 +8,7 @@ function createChart(statisticsDataSource, observations, id) {
         };
 
         var makeLi =  function(color, label) {
-            return '<li style="display: inline-block; margin-right: 7px"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;display:inline-block;background-color:'+ color +';"></span>' + label + '</li>';
+            return '<ul style="list-style:none"><li margin-right: 7px"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;display:inline-block;background-color:'+ color +';"></span>' + label + '</li></ul>';
         };
 
         var result = "";
@@ -37,7 +37,8 @@ function createChart(statisticsDataSource, observations, id) {
         inGraphDataAnglePosition : 2,
         inGraphDataRadiusPosition: 2,
         segmentShowStroke : false,
-        inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>"
+        inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>",
+		
 
     };
 
