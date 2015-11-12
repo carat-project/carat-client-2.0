@@ -119,8 +119,8 @@
 
 #home .circleContainer {
   position: absolute;
-  right: 10%;
-  top: 28px;
+  right: 12%;
+  top: 15px;
 }
 
 .outerCircle {
@@ -149,6 +149,13 @@
 .numberCircle {
   position: absolute;
   top: 37.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#home .numberCircle {
+  position: absolute;
+  top: 24.5%;
   text-align: center;
   vertical-align: middle;
 }
@@ -943,15 +950,37 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .ScoreAndBattery {
-color: rgba(0,0,0, 0.54);
-font-size: 16px;
-line-height: 18px;
+    margin-bottom: 25px;
+    margin-top: 8px;
 }
 
 .ScoreAndBattery .carat-Jscore-text {
+/*
     padding-right: 30%;
     padding-bottom: 20px;
     padding-top: 32px;
+*/
+    
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+}
+
+.carat-battery-text {
+    color: rgba(0,0,0, 0.54);
+    font-weight: 500;
+    font-size: 20px;
+    padding-top: 20px;
+    width: 60%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.carat-battery-text > p {
+    color: rgba(0,0,0, 0.54);
+    font-size: 16px;
+    text-align: center;
 }
 
 

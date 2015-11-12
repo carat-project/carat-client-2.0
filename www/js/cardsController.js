@@ -114,16 +114,22 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
     
         var injectBatteryText = function(cardDomNode, mainText) {
-
         if(!mainText) {
             return;
         }
 
-        var mainTextNode = cardDomNode
+            var mainTextNode = cardDomNode
                 .querySelector(".carat-battery-text");
+            appendTextOrRemoveNode(mainTextNode, mainText);
+            
+            var textElement = document.createElement("p");
+            mainTextNode.appendChild(textElement);
+            var text = "Active battery life";
+            appendTextOrRemoveNode(textElement, text);
+        }
 
-        appendTextOrRemoveNode(mainTextNode, mainText);
-    };
+            
+
     
 
     //add additional text to a card, id is required for
@@ -562,9 +568,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 
         var statsSpot = document.querySelector(".ScoreAndBattery");
         injectJscore(statsSpot, summaryStatisticsObject.jscore);
-        injectJScoreText(statsSpot,
-                         "Your device is more energy efficient than " + summaryStatisticsObject.jscore +
-                         "% of other devices measured by Carat.");
+//        injectJScoreText(statsSpot,
+//                         "Your device is more energy efficient than " + summaryStatisticsObject.jscore +
+//                         "% of other devices measured by Carat.");
         injectBatteryText(statsSpot, deviceinfo.batteryLife);
             
     };
