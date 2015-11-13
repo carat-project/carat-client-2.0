@@ -8,7 +8,7 @@ function createChart(statisticsDataSource, observations, id) {
         };
 
         var makeLi =  function(color, label) {
-            return '<li style="margin-left: 7px;float:left;"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;;float:left;display:inline-block;background-color:'+ color +';"></span>' + label + '</li></ul>';
+            return '<li style="margin-left: 7px;"><span style="-moz-border-radius:7px 7px 7px 7px; border-radius:7px 7px 7px 7px; margin-right:4px;width:15px;height:15px;;float:right;display:inline-block;background-color:'+ color +';"></span>' + label + '</li></ul>';
         };
 
         var result = "";
@@ -26,18 +26,8 @@ function createChart(statisticsDataSource, observations, id) {
     };
 
     var options = {
-        inGraphDataShow : true,
-        //inGraphDataAnglePosition : 2,
-        //	  inGraphDataRadiusPosition: [2, 3, 2],
-        inGraphDataFontSize : 8,
-        inGraphDataAlign : "center",
-        inGraphDataVAlign : "middle",
-        inGraphDataRotate : "inRadiusAxisRotateLabels",
-        inGraphDataFontColor : "white",
-        inGraphDataAnglePosition : 2,
-        inGraphDataRadiusPosition: 2,
-        segmentShowStroke : false,
-        inGraphDataTmpl: "<%= v1 + ': ' + v6 + '%' %>",
+        
+        segmentShowStroke : false
 		
 
     };
