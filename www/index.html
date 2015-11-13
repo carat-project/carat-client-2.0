@@ -174,17 +174,23 @@ window.onload = function () {
                       </div>
                       <div class="carat-card__supporting-text">
                           <div class="canvas-container">
-                          	  <p> Apps in your device </p>
-                              <canvas width="125" height="125" id="HogBugChart" style="float:left"></canvas>
-                              <ul style="list-style:none" id="HogBugChart-legend"></ul>
-                              <p> Android versions using Carat </p>
-                              <canvas width="125" height="125" id="AndroidVersionChart" style="float:left"></canvas>
-                              <ul style="list-style:none" id="AndroidVersionChart-legend"></ul>
-                              <p> Android devices using Carat </p>
-                              <canvas width="125" height="125" id="DeviceChart" style="float:left"></canvas>
-                              <ul style="list-style:none" id="DeviceChart-legend" class="chart-legend"></ul>
-                              <p> miltä viivakortti näyttää </p>
-                              <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                              <p style="float:center"> Android versions using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="AndroidVersionChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="AndroidVersionChart-legend"></ul></td>
+                              </tr>
+                              <p style="float:center"> Android devices using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="DeviceChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="DeviceChart-legend" class="chart-legend"></ul></td>
+                              </tr>
+                          	  <p style="float:center"> Apps in devices using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="HogBugChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="HogBugChart-legend"></ul></td>
+                              </tr>
+                              <!--<p>viivachartin proto</p>
+                              <div id="chartContainer" style="height: 300px; width: 100%;"></div>-->
                           </div>
                           
                       </div>
