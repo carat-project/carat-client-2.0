@@ -471,8 +471,9 @@ div.numberCircle > button {
 }
 
 p {
-      font-size: 16px;
-  line-height: normal;
+    font-size: 16px;
+    line-height: normal;
+    padding-bottom: 10px;
 }
 
 .circleContainer {
@@ -1016,6 +1017,10 @@ section.mdl-layout__tab-panel div.page-content {
     color: rgba(0,0,0, 0.54);
     font-size: 16px;
     text-align: center;
+}
+
+#card-statistics-jscore-textpand > div {
+    margin-bottom: 12px;
 }
 
 

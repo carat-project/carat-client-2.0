@@ -196,6 +196,36 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
     
+        var injectMultiparagraphText = function(cardDomNode,
+                                                     TextParagraphs,
+                                                     notificationId) {
+        var TextNode = cardDomNode
+                .querySelector(".mdl-card__supporting-text");
+        var moreButton = cardDomNode
+                .querySelector(".mdl-card__more");
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        if(!TextParagraphs) {
+            trashANode(secondaryTextNode);
+            if(moreButton) {
+                trashANode(moreButton);
+            }
+        } else {
+            for(var paragraphKey in TextParagraphs) {
+                var paragraph = TextParagraphs[paragraphKey];
+                var paragraphNode = document.createElement("div");
+                var textNode = document.createTextNode(paragraph);
+
+                paragraphNode.appendChild(textNode);
+                console.log(paragraphNode);
+
+                TextNode.insertBefore(paragraphNode, TextNode.firstChild);
+            }
+
+            TextNode.id = nodeId;
+        }
+    };
+    
     var injectParagraphSecondaryText = function(cardDomNode,
                                                      secondaryTextParagraph,
                                                      notificationId) {
@@ -501,10 +531,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         console.log(deviceInfo.osVersion);
 
         injectTitle(statisticsDomNode, "My Device");
-        injectJScoreText(statisticsDomNode,
-                                          "Your device is more energy efficient than " + statisticsObject.jscore +
-                            "% of other devices measured by Carat.");
-        injectJscore(statisticsDomNode, statisticsObject.jscore);
+//        injectJScoreText(statisticsDomNode,
+//                                          "Your device is more energy efficient than " + statisticsObject.jscore +
+//                            "% of other devices measured by Carat.");
+//        injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = [
                           "Carat id: " + deviceInfo.caratId,
@@ -514,7 +544,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                           "Device model: " + deviceInfo.modelName,
                           "OS version: " + deviceInfo.osVersion,
                          ];
-        injectMultiparagraphSecondaryText(statisticsDomNode,
+        injectMultiparagraphText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
     };
