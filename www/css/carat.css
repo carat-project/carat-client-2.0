@@ -1,3 +1,38 @@
+/* = HOG/BUG INTRO */
+
+.intro-container {
+  margin: 9px 16px 0px 15px;
+  padding-top: 7px;
+  padding-bottom: 5px;
+  height: 60px;
+}
+
+.intro-container img {
+  display: block;
+  margin-top: 1px;
+  padding: 4px 16px 5px 3px;
+  height: 45px;
+  width: 45px;
+}
+
+.intro-image {
+  text-align: center;
+  display: inline-block;
+  float: left;
+  height: 100%;
+}
+
+.intro-text {
+  text-align: left;
+  padding-top: 2px;
+  margin-right: 5px;
+  line-height: 103%;
+  overflow: hidden;
+  font-size: 14px;
+  color: rgb(139, 146, 155);
+}
+
+
 /* = ACTION BUTTON */
 
 .action-button {
@@ -117,6 +152,12 @@
 
 /* = JSCORE CIRCLE = */
 
+#home .circleContainer {
+  position: absolute;
+  right: 12%;
+  top: 15px;
+}
+
 .outerCircle {
   position: relative;
   border-radius: 50%;
@@ -143,6 +184,13 @@
 .numberCircle {
   position: absolute;
   top: 37.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#home .numberCircle {
+  position: absolute;
+  top: 24.5%;
   text-align: center;
   vertical-align: middle;
 }
@@ -423,8 +471,9 @@ div.numberCircle > button {
 }
 
 p {
-      font-size: 16px;
-  line-height: normal;
+    font-size: 16px;
+    line-height: normal;
+    padding-bottom: 10px;
 }
 
 .circleContainer {
@@ -934,6 +983,44 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .worstBug, .worstHog {
+}
+
+.ScoreAndBattery {
+    margin-bottom: 25px;
+    margin-top: 8px;
+}
+
+.ScoreAndBattery .carat-Jscore-text {
+/*
+    padding-right: 30%;
+    padding-bottom: 20px;
+    padding-top: 32px;
+*/
+    
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+}
+
+.carat-battery-text {
+    color: rgba(0,0,0, 0.54);
+    font-weight: 500;
+    font-size: 20px;
+    padding-top: 20px;
+    width: 60%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.carat-battery-text > p {
+    color: rgba(0,0,0, 0.54);
+    font-size: 16px;
+    text-align: center;
+}
+
+#card-statistics-jscore-textpand > div {
+    margin-bottom: 12px;
 }
 
 

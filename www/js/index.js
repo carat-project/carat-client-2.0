@@ -171,6 +171,8 @@ var app = {
                         };
 
                         itemCards.generateStatistics(main, deviceInfo);
+                        itemCards.generateSummaryStatistics(main, deviceInfo);
+
 
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
