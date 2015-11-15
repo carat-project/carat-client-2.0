@@ -309,7 +309,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var closeButton = document.createElement("button");
         closeButton.className = "action-button";
         if(!hasCloseButton) closeButton.disabled = true;
-        closeButton.innerHTML = "Kill";
+        closeButton.innerHTML = "Close app";
         closeButton.onclick = function(event){
             var button = event.target;
             appCloseCallback(packageName, function(state){
@@ -325,7 +325,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         var uninstallButton = document.createElement("button");
         uninstallButton.className = "action-button";
         if(!hasUninstallButton) uninstallButton.disabled = true;
-        uninstallButton.innerHTML = "Remove";
+        uninstallButton.innerHTML = "Uninstall";
         uninstallButton.onclick = function(event){
             var button = event.target;
             appUninstallCallback(packageName, function(state){
@@ -672,9 +672,23 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
             }
+           
             
+        // bug suggestion card
         } else if (notificationObject.worstBug) {
             var itemData = notificationObject.worstBug;
+            
+            // suggested action text
+            var hintText;
+            if (itemData.buttons.removeButton && itemData.buttons.killButton) {   
+                hintText = "Close, Update or Uninstall";
+            } else if (itemData.buttons.removeButton) {   
+                hintText = "Update or Uninstall";
+            } else {
+                hintText = "Close";
+            }     
+            hintText += " - Unexpectedly heavy use of energy."
+            
                         
             newCardNode = cardTemplates
                 .getNewWorstBugHogTemplate();
@@ -684,7 +698,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           "Update or Uninstall - Unexpectedly heavy use of energy.");
+                           hintText);
             injectParagraphSecondaryText(newCardNode,
                            itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
@@ -714,10 +728,22 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 newCardNode.style.display = 'none';
             }
             
-            
+        // hog suggestion card
         } else if (notificationObject.worstHog) {
             var itemData = notificationObject.worstHog;
 
+            // suggested action text
+            var hintText;
+            if (itemData.buttons.removeButton && itemData.buttons.killButton) {   
+                hintText = "Close, Update or Uninstall";
+            } else if (itemData.buttons.removeButton) {   
+                hintText = "Update or Uninstall";
+            } else {
+                hintText = "Close";
+            }     
+            hintText += " - Increased use of energy.";
+            
+            
             newCardNode = cardTemplates
                 .getNewWorstBugHogTemplate();
 
@@ -726,7 +752,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           "Close or Uninstall - Increased use of energy.");
+                           hintText);
             injectParagraphSecondaryText(newCardNode,
                            itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
@@ -794,7 +820,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
 
 
-    //fetch correct models for the home tab and create corresponding cards
+    //fetch correct models for the home tab suggested actions and create corresponding cards
     //for them
     var getHomeCards = function(bugOrHogSource, bugOrHogSelector,
                                 appCloseCallback, appUninstallCallback) {
@@ -909,12 +935,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //in "nodeArray")
     var generatePage = function(selector, nodeArray) {
 
-        console.log("generatePage");
-        
-        //creates separately suggestions and summarycard
         var rightSpot;
+
+        //creates separately suggestions and summarycard
         if(selector==='#suggestions') {
             rightSpot = document.querySelector(selector);
+            //reverse order to sort cards correctly
             homebrewConcatChildrenReverse(rightSpot, nodeArray);
        
         } else if (selector==='#summary') {
@@ -943,9 +969,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //generate home and system tab cards
     var generateCards = function(bugsSource, hogsSource, appCloseCallback, appUninstallCallback) {
+        // generates hog action suggestions
         if (typeof hogsSource !== 'undefined' && hogsSource.length>0) {
             generatePage("#suggestions", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
         }
+        //generates bug action suggestions
         if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
             generatePage("#suggestions", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
