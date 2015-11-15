@@ -76,15 +76,23 @@ function createChart(statisticsDataSource, observations, id) {
 //
 //        var asObject = JSON.parse(req.responseText);
 //        console.log(req.responseText);
-//
-//        var filtered = filterData(asObject);
-//
+//		
+//		if (chartName === "HogBugChart") {
+//        	var filtered = filterAppData(asObject);
+//		}
+//		 else if (chartName === "VersionChart") {
+//			var filtered = filterVersionData(asObject);
+//		}
+//		 else if (chartName === "DeviceChart") {
+//			var filtered = filterDeviceData(asObject);
+//		}
+//		
 //        if(!filtered || filtered.length < 1) {
 //           return false;
 //        }
 //        console.log(filtered);
 //	
-//    	createChart(filtered.regions, filtered.total, charName);
+//    	createChart(filtered.regions, filtered.total, chartName);
 //
 //        return true;
 //   	};
@@ -93,47 +101,46 @@ function createChart(statisticsDataSource, observations, id) {
 // 	req.send();
 //	
 //};
-//  
-//var fetchAndRenderAppChart = function() {	
-//		
-//	var filterAppData = function(rawData) {	
+// 
+//var filterAppData = function(rawData) {	
 //	
-//		var wellBehaved = template("#66BB6A", "#4CAF50");
-//        var hog = template("#FDB45C", "#FFC870");
-//        var bug = template("#F7464A", "#FF5A5E");
+//	var wellBehaved = template("#66BB6A", "#4CAF50");
+//    var hog = template("#FDB45C", "#FFC870");
+//    var bug = template("#F7464A", "#FF5A5E");
 //
-//        if(!rawData["android-apps"]) {
-//            return [];
-//        }
+//    if(!rawData["android-apps"]) {
+//       return [];
+//    }
 //
-//        var android = rawData["android-apps"];
-//        console.log(android);
+//    var android = rawData["android-apps"];
+//    console.log(android);
 //
-//        var result = {regions: [], total: 0};
+//    var result = {regions: [], total: 0};
 //
-//        for(var appsKey in android) {
+//    for(var appsKey in android) {
 //
-//            var observation = android[appsKey];
-//            console.log(observation);
-//            result.total += observation.value;
+//        var observation = android[appsKey];
+//        console.log(observation);
+//        result.total += observation.value;
 //
-//            if(observation.key === "well-behaved") {
+//        if(observation.key === "well-behaved") {
 //                result.regions.push(wellBehaved(observation.value, "fine"));
-//            } else if(observation.key === "hogs") {
+//        } else if(observation.key === "hogs") {
 //                result.regions.push(hog(observation.value, observation.key));
-//            } else if(observation.key === "bugs") {
+//        } else if(observation.key === "bugs") {
 //                result.regions.push(bug(observation.value, observation.key));
-//            }
 //        }
+//    }
 //
 //        return result;
-//	};
-//	
-//	render("HogBugChart", "http://carat.cs.helsinki.fi/statistics-data/stats.json");
+//};
+// 
+//var fetchAndRenderAppChart = function() {	
+//		
+//	return render("HogBugChart", "http://carat.cs.helsinki.fi/statistics-data/stats.json");
 //}
-//	
-//var fetchAndRenderVersionChart = function() {	
-//	var filterVersionData = function(rawData) {
+//
+//var filterVersionData = function(rawData) {
 //		
 //		var other = template("#F7464A", "#FF5A5E");
 //        var two = template("#FDB45C", "#FFC870");
@@ -192,13 +199,14 @@ function createChart(statisticsDataSource, observations, id) {
 //
 //
 //        return result;
-//	};
+//};
 //	
-//	render("AndroidVersionChart", "http://carat.cs.helsinki.fi/statistics-data/shares.json");
+//var fetchAndRenderVersionChart = function() {	
+//	
+//	return render("AndroidVersionChart", "http://carat.cs.helsinki.fi/statistics-data/shares.json");
 //}
 //
-//var fetchAndRenderDeviceChart = function() {
-//	var filterDeviceData = function(rawData) {
+//var filterDeviceData = function(rawData) {
 //		
 //		var other = template("#66BB6A", "#4CAF50");
 //        var samsungGalaxy = template("#FDB45C", "#FFC870");
@@ -259,16 +267,19 @@ function createChart(statisticsDataSource, observations, id) {
 //
 //        console.log(result);
 //        return result;
-//	};
+//		
+//};
+//
+//var fetchAndRenderDeviceChart = function() {
 //	
-//	render("DeviceChart", "http://carat.cs.helsinki.fi/statistics-data/shares.json");
+//	return render("DeviceChart", "http://carat.cs.helsinki.fi/statistics-data/shares.json");
 //	
 //}
 //	
 //console.log("DATA: ", fetchAndRenderAppChart());
 //console.log("DATA: ", fetchAndRenderVersionChart());
 //console.log("DATA: ", fetchAndRenderDeviceChart());
-
+//
 var fetchAndRenderAppsChart = function() {
 	// filters data shown in the chart
     var filterData = function(rawData) {
