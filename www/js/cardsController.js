@@ -344,6 +344,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             buttonSpot.appendChild(systemInfo);
         }
     };
+    
+    var injectTypeInfo = function (cardDomNode, text) {
+            var buttonSpot = cardDomNode
+                .querySelector(".mdl-card__actions");
+            var systemInfo = document.createElement("div");
+            systemInfo.className = "action-info";
+            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+            "<div class='action-info-text'>" + text + "</span>";
+            buttonSpot.appendChild(systemInfo);
+    };
 
     var changePaddingForButton = function(cardDomNode) {
       cardDomNode.style.padding = "0px 10px 10px";  
@@ -492,6 +502,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         for(var i = concatees.length -1; i >= 0; i--) {
             spot.insertBefore(concatees[i], firstChild);
+        }
+    };
+    
+        var homebrewConcatChildrenReverse = function(spot, concatees) {
+            console.log(concatees);
+            
+        for(var i = 0; i  < concatees.length; i++) {
+            spot.appendChild(concatees[i]);
         }
     };
     
@@ -657,7 +675,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             
         } else if (notificationObject.worstBug) {
             var itemData = notificationObject.worstBug;
-
+                        
             newCardNode = cardTemplates
                 .getNewWorstBugHogTemplate();
 
@@ -690,10 +708,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.appUninstallCallback,
                                          itemData.title,
                                          itemData.isSystem);
+            injectTypeInfo(newCardNode, "Bug");
 
-            if(localStorage.getItem(itemData.id) === 'dismissed') {
+            if(localStorage.getItem(itemData.id) === 'dismissed' || itemData.isSystem==true) {
                 newCardNode.style.display = 'none';
             }
+            
             
         } else if (notificationObject.worstHog) {
             var itemData = notificationObject.worstHog;
@@ -730,8 +750,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.appUninstallCallback,
                                          itemData.title,
                                          itemData.isSystem);
+            injectTypeInfo(newCardNode, "Hog");
 
-            if(localStorage.getItem(itemData.id) === 'dismissed') {
+
+            if(localStorage.getItem(itemData.id) === 'dismissed' || itemData.isSystem==true) {
                 newCardNode.style.display = 'none';
             }
 
@@ -799,9 +821,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                   makeCardBasedOnModel);
         }
 
-        for (i=0; i<result.length-1; i++){
-            result[i].style.display="none";
-        }
+//        for (i=0; i<result.length-1; i++){
+//            result[i].style.display="none";
+//        }
         
         
         return result;
@@ -891,12 +913,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         
         //creates separately suggestions and summarycard
         var rightSpot;
-        if(selector==='#suggestions' || selector==='#summary') {
+        if(selector==='#suggestions') {
             rightSpot = document.querySelector(selector);
+            homebrewConcatChildrenReverse(rightSpot, nodeArray);
+       
+        } else if (selector==='#summary') {
+             rightSpot = document.querySelector(selector);
             homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
                                        nodeArray);
-            
         } else {
         rightSpot = selectCardsSpot(selector);
         }
