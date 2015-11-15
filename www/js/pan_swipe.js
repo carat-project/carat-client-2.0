@@ -196,33 +196,34 @@ function makeElemTappable(el, mc, timer,
             // hides swiped bug and shows next bug 
             if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {
                 
-                var list
-                
-                if (el.classList.contains("worstBug")){
-                    list = document.querySelectorAll(".worstBug");
-                } else {
-                    list = document.querySelectorAll(".worstHog");
-                }
-                
-                var elPlaceinList;
-                for (i=0; i < list.length; i++ ) {
-                    console.log(list[i]);
-                    if (list[i].id === el.id) {
-                        elPlaceinList = i;
-                        break;
-                    }
-                }
-                
-                if (elPlaceinList < list.length-1) {
-
-                    list[elPlaceinList+1].style.display='inherit';
-                    list[elPlaceinList+1].style.visibility='visible';
-                    list[elPlaceinList+1].style.opacity="0";
-                    setTimeout(function() {
-                        list[elPlaceinList+1].style.opacity="1";
-                    }, 1);                    
-                    
-                } 
+//                var list;
+//                
+//                if (el.classList.contains("worstBug")){
+//                    list = document.querySelectorAll(".worstBug");
+//                } else {
+//                    list = document.querySelectorAll(".worstHog");
+//                }
+//                
+//                console.log(list);
+//                var elPlaceinList;
+//                for (i=0; i < list.length; i++ ) {
+//                    console.log(list[i]);
+//                    if (list[i].id === el.id) {
+//                        elPlaceinList = i;
+//                        break;
+//                    }
+//                }
+//                
+//                if (elPlaceinList < list.length-1) {
+//
+//                    list[elPlaceinList+1].style.display='inherit';
+//                    list[elPlaceinList+1].style.visibility='visible';
+//                    list[elPlaceinList+1].style.opacity="0";
+//                    setTimeout(function() {
+//                        list[elPlaceinList+1].style.opacity="1";
+//                    }, 1);                    
+//                    
+//                } 
                 el.style.display='none';
                 el.style.visibility='hidden';
 
