@@ -2,7 +2,14 @@ var HogBug = require("../model/HogBug.js").HogBug;
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.HogBugCards = (function(template, utilities, buttonActions) {
-
+    /**
+     * @class HogBugCards
+     * @param {} dataOrigin Callback that is used for acquiring
+     raw data from the server.
+     * @param {} outputElemId The id of the parent HTML element.
+     * @param {} gestureCallback Actions that are performed when
+     a gesture occurs.
+     */
     return function(dataOrigin, outputElemId, gestureCallback) {
 
         var dataSource = dataOrigin;
@@ -94,11 +101,24 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
 
         var renderAsync = renderAsyncSource(dataSource);
 
+        /**
+         * @function
+         * @instance
+         * @param {} freshDataSource A callback which is used for
+         acquiring data from the server.
+         * @memberOf HogBugCards
+         */
         var setDataSource = function(freshDataSource) {
             dataSource = freshDataSource;
             renderAsync = renderAsyncSource(freshDataSource);
         };
 
+        /**
+         * @function
+         * @instance
+         * @memberOf HogBugCards
+         * @summary Insert these cards as a part of the document.
+         */
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
 

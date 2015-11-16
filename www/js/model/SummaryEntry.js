@@ -1,6 +1,10 @@
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.SummaryEntry = (function(template, utilities) {
+    /**
+     * @class SummaryEntry
+     * @param {} data Raw data from the server.
+     */
     return function(data) {
 
         var cutLabel = function(labelToCut) {
@@ -31,14 +35,35 @@ module.exports.SummaryEntry = (function(template, utilities) {
             };
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} The id for the HTML-element
+         id field.
+         * @memberOf SummaryEntry
+         */
         var getId = function() {
             return id;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} The id of the item that clicking
+         this entry links to.
+         * @memberOf SummaryEntry
+         */
         var getTargetId = function() {
             return targetId;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} What kind of entry this is,
+         hog or a bug.
+         * @memberOf SummaryEntry
+         */
         var getType = function() {
             return type;
         };
@@ -66,6 +91,13 @@ module.exports.SummaryEntry = (function(template, utilities) {
             return node;
         })();
 
+        /**
+         * @function
+         * @instance
+         * @returns {DOM-element} Rendered DOM element
+         representing an app featured in the summary.
+         * @memberOf SummaryEntry
+         */
         var render = function() {
             return domNode;
         };

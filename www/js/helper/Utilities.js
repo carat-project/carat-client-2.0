@@ -1,5 +1,30 @@
+/**
+ * @namespace Utilities
+ */
 module.exports.Utilities = (function() {
 
+    /**
+     * @function
+     * @static
+     * @param {String} id
+     * @param {String} additional
+     * @returns {String} An is that is formed from the given data.
+     * @memberOf Utilities
+     */
+    var makeIdFromOtherId = function(id, additional) {
+
+        return id + "-" + additional;
+    };
+
+    /**
+     * @function
+     * @static
+     * @param {String} appName
+     * @param {String} hogOrBug
+     * @param {String} additional
+     * @returns {String} An id that is formed from the given data.
+     * @memberOf Utilities
+     */
     var makeIdFromAppName = function(appName,
                                      hogOrBug,
                                      additional) {
@@ -7,28 +32,53 @@ module.exports.Utilities = (function() {
         var idPrefix = appName.replace(/-/g, "--")
                 .replace(/\./g, "-");
 
+        var standardPart = idPrefix + "-" + hogOrBug;
+
         if(!additional) {
-            return idPrefix + "-" + hogOrBug;
+            return standardPart;
         }
 
-        return idPrefix + "-" + hogOrBug + "-" + additional;
+        return makeIdFromOtherId(standardPart, additional);
     };
 
-    var makeIdFromOtherId = function(id, additional) {
-
-        return id + "-" + additional;
-    };
-
+    /**
+     * @function
+     * @static
+     * @param {DOM-element} elem A DOM element that should contain
+     an element with the matching id as a sub-element.
+     * @param {String} id Id of the element one is searching for.
+     * @returns {DOM-element} Element which is a child of the given
+     element and has the corresponding id given as a parameter.
+     * @memberOf Utilities
+     */
     var findById = function(elem, id) {
         return elem.querySelector("#" + id);
     };
 
+    /**
+     * @function
+     * @static
+     * @param {DOM-element} elem The to-be parent of the appendees.
+     * @param {Array} appendees Array of DOM nodes that are to
+     be appended as children of the given element.
+     * @memberOf Utilities
+     */
     var appendChildAll = function(elem, appendees) {
         for(var key in appendees) {
             elem.appendChild(appendees[key]);
         }
     };
 
+    /**
+     * @function
+     * @static
+     * @param {String} timeDrainString String that represents
+     the time benefit of getting rid of the app.
+     * @returns {Object} The string split into two parts containing
+     the expected benefit of getting rid of the app and the error
+     part associated with the expected benefit.
+     * @memberOf Utilities
+     */
     var splitTimeDrainString = function(timeDrainString) {
         var timeDrainSplit = timeDrainString.split("±", 2);
 
@@ -47,6 +97,16 @@ module.exports.Utilities = (function() {
                 timeDrainErrorPart: timeDrainErrorPart};
     };
 
+    /**
+     * @function
+     * @static
+     * @param {Number} count The amount of "the thing".
+     * @param {String} singular The singular form of the word
+     for "the thing" at hand.
+     * @returns {String} End-user readable form of the given
+     word associated with the given number.
+     * @memberOf Utilities
+     */
     var pluralize = function(count, singular) {
 
         var form;
@@ -64,6 +124,15 @@ module.exports.Utilities = (function() {
         }
     };
 
+    /**
+     * @function
+     * @static
+     * @param {String} htmlString A string that should be valid
+     HTML.
+     * @returns {DOM-element} Corresponding DOM element that is
+     created from the given HTML string.
+     * @memberOf Utilities
+     */
     var makeDomNode = function(htmlString) {
 
         var dummyNode = document.createElement("div");

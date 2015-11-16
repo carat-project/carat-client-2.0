@@ -8,6 +8,10 @@ var MainContent = require("./MainContent.js").MainContent;
 MasterView = (function(headerView, mainView,
                        bugsView, hogsView,
                        homeView, statsView) {
+    /**
+     * @class MasterView
+     * @summary Class that wraps up all other views.
+     */
     return function() {
 
         var bugsRawData = [];
@@ -158,6 +162,13 @@ MasterView = (function(headerView, mainView,
         homeView.setDataSource(hogsAndBugsFetcherAsync);
         statsView.setDataSource(myDeviceFetcherAsync);
 
+        /**
+         * @function
+         * @instance
+         * @memberOf MasterView
+         * @summary Render all views and insert the results as
+         part of the document.
+         */
         var render = function() {
             bugsView.renderInsert();
             hogsView.renderInsert();

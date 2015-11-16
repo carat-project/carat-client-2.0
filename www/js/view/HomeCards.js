@@ -2,6 +2,9 @@ var SummaryContainer = require("../model/SummaryContainer.js").SummaryContainer;
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.HomeCards = (function(utilities) {
+    /**
+     * @class HomeCards
+     */
     return function() {
 
         var docLocation = document.querySelector("#home .page-content");
@@ -39,12 +42,24 @@ module.exports.HomeCards = (function(utilities) {
             return renderAsyncSource(source);
         })(dataSource);
 
+        /**
+         * @function
+         * @instance
+         * @param {} freshDataSource A callback which is used for
+         acquiring data from the server.
+         * @memberOf HomeCards
+         */
         var setDataSource = function(freshDataSource) {
             dataSource = freshDataSource;
             renderAsync = renderAsyncSource(freshDataSource);
         };
 
-
+        /**
+         * @function
+         * @instance
+         * @memberOf HomeCards
+         * @summary Insert these cards as a part of the document.
+         */
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
                 var node = renderedTemplate;

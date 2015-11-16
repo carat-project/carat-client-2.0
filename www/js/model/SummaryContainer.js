@@ -2,7 +2,13 @@ var SummaryEntry = require("./SummaryEntry.js").SummaryEntry;
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.SummaryContainer = (function(template, utilities) {
-
+    /**
+     * @class SummaryContainer
+     * @param {} bugs Array of raw data representing
+     the bugs that are listed in the summary.
+     * @param {} hogs Array of raw data representing
+     the hogs that are listed in the summary.
+     */
     return function(bugs, hogs) {
 
         var makeModels = function(data) {
@@ -20,6 +26,12 @@ module.exports.SummaryContainer = (function(template, utilities) {
 
         var hogEntries = makeModels(hogs);
 
+        /**
+         * @function
+         * @instance
+         * @returns {Object} All the fields of this object.
+         * @memberOf SummaryContainer
+         */
         var getFields = function() {
             return {
                 bugEntries: bugEntries,
@@ -27,10 +39,24 @@ module.exports.SummaryContainer = (function(template, utilities) {
             };
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {Array} All the bug entries listed
+         in the summary.
+         * @memberOf SummaryContainer
+         */
         var getBugs = function() {
             return bugEntries;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {Array} All the hog entries listed
+         in the summary.
+         * @memberOf SummaryContainer
+         */
         var getHogs = function() {
             return hogEntries;
         };
@@ -77,6 +103,13 @@ module.exports.SummaryContainer = (function(template, utilities) {
             return node;
         })();
 
+        /**
+         * @function
+         * @instance
+         * @returns {DOM-element} Rendered DOM element
+         representing the summary.
+         * @memberOf SummaryContainer
+         */
         var render = function() {
             return domNode;
         };

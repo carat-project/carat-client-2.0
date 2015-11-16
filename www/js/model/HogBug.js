@@ -1,7 +1,12 @@
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.HogBug = (function(template, utilities, buttonActions) {
-
+    /**
+     * @class HogBug
+     * @param {} data Raw data from the server.
+     * @param {} gestureCallback The actions that happen when
+     a gesture occurs.
+     */
     return function(data, gestureCallback) {
 
         var benefitSubstrings = utilities
@@ -25,6 +30,12 @@ module.exports.HogBug = (function(template, utilities, buttonActions) {
                                                   data.type,
                                                   "close");
 
+        /**
+         * @function
+         * @instance
+         * @returns {Object} All the fields of this object.
+         * @memberOf HogBug
+         */
         var getFields = function() {
             return {
                 benefit: benefit,
@@ -42,30 +53,77 @@ module.exports.HogBug = (function(template, utilities, buttonActions) {
             };
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} Id for the HTML-element id field.
+         * @memberOf HogBug
+         */
         var getId = function() {
             return id;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} Id for the close button
+         HTML-element id field.
+         * @memberOf HogBug
+         */
         var getCloseId = function() {
             return closeId;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} Id for the uninstall button
+         HTML-element id field.
+         * @memberOf HogBug
+         */
         var getUninstallId = function() {
             return uninstallId;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {Boolean} Whether or not this app is
+         currently running.
+         * @memberOf HogBug
+         */
         var getRunning = function() {
             return running;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} The package name of this app
+         for native plugin use.
+         * @memberOf HogBug
+         */
         var getPackageName = function() {
             return packageName;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {String} The name of the app that is
+         displayed for the end user.
+         * @memberOf HogBug
+         */
         var getLabel = function() {
             return label;
         };
 
+        /**
+         * @function
+         * @instance
+         * @returns {Boolean} Whether or not you can uninstall this app.
+         * @memberOf HogBug
+         */
         var getUninstallable = function() {
             return uninstallable;
         };
@@ -104,6 +162,13 @@ module.exports.HogBug = (function(template, utilities, buttonActions) {
             return node;
         })();
 
+        /**
+         * @function
+         * @instance
+         * @returns {DOM-element} Rendered DOM element
+         representing a hog or a bug.
+         * @memberOf HogBug
+         */
         var render = function() {
             return domNode;
         };
