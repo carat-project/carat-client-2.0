@@ -996,12 +996,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     
     var generateSummaryStatistics = function(mainDataSource, deviceInfo) {
         getSummaryStatistics(mainDataSource, deviceInfo);
-    }
+    };
 
     var generateStatistics = function(mainDataSource, deviceInfo) {
-        generatePage("#system", [getStatisticsCard(mainDataSource,
+       generatePage("#system", [getStatisticsCard(mainDataSource,
                                                  deviceInfo)]);
     };
+	
+	//var generateSystem = function(mainDataSource, deviceInfo) {
+//		generatePage("#system", [getStatisticsCard(mainDataSource,
+//                                                 deviceInfo)]);
+//	};
 
     //public methods of the module
     return {
@@ -1010,7 +1015,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         generateHogs: generateHogs,
         generateSummary: generateSummary,
         generateSummaryStatistics: generateSummaryStatistics,
-        generateStatistics: generateStatistics
+		generateStatistics: generateStatistics
+	//	generateSystem: generateSystem
+       
     };
 })(model.notifications, {panSwipefy: makeElemPanSwipable,
                          onlyTapify: makeElemTappable},
