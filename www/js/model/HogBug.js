@@ -1,8 +1,8 @@
 var Utilities = require("../helper/Utilities.js").Utilities;
 
-module.exports.HogBug = (function(template, utilities) {
+module.exports.HogBug = (function(template, utilities, buttonActions) {
 
-    return function(data) {
+    return function(data, gestureCallback) {
 
         var benefitSubstrings = utilities
                 .splitTimeDrainString(data.benefit);
@@ -72,8 +72,40 @@ module.exports.HogBug = (function(template, utilities) {
 
         var html = template.render(getFields());
 
+        var domNode = (function() {
+            var node = utilities.makeDomNode(html);
+            var closeButton = utilities.findById(node, closeId);
+            var uninstallButton = utilities.findById(node, uninstallId);
+
+            closeButton.addEventListener("click", function() {
+                buttonActions.close(
+                    packageName,
+                    function(state) {
+                        console.log("Killing app: " + state);
+                    });
+            });
+
+            uninstallButton.addEventListener("click", function() {
+                buttonActions.uninstall(
+                    packageName,
+                    function(state) {
+                        console.log("Uninstalling app: " + state);
+                    });
+            });
+
+            if(window.localStorage.getItem(id)
+               === 'dismissed') {
+                node.style.display = 'none';
+            } else {
+                gestureCallback(node);
+            }
+
+
+            return node;
+        })();
+
         var render = function() {
-            return html;
+            return domNode;
         };
 
 
@@ -89,5 +121,8 @@ module.exports.HogBug = (function(template, utilities) {
             getUninstallable: getUninstallable
         };
     };
-})(new EJS({url: 'js/template/hogBugCard.ejs'}), Utilities);
+})(new EJS({url: 'js/template/hogBugCard.ejs'}),
+   Utilities,
+   {close: window.carat.killApp,
+    uninstall: window.carat.uninstallApp});
 

@@ -1,20 +1,14 @@
-<div class="page-content">
-    <p>Running</p>
-    <% for(var key in running) { %>
-        <div class="mdl-card-background mdl-shadow--2dp">
-            <%= running[key] %>
-        </div>
-    <% } %>
-    <p>Inactive</p>
-    <% for(var key in inactive) { %>
-        <div class="mdl-card-background mdl-shadow--2dp">
-            <%= inactive[key] %>
-        </div>
-    <% } %>
-    <p>System</p>
-    <% for(var key in system) { %>
-        <div class="mdl-card-background mdl-shadow--2dp">
-            <%= system[key] %>
-        </div>
-    <% } %>
+<div class="page-content mdl-grid">
+    <div class="mdl-card-background mdl-shadow--2dp"
+         id="<%= runningId %>">
+        <p>Running</p>
+    </div>
+    <div class="mdl-card-background mdl-shadow--2dp"
+         id="<%= inactiveId %>">
+        <p>Inactive</p>
+    </div>
+    <div class="mdl-card-background mdl-shadow--2dp"
+         id="<%= systemId %>">
+        <p>System</p>
+    </div>
 </div>

@@ -10,9 +10,37 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
 
         var docLocation = document.getElementById(outputElemId);
 
+        var cardLocIdMaker = function(locName) {
+            return utilities.makeIdFromOtherId(outputElemId,
+                                               locName);
+        };
+
+        var cardLocIds = {
+            runningId: cardLocIdMaker("running"),
+            inactiveId: cardLocIdMaker("inactive"),
+            systemId: cardLocIdMaker("system")
+        };
+
         var renderTemplate = function(hogBugsArray) {
 
-            return template.render(hogBugsArray);
+            var rendered = utilities
+                    .makeDomNode(template.render(cardLocIds));
+
+            var runningLoc = utilities
+                    .findById(rendered, cardLocIds.runningId);
+            var inactiveLoc = utilities
+                    .findById(rendered, cardLocIds.inactiveId);
+            var systemLoc = utilities
+                    .findById(rendered, cardLocIds.systemId);
+
+            utilities.appendChildAll(runningLoc,
+                                     hogBugsArray.running);
+            utilities.appendChildAll(inactiveLoc,
+                                     hogBugsArray.inactive);
+            utilities.appendChildAll(systemLoc,
+                                     hogBugsArray.system);
+
+            return rendered;
         };
 
         var makeModels = function(rawData) {
@@ -24,7 +52,7 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
             };
 
             for(var key in rawData) {
-                var model = new HogBug(rawData[key]);
+                var model = new HogBug(rawData[key], gestureCallback);
 
                 if(model.getRunning()) {
                     result.running.push(model);
@@ -33,14 +61,12 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
                 } else {
                     result.inactive.push(model);
                 }
-
             }
 
             return result;
         };
 
         var renderModels = function(categories) {
-            console.log(categories);
 
             var morphToHTML = function(model) {
                 return model.render();
@@ -54,17 +80,13 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
         };
 
         var renderAsyncSource = function(sourceCallback) {
-            return function(onResultCallback, onModelsCallback) {
+            return function(onResultCallback) {
                 sourceCallback(function(data) {
                     var models = makeModels(data);
                     var result = renderTemplate(renderModels(models));
 
                     if(onResultCallback) {
                         onResultCallback(result);
-                    }
-
-                    if(onModelsCallback) {
-                        onModelsCallback(models);
                     }
                 });
             };
@@ -80,61 +102,11 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
 
-                var node = utilities.makeDomNode(renderedTemplate);
-                docLocation.appendChild(node);
+                docLocation.appendChild(renderedTemplate);
 
-            }, function(models) {
-
-                var applyActions = function(model) {
-                    var nodeId = model.getId();
-                    var closeButtonId = model.getCloseId();
-                    var uninstallButtonId = model.getUninstallId();
-
-                    var actualNode = document.getElementById(nodeId);
-                    var closeButton = document.getElementById(closeButtonId);
-                    var uninstallButton = document.getElementById(
-                        uninstallButtonId);
-
-                    closeButton.addEventListener("click", function() {
-                        buttonActions.close(
-                            model.getPackageName(),
-                            function(state) {
-                                console.log("Killing app: " + state);
-                            });
-                    });
-
-                    uninstallButton.addEventListener("click", function() {
-                        buttonActions.uninstall(
-                            model.getPackageName(),
-                            function(state) {
-                                console.log("Uninstalling app: " + state);
-                            });
-                    });
-
-                    if(window.localStorage.getItem(nodeId)
-                       === 'dismissed') {
-                        actualNode.style.display = 'none';
-                    } else {
-                        gestureCallback(actualNode);
-                    }
-
-                };
-
-                for(var keyRunning in models.running) {
-                    applyActions(models.running[keyRunning]);
-                }
-
-                for(var keyInactive in models.inactive) {
-                    applyActions(models.inactive[keyInactive]);
-                }
-
-                for(var keySystem in models.system) {
-                    applyActions(models.system[keySystem]);
-                }
             });
         };
 
-        console.log(window.carat.killApp);
 
         return {
             renderInsert: renderInsert,

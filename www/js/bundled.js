@@ -15,6 +15,21 @@ module.exports.Utilities = (function() {
         return idPrefix + "-" + hogOrBug + "-" + additional;
     };
 
+    var makeIdFromOtherId = function(id, additional) {
+
+        return id + "-" + additional;
+    };
+
+    var findById = function(elem, id) {
+        return elem.querySelector("#" + id);
+    };
+
+    var appendChildAll = function(elem, appendees) {
+        for(var key in appendees) {
+            elem.appendChild(appendees[key]);
+        }
+    };
+
     var splitTimeDrainString = function(timeDrainString) {
         var timeDrainSplit = timeDrainString.split("±", 2);
 
@@ -62,7 +77,10 @@ module.exports.Utilities = (function() {
         makeIdFromAppName: makeIdFromAppName,
         splitTimeDrainString: splitTimeDrainString,
         pluralize: pluralize,
-        makeDomNode: makeDomNode
+        makeDomNode: makeDomNode,
+        makeIdFromOtherId: makeIdFromOtherId,
+        appendChildAll: appendChildAll,
+        findById: findById
     };
 })();
 
@@ -106,9 +124,9 @@ module.exports.DeviceStats = (function(template) {
 },{}],3:[function(require,module,exports){
 var Utilities = require("../helper/Utilities.js").Utilities;
 
-module.exports.HogBug = (function(template, utilities) {
+module.exports.HogBug = (function(template, utilities, buttonActions) {
 
-    return function(data) {
+    return function(data, gestureCallback) {
 
         var benefitSubstrings = utilities
                 .splitTimeDrainString(data.benefit);
@@ -178,8 +196,40 @@ module.exports.HogBug = (function(template, utilities) {
 
         var html = template.render(getFields());
 
+        var domNode = (function() {
+            var node = utilities.makeDomNode(html);
+            var closeButton = utilities.findById(node, closeId);
+            var uninstallButton = utilities.findById(node, uninstallId);
+
+            closeButton.addEventListener("click", function() {
+                buttonActions.close(
+                    packageName,
+                    function(state) {
+                        console.log("Killing app: " + state);
+                    });
+            });
+
+            uninstallButton.addEventListener("click", function() {
+                buttonActions.uninstall(
+                    packageName,
+                    function(state) {
+                        console.log("Uninstalling app: " + state);
+                    });
+            });
+
+            if(window.localStorage.getItem(id)
+               === 'dismissed') {
+                node.style.display = 'none';
+            } else {
+                gestureCallback(node);
+            }
+
+
+            return node;
+        })();
+
         var render = function() {
-            return html;
+            return domNode;
         };
 
 
@@ -195,7 +245,10 @@ module.exports.HogBug = (function(template, utilities) {
             getUninstallable: getUninstallable
         };
     };
-})(new EJS({url: 'js/template/hogBugCard.ejs'}), Utilities);
+})(new EJS({url: 'js/template/hogBugCard.ejs'}),
+   Utilities,
+   {close: window.carat.killApp,
+    uninstall: window.carat.uninstallApp});
 
 
 },{"../helper/Utilities.js":1}],4:[function(require,module,exports){
@@ -236,8 +289,6 @@ module.exports.SummaryContainer = (function(template, utilities) {
             return hogEntries;
         };
 
-        console.log(getFields());
-
         var getRendered = function() {
 
             var renderedBugs = bugEntries.map(function(bug) {
@@ -248,8 +299,6 @@ module.exports.SummaryContainer = (function(template, utilities) {
             var renderedHogs = hogEntries.map(function(hog) {
                 return hog.render();
             });
-
-            console.log(renderedHogs);
 
             var bugsCount = utilities.pluralize(renderedBugs.length,
                                                 "bug");
@@ -265,10 +314,25 @@ module.exports.SummaryContainer = (function(template, utilities) {
 
         };
 
-        var html = template.render(getRendered());
+        var domNode = (function() {
+
+            var rendered = getRendered();
+            var html = template.render(rendered);
+
+            var node = utilities.makeDomNode(html);
+
+            var hogsLoc = utilities.findById(node, "hogsGrid");
+            var bugsLoc = utilities.findById(node, "bugsGrid");
+
+
+            utilities.appendChildAll(hogsLoc, rendered.hogs);
+            utilities.appendChildAll(bugsLoc, rendered.bugs);
+
+            return node;
+        })();
 
         var render = function() {
-            return html;
+            return domNode;
         };
 
         return {
@@ -328,8 +392,29 @@ module.exports.SummaryEntry = (function(template, utilities) {
 
         var html = template.render(getFields());
 
+        var domNode = (function() {
+            var node = utilities.makeDomNode(html);
+
+            var tab;
+
+            if(type === "BUG") {
+                tab = "bugs-tab";
+            } else if(type === "HOG") {
+                tab = "hogs-tab";
+            } else {
+                return node;
+            }
+
+            node.addEventListener("click", function() {
+                document.getElementById(tab).click();
+                window.location.hash = targetId;
+            });
+
+            return node;
+        })();
+
         var render = function() {
-            return html;
+            return domNode;
         };
 
         return {
@@ -407,9 +492,37 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
 
         var docLocation = document.getElementById(outputElemId);
 
+        var cardLocIdMaker = function(locName) {
+            return utilities.makeIdFromOtherId(outputElemId,
+                                               locName);
+        };
+
+        var cardLocIds = {
+            runningId: cardLocIdMaker("running"),
+            inactiveId: cardLocIdMaker("inactive"),
+            systemId: cardLocIdMaker("system")
+        };
+
         var renderTemplate = function(hogBugsArray) {
 
-            return template.render(hogBugsArray);
+            var rendered = utilities
+                    .makeDomNode(template.render(cardLocIds));
+
+            var runningLoc = utilities
+                    .findById(rendered, cardLocIds.runningId);
+            var inactiveLoc = utilities
+                    .findById(rendered, cardLocIds.inactiveId);
+            var systemLoc = utilities
+                    .findById(rendered, cardLocIds.systemId);
+
+            utilities.appendChildAll(runningLoc,
+                                     hogBugsArray.running);
+            utilities.appendChildAll(inactiveLoc,
+                                     hogBugsArray.inactive);
+            utilities.appendChildAll(systemLoc,
+                                     hogBugsArray.system);
+
+            return rendered;
         };
 
         var makeModels = function(rawData) {
@@ -421,7 +534,7 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
             };
 
             for(var key in rawData) {
-                var model = new HogBug(rawData[key]);
+                var model = new HogBug(rawData[key], gestureCallback);
 
                 if(model.getRunning()) {
                     result.running.push(model);
@@ -430,14 +543,12 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
                 } else {
                     result.inactive.push(model);
                 }
-
             }
 
             return result;
         };
 
         var renderModels = function(categories) {
-            console.log(categories);
 
             var morphToHTML = function(model) {
                 return model.render();
@@ -451,17 +562,13 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
         };
 
         var renderAsyncSource = function(sourceCallback) {
-            return function(onResultCallback, onModelsCallback) {
+            return function(onResultCallback) {
                 sourceCallback(function(data) {
                     var models = makeModels(data);
                     var result = renderTemplate(renderModels(models));
 
                     if(onResultCallback) {
                         onResultCallback(result);
-                    }
-
-                    if(onModelsCallback) {
-                        onModelsCallback(models);
                     }
                 });
             };
@@ -477,61 +584,11 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
 
-                var node = utilities.makeDomNode(renderedTemplate);
-                docLocation.appendChild(node);
+                docLocation.appendChild(renderedTemplate);
 
-            }, function(models) {
-
-                var applyActions = function(model) {
-                    var nodeId = model.getId();
-                    var closeButtonId = model.getCloseId();
-                    var uninstallButtonId = model.getUninstallId();
-
-                    var actualNode = document.getElementById(nodeId);
-                    var closeButton = document.getElementById(closeButtonId);
-                    var uninstallButton = document.getElementById(
-                        uninstallButtonId);
-
-                    closeButton.addEventListener("click", function() {
-                        buttonActions.close(
-                            model.getPackageName(),
-                            function(state) {
-                                console.log("Killing app: " + state);
-                            });
-                    });
-
-                    uninstallButton.addEventListener("click", function() {
-                        buttonActions.uninstall(
-                            model.getPackageName(),
-                            function(state) {
-                                console.log("Uninstalling app: " + state);
-                            });
-                    });
-
-                    if(window.localStorage.getItem(nodeId)
-                       === 'dismissed') {
-                        actualNode.style.display = 'none';
-                    } else {
-                        gestureCallback(actualNode);
-                    }
-
-                };
-
-                for(var keyRunning in models.running) {
-                    applyActions(models.running[keyRunning]);
-                }
-
-                for(var keyInactive in models.inactive) {
-                    applyActions(models.inactive[keyInactive]);
-                }
-
-                for(var keySystem in models.system) {
-                    applyActions(models.system[keySystem]);
-                }
             });
         };
 
-        console.log(window.carat.killApp);
 
         return {
             renderInsert: renderInsert,
@@ -575,32 +632,11 @@ module.exports.HomeCards = (function(utilities) {
             });
         };
 
-        var linkifySummaryEntry = function(originId, targetId, type) {
-
-            var tab;
-
-            if(type === "BUG") {
-                tab = "bugs-tab";
-            } else if(type === "HOG") {
-                tab = "hogs-tab";
-            } else {
-                return;
-            }
-
-            var element = document.getElementById(originId);
-
-
-            element.addEventListener("click", function() {
-                document.getElementById(tab).click();
-                window.location.hash = targetId;
-            });
-        };
-
         var dataSource = defaultDataSource;
 
         var renderAsyncSource = function(sourceCallback) {
 
-            return function(onResultCallback, onModelCallback) {
+            return function(onResultCallback) {
                 sourceCallback(function(data) {
 
                     var model = new SummaryContainer(data.bugs,
@@ -609,10 +645,6 @@ module.exports.HomeCards = (function(utilities) {
 
                     if(onResultCallback) {
                         onResultCallback(rendered);
-                    }
-
-                    if(onModelCallback) {
-                        onModelCallback(model);
                     }
                 });
             };
@@ -630,27 +662,9 @@ module.exports.HomeCards = (function(utilities) {
 
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
-                var node = utilities.makeDomNode(renderedTemplate);
+                var node = renderedTemplate;
                 docLocation.appendChild(node);
                 showOrHideActions();
-            }, function(model) {
-
-                var bugs = model.getBugs();
-                var hogs = model.getHogs();
-
-                var linkifyEntries = function(entries) {
-                    for(var key in entries) {
-                        var entry = entries[key];
-
-                        linkifySummaryEntry(entry.getId(),
-                                            entry.getTargetId(),
-                                            entry.getType());
-                    }
-                };
-
-                linkifyEntries(bugs);
-                linkifyEntries(hogs);
-
             });
         };
 

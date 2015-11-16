@@ -35,8 +35,6 @@ module.exports.SummaryContainer = (function(template, utilities) {
             return hogEntries;
         };
 
-        console.log(getFields());
-
         var getRendered = function() {
 
             var renderedBugs = bugEntries.map(function(bug) {
@@ -47,8 +45,6 @@ module.exports.SummaryContainer = (function(template, utilities) {
             var renderedHogs = hogEntries.map(function(hog) {
                 return hog.render();
             });
-
-            console.log(renderedHogs);
 
             var bugsCount = utilities.pluralize(renderedBugs.length,
                                                 "bug");
@@ -64,10 +60,25 @@ module.exports.SummaryContainer = (function(template, utilities) {
 
         };
 
-        var html = template.render(getRendered());
+        var domNode = (function() {
+
+            var rendered = getRendered();
+            var html = template.render(rendered);
+
+            var node = utilities.makeDomNode(html);
+
+            var hogsLoc = utilities.findById(node, "hogsGrid");
+            var bugsLoc = utilities.findById(node, "bugsGrid");
+
+
+            utilities.appendChildAll(hogsLoc, rendered.hogs);
+            utilities.appendChildAll(bugsLoc, rendered.bugs);
+
+            return node;
+        })();
 
         var render = function() {
-            return html;
+            return domNode;
         };
 
         return {

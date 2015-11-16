@@ -45,8 +45,29 @@ module.exports.SummaryEntry = (function(template, utilities) {
 
         var html = template.render(getFields());
 
+        var domNode = (function() {
+            var node = utilities.makeDomNode(html);
+
+            var tab;
+
+            if(type === "BUG") {
+                tab = "bugs-tab";
+            } else if(type === "HOG") {
+                tab = "hogs-tab";
+            } else {
+                return node;
+            }
+
+            node.addEventListener("click", function() {
+                document.getElementById(tab).click();
+                window.location.hash = targetId;
+            });
+
+            return node;
+        })();
+
         var render = function() {
-            return html;
+            return domNode;
         };
 
         return {

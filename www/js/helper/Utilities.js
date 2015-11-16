@@ -14,6 +14,21 @@ module.exports.Utilities = (function() {
         return idPrefix + "-" + hogOrBug + "-" + additional;
     };
 
+    var makeIdFromOtherId = function(id, additional) {
+
+        return id + "-" + additional;
+    };
+
+    var findById = function(elem, id) {
+        return elem.querySelector("#" + id);
+    };
+
+    var appendChildAll = function(elem, appendees) {
+        for(var key in appendees) {
+            elem.appendChild(appendees[key]);
+        }
+    };
+
     var splitTimeDrainString = function(timeDrainString) {
         var timeDrainSplit = timeDrainString.split("±", 2);
 
@@ -61,6 +76,9 @@ module.exports.Utilities = (function() {
         makeIdFromAppName: makeIdFromAppName,
         splitTimeDrainString: splitTimeDrainString,
         pluralize: pluralize,
-        makeDomNode: makeDomNode
+        makeDomNode: makeDomNode,
+        makeIdFromOtherId: makeIdFromOtherId,
+        appendChildAll: appendChildAll,
+        findById: findById
     };
 })();

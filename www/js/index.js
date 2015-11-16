@@ -86,6 +86,7 @@ var app = {
     onDataReady: function(){
         app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
+        console.log(carat);
         var masterView = new MasterView();
         masterView.render();
 

@@ -17,32 +17,11 @@ module.exports.HomeCards = (function(utilities) {
             });
         };
 
-        var linkifySummaryEntry = function(originId, targetId, type) {
-
-            var tab;
-
-            if(type === "BUG") {
-                tab = "bugs-tab";
-            } else if(type === "HOG") {
-                tab = "hogs-tab";
-            } else {
-                return;
-            }
-
-            var element = document.getElementById(originId);
-
-
-            element.addEventListener("click", function() {
-                document.getElementById(tab).click();
-                window.location.hash = targetId;
-            });
-        };
-
         var dataSource = defaultDataSource;
 
         var renderAsyncSource = function(sourceCallback) {
 
-            return function(onResultCallback, onModelCallback) {
+            return function(onResultCallback) {
                 sourceCallback(function(data) {
 
                     var model = new SummaryContainer(data.bugs,
@@ -51,10 +30,6 @@ module.exports.HomeCards = (function(utilities) {
 
                     if(onResultCallback) {
                         onResultCallback(rendered);
-                    }
-
-                    if(onModelCallback) {
-                        onModelCallback(model);
                     }
                 });
             };
@@ -72,27 +47,9 @@ module.exports.HomeCards = (function(utilities) {
 
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
-                var node = utilities.makeDomNode(renderedTemplate);
+                var node = renderedTemplate;
                 docLocation.appendChild(node);
                 showOrHideActions();
-            }, function(model) {
-
-                var bugs = model.getBugs();
-                var hogs = model.getHogs();
-
-                var linkifyEntries = function(entries) {
-                    for(var key in entries) {
-                        var entry = entries[key];
-
-                        linkifySummaryEntry(entry.getId(),
-                                            entry.getTargetId(),
-                                            entry.getType());
-                    }
-                };
-
-                linkifyEntries(bugs);
-                linkifyEntries(hogs);
-
             });
         };
 
