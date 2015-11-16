@@ -36,21 +36,21 @@
 /* = ACTION BUTTON */
 
 .action-button {
-  margin-right: 5px;
+  margin-right: 6px;
   box-shadow: none;
   outline: 0;
   outline-style: none;
   outline-width: 0;
   text-align: center;
   text-transform: uppercase;
-  font-weight: bold;
-  font-size: 11px;
+/*  font-weight: bold;*/
+  font-size: 12px;
   vertical-align: middle;
   padding: 8px 14px 8px 14px;
   border: 2px solid #F7A71B;
   border-radius: 4px;
   background-color: #F7A71B;
-  box-shadow: 1px 1px 0px #C0C0C0;
+/*  box-shadow: 1px 1px 0px #C0C0C0;*/
 }
 
 .action-info {
@@ -72,7 +72,7 @@
 .action-button:disabled {
   background-color: #E0E0E0;
   border-color: #E0E0E0;
-  box-shadow: 1px 1px 0px #B0B0B0;
+/*  box-shadow: 1px 1px 0px #B0B0B0;*/
   color: #B0B0B0;
 }
 
@@ -817,7 +817,7 @@ section.mdl-layout__tab-panel div.page-content {
     height 40px;
     position: absolute;
     left: 15px;
-    top: 15px;
+    top: 16px;
 }
 
 #home .mdl-card.sleeker .mdl-card__supporting-text {
@@ -1031,6 +1031,44 @@ section.mdl-layout__tab-panel div.page-content {
 	height:15px;
 	float:right;
 	display:inline-block;
+}
+
+.mdl-card.sleeker.system {
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+}
+
+.suggested-action {
+    color: #F7A71B;
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 6px;
+}
+
+#system .system .carat-card__title {
+    border-width: 0;
+    padding-top: 15px;
+}
+
+.system .mdl-card__icon {
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    color: dimgray;
+    background-color: darkgray;
+    height 40px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+.system .mdl-card__icon .material-icons {
+    line-height: 40px;
+    vertical-align: middle;
 }
 
 

@@ -241,9 +241,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var paragraphNode = document.createElement("p");
             var textNode = document.createTextNode(secondaryTextParagraph);
             paragraphNode.appendChild(textNode);
-            console.log(paragraphNode);
 
-                secondaryTextNode.appendChild(paragraphNode);
+            secondaryTextNode.appendChild(paragraphNode);
             }
 
             secondaryTextNode.id = nodeId;
@@ -459,8 +458,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var injectJscore = function(statisticsDomNode,
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
-        console.log("jsco");
-        console.log(jscore);
         var circle = statisticsDomNode.querySelector(".outerCircle");
         var degree = jscore*3.6;
         var color;
@@ -505,9 +502,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
     
-        var homebrewConcatChildrenReverse = function(spot, concatees) {
-            console.log(concatees);
-            
+    // reverse order compared to homebrewConcatChildren
+    var homebrewConcatChildrenReverse = function(spot, concatees) {            
         for(var i = 0; i  < concatees.length; i++) {
             spot.appendChild(concatees[i]);
         }
