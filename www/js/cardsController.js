@@ -101,17 +101,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
     
     //tää pois ku summarykortti toimii
-    var injectJScoreText = function(cardDomNode, mainText) {
-
-        if(!mainText) {
-            return;
-        }
-
-        var mainTextNode = cardDomNode
-                .querySelector(".carat-Jscore-text");
-
-        appendTextOrRemoveNode(mainTextNode, mainText);
-    };
+//    var injectJScoreText = function(cardDomNode, mainText) {
+//
+//        if(!mainText) {
+//            return;
+//        }
+//
+//        var mainTextNode = cardDomNode
+//                .querySelector(".carat-Jscore-text");
+//
+//        appendTextOrRemoveNode(mainTextNode, mainText);
+//    };
     
         var injectBatteryText = function(cardDomNode, mainText) {
         if(!mainText) {
@@ -165,6 +165,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
 
+    // for collapsing div
     var injectMultiparagraphSecondaryText = function(cardDomNode,
                                                      secondaryTextParagraphs,
                                                      notificationId) {
@@ -196,6 +197,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
     
+        // in main text area, doesn't collapse
         var injectMultiparagraphText = function(cardDomNode,
                                                      TextParagraphs,
                                                      notificationId) {
@@ -205,25 +207,20 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
 
-        if(!TextParagraphs) {
-            trashANode(secondaryTextNode);
-            if(moreButton) {
-                trashANode(moreButton);
-            }
-        } else {
-            for(var paragraphKey in TextParagraphs) {
-                var paragraph = TextParagraphs[paragraphKey];
-                var paragraphNode = document.createElement("div");
-                var textNode = document.createTextNode(paragraph);
+        
+        for(var paragraphKey in TextParagraphs) {
+            var paragraph = TextParagraphs[paragraphKey];
+            var paragraphNode = document.createElement("div");
+            var textNode = document.createTextNode(paragraph);
 
-                paragraphNode.appendChild(textNode);
-                console.log(paragraphNode);
-
-                TextNode.insertBefore(paragraphNode, TextNode.firstChild);
+            paragraphNode.appendChild(textNode);
+            console.log(textNode);
+            console.log(textNode.firstChild);
+            
+            TextNode.insertBefore(paragraphNode, TextNode.firstChild);
             }
 
             TextNode.id = nodeId;
-        }
     };
     
     var injectParagraphSecondaryText = function(cardDomNode,
@@ -566,6 +563,43 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                           expandText,
                                           statisticsCardId);
     };
+    
+    var makeNoRaportsCard = function(hogOrBugOrSystem) {
+        newCardNode = cardTemplates.getNewItemDomNodeTemplate(); 
+        var expandArrowToRemovedParent = newCardNode.querySelector(".mdl-card__title-text");
+        
+//         removes expand arrow from template, might be better to make own template in th future
+        expandArrowToRemovedParent.removeChild(expandArrowToRemovedParent.childNodes[0]);
+            
+        var NoRaportsCardId = "No_apps-" + hogOrBugOrSystem;
+        injectIdToCard(newCardNode, NoRaportsCardId);
+        newCardNode.classList.add("no-reports");
+        var title;
+        var node;
+        var expandText;
+                
+        if (hogOrBugOrSystem == "hog") {
+            title = "Congratulations! You have no Hogs.";
+            expandText = [
+                          "Please check back in a week.",
+                          "If your apps are behaving normally, there will be no hogs here.",
+                          "When an app starts to use more energy on your device than on others, it will show up here."
+                         ];
+            node = "#hogs";
+        } else if (hogOrBugOrSystem == "bug"){
+            title = "Congratulations! You have no Bugs.";
+            expandText = [
+                          "Please check back in a week.",
+                          "If your apps are behaving normally, there will be no bugs here.",
+                          "When an app starts to use significantly more energy on your device than on others, it will show up here."
+                         ];
+            node = "#bugs";
+        }   
+            
+        injectTitle(newCardNode, title);
+        injectMultiparagraphText(newCardNode, expandText, NoRaportsCardId); 
+        document.querySelector(node).appendChild(newCardNode);
+    };
 
 	var makeCaratCard = function(caratDomNode,
 								 caratObject) {
@@ -817,29 +851,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 		}
 
         return newCardNode;
-    };
-    
-    var makeNoRaportsCard = function(hogOrBugOrSystem) {
-        newCardNode = cardTemplates
-            .getNewItemDomNodeTemplate(); 
-            
-        var title;
-        var text;
-        var node;
-                
-        if (hogOrBugOrSystem == "hog") {
-            title = "You have no Hogs";
-            text = "Please check back in a week. If your apps are behaving normally, there will be no hogs here. When an app starts to use more energy on your device than on others, it will show up here.";
-            node = "#hogs";
-        } else if (hogOrBugOrSystem == "bug"){
-            title = "You have no Bugs";
-            text = "Please check back in a week. If your apps are behaving normally, there will be no bugs here. When an app starts to use significantly more energy on your device than on others, it will show up here.";
-            node = "#bugs";
-        }   
-            
-        injectTitle(newCardNode, title);
-        injectMainText(newCardNode, text); 
-        document.querySelector(node).appendChild(newCardNode);
     };
 
     //fetch correct models for the home tab suggested actions and create corresponding cards
