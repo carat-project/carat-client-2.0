@@ -818,7 +818,29 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
         return newCardNode;
     };
-
+    
+    var makeNoRaportsCard = function(hogOrBugOrSystem) {
+        newCardNode = cardTemplates
+            .getNewItemDomNodeTemplate(); 
+            
+        var title;
+        var text;
+        var node;
+                
+        if (hogOrBugOrSystem == "hog") {
+            title = "You have no Hogs";
+            text = "Please check back in a week. If your apps are behaving normally, there will be no hogs here. When an app starts to use more energy on your device than on others, it will show up here.";
+            node = "#hogs";
+        } else if (hogOrBugOrSystem == "bug"){
+            title = "You have no Bugs";
+            text = "Please check back in a week. If your apps are behaving normally, there will be no bugs here. When an app starts to use significantly more energy on your device than on others, it will show up here.";
+            node = "#bugs";
+        }   
+            
+        injectTitle(newCardNode, title);
+        injectMainText(newCardNode, text); 
+        document.querySelector(node).appendChild(newCardNode);
+    };
 
     //fetch correct models for the home tab suggested actions and create corresponding cards
     //for them
@@ -860,7 +882,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //to create cards from
     var getHogsCards = function(hogsSource,
                                 appCloseCallback, appUninstallCallback) {
-
+    
+        if (hogsSource.length == 0 || hogsSource !== 'undefined') {
+            makeNoRaportsCard("hog");
+        }
+        
         return homebrewMap(notificationsArray
                            .getHogs(hogsSource,
                                     appCloseCallback, appUninstallCallback),
@@ -873,6 +899,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var getBugsCards = function(bugsSource,
                                 appCloseCallback, appUninstallCallback) {
 
+        if (bugsSource.length == 0 || bugsSource !== 'undefined') {
+            makeNoRaportsCard("bug");
+        }
+        
         var result =  homebrewMap(notificationsArray
                                   .getBugs(bugsSource,
                                            appCloseCallback,
