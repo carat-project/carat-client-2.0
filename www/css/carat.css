@@ -1072,3 +1072,21 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 
+.no-reports .mdl-card__title-text {
+    padding-top: 15px;
+    width: 100%;
+    color: #F7A71B;
+    font-weight: 600;
+}
+
+.no-reports .mdl-card__supporting-text {
+    padding-top: 0px;
+    padding-left: 15px;
+    padding-right: 20px;
+}
+
+.no-reports .mdl-card__supporting-text > div {
+    padding-top: 15px;
+}
+
+
