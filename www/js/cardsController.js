@@ -345,11 +345,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     };
     
     var injectTypeInfo = function (cardDomNode, text) {
+            var iconFileName = "img/ic_info_black_24dp_1x.png"
+            if (text == "Bug" || text == "Hog"){
+                iconFileName = "img/"+text.toLowerCase() + "_icon.png";
+            }
             var buttonSpot = cardDomNode
                 .querySelector(".mdl-card__actions");
             var systemInfo = document.createElement("div");
             systemInfo.className = "action-info";
-            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+            systemInfo.innerHTML = "<img width='20px' height='20px' style='margin-right: 2px' src='"+iconFileName+"' />"+
             "<div class='action-info-text'>" + text + "</span>";
             buttonSpot.appendChild(systemInfo);
     };
