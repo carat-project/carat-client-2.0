@@ -212,14 +212,14 @@ var app = {
         var memLoad = document.querySelector("#memProgressBar > div");
 
         carat.startCpuPolling(function(usage){
-            cpuText.style.color = (usage > 50) ? "#fff" : "#000";
+            cpuText.style.color = (usage > 65) ? "#fff" : "#000";
             usage = usage + "%";
             cpuText.innerHTML = usage;
             cpuLoad.style.width = usage;
         }, 4000);
 
         carat.startMemoryPolling(function(usage){
-            memText.style.color = (usage > 50) ? "#fff" : "#000";
+            memText.style.color = (usage > 65) ? "#fff" : "#000";
             usage = usage + "%";
             memText.innerHTML = usage;
             memLoad.style.width = usage;

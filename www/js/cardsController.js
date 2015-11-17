@@ -889,7 +889,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var getHogsCards = function(hogsSource,
                                 appCloseCallback, appUninstallCallback) {
     
-        if (hogsSource.length == 0 || hogsSource !== 'undefined') {
+        if (typeof hogsSource == 'undefined' || hogsSource.length <= 0) {
             makeNoRaportsCard("hog");
         }
         
@@ -905,7 +905,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var getBugsCards = function(bugsSource,
                                 appCloseCallback, appUninstallCallback) {
 
-        if (bugsSource.length == 0 || bugsSource !== 'undefined') {
+        if (typeof bugsSource == 'undefined' || bugsSource.length <= 0) {
             makeNoRaportsCard("bug");
         }
         
