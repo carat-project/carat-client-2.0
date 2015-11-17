@@ -116,7 +116,7 @@ cardTemplates = (function() {
     var progressBar = function(barId, initialText) {
         return '<div id="'+barId+'" class="progressBar">'+
                     '<span>'+initialText+'</span>'+
-                    '<div></div>'
+                    '<div></div>'+
                 '</div>'
     }
 
@@ -132,7 +132,9 @@ cardTemplates = (function() {
                                 '</div>' +
                             '</div>' +
                             '<div class="mdl-card__supporting-text">' +
-                                '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "Calculating..")+
+                                '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "?") +
+                                '</div>'+
+                                '<div style="display: inline-block">Memory usage: '+progressBar("memProgressBar", "?") +
                                 '</div>'+
 //                                '<div class="carat-Jscore-text"></div>'+
 //                                '<div class="circleContainer">'+

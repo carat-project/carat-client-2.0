@@ -188,7 +188,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 var textNode = document.createTextNode(paragraph);
 
                 paragraphNode.appendChild(textNode);
-                console.log(paragraphNode);
 
                 secondaryTextNode.insertBefore(paragraphNode, secondaryTextNode.firstChild);
             }
@@ -196,18 +195,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             secondaryTextNode.id = nodeId;
         }
     };
-    
+
         // in main text area, doesn't collapse
-        var injectMultiparagraphText = function(cardDomNode,
-                                                     TextParagraphs,
-                                                     notificationId) {
+    var injectMultiparagraphText = function(cardDomNode, TextParagraphs, notificationId) {
         var TextNode = cardDomNode
                 .querySelector(".mdl-card__supporting-text");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
 
-        
         for(var paragraphKey in TextParagraphs) {
             var paragraph = TextParagraphs[paragraphKey];
             var paragraphNode = document.createElement("div");
@@ -216,13 +212,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             paragraphNode.appendChild(textNode);
             console.log(textNode);
             console.log(textNode.firstChild);
-            
-            TextNode.insertBefore(paragraphNode, TextNode.firstChild);
-            }
 
-            TextNode.id = nodeId;
+            TextNode.insertBefore(paragraphNode, TextNode.firstChild);
+        }
+
+        TextNode.id = nodeId;
     };
-    
+
     var injectParagraphSecondaryText = function(cardDomNode,
                                                      secondaryTextParagraph,
                                                      notificationId) {
@@ -553,7 +549,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = [
                           "Carat id: " + deviceInfo.caratId,
-                          "Memory used: " + deviceInfo.memoryUsed,
                           "Memory total: " + deviceInfo.memoryTotal,
                           "Battery duration: " + deviceInfo.batteryLife,
                           "Device model: " + deviceInfo.modelName,

@@ -280,24 +280,28 @@ public class DeviceLibrary {
      *
      * @return HashMap containing memory statistics.
      */
-    public static HashMap<String, Integer> getMemoryInfo() {
-        Log.v("Carat", "Reading memory info");
-        HashMap<String, Integer> result = new HashMap<String, Integer>();
+    public static MemoryStats getMemoryStats() {
+        //Log.v("Carat", "Reading memory info");
         RandomAccessFile reader;
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
             int[][] data = readLines(reader, 7, 2, "\\s+");
-            result.put("total", data[0][1]);
-            result.put("free", data[1][1]);
-            result.put("cached", data[3][1]);
-            result.put("active", data[5][1]);
-            result.put("inactive", data[6][1]);
             reader.close();
-            return result;
+            return new MemoryStats(data);
         } catch (IOException e) {
             Log.v("Carat", "Failed to read meminfo", e);
         }
         return null;
+    }
+    
+    /**
+     * Get memory usage percentage
+     * @return Memory usage percentage
+     */
+    public static float getMemoryUsage(){
+        MemoryStats mem = getMemoryStats();
+        float memP = 100*(mem.used/mem.total);
+        return (memP > 0)? memP : 0;
     }
 
     /**
@@ -306,7 +310,7 @@ public class DeviceLibrary {
      * @return CPU usage percentage
      */
     public static float getCpuUsage(int interval) {
-        Log.v("Carat", "Reading cpu usage");
+        //Log.v("Carat", "Reading cpu usage");
         try {
             RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
             int[] data = readLines(reader, 1, 10, "\\s+")[0];

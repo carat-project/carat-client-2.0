@@ -39,6 +39,7 @@
         <source-file src="src/org/carat20/client/device/ApplicationLibrary.java" target-dir="src/org/carat20/client/carat/device"/>
         <source-file src="src/org/carat20/client/device/DeviceLibrary.java" target-dir="src/org/carat20/client/carat/device"/>
         <source-file src="src/org/carat20/client/device/CPUStats.java" target-dir="src/org/carat20/client/carat/device"/>
+        <source-file src="src/org/carat20/client/device/MemoryStats.java" target-dir="src/org/carat20/client/carat/device"/>
         <source-file src="src/org/carat20/client/utility/Range.java" target-dir="src/org/carat20/client/carat/utility"/>
 		<source-file src="src/org/carat20/client/utility/Parser.java" target-dir="src/org/carat20/client/carat/utility"/>
 

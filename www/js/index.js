@@ -68,14 +68,6 @@ var app = {
         });
     },
 
-    getCpuUsage: function(progressText, progressLoad){
-        carat.getCpuUsage(function(usage){
-            usage = usage + "%";
-            progressText.innerHTML = usage;
-            progressLoad.style.width = usage;
-        });
-    },
-
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
@@ -213,13 +205,25 @@ var app = {
     // Set an interval for refreshing cpu usage
     refreshCpuUsage: function() {
 
-        var progressText = document.querySelector("#cpuProgressBar > span");
-        var progressLoad = document.querySelector("#cpuProgressBar > div");
+        var cpuText = document.querySelector("#cpuProgressBar > span");
+        var cpuLoad = document.querySelector("#cpuProgressBar > div");
 
-        app.getCpuUsage(progressText, progressLoad);
-        setInterval(function(){
-            app.getCpuUsage(progressText, progressLoad);
-        }, 2000);
+        var memText = document.querySelector("#memProgressBar > span");
+        var memLoad = document.querySelector("#memProgressBar > div");
+
+        carat.startCpuPolling(function(usage){
+            cpuText.style.color = (usage > 50) ? "#fff" : "#000";
+            usage = usage + "%";
+            cpuText.innerHTML = usage;
+            cpuLoad.style.width = usage;
+        }, 4000);
+
+        carat.startMemoryPolling(function(usage){
+            memText.style.color = (usage > 50) ? "#fff" : "#000";
+            usage = usage + "%";
+            memText.innerHTML = usage;
+            memLoad.style.width = usage;
+        }, 4000);
     },
 
     showProgress: function(){
