@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
+    <title>Carat 2.0</title>
+
+    <!--<link href="https://fonts.googleapis.com/css family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/material.css">
+    <link rel="stylesheet" href="css/carat.css">
+    <link rel="stylesheet" href="css/dialog.css">
+    <link rel="stylesheet" href="css/snackbar.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+                mdl-layout--fixed-tabs mdl-color--grey-200">
+
+    <header class="mdl-layout__header mdl-color--orange-500">
+
+            <div class="mdl-layout__header-row" style="padding-left: 2%;">
+                <!--back arrow-->
+                <button class="mdl-layout-icon mdl-button mdl-js-button mdl-button--icon" onclick="history.go(-1);">
+                    <i class="material-icons">arrow_back</i>
+                    <!-- For IE9 or below. -->
+                    <i class="material-icons">&#xE5C4;</i>
+                </button>
+
+
+                <!--Title-->
+                <span class="mdl-layout-title" style="margin-left: 30px;">Statistics</span>
+            </div>
+
+
+
+
+
+    </header>
+
+
+    <!--Statistics-->
+    <div class="mdl-layout__content">
+		<!-- Pie card -->
+               	<div class="mdl-card mdl-shadow--2dp">
+                      <div class="carat-caratCard__title">
+                          <div class="mdl-card__title-text carat_summaryCard_title_text">
+                              Global Statistics
+                          </div>
+                      </div>
+                      <div class="carat-card__supporting-text">
+                          <div class="canvas-container">
+                              <p style="float:center"> Android versions using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="AndroidVersionChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="AndroidVersionChart-legend"></ul></td>
+                              </tr>
+                              <p style="float:center"> Android devices using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="DeviceChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="DeviceChart-legend" class="chart-legend"></ul></td>
+                              </tr>
+                          	  <p style="float:center"> Apps in devices using Carat </p>
+                              <tr>
+                              <td><canvas width="125" height="125" id="HogBugChart" style="float:left"></canvas></td>
+                              <td><ul style="list-style:none" id="HogBugChart-legend"></ul></td>
+                              </tr>
+                          </div>
+                          
+                      </div>
+                </div>
+        
+    </div>
+
+
+</div>
+
+
+
+<script type="text/javascript" src="js/appmenu.js"></script>
+<script type="text/javascript" src="js/lib/material.min.js"></script>
+<script type="text/javascript" src="js/lib/chartNew.js"></script>
+<script type="text/javascript" src="js/view/cardTemplates.js"></script>
+<script type="text/javascript" src="js/cardsController.js"></script>
+<script type="text/javascript" src="js/caratCard.js"></script>
+</body>
+</html>
