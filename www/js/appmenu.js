@@ -121,6 +121,9 @@ function appSettings(){
     moveToPage('appSettings', 'settings.html');
 }
 
+function appStatistics() {
+	moveToPage('appStatistics', 'statistics.html');	
+}
 
 function moveToPage(pagename, address){
     var li = document.querySelector("#"+pagename);
@@ -138,4 +141,5 @@ function handleSetting(e) {
 
 	sendFeedback();
 	appSettings();
+	appStatistics();
 	backToIndex();
