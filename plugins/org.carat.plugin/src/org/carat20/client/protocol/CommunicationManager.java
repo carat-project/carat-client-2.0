@@ -117,8 +117,8 @@ public class CommunicationManager {
             return true;
         } catch (Exception ex) {
             Log.v("Carat", "Error refreshing settings" + ex);
-            return false;
         }
+        return false;
     }
     
     //Bundles two value-key pairs together in a Feature List

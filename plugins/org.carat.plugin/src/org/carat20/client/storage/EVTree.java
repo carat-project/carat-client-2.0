@@ -71,6 +71,7 @@ public class EVTree implements Serializable{
         
     // Gets a list of suggested nodes
     public SimpleSettings[] getSuggestions(HashMap<String, Object> info) {
+        if(info == null) return null;
         List<SimpleSettings> results = new LinkedList<SimpleSettings>();
         EVNode node = root;
         TreeSet<EVNode> children;

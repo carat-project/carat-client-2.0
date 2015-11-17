@@ -889,14 +889,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     var getHogsCards = function(hogsSource,
                                 appCloseCallback, appUninstallCallback) {
     
-        if (typeof hogsSource == 'undefined' || hogsSource.length <= 0) {
+        if (typeof hogsSource == 'undefined' || hogsSource == null || hogsSource.length <= 0) {
             makeNoRaportsCard("hog");
         }
         
         return homebrewMap(notificationsArray
-                           .getHogs(hogsSource,
-                                    appCloseCallback, appUninstallCallback),
-                           makeCardBasedOnModel);
+                            .getHogs(hogsSource,
+                            appCloseCallback,
+                            appUninstallCallback),
+                            makeCardBasedOnModel);
     };
 
     //pass bugs source(data from server) to
@@ -904,18 +905,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //to create cards from
     var getBugsCards = function(bugsSource,
                                 appCloseCallback, appUninstallCallback) {
-
-        if (typeof bugsSource == 'undefined' || bugsSource.length <= 0) {
+        if (typeof bugsSource == "undefined" || bugsSource == null || bugsSource.length <= 0) {
             makeNoRaportsCard("bug");
         }
-        
-        var result =  homebrewMap(notificationsArray
-                                  .getBugs(bugsSource,
-                                           appCloseCallback,
-                                           appUninstallCallback),
-                                  makeCardBasedOnModel);
 
-        return result;
+        return homebrewMap(notificationsArray
+                            .getBugs(bugsSource,
+                            appCloseCallback,
+                            appUninstallCallback),
+                            makeCardBasedOnModel);;
     };
 
     //fetch a model object for the system tab cards

@@ -195,21 +195,21 @@ public class Carat extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
-                // No data
-                if(storage.isEmpty()){
-                    Log.v("Carat", "Storage is empty, fetching reports..");
-                    commManager.refreshAllReports();
-                }
-                // Missing data
-                else if (!storage.isComplete()){
-                    Log.v("Carat", "Storage is incomplete, fetching missing reports..");
-                    if(storage.getMainReports() == null) commManager.refreshMainReports();
-                    if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
-                    if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
-                    if(storage.getBugReports() == null) commManager.refreshSettings();
-                } else {
-                    Log.v("Carat", "Storage is complete and ready to go");
-                }
+                if(!storage.isComplete() && deviceLibrary.isNetworkAvailable()) {
+                    // No data
+                    if(storage.isEmpty()){
+                        Log.v("Carat", "Storage is empty, fetching reports..");
+                        commManager.refreshAllReports();
+                    }
+                    // Missing data
+                    else if (!storage.isComplete()){
+                        Log.v("Carat", "Storage is incomplete, fetching missing reports..");
+                        if(storage.getMainReports() == null) commManager.refreshMainReports();
+                        if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
+                        if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
+                        if(storage.getSettingsTree() == null) commManager.refreshSettings();
+                    } 
+                } 
                 // Send dataready event when storage is ready
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -257,6 +257,7 @@ public class Carat extends CordovaPlugin {
     private void getMainReports(CallbackContext cb){
         try{
             mainReports = storage.getMainReports();
+            if(mainReports == null) return;
             cb.success(convertToJSON(mainReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert main reports.", e);
@@ -287,11 +288,16 @@ public class Carat extends CordovaPlugin {
     private void getSettings(CallbackContext cb){
         try {
             HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
-            if(deviceInfo == null) return;
+            if(deviceInfo == null){
+                cb.error(new JSONObject());
+                return;
+            }
             EVTree tree = storage.getSettingsTree();
-            if(tree == null) return;
+            if(tree == null){
+                cb.error(new JSONObject());
+                return;
+            }
             settingsReports = tree.getSuggestions(deviceInfo);
-            if(settingsReports == null) return;
             cb.success(convertToJSON(settingsReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert settings.", e);
@@ -471,6 +477,7 @@ public class Carat extends CordovaPlugin {
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
         Log.v("Carat", "Converting hog/bug reports to JSON");
         JSONArray results = new JSONArray();
+        if(reports == null) return results;
         for(SimpleHogBug s : reports){
             String packageName = s.getAppName();
             
@@ -513,6 +520,7 @@ public class Carat extends CordovaPlugin {
      */
     public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
         JSONArray results = new JSONArray();
+        if(settings == null) return results;
         for(SimpleSettings s : settings){
             //if(s.getErrorRatio() > ERROR_LIMIT) continue;
             
@@ -540,6 +548,7 @@ public class Carat extends CordovaPlugin {
      * @throws org.json.JSONException
      */
     public JSONObject convertToJSON(Reports r) throws JSONException{
+        if(r == null) return new JSONObject();
         final String batteryLife = this.getBatteryLife(r);
         
         Log.v("Converting main reports to JSON", r.toString());

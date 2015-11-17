@@ -158,6 +158,16 @@ public class DeviceLibrary {
     }
     
     /**
+     * @return True if network is available
+     */
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        NetworkInfo i = cm.getActiveNetworkInfo();
+        return i != null && i.isConnected();
+    }
+    
+    /**
      * Get specific mobile network type
      * @return Mobile network type
      */
