@@ -144,6 +144,15 @@ model.notifications = (function() {
         };
     };
 
+	var makeSystem = function(setting) {
+		
+		return {
+			system: {
+				 setting: setting
+			}
+		};
+	};
+
 	var makeCarat = function(chart) {
 		
 		return {
