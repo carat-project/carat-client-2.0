@@ -1,18 +1,34 @@
 .carat_settings_line {
     border-top: solid;
     border-width: 1px;
-    border-color:#E8E8E8;
+    border-color:#E0E0E0;
 }
 
 .carat_settings_box {
      position:relative;
-     margin: 15px 10px;
-     display: block;
-     color:#616161;
 }
 
 .checkbox_wrapper{
     position:absolute;
-    top:0;
-    right: 14px;
+    top:30%;
+    right: 25px;
+}
+
+.fill-box {
+    display: inline-block;
+    height: 100%;
+    width: 75%;
+    padding: 15px 24px;
+    line-height: 24px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #000 !important;
+     -webkit-transition: all .2s ease;
+}
+
+
+.fill-box:active {
+     width: 100%;
+     background-color:#E0E0E0;
+     -webkit-transition: background-color .2s ease;
 }

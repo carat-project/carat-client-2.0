@@ -1,14 +1,17 @@
 package org.carat20.client.protocol;
 
 import android.util.Log;
+import java.net.URL;
 import org.carat20.client.storage.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
 import org.carat20.client.device.DeviceLibrary;
+import org.carat20.client.storage.EVTree;
 import org.carat20.client.thrift.CaratService;
 import org.carat20.client.thrift.Feature;
 import org.carat20.client.thrift.HogBugReport;
 import org.carat20.client.thrift.Reports;
+import org.carat20.client.utility.Parser;
 
 /**
  * Communication middleman between {@link ProtocolClient} and {@link DataStorage}.
@@ -51,6 +54,7 @@ public class CommunicationManager {
         this.refreshMainReports();
         this.refreshHogsBugs("Hog");
         this.refreshHogsBugs("Bug");
+        this.refreshSettings();
     }
 
     /** Refreshes JScore by requesting main reports from {@link CaratService} instance.
@@ -99,6 +103,20 @@ public class CommunicationManager {
             return true;
         } catch (Throwable error) {
             Log.v("Carat", "Error refreshing reports: " + error);
+        }
+        return false;
+    }
+    
+    public boolean refreshSettings(){
+        // Temporary solution
+        try {
+            URL url = new URL("http://www.cs.helsinki.fi/group/super/raw-tree-s4.dat");
+            EVTree tree = Parser.parseTree(url);
+            Log.v("Carat", "Opening url. Object received: " + (tree!=null));
+            dataStorage.writeSettingsTree(tree);
+            return true;
+        } catch (Exception ex) {
+            Log.v("Carat", "Error refreshing settings" + ex);
         }
         return false;
     }

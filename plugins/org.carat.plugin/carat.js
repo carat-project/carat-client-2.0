@@ -33,13 +33,28 @@ module.exports = {
     getBugs: function(callback){
         exec(callback, callback, service, "bugs", [""]);
     },
+    getSettings: function(callback){
+        exec(callback, callback, service, "settings", [""]);
+    },
     getMemoryInfo: function(callback){
     	exec(callback, callback, service, "memory", [""]);
+    },
+    startCpuPolling: function(callback, interval){
+        exec(callback, callback, service, "cpupoll", [interval]);
+    },
+    startMemoryPolling: function(callback, interval){
+        exec(callback, callback, service, "mempoll", [interval]);
     },
     killApp: function(packageName, callback){
         exec(callback, callback, service, "kill", [packageName]);
     },
     uninstallApp: function(packageName, callback){
         exec(callback, callback, service, "uninstall", [packageName]);
+    },
+    showToast: function(message, callback){
+        exec(callback, callback, service, "toast", [message]);
+    },
+    showNotification: function(title, message, callback){
+        exec(callback, callback, service, "notify", [title, message]);
     }
 };

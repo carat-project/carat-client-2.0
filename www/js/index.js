@@ -17,6 +17,8 @@
  * under the License.
  */
 
+var backPressed = false;
+
 var app = {
     // This sets up our app
     initialize: function() {
@@ -28,10 +30,14 @@ var app = {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
         document.addEventListener("dataready", this.onDataReady, false);
+        document.addEventListener("renderfinished", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
         uuidButton.addEventListener("click", this.onUuidChange, false);
+
+        // Listener for menu
+        initializeListeners();
     },
 
     // Clear and refresh storage data
@@ -65,9 +71,27 @@ var app = {
     // When device is ready we start up the plugin
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        // Specify back button behavior
+        document.addEventListener("backbutton", function(e){
+            if(window.location.href.indexOf("index.html")){
+                if(backPressed){
+                    navigator.app.exitApp();
+                } else {
+                    carat.showToast("Press back again to exit");
+                    backPressed = true;
+                    setTimeout(function(){
+                        backPressed = false;
+                    }, 4000);
+                }
+            }
+            navigator.app.backHistory();
+        }, false);
+
+        // Attempt at making taps faster
         FastClick.attach(document.body);
 
-        // Set up storage
+        // Start setting up plugin
         console.log("Initializing plugin");
         app.showProgress();
         carat.setup(app.getUuid);
@@ -113,6 +137,7 @@ var app = {
 
             // Pass bugs to controller
             itemCards.generateSummary(hogs, bugs);
+            itemCards.generateCards(bugs, hogs, carat.killApp, carat.uninstallApp);
 
             carat.getMainReports(displayMain);
         };
@@ -131,18 +156,23 @@ var app = {
                         var duration = main;
 
                         var deviceInfo = {
+                            batteryLife: main.batteryLife,
                             modelName: device.model,
                             osVersion: device.platform + " " + device.version,
                             caratId: uuid,
                             memoryUsed: percentage + "%",
                             memoryTotal: totalMemory + " MiB"
                         };
-                        console.log(main, deviceInfo);
+
+                        itemCards.generateStatistics(main, deviceInfo);
+                        itemCards.generateSummaryStatistics(main, deviceInfo);
+
 
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
 
                         console.log("Finished rendering");
+                        cordova.fireDocumentEvent("renderfinished");
                     });
             };
 
@@ -153,12 +183,50 @@ var app = {
                     }
                     getMemoryInfo(uuid);
             });
-
             // ...
         };
 
         // Begin the callback chain
         displayData();
+
+        // Display setting suggestions for debugging
+        carat.getSettings(function(settings){
+            if((typeof settings !== "undefined") && (settings !== null) && (settings.length > 0)){
+                var suggestion = settings[0];
+                var benefit = suggestion.benefit
+                var length =  benefit.indexOf("±");
+                var benefit = benefit.substr(0, length-1);
+
+                carat.showNotification("Change to "+suggestion.changeTo, "Benefit: "+benefit, function(success){
+                    console.log("Showing placeholder notification for a system setting");
+                });
+            }
+            //console.log(JSON.stringify(settings));
+        });
+    },
+
+    // Set an interval for refreshing cpu usage
+    refreshCpuUsage: function() {
+
+        var cpuText = document.querySelector("#cpuProgressBar > span");
+        var cpuLoad = document.querySelector("#cpuProgressBar > div");
+
+        var memText = document.querySelector("#memProgressBar > span");
+        var memLoad = document.querySelector("#memProgressBar > div");
+
+        carat.startCpuPolling(function(usage){
+            cpuText.style.color = (usage > 65) ? "#fff" : "#000";
+            usage = usage + "%";
+            cpuText.innerHTML = usage;
+            cpuLoad.style.width = usage;
+        }, 4000);
+
+        carat.startMemoryPolling(function(usage){
+            memText.style.color = (usage > 65) ? "#fff" : "#000";
+            usage = usage + "%";
+            memText.innerHTML = usage;
+            memLoad.style.width = usage;
+        }, 4000);
     },
 
     showProgress: function(){

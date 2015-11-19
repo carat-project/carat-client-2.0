@@ -18,8 +18,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import org.carat20.client.Constants;
@@ -43,12 +41,14 @@ public final class DataStorage {
     private WeakReference<Reports> mainReports;
     private WeakReference<SimpleHogBug[]> hogReports;
     private WeakReference<SimpleHogBug[]> bugReports;
+    private WeakReference<EVTree> settingsTree;
 
     public static final String UUIDFILE = "carat-uuid.dat";
     
     public static final String MAINFILE = "carat-main.dat";
     public static final String HOGFILE = "carat-hogs.dat";
     public static final String BUGFILE = "carat-bugs.dat";
+    public static final String SETTINGSTREE = "carat-settings.dat";
 
     /**
      * Constructs a storage used for writing and reading reports.
@@ -63,6 +63,7 @@ public final class DataStorage {
         readMainReports();
         readHogReports();
         readBugReports();
+        readSettingsTree();
     }
     
     /**
@@ -72,7 +73,8 @@ public final class DataStorage {
     public boolean isEmpty(){
         return (mainReports == null 
                 && hogReports == null 
-                && bugReports == null);
+                && bugReports == null
+                && settingsTree == null);
     }
     
     /**
@@ -82,16 +84,19 @@ public final class DataStorage {
     public boolean isComplete(){
         return !(mainReports == null 
                 || hogReports == null 
-                || bugReports == null);
+                || bugReports == null
+                || settingsTree == null);
     }
     
     public void clearData(){
         context.deleteFile(MAINFILE);
         context.deleteFile(HOGFILE);
         context.deleteFile(BUGFILE);
+        context.deleteFile(SETTINGSTREE);
         mainReports = null;
         hogReports = null;
         bugReports = null;
+        settingsTree = null;
     }
 
     /**
@@ -124,6 +129,10 @@ public final class DataStorage {
      */
     public boolean bugsEmpty(){
         return (bugReports == null);
+    }
+    
+    public boolean settingsEmpty(){
+        return (settingsTree == null);
     }
     
     /**
@@ -167,6 +176,12 @@ public final class DataStorage {
                 bugReports.get() : readBugReports();
     }
     
+    public EVTree getSettingsTree() {
+        Log.v("Carat", "Getting settings tree");
+        return (settingsTree != null && settingsTree.get() != null) ?
+                settingsTree.get() : readSettingsTree();
+    }
+    
     //Reads uuid from file.
     private String readUuid() {
         Log.v("Carat", "Reading uuid from disk");
@@ -201,6 +216,14 @@ public final class DataStorage {
         if(o == null) return null;
         this.bugReports = new WeakReference<SimpleHogBug[]>((SimpleHogBug[]) o);
         return (SimpleHogBug[]) o;
+    }
+    
+    private EVTree readSettingsTree(){
+       Log.v("Carat", "Reading settings from disk");
+       Object o = readObject(SETTINGSTREE);
+       if(o == null) return null;
+       this.settingsTree = new WeakReference<EVTree>((EVTree) o);
+       return (EVTree) o;
     }
     
     /**
@@ -245,7 +268,11 @@ public final class DataStorage {
         }
         writeObject(list, BUGFILE);
     }
-
+    
+    public void writeSettingsTree(EVTree tree){
+        this.settingsTree = new WeakReference<EVTree>(tree);
+        writeObject(tree, SETTINGSTREE);
+    }
     
     // Write object to file
     private void writeObject(Object object, String fileName) {
@@ -348,13 +375,14 @@ public final class DataStorage {
             
             // Device specific application icon and label
             h.setAppLabel(this.getApplicationLabel(packageName));
-            h.setAppIcon(this.getApplicationIcon(packageName));
+            Bitmap icon = DataStorage.getApplicationIcon(packageName, context);
+            String icon64 = DataStorage.base64Encode(icon, 48, 48);
+            h.setAppIcon(icon64);
             
             String priority = item.getAppPriority();
             if (priority == null || priority.length() == 0) {
                 priority = "Foreground app";
             }
-            double error = item.getError();
             
             h.setAppPriority(priority);
             h.setExpectedValue(item.getExpectedValue());
@@ -393,34 +421,47 @@ public final class DataStorage {
     }
     
     /**
-     * Return base64 encoded icon PNG from a package.
-     * @param packageName Package name.
-     * @return Base 64 encoded PNG or an empty string.
+     * Returns application icon as a bitmap.
+     * @param packageName Application package name
+     * @return Icon as a bitmap
      */
-    private String getApplicationIcon(String packageName){
+    public static Bitmap getApplicationIcon(String packageName, Context context){
         try{
             Drawable d = context.getPackageManager().getApplicationIcon(packageName);
-            return "data:image/png;base64,"+ encodeIcon(d);
+            return getBitmap(d);
         } catch (PackageManager.NameNotFoundException e){
-            return "";
+            return null;
         }
     }
     /**
-     * Converts a drawable resource to a base64 encoded bitmap.
-     * @param icon Drawable image resource.
-     * @return Base64 representation of PNG compressed bitmap.
+     * Converts a drawable resource to a bitmap.
+     * @param image Drawable image
+     * @return Bitmap
      */
-    public static String encodeIcon(Drawable icon){
-            if(icon == null) return "";
-            
-            BitmapDrawable bmDrawable = ((BitmapDrawable) icon);
-            Bitmap bitmap = bmDrawable.getBitmap();
-            
-            bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48, true);
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            byte[] bitmapByte = outStream.toByteArray();
-
-            return Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+    public static Bitmap getBitmap(Drawable image){
+            if(image == null) return null;
+            BitmapDrawable bmDrawable = ((BitmapDrawable) image);
+            return bmDrawable.getBitmap();
+    }
+    
+    /**
+     * Compresses and scales a bitmap encoding it base64.
+     * Negative and zero rescaling values are ignored.
+     * @param bitmap Bitmap
+     * @param width Rescale width
+     * @param height Rescale height
+     * @return Base64 encoded bitmap
+     */
+    public static String base64Encode(Bitmap bitmap, int width, int height){
+        if(bitmap == null) return "";
+        if(width > 0 && height > 0){
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        }
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+        byte[] bitmapByte = outStream.toByteArray();
+        String base64 = Base64.encodeToString(bitmapByte,Base64.DEFAULT);
+        
+        return "data:image/png;base64,"+ base64;
     }
 }

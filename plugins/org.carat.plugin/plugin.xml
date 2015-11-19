@@ -19,6 +19,7 @@
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+            <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
         </config-file>
 
         <js-module src="carat.js" name="Carat">
@@ -32,13 +33,21 @@
         <source-file src="src/org/carat20/client/protocol/ProtocolClient.java" target-dir="src/org/carat20/client/carat/protocol"/>
         <source-file src="src/org/carat20/client/storage/DataStorage.java" target-dir="src/org/carat20/client/carat/storage"/>
         <source-file src="src/org/carat20/client/storage/SimpleHogBug.java" target-dir="src/org/carat20/client/carat/storage"/>
+        <source-file src="src/org/carat20/client/storage/SimpleSettings.java" target-dir="src/org/carat20/client/carat/storage"/>
+        <source-file src="src/org/carat20/client/storage/EVTree.java" target-dir="src/org/carat20/client/carat/storage"/>
+        <source-file src="src/org/carat20/client/storage/EVNode.java" target-dir="src/org/carat20/client/carat/storage"/>
         <source-file src="src/org/carat20/client/device/ApplicationLibrary.java" target-dir="src/org/carat20/client/carat/device"/>
         <source-file src="src/org/carat20/client/device/DeviceLibrary.java" target-dir="src/org/carat20/client/carat/device"/>
+        <source-file src="src/org/carat20/client/device/CPUStats.java" target-dir="src/org/carat20/client/carat/device"/>
+        <source-file src="src/org/carat20/client/device/MemoryStats.java" target-dir="src/org/carat20/client/carat/device"/>
+        <source-file src="src/org/carat20/client/utility/Range.java" target-dir="src/org/carat20/client/carat/utility"/>
+		<source-file src="src/org/carat20/client/utility/Parser.java" target-dir="src/org/carat20/client/carat/utility"/>
 
         <!-- Libs -->
         <source-file src="src/org/carat20/client/libs/libthrift-0.9.2.jar" target-dir="libs"/>
         <source-file src="src/org/carat20/client/libs/slf4j-android-1.6.1-RC1.jar" target-dir="libs" />
         <source-file src="src/org/carat20/client/libs/javax.annotation-3.2-b06.jar" target-dir="libs" />
+        <source-file src="src/org/carat20/client/libs/android-support-v4.jar" target-dir="libs" />
 
         <!-- Thrift -->
         <source-file src="src/org/carat20/client/thrift/BatteryDetails.java" target-dir="src/org/carat20/client/thrift"/>

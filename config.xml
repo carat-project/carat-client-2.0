@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="org.carat20.client" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>caratClient20</name>
+    <name>Carat 2</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        Carat is a free app that tells you what is using up the battery of your mobile device, whether that's normal, and what you can do about it.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author href="http://www.cs.helsinki.fi/group/super/">
+        Carat 2.0 Superteam
     </author>
     <content src="index.html" />
     <preference name="loadUrlTimeoutValue" value="60000" />
     <preference name="permissions" value="none" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
-    <preference name="fullscreen" value="true" />
+    <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
@@ -24,6 +24,7 @@
     <preference name="disable-cursor" value="false" />
     <preference name="android-minSdkVersion" value="14" />
     <preference name="android-installLocation" value="auto" />
+    <preference name="StatusBarBackgroundColor" value="#F1840C" />
     <gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
     <gap:plugin name="org.apache.cordova.media-capture" />
@@ -42,11 +43,14 @@
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
-    <icon src="icon.png" />
-    <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
-    <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
-    <icon gap:platform="android" gap:qualifier="hdpi" src="www/res/icon/android/icon-72-hdpi.png" />
-    <icon gap:platform="android" gap:qualifier="xhdpi" src="www/res/icon/android/icon-96-xhdpi.png" />
+    <platform name="android">
+        <icon density="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
+        <icon density="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
+        <icon density="hdpi" src="www/res/icon/android/icon-72-hdpi.png" />
+        <icon density="xhdpi" src="www/res/icon/android/icon-96-xhdpi.png" />
+        <icon density="xxhdpi" src="www/res/icon/android/icon.png" />
+        <icon density="xxxhdpi" src="www/res/icon/android/icon.png" />
+    </platform>
     <icon gap:platform="blackberry" src="www/res/icon/blackberry/icon-80.png" />
     <icon gap:platform="blackberry" gap:state="hover" src="www/res/icon/blackberry/icon-80.png" />
     <icon gap:platform="ios" height="57" src="www/res/icon/ios/icon-57.png" width="57" />

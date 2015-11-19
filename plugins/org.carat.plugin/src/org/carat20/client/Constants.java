@@ -7,14 +7,15 @@ public class Constants {
     public static final int IMPORTANCE_PERCEPTIBLE = 130;
     public static final double ERROR_LIMIT = (double) 2/3;
 
-    // Used for bugs and hogs, and EnergyDetails sub-screen (previously known as drawing)
     public static enum Type {
-        OS, MODEL, HOG, BUG, SIMILAR, JSCORE, OTHER, BRIGHTNESS, WIFI, MOBILEDATA
+        OS, MODEL, HOG, BUG, SIMILAR, JSCORE, OTHER, BRIGHTNESS, 
+        WIFI, MOBILEDATA;
     }
 
     public static enum ActionType {
         SETUP, CLEAR, UUID, REFRESH, JSCORE, MAIN, HOGS, BUGS, 
-        KILL, REMOVE, MEMORY, UNKNOWN;
+        KILL, REMOVE, MEMORY, UNKNOWN, CPUPOLL, TOAST, NOTIFY, 
+        SETTINGS, MEMPOLL;
         
         public static ActionType get(String action){
             if(action.equals("setup"))      return SETUP;
@@ -28,6 +29,11 @@ public class Constants {
             if(action.equals("kill"))       return KILL;
             if(action.equals("uninstall"))  return REMOVE;
             if(action.equals("memory"))     return MEMORY;
+            if(action.equals("toast"))      return TOAST;
+            if(action.equals("notify"))     return NOTIFY;
+            if(action.equals("settings"))   return SETTINGS;
+            if(action.equals("cpupoll"))    return CPUPOLL;
+            if(action.equals("mempoll"))    return MEMPOLL;
             return UNKNOWN;
         }
     }

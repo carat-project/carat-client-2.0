@@ -7,6 +7,7 @@ import android.content.Context;
 import static android.content.Context.ACTIVITY_SERVICE;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -44,7 +45,7 @@ public class ApplicationLibrary {
     /**
      * Returns application information used for flags.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return ApplicationInfo
      */
     public ApplicationInfo getAppInfo(String packageName) {
@@ -55,29 +56,49 @@ public class ApplicationLibrary {
         }
         return null;
     }
+    
+    /**
+     * @param packageName Package name.
+     * @return Application version.
+     */
+    public String getAppVersion(String packageName){
+        try{
+            PackageInfo pak = pm.getPackageInfo(packageName, 0);
+            if(pak.versionName == null){
+                return Integer.toString(pak.versionCode);
+            } else{
+                return pak.versionName;
+            }
+        } catch (NameNotFoundException e){
+            Log.v("Carat", "No version found for " + packageName);
+            return "";
+        }
+    }
 
     /**
-     * Returns whether the application is installed on device.
-     *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application is installed.
      */
     public boolean isAppInstalled(String packageName) {
         try {
+            // This throws an exception if package is not found
             pm.getPackageInfo(packageName, 0);
+            
+            // Consider disabled apps uninstalled
+            return getAppInfo(packageName).enabled;
         } catch (NameNotFoundException e) {
             return false;
         }
-        return true;
     }
 
     /**
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if the application is running.
      */
     public boolean isAppRunning(String packageName) {
         for (RunningAppProcessInfo pid : am.getRunningAppProcesses()) {
             // Process can have multiple packages
+            // Todo: Check process importance
             if (Arrays.asList(pid.pkgList).contains(packageName)) {
                 return true;
             }
@@ -86,22 +107,18 @@ public class ApplicationLibrary {
     }
 
     /**
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application can be uninstalled.
      */
     public boolean isAppRemovable(String packageName) {
-        ApplicationInfo appInfo = getAppInfo(packageName);
-        if (appInfo == null) {
-            return false;
-        }
-        return !isSystem(appInfo);
+        return !isAppSystem(packageName);
     }
 
     /**
      * Determines if process belonging to package can be terminated. Checks if
      * package is a system app, persistent or blacklisted.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application can be killed.
      */
     public boolean isAppKillable(String packageName) {
@@ -111,15 +128,29 @@ public class ApplicationLibrary {
         }
         
         // Allow killing system apps for now
-        return !(//isSystem(appInfo)  || 
+        return !(//isSystemSigned(packageName)  || 
                 isPersistent(appInfo) || 
                 isIgnored(appInfo));
+    }
+    
+    /**
+     * Checks if package is signed and flagged as a system app.
+     * @param packageName Application package name
+     * @return True if application belongs to system 
+     */
+    public boolean isAppSystem(String packageName){
+        if(packageName == null) return false;
+        ApplicationInfo info = getAppInfo(packageName);
+        if(info != null){
+            return (isSystemSigned(packageName) && isPreloaded(info));
+        }
+        return false;
     }
 
     /**
      * Terminates processes belonging to the package.
      *
-     * @param packageName Application package name.
+     * @param packageName Package name.
      * @return True if application was terminated.
      */
     public boolean killApp(String packageName) {
@@ -141,6 +172,7 @@ public class ApplicationLibrary {
      * This is used to avoid excessive permissions.
      *
      * @param packageName Application package name.
+     * @return True when details were be opened
      */
     public boolean openAppDetails(String packageName) {
         Intent intent = new Intent();
@@ -172,19 +204,32 @@ public class ApplicationLibrary {
         }
         return true;
     }
-
-    // Detect system applications
-    private boolean isSystem(ApplicationInfo app) {
-        return (app.flags & ApplicationInfo.FLAG_SYSTEM) != 0
-                || (app.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
+    
+    // Detects system applications
+    private boolean isPreloaded(ApplicationInfo app) {
+        return ((app.flags & (ApplicationInfo.FLAG_SYSTEM 
+                | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
+    }
+    
+    // Compares application and system signatures
+    private boolean isSystemSigned(String packageName){
+        try {
+            PackageInfo pi = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            PackageInfo sys = pm.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            if(pi==null || sys == null) return false;
+            return (sys.signatures[0].equals(pi.signatures[0]));
+        } catch (NameNotFoundException ex) {
+            Log.v("Carat", "No package info found for "+packageName, ex);
+            return false;
+        }
     }
 
-    // Detect applications that are running at all times
+    // Detects applications that are running at all times
     private boolean isPersistent(ApplicationInfo info) {
         return (info.flags & ApplicationInfo.FLAG_PERSISTENT) != 0;
     }
 
-    // Detect blacklisted applications
+    // Detects blacklisted applications
     private boolean isIgnored(ApplicationInfo info) {
         // ...
         return false;

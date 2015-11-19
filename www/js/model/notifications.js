@@ -11,17 +11,18 @@ model.notifications = (function() {
     var ellipsis = String.fromCharCode(8230);
 
     var makeNotification = function(title, icon, label, packageName,
-                                    samples, classes,
+                                    version, samples, classes,
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
         return {
             item: {
                 title: title,
                 icon: icon,
                 label: label,
                 packageName: packageName,
+                version: version,
                 samples: samples,
                 classes: classes,
                 timeDrain: timeDrain,
@@ -32,7 +33,75 @@ model.notifications = (function() {
                 },
                 id: id,
                 appCloseCallback: appCloseCallback,
-                appUninstallCallback: appUninstallCallback
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
+            }
+        };
+    };
+    
+        var makeWorstBug = function(title, icon, label, packageName,
+                                    version, samples, classes,
+                                    timeDrain,
+                                    timeDrainErrorString,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
+        return {
+            worstBug: {
+                title: title,
+                icon: icon,
+                label: label,
+                packageName: packageName,
+                version: version,
+                samples: samples,
+                classes: classes,
+                timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
+            }
+        };
+    };
+    
+    var makeWorstHog = function(title, icon, label, packageName,
+                                    version, samples, classes,
+                                    timeDrain,
+                                    timeDrainErrorString,
+                                    killButton, removeButton,
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
+        return {
+            worstHog: {
+                title: title,
+                icon: icon,
+                label: label,
+                packageName: packageName,
+                version: version,
+                samples: samples,
+                classes: classes,
+                timeDrain: timeDrain,
+                timeDrainErrorString: timeDrainErrorString,
+                buttons: {
+                    killButton: killButton,
+                    removeButton: removeButton
+                },
+                id: id,
+                appCloseCallback: appCloseCallback,
+                appUninstallCallback: appUninstallCallback,
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
             }
         };
     };
@@ -74,6 +143,15 @@ model.notifications = (function() {
             }
         };
     };
+
+	var makeSystem = function(setting) {
+		
+		return {
+			system: {
+				 setting: setting
+			}
+		};
+	};
 
 	var makeCarat = function(chart) {
 		
@@ -145,28 +223,85 @@ model.notifications = (function() {
     //function that cleans up data straight from native plugin
     //so it can be passed forward
     var hogsBugsPurify = function(arr,
-                                  appCloseCallback, appUninstallCallback) {
+                                  appCloseCallback, appUninstallCallback, styles, textfield, type) {
         var hogBugs = arr.map(function(elem) {
             var times = splitTimeDrainString(elem.benefit);
             var label = elem.label.length > 20 ?
                 elem.label.slice(0,19) + ellipsis : elem.label;
+            
+            var elemType = type;
+            if (elemType == "") {
+                elemType = elem.type;
+            };
+              
+            
+            var result;
+            
+            
+            if (elemType === "worstBug") {
 
-            var result =  makeNotification(label,
+                result = makeWorstBug(label,
+                                       elem.icon,
+                                       elem.name,
+                                       elem.name,
+                                       elem.version,
+                                       elem.samples,
+                                       styles,
+                                       times.timeDrainPart,
+                                       times.timeDrainErrorPart,
+                                       elem.killable && elem.running,
+                                       elem.removable,
+                                       makeIdFromAppName(elem.name, elemType),
+                                       appCloseCallback,
+                                       appUninstallCallback,
+                                       textfield,
+                                       elem.system,
+                                       elem.popularity,
+                                       elem.type);
+                
+            } else if (elemType === "worstHog") {
+
+                result = makeWorstHog(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
-                                           "Samples: " + elem.samples,
-                                           ["sleeker",
-                                            "smaller-time-text"],
+                                           elem.version,
+                                           elem.samples,
+                                           styles,
                                            times.timeDrainPart,
                                            times.timeDrainErrorPart,
                                            elem.killable && elem.running,
-                                           elem.removable &&
-                                           !(elem.killable && elem.running),
-                                           makeIdFromAppName(elem.name, elem.type),
+                                           elem.removable,
+                                           makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
-                                           appUninstallCallback);
-            console.log(result);
+                                           appUninstallCallback,
+                                           textfield,
+                                           elem.system,
+                                           elem.popularity,
+                                           elem.type);
+            }else {
+        
+            result =  makeNotification(label,
+                                           elem.icon,
+                                           elem.name,
+                                           elem.name,
+                                           elem.version,
+                                           elem.samples,
+                                           styles,
+                                           times.timeDrainPart,
+                                           times.timeDrainErrorPart,
+                                           elem.killable && elem.running,
+                                           elem.removable,
+                                           makeIdFromAppName(elem.name, elemType),
+                                           appCloseCallback,
+                                           appUninstallCallback,
+                                           textfield,
+                                           elem.system,
+                                           elem.popularity,
+                                           elem.type);
+                
+            }
+
             return result;
         });
 
@@ -177,17 +312,35 @@ model.notifications = (function() {
     //clean up bugs data
     var getBugs = function(bugsSource,
                            appCloseCallback, appUninstallCallback) {
-        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback);
+        var styles = ["sleeker", "smaller-time-text", "bug"];
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return bugs;
     };
 
     //clean up hogs data
     var getHogs = function(hogsSource,
                            appCloseCallback, appUninstallCallback) {
-        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback);
+                var styles = ["sleeker", "smaller-time-text", "hog"];
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, "", "");
         return hogs;
     };
 
+    var getWorstBugs = function(bugsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var styles = ["sleeker", "smaller-time-text", "worstBug"];
+        var textfield = "This app uses a significant amount of more energy on your device compared to others. You might consider updating or removing it."
+        var bugs = hogsBugsPurify(bugsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstBug");
+        return bugs;
+    };
+    
+        var getWorstHogs = function(hogsSource,
+                           appCloseCallback, appUninstallCallback) {
+        var styles = ["sleeker", "smaller-time-text", "worstHog"];
+        var textfield = "This app has increased energy use, across all carat users. It isn't specific to your device or your usage or your running instance. Closing this app and keeping it closed will result in improved battery life."
+        var hogs = hogsBugsPurify(hogsSource, appCloseCallback, appUninstallCallback, styles, textfield, "worstHog");
+        return hogs;
+    };
+        
     //nothing at the moment
     var getSystem = function() {
         return [];
@@ -212,6 +365,8 @@ model.notifications = (function() {
         getBugs: getBugs,
         getHogs: getHogs,
         getSystem: getSystem,
+        getWorstBugs: getWorstBugs,
+        getWorstHogs: getWorstHogs,
         getSummary: getSummary,
         getStatistics: getStatistics,
 		getCarat: getCarat,

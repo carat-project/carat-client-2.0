@@ -1,7 +1,6 @@
 package org.carat20.client.storage;
 
 import android.app.ActivityManager.RunningAppProcessInfo;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseArray;
 import java.io.Serializable;
@@ -24,7 +23,6 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
     // the server, and showing them in the process list.
     private static final SparseArray<String> importanceToString = new SparseArray<String>();
 
-    private String appPackage;
     private String appIcon;
     
     static {
@@ -277,8 +275,7 @@ public class SimpleHogBug implements Serializable, Comparable<SimpleHogBug> {
         return new int[]{hours, min, (int) benefit, errorMins, (int) maxError};
     }
 
-    public static String getBenefitText(double ev, double error, double evWo,
-            double errorWo) {
+    public static String getBenefitText(double ev, double error, double evWo, double errorWo) {
         int[] benefit = getBenefit(ev, error, evWo, errorWo);
         int hours = benefit[0];
         int min = benefit[1];

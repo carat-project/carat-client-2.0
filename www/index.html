@@ -19,123 +19,166 @@
         <link rel="stylesheet" href="css/carat.css">
         <link rel="stylesheet" href="css/dialog.css">
         <link rel="stylesheet" href="css/snackbar.css">
-
         <!--
-             <style>.animate {
-           -webkit-transition: all 0.3s;
-           -moz-transition: all 0.3s;
-             transition: all 0.3s;
-             } </style>
-           -->
+             <script type="text/javascript">
+             window.onload = function () {
+             var chart = new CanvasJS.Chart("chartContainer",
+             {
 
+             data: [
+             {
+             type: "pie",
+             showInLegend: false,
+             legendText: "{indexLabel}",
+             dataPoints: [
+             { y: 4181563, indexLabel: "Samsung Galaxy" },
+             { y: 2175498, indexLabel: "Other" },
+             { y: 3125844, indexLabel: "HTC" },
+             { y: 1176121, indexLabel: "Motorola"},
+             { y: 1727161, indexLabel: "DROID" },
+             { y: 4303364, indexLabel: "Nexus"},
+             { y: 1717786, indexLabel: "iPhone"}
+             ]
+             }
+             ]
+             });
+             chart.render();
+             }
+             </script>-->
     </head>
 
     <body>
 
-        <!-- dialog for closing card, pan_swipe.js -->
-        <div class="overlay" id="popup-overlay"></div>
-        <div class="modal" id="popup-modal">
-            <div class="mdl-card mdl-shadow--2dp">
-                <div class="carat-card__title">
-                    <div class="mdl-card__title-text">Don't show this card again?
+        <!-- dialog for everything needed -->
+        <div class="overlay" id="popup-overlay">
+            <div class="modal" id="popup-modal">
+                <div class="mdl-card mdl-shadow--2dp">
+                    <div class="carat-card__title">
+                        <div class="mdl-card__title-text"></div>
+                        <div class="mdl-layout-spacer"></div>
+                        <button class="mdl-button mdl-js-button mdl-button--icon" id="modalClose" onclick="closeModal()">
+                            <i class="material-icons">&#xE5CD;</i>
+                        </button>
                     </div>
-                    <div class="mdl-layout-spacer"></div>
-                </div>
-                <div class="mdl-card__supporting-text">If you want to show hidden cards, open the menu on the top right corner
-                    and select "show hidden cards".
-                </div>
-
-                <div class="mdl-card__actions">
-                    <button id="popup-accept-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            onclick="">Don't show
-                    </button>
-                    <button id="popup-cancel-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            onclick="">Cancel
-                    </button>
+                    <div class="mdl-card__supporting-text">
+                    </div>
+                    <div class="mdl-card__actions">
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-                    mdl-layout--fixed-tabs mdl-color--grey-200"
-             id="main-screen">
-            <header class="mdl-layout__header mdl-color--blue-grey-500"
-                    id="header-bar">
+                    mdl-layout--fixed-tabs mdl-color--grey-200">
+
+            <header class="mdl-layout__header mdl-color--orange-500">
                 <img class="mdl-layout-icon" src="img/icon.png"></img>
-                <div class="mdl-layout__header-row mdl-layout-title"
-                     style="float:left; left:0px; top:2px;">
+                <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
                     <!-- Title -->
                     <span>Carat 2.0</span>
                     <span id="progress"></span>
                     <span id="usage"></span>
 
                     <div class="mdl-layout-spacer"></div>
-                    <button class="mdl-button mdl-js-button mdl-button--icon"
-                            id="menu" onclick="listenMenu();">
-                        <i class="material-icons">more_vert</i>
+                    <button class="mdl-button mdl-js-button mdl-button--icon" id="menu" onclick="listenMenu();">
+                        <i class="material-icons">&#xE5D4;</i>
                     </button>
-                    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right"
-                        for="menu">
-                        <li class="mdl-menu__item" id="showHiddenBugCards"
-                            disabled="true">Show hidden bugs</li>
-                        <li class="mdl-menu__item" id="showHiddenHogCards"
-                            disabled="true">Show hidden hogs</li>
-                        <li class="mdl-menu__item" id="sendFeedback">
-                            Send Feedback
-                        </li>
+                    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="menu">
+                        <li class="mdl-menu__item" id="showHiddenBugCards" disabled="true">Show hidden bugs</li>
+                        <li class="mdl-menu__item" id="showHiddenHogCards" disabled="true">Show hidden hogs</li>
+                        <li class="mdl-menu__item" id="sendFeedback">Send Feedback</li>
                         <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                         <li class="mdl-menu__item" id="appSettings">Settings</li>
+                        <li class="mdl-menu__item" id="appStatistics">Statistics</li>
                     </ul>
 
                 </div>
 
                 <!-- Tabs -->
-                <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
-                    <a href="#home" class="mdl-layout__tab is-active" id="home-tab">
-                        Home
-                    </a>
+                <div class="mdl-layout__tab-bar mdl-color--orange-500">
+                    <a href="#home" class="mdl-layout__tab is-active" id="home-tab">Home</a>
                     <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
                     <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
-                    <a href="#system" class="mdl-layout__tab" id="system-tab">
-                        Stats
-                    </a>
+                    <a href="#system" class="mdl-layout__tab" id="system-tab">System</a>
                 </div>
             </header>
             <main class="mdl-layout__content">
                 <!-- Home view -->
                 <section class="mdl-layout__tab-panel is-active" id="home">
 
-                    <!-- Pie card -->
                     <div class="page-content">
-                        <div class="mdl-card mdl-shadow--2dp">
-                            <div class="carat-caratCard__title">
-                                <div class="mdl-card__title-text
-                                            carat_caratCard_title_text">
-                                    Global Statistics
-                                </div>
-                            </div>
-                            <div class="carat-card__supporting-text">
-                                <div class="canvas-container">
-                                    <canvas width="350" height="250"
-                                            id="chart"></canvas>
-                                </div>
-                                <ul id="chart-legend"></ul>
-                            </div>
+                        <div class="carat-module">
+                            <div class="carat-module-title">Summary:</div>
+                            <div class="carat-module-content" id="summary"></div>
+                        </div>
+
+                        <div class="carat-module">
+                            <div class="carat-module-title">Suggested actions:</div>
+                            <div class="carat-module-content" id="suggestions"></div>
                         </div>
                     </div>
+
 
                 </section>
 
                 <!-- Bugs tabs view -->
                 <section class="mdl-layout__tab-panel" id="bugs">
+
+                    <!-- Start bug intro block -->
+                    <div class="intro-container">
+                        <div class="intro-image">
+                            <img src="img/bug_icon.png" />
+                        </div>
+                        <div class="intro-text">
+                            Bugs are apps that use a lot of energy on a small number of devices, including yours.
+                            Killing or uninstalling these apps may improve your battery life.
+                        </div>
+                    </div>
+                    <!-- End bug intro -->
+
+                    <div class="page-content mdl-grid">
+                    </div>
                 </section>
 
                 <!-- Hogs tab view -->
                 <section class="mdl-layout__tab-panel" id="hogs">
-                </section>
+
+                    <!-- Start hog intro block -->
+                    <div class="intro-container">
+                        <div class="intro-image">
+                            <img src="img/hog_icon.png" />
+                        </div>
+                        <div class="intro-text">
+                            Hogs are apps that are correlated with higher energy use across many devices.
+                            Killing or uninstalling these apps may improve your battery life.
+                        </div>
+                    </div>
+                    <!-- End hog intro -->
+
+                    <div class="page-content mdl-grid">
+                    </div>
+
                     <!-- System tab view -->
+                </section>
                 <section class="mdl-layout__tab-panel" id="system">
                     <div class="page-content">
+
+                        <!--placeholder system card-->
+                        <div class="mdl-card mdl-shadow--2dp sleeker smaller-time-text system">
+                            <div class="carat-card__title">
+                                <div class="mdl-card__icon"><i class="material-icons">&#xE1DA;</i></div>
+                                <div class="mdl-card__title-text">Mobile Data</div>
+                                <div class="carat-card-time">+39m</div>
+                            </div>
+                            <div class="mdl-card__supporting-text">
+                                <div class="suggested-action">Switch to Wi-Fi</div>Place for additional infotext. Mobile data consumes more energy than Wi-Fi. In order to save energy switch to Wi-Fi.
+                                <div class="collapse"></div>
+                            </div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <button class="action-button">Enable Wifi</button>
+                            </div>
+                        </div>
+                        <!--End placeholder system card-->
                     </div>
                 </section>
             </main>
@@ -144,7 +187,9 @@
         <script type="text/javascript" src="js/lib/jquery.min.js"></script>
         <script type="text/javascript" src="js/lib/hammer.min.js"></script>
         <script type="text/javascript" src="js/lib/material.min.js"></script>
-        <script type="text/javascript" src="js/lib/chart.min.js"></script>
+        <script type="text/javascript" src="js/lib/chartNew.js"></script>
+        <!--<script type="text/javascript" src="js/lib/canvasjs.min.js"></script>
+           -->
         <script type="text/javascript" src="js/lib/ejs_production.js"></script>
 
         <script type="text/javascript" src="js/pan_swipe.js"></script>
@@ -163,5 +208,4 @@
          app.initialize();
         </script>
     </body>
-
 </html>
