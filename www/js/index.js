@@ -44,7 +44,10 @@ var app = {
         // This fires the dataready event
         console.log("Getting fresh data for uuid " +uuid);
         carat.clear(function(){
-            carat.refreshData(app.pluginStatus);
+            var state = document.getElementById("state");
+            carat.refreshData(function(status){
+                app.pluginStatus(status, state);
+            });
             //app.showProgress();
         });
     },
@@ -61,7 +64,10 @@ var app = {
             } else {
                 // Refresh existing data if needed
                 console.log("Getting data for existing uuid "+uuid);
-                carat.refreshData(app.pluginStatus);
+                carat.refreshData(function(status){
+                    var state = document.getElementById("state");
+                    app.pluginStatus(status, state);
+                });
                 //app.showProgress();
             }
         });
@@ -228,16 +234,19 @@ var app = {
         var indicator = document.createElement("img");
         indicator.src = "img/progress.gif";
         indicator.alt = "Loading..";
-        indicator.width = "17";
-        indicator.height = "17";
+        indicator.width = "15";
+        indicator.height = "15";
         document.getElementById("progress").appendChild(indicator);
     },
 
-    pluginStatus: function(status){
+    // Display plugin status temporarily in header
+    pluginStatus: function(status, state){
         if(status == "READY"){
             app.onDataReady();
+            state.innerHTML = "";
         } else {
             console.log("Plugin: " + status);
+            state.innerHTML = status + "..";
         }
     },
 

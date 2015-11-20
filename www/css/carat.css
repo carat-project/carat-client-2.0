@@ -1,3 +1,21 @@
+/* = TEMPORARY UPDATE STATUS = */
+
+#state {
+  float: right;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* = PROGRESS INDICATOR = */
+
+#progress {
+  float: right;
+  margin-left: 12px;
+  margin-bottom: 4px;
+}
+
+
 /* = HOG/BUG INTRO */
 
 .intro-container {
@@ -143,13 +161,6 @@
   background-color: #66BB6A;
 }
 
-/* = PROGRESS INDICATOR = */
-
-#progress {
-  margin-left: 10px;
-  margin-bottom: 5px;
-}
-
 /* = JSCORE CIRCLE = */
 
 #home .circleContainer {
@@ -213,7 +224,7 @@ div.numberCircle > button {
 /* = OTHER = */
 
 .mdl-layout__header-row {
-  margin-left: -8px;
+  margin-left: -12px;
 }
 
 .mdl-layout-icon {
