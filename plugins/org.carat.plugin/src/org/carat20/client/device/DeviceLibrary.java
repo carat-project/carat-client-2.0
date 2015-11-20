@@ -1,5 +1,6 @@
 package org.carat20.client.device;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,14 +13,18 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.provider.Settings.SettingNotFoundException;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import org.carat20.client.storage.DataStorage;
+import org.carat20.client.utility.TypeUtilities;
 
 /**
  * Provides device information and statistics.
@@ -31,6 +36,7 @@ public class DeviceLibrary {
     private static Intent intent;
     private static TelephonyManager telManager;
     private static Location lastKnownLocation;
+    private static Activity activity;
     
     private static final int EVDO_B = 12;
     private static final int LTE = 13;
@@ -39,12 +45,12 @@ public class DeviceLibrary {
     
     
     
-    public DeviceLibrary(Context context, Intent intent){
+    public DeviceLibrary(Context context, Intent intent, Activity activity){
                  context.getSystemService(Context.TELEPHONY_SERVICE);
-
         lastKnownLocation = null;
         DeviceLibrary.context = context;
         DeviceLibrary.intent = intent;
+        DeviceLibrary.activity = activity;
         telManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
     
@@ -158,16 +164,6 @@ public class DeviceLibrary {
     }
     
     /**
-     * @return True if network is available
-     */
-    public boolean isNetworkAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
-        NetworkInfo i = cm.getActiveNetworkInfo();
-        return i != null && i.isConnected();
-    }
-    
-    /**
      * Get specific mobile network type
      * @return Mobile network type
      */
@@ -274,7 +270,7 @@ public class DeviceLibrary {
         // Build the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(context.getApplicationInfo().icon) // This needs to be transparent
-                .setLargeIcon(DataStorage.getApplicationIcon(mainPackage, context))
+                .setLargeIcon(ApplicationLibrary.getApplicationIcon(mainPackage, context))
                 .setContentTitle(title)
                 .setContentText(content);
         notification.setContentIntent(pIntent);
@@ -346,6 +342,42 @@ public class DeviceLibrary {
         }
     }
     
+    /**
+     * @return True if network is available
+     */
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        NetworkInfo i = cm.getActiveNetworkInfo();
+        return i != null && i.isConnected();
+    }
+    
+    /**
+     * Changes statusbar color on Android 5+ devices.
+     * @param color Color value as integer
+     * @param activity Application activity 
+     * @return True if action is supported
+     */
+    public static boolean changeStatusbarColor(int color, Activity activity){
+        Window window = activity.getWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+            return true;
+        }
+        return false;
+   }
+    
+    /**
+     * Non-static version of changeStatusbarColor
+     * @param color Color value as integer
+     * @return True if action is supported
+     */
+    public boolean changeStatusbarColor(int color){
+        return DeviceLibrary.changeStatusbarColor(color, activity);
+    }
+    
     // Helper method for reading /stat/proc or meminfo
     private static int[][] readLines(RandomAccessFile reader, int maxRows, int maxColumns, String delim) throws IOException {
         int[][] result = new int[maxRows+1][maxColumns+1];
@@ -354,7 +386,7 @@ public class DeviceLibrary {
             if (line == null) break; // EOF
             String[] tokens = line.split(delim);
             for (int column = 0; column < maxColumns; column++) {
-                if(maxColumns < tokens.length && isInteger(tokens[column])){
+                if(maxColumns < tokens.length && TypeUtilities.isInteger(tokens[column])){
                     result[row][column] = Integer.parseInt(tokens[column]);
                 } else result[row][column] = 0; // Default to zero
             }
@@ -363,13 +395,4 @@ public class DeviceLibrary {
         return result;
     }
 
-    // Utility method
-    public static boolean isInteger(String self) {
-        try {
-            Integer.valueOf(self.trim());
-            return true;
-        } catch (NumberFormatException n) {
-            return false;
-        }
-    }
 }

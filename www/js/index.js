@@ -29,7 +29,6 @@ var app = {
     bindEvents: function() {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
-        document.addEventListener("dataready", this.onDataReady, false);
         document.addEventListener("renderfinished", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
@@ -45,7 +44,7 @@ var app = {
         // This fires the dataready event
         console.log("Getting fresh data for uuid " +uuid);
         carat.clear(function(){
-            carat.refreshData();
+            carat.refreshData(app.pluginStatus);
             //app.showProgress();
         });
     },
@@ -62,7 +61,7 @@ var app = {
             } else {
                 // Refresh existing data if needed
                 console.log("Getting data for existing uuid "+uuid);
-                carat.refreshData();
+                carat.refreshData(app.pluginStatus);
                 //app.showProgress();
             }
         });
@@ -108,7 +107,6 @@ var app = {
 
     // Load objects asynchronously with callbacks
     onDataReady: function(){
-        app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
 
         // Start of the callback chain
@@ -233,6 +231,14 @@ var app = {
         indicator.width = "17";
         indicator.height = "17";
         document.getElementById("progress").appendChild(indicator);
+    },
+
+    pluginStatus: function(status){
+        if(status == "READY"){
+            app.onDataReady();
+        } else {
+            console.log("Plugin: " + status);
+        }
     },
 
     // Update DOM on a Received Event

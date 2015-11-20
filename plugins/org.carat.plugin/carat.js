@@ -2,7 +2,7 @@ var exec = require("cordova/exec"),
     service = "CaratPlugin";
 
 var generic = function(d) {
-	return;
+    return;
 };
 
 module.exports = {
@@ -10,16 +10,16 @@ module.exports = {
         exec(callback, callback, service, "setup", [""]);
     },
     clear: function(callback){
-    	exec(callback, callback, service, "clear", [""]);
+        exec(callback, callback, service, "clear", [""]);
     },
     getUuid: function(callback){
-    	exec(callback, callback, service,"uuid", ["get"]);
+        exec(callback, callback, service,"uuid", ["get"]);
     },
     setUuid: function(uuid, callback){
-    	exec(callback, callback, service, "uuid", [uuid]);
+        exec(callback, callback, service, "uuid", [uuid]);
     },
-    refreshData: function(){
-    	exec(generic, generic, service, "refresh", [""]);
+    refreshData: function(callback){
+        exec(callback, callback, service, "refresh", [""]);
     },
     getJscore: function(callback) {
         exec(callback, callback, service, "jscore", [""]);
@@ -37,7 +37,7 @@ module.exports = {
         exec(callback, callback, service, "settings", [""]);
     },
     getMemoryInfo: function(callback){
-    	exec(callback, callback, service, "memory", [""]);
+        exec(callback, callback, service, "memory", [""]);
     },
     startCpuPolling: function(callback, interval){
         exec(callback, callback, service, "cpupoll", [interval]);

@@ -5,6 +5,10 @@ import java.net.URL;
 import org.carat20.client.storage.DataStorage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.thrift.TException;
+import org.apache.thrift.transport.TTransportException;
 import org.carat20.client.device.DeviceLibrary;
 import org.carat20.client.storage.EVTree;
 import org.carat20.client.thrift.CaratService;
@@ -101,8 +105,10 @@ public class CommunicationManager {
             //Safely close the instance
             ProtocolClient.close(instance);
             return true;
-        } catch (Throwable error) {
+        } catch (TTransportException error ) {
             Log.v("Carat", "Error refreshing reports: " + error);
+        } catch (TException e){
+            Log.v("Carat", "Error refreshing reports: " + e);
         }
         return false;
     }
