@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.os.Build;
-import android.os.Handler;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
@@ -14,8 +12,6 @@ import org.json.JSONException;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -77,14 +73,8 @@ public class Carat extends CordovaPlugin {
         Log.v("Carat", "Plugin is initializing");
         super.initialize(cordova, webView);
         Carat.activity = cordova.getActivity();
-        Window window = activity.getWindow();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(color);
-        }
-        
+        int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
+        DeviceLibrary.changeStatusbarColor(color, activity);
         // ...
     }
 
@@ -159,9 +149,9 @@ public class Carat extends CordovaPlugin {
         activity = cordova.getActivity();
         context = activity.getApplicationContext();
         intent = activity.getIntent();
-        storage = new DataStorage(context);
         applicationLibrary = new ApplicationLibrary(activity);
-        deviceLibrary = new DeviceLibrary(context, intent);
+        storage = new DataStorage(context, applicationLibrary);
+        deviceLibrary = new DeviceLibrary(context, intent, activity);
         cb.success();
     }
     
@@ -184,41 +174,29 @@ public class Carat extends CordovaPlugin {
         // Use plugin.xml value if we have no uuid
         if(uuid == null || uuid.isEmpty()){  
             uuid = readConfig("uuid");
-            Log.v("Carat", "Using default uuid "+uuid);
             storage.writeUuid(uuid);
-        } else {
-            Log.v("Carat", "Using custom uuid "+uuid);
         }
         
+        Log.v("Carat", "Using uuid "+uuid);
         commManager = new CommunicationManager(storage, uuid);
         
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                if(!storage.isComplete() && deviceLibrary.isNetworkAvailable()) {
-                    // No data
-                    if(storage.isEmpty()){
-                        Log.v("Carat", "Storage is empty, fetching reports..");
-                        commManager.refreshAllReports();
-                    }
-                    // Missing data
-                    else if (!storage.isComplete()){
-                        Log.v("Carat", "Storage is incomplete, fetching missing reports..");
-                        if(storage.getMainReports() == null) commManager.refreshMainReports();
-                        if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
-                        if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
-                        if(storage.getSettingsTree() == null) commManager.refreshSettings();
-                    } 
-                } 
-                // Send dataready event when storage is ready
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendEvent("dataready");
-                    }
-                });
-            }
-        });
+        // Reload data if storage isn't complete
+        if(!storage.isComplete() && deviceLibrary.isNetworkAvailable()) {
+            Log.v("Carat", "Storage is empty or incomplete, fetching reports..");
+            
+            // Fetch data from server
+            sendPluginResult(cb, "Updating system");
+            commManager.refreshMainReports();
+            sendPluginResult(cb, "Updating hogs");
+            commManager.refreshHogsBugs("Hog");
+            sendPluginResult(cb, "Updating bugs");
+            commManager.refreshHogsBugs("Bug");
+            sendPluginResult(cb, "Updating settings");
+            commManager.refreshSettings();
+        } 
+        
+        // Let webview know we're ready
+        cb.success("READY");
     }
     
     // Combined method for getting and setting uuid
@@ -229,14 +207,10 @@ public class Carat extends CordovaPlugin {
         } catch (JSONException e) {
             uuid = "";
         }
-        
-        // When no uuid is specified..
         if(uuid.equals("get")){
-            // .. use the one in storage..
+            // Fetch from storage
             uuid = storage.getUuid();
-            // .. and if there is no uuid stored..
             if(uuid == null || uuid.isEmpty()){
-                // .. return an empty string
                 cb.success("");
             }
         } else {
@@ -257,7 +231,6 @@ public class Carat extends CordovaPlugin {
     private void getMainReports(CallbackContext cb){
         try{
             mainReports = storage.getMainReports();
-            if(mainReports == null) return;
             cb.success(convertToJSON(mainReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert main reports.", e);

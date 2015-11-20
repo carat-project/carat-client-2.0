@@ -10,11 +10,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import java.util.Arrays;
+import org.carat20.client.utility.TypeUtilities;
 
 /**
  * Provides application information and performs tasks. 
@@ -72,6 +75,43 @@ public class ApplicationLibrary {
         } catch (NameNotFoundException e){
             Log.v("Carat", "No version found for " + packageName);
             return "";
+        }
+    }
+    
+    /**
+     * Returns application icon as a bitmap.
+     * @param packageName Application package name
+     * @param context Context
+     * @return Icon as a bitmap
+     */
+    public static Bitmap getApplicationIcon(String packageName, Context context){
+        try{
+            Drawable d = context.getPackageManager().getApplicationIcon(packageName);
+            return TypeUtilities.getBitmap(d);
+        } catch (PackageManager.NameNotFoundException e){
+            return null;
+        }
+    }
+    
+    public Bitmap getApplicationIcon(String packageName){
+        return ApplicationLibrary.getApplicationIcon(packageName, context);
+    }
+    
+    /**
+     * Return a human-readable application label from package name.
+     * @param packageName Fixed package name
+     * @return Application label if found, otherwise package name.
+     * Null package names are returned with <i>Unknown</i> as label.
+     */
+    public String getApplicationLabel(String packageName){
+        if(packageName == null) return "Unknown";
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+            if(info !=null){
+                return pm.getApplicationLabel(info).toString();
+            } else return packageName; 
+        } catch(NameNotFoundException e){
+            return packageName;
         }
     }
 
