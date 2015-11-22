@@ -762,8 +762,13 @@ module.exports.HogBugCards = (function(template, utilities, buttonActions) {
 
         var renderTemplate = function(hogBugsArray) {
 
+            var templateData = {
+                cardLocIds: cardLocIds,
+                hogBugsArray: hogBugsArray
+            };
+
             var rendered = utilities
-                    .makeDomNode(template.render(cardLocIds));
+                    .makeDomNode(template.render(templateData));
 
             var runningLoc = utilities
                     .findById(rendered, cardLocIds.runningId);

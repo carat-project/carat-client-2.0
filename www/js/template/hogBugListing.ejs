@@ -1,26 +1,38 @@
 <div class="page-content">
     <div class="carat-module">
         <div class="carat-module-title">
-            Running:
+            Running:&nbsp;
+            <% if(!hogBugsArray.running
+               || hogBugsArray.running.length < 1) { %>
+                None.
+            <% } %>
         </div>
         <div class="carat-module-content"
-             id="<%= runningId %>">
+             id="<%= cardLocIds.runningId %>">
         </div>
     </div>
     <div class="carat-module">
         <div class="carat-module-title">
-            Inactive:
+            Inactive:&nbsp;
+            <% if(!hogBugsArray.inactive
+               || hogBugsArray.inactive.length < 1) { %>
+                None.
+            <% } %>
         </div>
         <div class="carat-module-content"
-             id="<%= inactiveId %>">
+             id="<%= cardLocIds.inactiveId %>">
         </div>
     </div>
     <div class="carat-module">
         <div class="carat-module-title">
-            System:
+            System:&nbsp;
+            <% if(!hogBugsArray.system
+               || hogBugsArray.system.length < 1) { %>
+                None.
+            <% } %>
         </div>
         <div class="carat-module-content"
-             id="<%= systemId %>">
+             id="<%= cardLocIds.systemId %>">
         </div>
     </div>
 </div>
