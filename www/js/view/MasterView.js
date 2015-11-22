@@ -109,13 +109,9 @@ MasterView = (function(headerView, mainView,
         var myDeviceFetcherAsync = function(callback) {
 
             deviceInfoFetcherAsync(function(deviceInfo) {
-                console.log(deviceInfo);
                 memoryStatsFetcherAsync(function(memInfo) {
-                    console.log(memInfo);
                     mainReportsFetcherAsync(function(mainData) {
-                        console.log(mainData);
                         uuidFetcherAsync(function(uuid) {
-                            console.log(uuid);
                             callback({
                                 modelName: deviceInfo.modelName,
                                 osVersion: deviceInfo.osVersion,
@@ -123,7 +119,8 @@ MasterView = (function(headerView, mainView,
                                 uuid: uuid,
                                 usedMemory: memInfo.usedMemory,
                                 totalMemory: memInfo.totalMemory,
-                                memoryPercentage: memInfo.percentage
+                                memoryPercentage: memInfo.percentage,
+                                batteryLife: mainData.batteryLife
                             });
                         });
                     });

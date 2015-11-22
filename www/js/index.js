@@ -30,7 +30,6 @@ var app = {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
         document.addEventListener("dataready", this.onDataReady, false);
-        document.addEventListener("renderfinished", this.refreshCpuUsage, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -164,7 +163,6 @@ var app = {
                             memoryTotal: totalMemory + " MiB"
                         };
 
-                        itemCards.generateStatistics(main, deviceInfo);
                         itemCards.generateSummaryStatistics(main, deviceInfo);
 
 

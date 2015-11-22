@@ -154,22 +154,26 @@ module.exports.Utilities = (function() {
 })();
 
 },{}],2:[function(require,module,exports){
-module.exports.DeviceStats = (function(template) {
+var Utilities = require('../helper/Utilities.js').Utilities;
 
-    return function(data) {
+module.exports.DeviceStats = (function(template, utilities, statsPoller) {
+
+    return function(data, gestureCallback) {
 
         var jScore = Math.round(data.jScore * 100);
-        console.log(jScore, data.jscore);
         var osVersion = data.osVersion;
         var uuid = data.uuid;
         var deviceModel = data.modelName;
         var totalMemory = data.totalMemory;
         var memoryPercentage = data.memoryPercentage;
+        var batteryLife = data.batteryLife;
+        console.log(batteryLife);
 
         var getFields = function() {
             return {
                 jScore: jScore,
                 osVersion: osVersion,
+                batteryLife: batteryLife,
                 uuid: uuid,
                 deviceModel: deviceModel,
                 totalMemory: totalMemory,
@@ -179,8 +183,43 @@ module.exports.DeviceStats = (function(template) {
 
         var html = template.render(getFields());
 
+        var domNode = (function() {
+            var node = utilities.makeDomNode(html);
+            gestureCallback(node);
+
+
+            var cpuText = node.querySelector(
+                "#cpuProgressBar span");
+            var cpuLoad = node.querySelector(
+                "#cpuProgressBar div");
+
+            var memoryText = node.querySelector(
+                "#memProgressBar span");
+            var memoryLoad = node.querySelector(
+                "#memProgressBar div");
+
+            statsPoller.cpuPoller(function(usage) {
+                cpuText.style.color = (usage > 65) ?
+                    "#fff" : "#000";
+                usage = usage + "%";
+                console.log(usage);
+                cpuText.innerHTML = usage;
+                cpuLoad.style.width = usage;
+            }, 4000);
+
+            statsPoller.memoryPoller(function(usage) {
+                memoryText.style.color = (usage > 65) ?
+                    "#fff" : "#000";
+                usage = usage + "%";
+                memoryText.innerHTML = usage;
+                memoryLoad.style.width = usage;
+            }, 4000);
+
+            return node;
+        })();
+
         var render = function() {
-            return html;
+            return domNode;
         };
 
         return {
@@ -188,9 +227,11 @@ module.exports.DeviceStats = (function(template) {
             render: render
         };
     };
-})(new EJS({url: 'js/template/myDevice.ejs'}));
+})(new EJS({url: 'js/template/myDevice.ejs'}), Utilities,
+   {cpuPoller: window.carat.startCpuPolling,
+    memoryPoller: window.carat.startMemoryPolling});
 
-},{}],3:[function(require,module,exports){
+},{"../helper/Utilities.js":1}],3:[function(require,module,exports){
 var Utilities = require("../helper/Utilities.js").Utilities;
 
 module.exports.HogBug = (function(template, utilities, buttonActions) {
@@ -1059,13 +1100,9 @@ MasterView = (function(headerView, mainView,
         var myDeviceFetcherAsync = function(callback) {
 
             deviceInfoFetcherAsync(function(deviceInfo) {
-                console.log(deviceInfo);
                 memoryStatsFetcherAsync(function(memInfo) {
-                    console.log(memInfo);
                     mainReportsFetcherAsync(function(mainData) {
-                        console.log(mainData);
                         uuidFetcherAsync(function(uuid) {
-                            console.log(uuid);
                             callback({
                                 modelName: deviceInfo.modelName,
                                 osVersion: deviceInfo.osVersion,
@@ -1073,7 +1110,8 @@ MasterView = (function(headerView, mainView,
                                 uuid: uuid,
                                 usedMemory: memInfo.usedMemory,
                                 totalMemory: memInfo.totalMemory,
-                                memoryPercentage: memInfo.percentage
+                                memoryPercentage: memInfo.percentage,
+                                batteryLife: mainData.batteryLife
                             });
                         });
                     });
@@ -1168,7 +1206,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
                                 - memInfo.available,
                             totalMemory: memInfo.total,
                             percentage: memInfo.available
-                                / memInfo.total
+                                / memInfo.total,
+                            batteryLife: main.batteryLife
                         });
                     });
                 });
@@ -1181,7 +1220,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
 
             return function(onResultCallback) {
                 sourceCallback(function(data) {
-                    var myDeviceModel = new DeviceStats(data);
+                    var myDeviceModel = new DeviceStats(data,
+                                                        gestureCallback);
                     var rendered = myDeviceModel.render();
 
                     onResultCallback(rendered);
@@ -1213,10 +1253,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
          */
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
-                var node = utilities.makeDomNode(renderedTemplate);
+                var node = renderedTemplate;
                 docLocation.appendChild(node);
-
-                gestureCallback(node);
             });
         };
 
@@ -1225,6 +1263,6 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
             renderInsert: renderInsert
         };
     };
-})(makeElemPanSwipable, Utilities);
+})(makeElemTappable, Utilities);
 
 },{"../helper/Utilities.js":1,"../model/DeviceStats.js":2}]},{},[12]);

@@ -1,35 +1,32 @@
 <div class="mdl-card mdl-shadow--2dp"
      id="statistics-jscore"
-     style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+     style="-webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
     <div class="carat-card__title">
         <div class="mdl-card__title-text carat_summaryCard_title_text">
             My Device
         </div>
-        <div class="expand">
-            <i class="material-icons"></i>
-        </div>
     </div>
-    <div class="mdl-card__supporting-text">
-        <div class="carat-Jscore-text">
-            Your device is more energy efficient than <%= jScore %>% of other devices measured by Carat.
+    <div class="mdl-card__supporting-text in_large">
+        <p>OS version: <%= osVersion %></p>
+        <p>Device model: <%= deviceModel %></p>
+        <p>Battery duration: <%= batteryLife %></p>
+        <p>Memory total: <%= totalMemory %> MiB</p>
+        <p>Carat id: <%= uuid %></p>
+        <div style="display: inline-block;">
+            CPU usage:&nbsp;
+            <div id="cpuProgressBar" class="progressBar">
+                <span>?</span>
+                <div></div>
+            </div>
         </div>
-        <div class="numberCircle">
-            <%= jScore %>
-            <button class="info" onclick="JscoreInfo()">
-            </button>
-        </div>
-        <div class="collapse" id="card-statistics-jscore-textpand">
-            <p>Battery duration: 27h 45m ± 3h 25 m</p>
-            <p>OS version: <%= osVersion %></p>
-            <p>Memory used: <%= memoryPercentage %>%</p>
-            <p>Memory total: <%= totalMemory %> MiB</p>
-            <p>Device model: <%= deviceModel %></p>
-            <p>Carat id: <%= uuid %></p>
-            <p>CPU usage:
-                <span id="cpu-usage">
-                    86.4%
-                </span>
-            </p>
+        <div style="display: inline-block;">
+            Memory usage:&nbsp;
+            <div id="memProgressBar" class="progressBar">
+                <span>?</span>
+                <div></div>
+            </div>
         </div>
     </div>
 </div>

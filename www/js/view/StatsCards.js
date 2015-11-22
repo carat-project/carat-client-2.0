@@ -23,7 +23,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
                                 - memInfo.available,
                             totalMemory: memInfo.total,
                             percentage: memInfo.available
-                                / memInfo.total
+                                / memInfo.total,
+                            batteryLife: main.batteryLife
                         });
                     });
                 });
@@ -36,7 +37,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
 
             return function(onResultCallback) {
                 sourceCallback(function(data) {
-                    var myDeviceModel = new DeviceStats(data);
+                    var myDeviceModel = new DeviceStats(data,
+                                                        gestureCallback);
                     var rendered = myDeviceModel.render();
 
                     onResultCallback(rendered);
@@ -68,10 +70,8 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
          */
         var renderInsert = function() {
             renderAsync(function(renderedTemplate) {
-                var node = utilities.makeDomNode(renderedTemplate);
+                var node = renderedTemplate;
                 docLocation.appendChild(node);
-
-                gestureCallback(node);
             });
         };
 
@@ -80,4 +80,4 @@ module.exports.StatsCards = (function(gestureCallback, utilities) {
             renderInsert: renderInsert
         };
     };
-})(makeElemPanSwipable, Utilities);
+})(makeElemTappable, Utilities);
