@@ -16,38 +16,36 @@
         </div>
         <div class="carat-card-time">
             <%= benefit %>
-            <span class="show-on-expand">
+            <span class="benefit-error">
                 <%= benefitError %>
             </span>
         </div>
     </div>
     <div class="mdl-card__supporting-text">
         <div class="collapse" id="card-<%= id %>-textpand">
-            <%= "Samples: " + samples %>
+            <div><%= "Version: " + version %></div>
+            <div><%= "Samples: " + samples %></div>
+            <div><%= "Found in " + popularity + "% of devices." %></div>
         </div>
     </div>
-    <div class="mdl-card__actions slimmer mdl-card--border">
+    <div class="mdl-card__actions mdl-card--border">
         <span>
-            <a class="mdl-button mdl-button--colored
-                      hog-bug-action mdl-js-button
-                      mdl-js-ripple-effect"
+            <button class="action-button"
                id="<%= closeId %>"
                <% if(!killable) { %>
-               style="display: none;"
+               disabled
                <% } %>>
                 Close app
-            </a>
+            </button>
         </span>
         <span>
-            <a class="mdl-button mdl-button--colored
-                      hog-bug-action mdl-js-button
-                      mdl-js-ripple-effect"
+            <button class="action-button"
                id="<%= uninstallId %>"
                <% if(!uninstallable) { %>
-               style="display: none;"
+               disabled
                <% } %>>
                 Uninstall
-            </a>
+            </button>
         </span>
     </div>
 </div>

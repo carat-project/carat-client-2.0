@@ -245,10 +245,11 @@ module.exports.HogBug = (function(template, utilities, buttonActions) {
 
         var benefitSubstrings = utilities
                 .splitTimeDrainString(data.benefit);
-
         var benefit = benefitSubstrings.timeDrainPart;
         var benefitError = benefitSubstrings.timeDrainErrorPart;
         var expected = data.expected;
+        var version = data.version;
+        var popularity = data.popularity;
         var icon = data.icon;
         var samples = data.samples;
         var label = data.label;
@@ -278,6 +279,8 @@ module.exports.HogBug = (function(template, utilities, buttonActions) {
                 icon: icon,
                 samples: samples,
                 label: label,
+                version: version,
+                popularity: popularity,
                 running: running,
                 id: id,
                 uninstallId: uninstallId,
