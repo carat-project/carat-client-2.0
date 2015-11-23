@@ -29,7 +29,7 @@ var app = {
     bindEvents: function() {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
-        document.addEventListener("dataready", this.onDataReady, false);
+        document.addEventListener("renderfinished", this.refreshSystemData, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -44,7 +44,10 @@ var app = {
         // This fires the dataready event
         console.log("Getting fresh data for uuid " +uuid);
         carat.clear(function(){
-            carat.refreshData();
+            var state = document.getElementById("state");
+            carat.refreshData(function(status){
+                app.pluginStatus(status, state);
+            });
             //app.showProgress();
         });
     },
@@ -61,7 +64,10 @@ var app = {
             } else {
                 // Refresh existing data if needed
                 console.log("Getting data for existing uuid "+uuid);
-                carat.refreshData();
+                carat.refreshData(function(status){
+                    var state = document.getElementById("state");
+                    app.pluginStatus(status, state);
+                });
                 //app.showProgress();
             }
         });
@@ -107,7 +113,6 @@ var app = {
 
     // Load objects asynchronously with callbacks
     onDataReady: function(){
-        app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
         var masterView = new MasterView();
         masterView.render();
@@ -202,7 +207,7 @@ var app = {
     },
 
     // Set an interval for refreshing cpu usage
-    refreshCpuUsage: function() {
+    refreshSystemData: function() {
 
         var cpuText = document.querySelector("#cpuProgressBar > span");
         var cpuLoad = document.querySelector("#cpuProgressBar > div");
@@ -229,9 +234,20 @@ var app = {
         var indicator = document.createElement("img");
         indicator.src = "img/progress.gif";
         indicator.alt = "Loading..";
-        indicator.width = "17";
-        indicator.height = "17";
+        indicator.width = "15";
+        indicator.height = "15";
         document.getElementById("progress").appendChild(indicator);
+    },
+
+    // Display plugin status temporarily in header
+    pluginStatus: function(status, state){
+        if(status == "READY"){
+            app.onDataReady();
+            state.innerHTML = "";
+        } else {
+            console.log("Plugin: " + status);
+            state.innerHTML = status + "..";
+        }
     },
 
     // Update DOM on a Received Event

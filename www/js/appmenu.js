@@ -102,11 +102,13 @@ function cancelHog(){
 
 function sendFeedback(){
 
-    var li = document.querySelector("#sendFeedback");
+    //var li = document.querySelector("#sendFeedback");
+//
+//   	li.addEventListener('click', function () {
+//    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
+//		});
 
-   	li.addEventListener('click', function () {
-    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
-		});
+	moveToPage('sendFeedback', 'feedback.html');
 }
 
 //function appSettings(){

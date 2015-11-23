@@ -5,8 +5,7 @@
         <meta charset="utf-8">
         <meta name="format-detection" content="telephone=no"/>
         <meta name="msapplication-tap-highlight" content="no"/>
-        <meta name="viewport"
-              content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
         <title>Carat 2.0</title>
 
         <script type="text/javascript" src="cordova.js"></script>
@@ -19,36 +18,9 @@
         <link rel="stylesheet" href="css/carat.css">
         <link rel="stylesheet" href="css/dialog.css">
         <link rel="stylesheet" href="css/snackbar.css">
-        <!--
-             <script type="text/javascript">
-             window.onload = function () {
-             var chart = new CanvasJS.Chart("chartContainer",
-             {
-
-             data: [
-             {
-             type: "pie",
-             showInLegend: false,
-             legendText: "{indexLabel}",
-             dataPoints: [
-             { y: 4181563, indexLabel: "Samsung Galaxy" },
-             { y: 2175498, indexLabel: "Other" },
-             { y: 3125844, indexLabel: "HTC" },
-             { y: 1176121, indexLabel: "Motorola"},
-             { y: 1727161, indexLabel: "DROID" },
-             { y: 4303364, indexLabel: "Nexus"},
-             { y: 1717786, indexLabel: "iPhone"}
-             ]
-             }
-             ]
-             });
-             chart.render();
-             }
-             </script>-->
     </head>
 
     <body>
-
         <!-- dialog for everything needed -->
         <div class="overlay" id="popup-overlay">
             <div class="modal" id="popup-modal">
@@ -68,16 +40,14 @@
             </div>
         </div>
 
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
-                    mdl-layout--fixed-tabs mdl-color--grey-200">
-
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs mdl-color--grey-200">
             <header class="mdl-layout__header mdl-color--orange-500">
-                <img class="mdl-layout-icon" src="img/icon.png"></img>
+                <img class="mdl-layout-icon" src="img/carat_mini_icon.png"></img>
                 <div class="mdl-layout__header-row mdl-layout-title" style="float:left; left:0px; top:2px;">
                     <!-- Title -->
                     <span>Carat 2.0</span>
                     <span id="progress"></span>
-                    <span id="usage"></span>
+                    <span id="state"></span>
 
                     <div class="mdl-layout-spacer"></div>
                     <button class="mdl-button mdl-js-button mdl-button--icon" id="menu" onclick="listenMenu();">
@@ -193,7 +163,7 @@
         <script type="text/javascript" src="js/caratCard.js"></script>
 
         <script type="text/javascript">
-         app.initialize();
+            app.initialize();
         </script>
     </body>
 </html>

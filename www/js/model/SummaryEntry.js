@@ -61,18 +61,18 @@ class SummaryEntry {
         var node = Utilities.makeDomNode(html);
 
         var tab;
+        if(this.data.type != "HOG" && this.data.type != "BUG") return node;
+        var tabId = this.data.type.toLowerCase() + "s-tab";
 
-        if(this.data.type === "BUG") {
-            tab = "bugs-tab";
-        } else if(this.data.type === "HOG") {
-            tab = "hogs-tab";
-        } else {
-            return node;
-        }
-
+        let _this = this;
         node.addEventListener("click", function() {
-            document.getElementById(tab).click();
-            window.location.hash = targetId;
+            document.getElementById(tabId).click();
+            window.location.hash = _this.data.targetId;
+            var expandId = "card-"+_this.data.targetId+"-textpand";
+            var expand = $("#"+expandId);
+            if(!expand.hasClass("in")){
+                expand.addClass("in");
+            }
         });
 
         return node;

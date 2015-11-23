@@ -1975,18 +1975,19 @@ var SummaryEntry = (function () {
             var node = _Utilities.Utilities.makeDomNode(html);
 
             var tab;
+            if (this.data.type != "HOG" && this.data.type != "BUG") return node;
+            var tabId = this.data.type.toLowerCase() + "s-tab";
 
-            if (this.data.type === "BUG") {
-                tab = "bugs-tab";
-            } else if (this.data.type === "HOG") {
-                tab = "hogs-tab";
-            } else {
-                return node;
-            }
-
+            var _this = this;
             node.addEventListener("click", function () {
-                document.getElementById(tab).click();
-                window.location.hash = targetId;
+                document.getElementById(tabId).click();
+                console.log(_this.data.targetId);
+                window.location.hash = _this.data.targetId;
+                var expandId = "card-" + _this.data.targetId + "-textpand";
+                var expand = $("#" + expandId);
+                if (!expand.hasClass("in")) {
+                    expand.addClass("in");
+                }
             });
 
             return node;
@@ -2045,7 +2046,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<header class=\"mdl-layout__header mdl-color--blue-grey-500\"\r\n        id=\"header-bar\">\r\n    <img class=\"mdl-layout-icon\" src=\"img/icon.png\"></img>\r\n    <div class=\"mdl-layout__header-row mdl-layout-title\"\r\n         style=\"float:left; left:0px; top:2px;\">\r\n        <!-- Title -->\r\n        <span>Carat 2.0</span>\r\n        <span id=\"progress\"></span>\r\n        <span id=\"usage\"></span>\r\n\r\n        <div class=\"mdl-layout-spacer\"></div>\r\n        <button class=\"mdl-button mdl-js-button mdl-button--icon\"\r\n                id=\"menu\" onclick=\"listenMenu();\">\r\n            <i class=\"material-icons\">more_vert</i>\r\n        </button>\r\n        <ul class=\"mdl-menu mdl-js-menu mdl-menu--bottom-right\"\r\n            for=\"menu\">\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenBugCards\"\r\n                disabled=\"true\">Show hidden bugs</li>\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenHogCards\"\r\n                disabled=\"true\">Show hidden hogs</li>\r\n            <li class=\"mdl-menu__item\" id=\"sendFeedback\">\r\n                Send Feedback\r\n            </li>\r\n            <li class=\"mdl-menu__item\" id=\"changeUuid\">Change UUID</li>\r\n            <li class=\"mdl-menu__item\" id=\"appSettings\">Settings</li>\r\n        </ul>\r\n\r\n    </div>\r\n\r\n    <!-- Tabs -->\r\n    <div class=\"mdl-layout__tab-bar mdl-color--blue-grey-500\">\r\n        <a href=\"#home\" class=\"mdl-layout__tab is-active\" id=\"home-tab\">\r\n            Home\r\n        </a>\r\n        <a href=\"#bugs\" class=\"mdl-layout__tab\" id=\"bugs-tab\">Bugs</a>\r\n        <a href=\"#hogs\" class=\"mdl-layout__tab\" id=\"hogs-tab\">Hogs</a>\r\n        <a href=\"#system\" class=\"mdl-layout__tab\" id=\"system-tab\">\r\n            Stats\r\n        </a>\r\n    </div>\r\n</header>\r\n";
+var Template = "<header class=\"mdl-layout__header mdl-color--blue-grey-500\"\r\n        id=\"header-bar\">\r\n    <img class=\"mdl-layout-icon\" src=\"img/icon.png\"></img>\r\n    <div class=\"mdl-layout__header-row mdl-layout-title\"\r\n         style=\"float:left; left:0px; top:2px;\">\r\n        <!-- Title -->\r\n        <span>Carat 2.0</span>\r\n        <span id=\"progress\"></span>\r\n        <span id=\"state\"></span>\r\n\r\n        <div class=\"mdl-layout-spacer\"></div>\r\n        <button class=\"mdl-button mdl-js-button mdl-button--icon\"\r\n                id=\"menu\" onclick=\"listenMenu();\">\r\n            <i class=\"material-icons\">more_vert</i>\r\n        </button>\r\n        <ul class=\"mdl-menu mdl-js-menu mdl-menu--bottom-right\"\r\n            for=\"menu\">\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenBugCards\"\r\n                disabled=\"true\">Show hidden bugs</li>\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenHogCards\"\r\n                disabled=\"true\">Show hidden hogs</li>\r\n            <li class=\"mdl-menu__item\" id=\"sendFeedback\">\r\n                Send Feedback\r\n            </li>\r\n            <li class=\"mdl-menu__item\" id=\"changeUuid\">Change UUID</li>\r\n            <li class=\"mdl-menu__item\" id=\"appSettings\">Settings</li>\r\n        </ul>\r\n\r\n    </div>\r\n\r\n    <!-- Tabs -->\r\n    <div class=\"mdl-layout__tab-bar mdl-color--blue-grey-500\">\r\n        <a href=\"#home\" class=\"mdl-layout__tab is-active\" id=\"home-tab\">\r\n            Home\r\n        </a>\r\n        <a href=\"#bugs\" class=\"mdl-layout__tab\" id=\"bugs-tab\">Bugs</a>\r\n        <a href=\"#hogs\" class=\"mdl-layout__tab\" id=\"hogs-tab\">Hogs</a>\r\n        <a href=\"#system\" class=\"mdl-layout__tab\" id=\"system-tab\">\r\n            Stats\r\n        </a>\r\n    </div>\r\n</header>\r\n";
 
 var Headerbar = (function () {
     function Headerbar() {

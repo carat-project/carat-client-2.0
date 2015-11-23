@@ -21,9 +21,11 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 import org.carat20.client.Constants;
+import org.carat20.client.device.ApplicationLibrary;
 import org.carat20.client.thrift.HogBugReport;
 import org.carat20.client.thrift.HogsBugs;
 import org.carat20.client.thrift.Reports;
+import org.carat20.client.utility.TypeUtilities;
 
 /**
  * Handles writing and reading reports from memory. It is used to abstract the
@@ -34,8 +36,8 @@ import org.carat20.client.thrift.Reports;
  */
 public final class DataStorage {
 
+    private final ApplicationLibrary appLib;
     private final Context context;
-    private final PackageManager pm;
     
     private String uuid;
     private WeakReference<Reports> mainReports;
@@ -53,11 +55,12 @@ public final class DataStorage {
     /**
      * Constructs a storage used for writing and reading reports.
      * Creates references in memory for faster data loading.
-     * @param context
+     * @param context Context
+     * @param appLib Application methods
      */
-    public DataStorage(Context context) {
+    public DataStorage(Context context, ApplicationLibrary appLib) {
         this.context = context;
-        this.pm = context.getPackageManager();
+        this.appLib = appLib;
         
         // Read latest reports to memory
         readMainReports();
@@ -374,9 +377,9 @@ public final class DataStorage {
                     Constants.Type.HOG);
             
             // Device specific application icon and label
-            h.setAppLabel(this.getApplicationLabel(packageName));
-            Bitmap icon = DataStorage.getApplicationIcon(packageName, context);
-            String icon64 = DataStorage.base64Encode(icon, 48, 48);
+            h.setAppLabel(appLib.getApplicationLabel(packageName));
+            Bitmap icon = appLib.getApplicationIcon(packageName);
+            String icon64 = TypeUtilities.bitmapToBase64(icon, 48, 48);
             h.setAppIcon(icon64);
             
             String priority = item.getAppPriority();
@@ -396,72 +399,10 @@ public final class DataStorage {
         }
         return result.toArray(new SimpleHogBug[result.size()]);
     }
-    
-    /**
-     * Return a human-readable application label from package name.
-     * @param packageName Fixed package name
-     * @return Application label if found, otherwise package name.
-     * Null package names are returned with <i>Unknown</i> as label.
-     */
-    private String getApplicationLabel(String packageName){
-        if(packageName == null) return "Unknown";
-        try {
-            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
-            if(info !=null){
-                return pm.getApplicationLabel(info).toString();
-            } else return packageName; 
-        } catch(NameNotFoundException e){
-            return packageName;
-        }
-    }
 
     //Splits the string and returns everything before a colon
     private String fixPackageName(String name) {
         return (name == null)? null : name.split(":")[0];
     }
     
-    /**
-     * Returns application icon as a bitmap.
-     * @param packageName Application package name
-     * @return Icon as a bitmap
-     */
-    public static Bitmap getApplicationIcon(String packageName, Context context){
-        try{
-            Drawable d = context.getPackageManager().getApplicationIcon(packageName);
-            return getBitmap(d);
-        } catch (PackageManager.NameNotFoundException e){
-            return null;
-        }
-    }
-    /**
-     * Converts a drawable resource to a bitmap.
-     * @param image Drawable image
-     * @return Bitmap
-     */
-    public static Bitmap getBitmap(Drawable image){
-            if(image == null) return null;
-            BitmapDrawable bmDrawable = ((BitmapDrawable) image);
-            return bmDrawable.getBitmap();
-    }
-    
-    /**
-     * Compresses and scales a bitmap encoding it base64.
-     * Negative and zero rescaling values are ignored.
-     * @param bitmap Bitmap
-     * @param width Rescale width
-     * @param height Rescale height
-     * @return Base64 encoded bitmap
-     */
-    public static String base64Encode(Bitmap bitmap, int width, int height){
-        if(bitmap == null) return "";
-        if(width > 0 && height > 0){
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
-        }
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-        byte[] bitmapByte = outStream.toByteArray();
-        String base64 = Base64.encodeToString(bitmapByte,Base64.DEFAULT);
-        
-        return "data:image/png;base64,"+ base64;
-    }
 }
