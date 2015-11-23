@@ -111,6 +111,7 @@ var app = {
         console.log("Requesting data from plugin");
         console.log(carat);
         var masterView = new MasterView();
+        console.log(masterView);
         masterView.render();
 
         // Start of the callback chain
