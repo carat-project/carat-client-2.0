@@ -1,21 +1,22 @@
-var Utilities = require("../helper/Utilities.js").Utilities;
+import ejs from "ejs";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
 
-module.exports.MainContent = (function(template, parentId, utilities) {
-    return function() {
+var Template = fs.readFileSync(__dirname + "/../template/mainContent.ejs", "utf-8");
 
-        var renderTemplate = function() {
-            return template.render();
-        };
+class MainContent {
+    constructor(){
+        this.parentId = "main-screen";
+    }
 
-        var renderInsert = function() {
-            var node = utilities.makeDomNode(renderTemplate());
-            console.log(node);
-            document.getElementById(parentId).appendChild(node);
-        };
-
-        return {
-            renderInsert: renderInsert
-        };
+    renderTemplate() {
+        return ejs.render(Template);
     };
-})(new EJS({url: 'js/template/mainContent.ejs'}), "main-screen",
-   Utilities);
+
+    renderInsert() {
+        var node = Utilities.makeDomNode(renderTemplate());
+        document.getElementById(parentId).appendChild(node);
+    };
+}
+
+export default MainContent;

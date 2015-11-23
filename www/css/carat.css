@@ -730,8 +730,8 @@ _:-ms-input-placeholder, :root .carat-graph {
 }
 
 section.mdl-layout__tab-panel div.page-content {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .mdl-card.sleeker {

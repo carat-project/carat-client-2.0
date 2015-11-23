@@ -1,76 +1,56 @@
-var Utilities = require('../helper/Utilities.js').Utilities;
+import ejs from "ejs";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
 
-module.exports.DeviceStats = (function(template, utilities, statsPoller) {
+// Template
+var Template = fs.readFileSync(__dirname + "/../template/myDevice.ejs", "utf-8");
 
-    return function(data, gestureCallback) {
+class DeviceStats {
+    constructor(data){
+        data.jScore = Math.round(data.jScore * 100);
+        data.deviceModel = data.modelName;
 
-        var jScore = Math.round(data.jScore * 100);
-        var osVersion = data.osVersion;
-        var uuid = data.uuid;
-        var deviceModel = data.modelName;
-        var totalMemory = data.totalMemory;
-        var memoryPercentage = data.memoryPercentage;
-        var batteryLife = data.batteryLife;
-        console.log(batteryLife);
+        this.data = data;
 
-        var getFields = function() {
-            return {
-                jScore: jScore,
-                osVersion: osVersion,
-                batteryLife: batteryLife,
-                uuid: uuid,
-                deviceModel: deviceModel,
-                totalMemory: totalMemory,
-                memoryPercentage: memoryPercentage
-            };
-        };
+        var html = ejs.render(Template, data);
+        this.node = this.createNode(html);
+    }
 
-        var html = template.render(getFields());
+    // create node and bind functions
+    createNode(html) {
+        var node = Utilities.makeDomNode(html);
+        makeElemPanSwipable(node);
 
-        var domNode = (function() {
-            var node = utilities.makeDomNode(html);
-            gestureCallback(node);
+        var cpuText = node.querySelector("#cpuProgressBar span");
+        var cpuLoad = node.querySelector("#cpuProgressBar div");
 
+        var memoryText = node.querySelector("#memProgressBar span");
+        var memoryLoad = node.querySelector("#memProgressBar div");
 
-            var cpuText = node.querySelector(
-                "#cpuProgressBar span");
-            var cpuLoad = node.querySelector(
-                "#cpuProgressBar div");
+        carat.startCpuPolling(function(usage) {
+            cpuText.style.color = (usage > 65) ? "#fff" : "#000";
+            usage = usage + "%";
+            cpuText.innerHTML = usage;
+            cpuLoad.style.width = usage;
+        }, 4000);
 
-            var memoryText = node.querySelector(
-                "#memProgressBar span");
-            var memoryLoad = node.querySelector(
-                "#memProgressBar div");
+        carat.startMemoryPolling(function(usage) {
+            memoryText.style.color = (usage > 65) ? "#fff" : "#000";
+            usage = usage + "%";
+            memoryText.innerHTML = usage;
+            memoryLoad.style.width = usage;
+        }, 4000);
 
-            statsPoller.cpuPoller(function(usage) {
-                cpuText.style.color = (usage > 65) ?
-                    "#fff" : "#000";
-                usage = usage + "%";
-                console.log(usage);
-                cpuText.innerHTML = usage;
-                cpuLoad.style.width = usage;
-            }, 4000);
+        return node;
+    }
 
-            statsPoller.memoryPoller(function(usage) {
-                memoryText.style.color = (usage > 65) ?
-                    "#fff" : "#000";
-                usage = usage + "%";
-                memoryText.innerHTML = usage;
-                memoryLoad.style.width = usage;
-            }, 4000);
+    render() {
+        return this.node;
+    }
 
-            return node;
-        })();
+    getFields() {
+        return this.data;
+    }
+}
 
-        var render = function() {
-            return domNode;
-        };
-
-        return {
-            getFields: getFields,
-            render: render
-        };
-    };
-})(new EJS({url: 'js/template/myDevice.ejs'}), Utilities,
-   {cpuPoller: window.carat.startCpuPolling,
-    memoryPoller: window.carat.startMemoryPolling});
+export default DeviceStats;

@@ -109,9 +109,7 @@ var app = {
     onDataReady: function(){
         app.receivedEvent('dataready');
         console.log("Requesting data from plugin");
-        console.log(carat);
         var masterView = new MasterView();
-        console.log(masterView);
         masterView.render();
 
         // Start of the callback chain
@@ -122,7 +120,6 @@ var app = {
         // Create cards for hogs and append to system tab
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
-            console.log("HOGS --- ", hogs);
             // Pass hogs to controller
 
             carat.getBugs(function(bugs) {

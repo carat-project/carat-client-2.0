@@ -1,113 +1,93 @@
-var Utilities = require("../helper/Utilities.js").Utilities;
+import ejs from "ejs";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
 
-module.exports.SummaryEntry = (function(template, utilities) {
+var Template = fs.readFileSync(__dirname + "/../template/summaryEntry.ejs", "utf-8");
+
+/**
+ * @class SummaryEntry
+ * @param {} data Raw data from the server.
+ */
+class SummaryEntry {
+
+    constructor(data){
+        // Prepare and reformat data
+        data.label = Utilities.cutLabel(data.label, 6);
+        data.benefit = Utilities.splitTimeDrainString(data.benefit).timeDrainPart;
+        data.id = Utilities.makeIdFromAppName(data.name, data.type, "entry");
+        data.targetId = Utilities.makeIdFromAppName(data.name, data.type);
+
+        this.data = data;
+
+        // Render template
+        var html = ejs.render(Template, data);
+        this.node = this.createNode(html);
+    }
+
     /**
-     * @class SummaryEntry
-     * @param {} data Raw data from the server.
+     * @function
+     * @instance
+     * @returns {String} The id for the HTML-element
+     id field.
+     * @memberOf SummaryEntry
      */
-    return function(data) {
-
-        var cutLabel = function(labelToCut) {
-            var ellipsis = String.fromCharCode(8230);
-            // Charcode 8230 is ellipsis
-            return labelToCut.length > 9 ?
-                labelToCut.slice(0,6) + ellipsis : labelToCut;
-        };
-
-        var id = utilities.makeIdFromAppName(data.name,
-                                             data.type,
-                                             "entry");
-        var targetId = utilities.makeIdFromAppName(data.name,
-                                                   data.type);
-        var benefit = utilities.splitTimeDrainString(data.benefit)
-                .timeDrainPart;
-        var label = cutLabel(data.label);
-        var icon = data.icon;
-        var type = data.type;
-
-        var getFields = function() {
-
-            return {
-                id: id,
-                benefit: benefit,
-                label: label,
-                icon: icon
-            };
-        };
-
-        /**
-         * @function
-         * @instance
-         * @returns {String} The id for the HTML-element
-         id field.
-         * @memberOf SummaryEntry
-         */
-        var getId = function() {
-            return id;
-        };
-
-        /**
-         * @function
-         * @instance
-         * @returns {String} The id of the item that clicking
-         this entry links to.
-         * @memberOf SummaryEntry
-         */
-        var getTargetId = function() {
-            return targetId;
-        };
-
-        /**
-         * @function
-         * @instance
-         * @returns {String} What kind of entry this is,
-         hog or a bug.
-         * @memberOf SummaryEntry
-         */
-        var getType = function() {
-            return type;
-        };
-
-        var html = template.render(getFields());
-
-        var domNode = (function() {
-            var node = utilities.makeDomNode(html);
-
-            var tab;
-
-            if(type === "BUG") {
-                tab = "bugs-tab";
-            } else if(type === "HOG") {
-                tab = "hogs-tab";
-            } else {
-                return node;
-            }
-
-            node.addEventListener("click", function() {
-                document.getElementById(tab).click();
-                window.location.hash = targetId;
-            });
-
-            return node;
-        })();
-
-        /**
-         * @function
-         * @instance
-         * @returns {DOM-element} Rendered DOM element
-         representing an app featured in the summary.
-         * @memberOf SummaryEntry
-         */
-        var render = function() {
-            return domNode;
-        };
-
-        return {
-            render: render,
-            getId: getId,
-            getTargetId: getTargetId,
-            getType: getType
-        };
-
+    getId() {
+        return this.data.id;
     };
-})(new EJS({url: "js/template/summaryEntry.ejs"}), Utilities);
+
+    /**
+     * @function
+     * @instance
+     * @returns {String} The id of the item that clicking
+     this entry links to.
+     * @memberOf SummaryEntry
+     */
+    getTargetId() {
+        return this.data.targetId;
+    };
+
+    /**
+     * @function
+     * @instance
+     * @returns {String} What kind of entry this is,
+     hog or a bug.
+     * @memberOf SummaryEntry
+     */
+    getType() {
+        return this.data.type;
+    };
+
+    createNode(html) {
+        var node = Utilities.makeDomNode(html);
+
+        var tab;
+
+        if(this.data.type === "BUG") {
+            tab = "bugs-tab";
+        } else if(this.data.type === "HOG") {
+            tab = "hogs-tab";
+        } else {
+            return node;
+        }
+
+        node.addEventListener("click", function() {
+            document.getElementById(tab).click();
+            window.location.hash = targetId;
+        });
+
+        return node;
+    }
+
+    /**
+     * @function
+     * @instance
+     * @returns {DOM-element} Rendered DOM element
+     representing an app featured in the summary.
+     * @memberOf SummaryEntry
+     */
+    render() {
+        return this.node;
+    };
+}
+
+export default SummaryEntry;

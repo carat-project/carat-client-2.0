@@ -1,83 +1,75 @@
-var DeviceStats = require("../model/DeviceStats.js").DeviceStats;
-var Utilities = require("../helper/Utilities.js").Utilities;
+import ejs from "ejs";
+import DeviceStats from "../model/DeviceStats.js";
+import {Utilities} from "../helper/Utilities.js";
 
-module.exports.StatsCards = (function(gestureCallback, utilities) {
-    /**
-     * @class StatsCards
-     */
-    return function() {
+class StatsCards {
 
-        var docLocation = document.querySelector("#system .page-content");
+    constructor(){
+        this.docLocation = document.querySelector("#system .page-content");
+        this.dataSource = this.defaultDataSource;
 
-        var defaultDataSource = function(callback) {
+        let _this = this;
+        this.renderAsync = (function(source) {
+            return _this.renderAsyncSource(source);
+        }) (this.dataSource);
+    }
 
-            window.carat.getMainReports(function(main) {
-                window.carat.getMemoryInfo(function(memInfo) {
-                    window.carat.getUuid(function(uuid) {
-                        callback({
-                            modelName: window.device.model,
-                            osVersion: window.device.version,
-                            jScore: main.jscore,
-                            uuid: uuid,
-                            usedMemory: memInfo.total
-                                - memInfo.available,
-                            totalMemory: memInfo.total,
-                            percentage: memInfo.available
-                                / memInfo.total,
-                            batteryLife: main.batteryLife
-                        });
+    defaultDataSource(callback) {
+
+        carat.getMainReports(function(main) {
+            carat.getMemoryInfo(function(memInfo) {
+                carat.getUuid(function(uuid) {
+                    callback({
+                        modelName: window.device.model,
+                        osVersion: window.device.version,
+                        jScore: main.jscore,
+                        uuid: uuid,
+                        usedMemory: memInfo.total - memInfo.available,
+                        totalMemory: memInfo.total,
+                        percentage: memInfo.available / memInfo.total,
+                        batteryLife: main.batteryLife
                     });
                 });
             });
-        };
+        });
+    };
 
-        var dataSource = defaultDataSource;
-
-        var renderAsyncSource = function(sourceCallback) {
-
-            return function(onResultCallback) {
-                sourceCallback(function(data) {
-                    var myDeviceModel = new DeviceStats(data,
-                                                        gestureCallback);
-                    var rendered = myDeviceModel.render();
-
-                    onResultCallback(rendered);
-                });
-            };
-        };
-
-        var renderAsync = (function(source) {
-            return renderAsyncSource(source);
-        })(dataSource);
-
-        /**
-         * @function
-         * @instance
-         * @param {} freshDataSource A callback which is used for
-         acquiring data from the server.
-         * @memberOf StatsCards
-         */
-        var setDataSource = function(freshDataSource) {
-            dataSource = freshDataSource;
-            renderAsync = renderAsyncSource(freshDataSource);
-        };
-
-        /**
-         * @function
-         * @instance
-         * @memberOf StatsCards
-         * @summary Insert these cards as a part of the document.
-         */
-        var renderInsert = function() {
-            renderAsync(function(renderedTemplate) {
-                var node = renderedTemplate;
-                docLocation.appendChild(node);
+    renderAsyncSource(sourceCallback) {
+        var _this = this;
+        return function(onResultCallback) {
+            sourceCallback(function(data) {
+                var myDeviceModel = new DeviceStats(data);
+                var rendered = myDeviceModel.render();
+                onResultCallback(rendered);
             });
         };
-
-        return {
-            setDataSource: setDataSource,
-            renderInsert: renderInsert
-        };
     };
-})(makeElemTappable, Utilities);
+
+    /**
+     * @function
+     * @instance
+     * @param {} freshDataSource A callback which is used for
+     acquiring data from the server.
+     * @memberOf StatsCards
+     */
+    setDataSource(freshDataSource) {
+        this.dataSource = freshDataSource;
+        this.renderAsync = this.renderAsyncSource(freshDataSource);
+    };
+
+    /**
+     * @function
+     * @instance
+     * @memberOf StatsCards
+     * @summary Insert these cards as a part of the document.
+     */
+    renderInsert() {
+        let _this = this;
+        this.renderAsync(function(renderedTemplate) {
+            var node = renderedTemplate;
+            _this.docLocation.appendChild(node);
+        });
+    };
+}
+
+export default StatsCards;

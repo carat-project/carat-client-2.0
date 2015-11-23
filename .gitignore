@@ -43,6 +43,9 @@ plugins/org.carat.plugin/manifest.mf
 *.tmPreferences.cache
 *.stTheme.cache
 sftp-config.json
+.babelrc
+.eslintrc
+.idea/
 
 # Other
 npm_modules/

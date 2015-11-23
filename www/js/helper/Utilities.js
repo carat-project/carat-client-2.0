@@ -52,6 +52,7 @@ module.exports.Utilities = (function() {
      * @memberOf Utilities
      */
     var findById = function(elem, id) {
+        if(!elem.querySelector) return;
         return elem.querySelector("#" + id);
     };
 
@@ -65,7 +66,9 @@ module.exports.Utilities = (function() {
      */
     var appendChildAll = function(elem, appendees) {
         for(var key in appendees) {
-            elem.appendChild(appendees[key]);
+            if(elem && elem.appendChild){
+                elem.appendChild(appendees[key]);
+            }
         }
     };
 
@@ -137,11 +140,18 @@ module.exports.Utilities = (function() {
 
         var dummyNode = document.createElement("div");
         dummyNode.innerHTML = htmlString;
-
         return dummyNode.firstChild;
     };
 
+    var cutLabel = function(label, length){
+        // Charcode 8230 is ellipsis
+        var ellipsis = String.fromCharCode(8230);
+        return label.length > length ?
+            label.slice(0,length-3) + ellipsis : label;
+    };
+
     return {
+        cutLabel: cutLabel,
         makeIdFromAppName: makeIdFromAppName,
         splitTimeDrainString: splitTimeDrainString,
         pluralize: pluralize,

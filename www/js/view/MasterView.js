@@ -1,190 +1,171 @@
-var HogCards = require("./HogCards.js").HogCards;
-var BugCards = require("./BugCards.js").BugCards;
-var HomeCards = require("./HomeCards.js").HomeCards;
-var StatsCards = require("./StatsCards.js").StatsCards;
-var Headerbar = require("./Headerbar.js").Headerbar;
-var MainContent = require("./MainContent.js").MainContent;
+import HomeCards from "./HomeCards.js";
+import HogBugCards from "./HogBugCards.js";
+import StatsCards from "./StatsCards.js";
+import Headerbar from "./Headerbar.js";
+import MainContent from "./MainContent.js";
 
-MasterView = (function(headerView, mainView,
-                       bugsView, hogsView,
-                       homeView, statsView) {
-    /**
-     * @class MasterView
-     * @summary Class that wraps up all other views.
-     */
-    return function() {
+ /**
+ * @class MasterView
+ * @summary Class that wraps up all other views.
+ */
+class MasterView {
 
-        var bugsRawData = [];
-        var hogsRawData = [];
-        var mainReportsRawData = [];
-        var deviceInfoRawData = [];
-        var memoryRawData = [];
-        var savedUuid = "";
+    constructor() {
+        this.bugsRawData = [];
+        this.hogsRawData = [];
+        this.mainReportsRawData = [];
+        this.deviceInfoRawData = [];
+        this.memoryRawData = [];
+        this.savedUuid = "";
 
-        var savedInfoFetcherAsync = function(savedInfo, dataSource,
-                                             callback) {
-            console.log(savedInfo, dataSource, callback);
-            if(!savedInfo || savedInfo.length === 0) {
+        this.headerView = new Headerbar();
+        this.mainView = new MainContent();
+        this.homeView = new HomeCards();
+        this.statsView = new StatsCards();
+        this.bugsView = new HogBugCards(carat.getHogs, "bugs");
+        this.hogsView = new HogBugCards(carat.getBugs, "hogs");
 
-                dataSource(function(data) {
+        this.bugsFetcherAsync = this.bugsFetcherAsync.bind(this);
+        this.hogsFetcherAsync = this.hogsFetcherAsync.bind(this);
+        this.hogsAndBugsFetcherAsync = this.hogsAndBugsFetcherAsync.bind(this);
+        this.myDeviceFetcherAsync = this.myDeviceFetcherAsync.bind(this);
+        this.memoryStatsFetcherAsync = this.memoryStatsFetcherAsync.bind(this);
 
-                    savedInfo = data;
-                    callback(data);
-                });
-            } else {
-                callback(savedInfo);
-            }
+        this.bugsView.setDataSource(this.bugsFetcherAsync);
+        this.hogsView.setDataSource(this.hogsFetcherAsync);
+        this.homeView.setDataSource(this.hogsAndBugsFetcherAsync);
+        this.statsView.setDataSource(this.myDeviceFetcherAsync);
+    }
+
+    savedInfoFetcherAsync(savedInfo, dataSource, callback) {
+        if(!savedInfo || savedInfo.length === 0) {
+
+            dataSource(function(data) {
+
+                savedInfo = data;
+                callback(data);
+            });
+        } else {
+            callback(savedInfo);
+        }
+    };
+
+    uuidFetcherAsync(callback) {
+
+        var uuidGetter = function(action) {
+            carat.getUuid(function(uuid) {
+                if(!uuid) {
+                    action("Default");
+                }
+
+                action(uuid);
+            });
         };
 
-        var uuidFetcherAsync = function(callback) {
+        this.savedInfoFetcherAsync(this.savedUuid, uuidGetter, callback);
+    };
 
-            var uuidGetter = function(action) {
-                window.carat.getUuid(function(uuid) {
-                    if(!uuid) {
-                        action("Default");
-                    }
+    memoryStatsFetcherAsync(callback) {
 
-                    action(uuid);
-                });
-            };
-
-            savedInfoFetcherAsync(savedUuid,
-                                  uuidGetter,
-                                  callback);
-        };
-
-        var memoryStatsFetcherAsync = function(callback) {
-
-            var getMemory = function(action) {
-                window.carat.getMemoryInfo(function(memInfo) {
-                    var usedMemory = Math.round((memInfo.total
-                                                 - memInfo.available)
-                                                / 1000);
-                    var totalMemory = Math.round(memInfo.total
-                                                 / 1000);
-                    var percentage = Math.floor((usedMemory
-                                                 / totalMemory)
-                                                * 100);
+        var getMemory = function(action) {
+            carat.getMemoryInfo(function(memInfo) {
+                var usedMemory = Math.round((memInfo.total- memInfo.available) / 1000);
+                var totalMemory = Math.round(memInfo.total / 1000);
+                var percentage = Math.floor((usedMemory / totalMemory)* 100);
 
 
-                    var result = {
-                        usedMemory: usedMemory,
-                        totalMemory: totalMemory,
-                        percentage: percentage
-                    };
-
-                    action(result);
-                });
-            };
-
-            savedInfoFetcherAsync(memoryRawData,
-                                  getMemory,
-                                  callback);
-        };
-
-        var mainReportsFetcherAsync = function(callback) {
-
-            savedInfoFetcherAsync(mainReportsRawData,
-                                  window.carat.getMainReports,
-                                  callback);
-        };
-
-        var deviceInfoFetcherAsync = function(callback) {
-
-            var getDeviceInfo = function(action) {
-                var device = {
-                    modelName: window.device.model,
-                    osVersion: window.device.platform
-                        + " " + window.device.version
-
+                var result = {
+                    usedMemory: usedMemory,
+                    totalMemory: totalMemory,
+                    percentage: percentage
                 };
-                action(device);
-            };
 
-            savedInfoFetcherAsync(deviceInfoRawData,
-                                  getDeviceInfo,
-                                  callback);
+                action(result);
+            });
         };
 
-        var myDeviceFetcherAsync = function(callback) {
+        this.savedInfoFetcherAsync(this.memoryRawData,
+                              getMemory,
+                              callback);
+    };
 
-            deviceInfoFetcherAsync(function(deviceInfo) {
-                memoryStatsFetcherAsync(function(memInfo) {
-                    mainReportsFetcherAsync(function(mainData) {
-                        uuidFetcherAsync(function(uuid) {
-                            callback({
-                                modelName: deviceInfo.modelName,
-                                osVersion: deviceInfo.osVersion,
-                                jScore: mainData.jscore,
-                                uuid: uuid,
-                                usedMemory: memInfo.usedMemory,
-                                totalMemory: memInfo.totalMemory,
-                                memoryPercentage: memInfo.percentage,
-                                batteryLife: mainData.batteryLife
-                            });
+    mainReportsFetcherAsync(callback) {
+
+        this.savedInfoFetcherAsync(this.mainReportsRawData, carat.getMainReports, callback);
+    };
+
+    deviceInfoFetcherAsync(callback) {
+
+        var getDeviceInfo = function(action) {
+            var device = {
+                modelName: window.device.model,
+                osVersion: window.device.platform + " " + window.device.version
+            };
+            action(device);
+        };
+
+        this.savedInfoFetcherAsync(this.deviceInfoRawData, getDeviceInfo, callback);
+    };
+
+    myDeviceFetcherAsync(callback) {
+
+        let _this = this;
+        _this.deviceInfoFetcherAsync(function(deviceInfo) {
+            _this.memoryStatsFetcherAsync(function(memInfo) {
+                _this.mainReportsFetcherAsync(function(mainData) {
+                    _this.uuidFetcherAsync(function(uuid) {
+                        callback({
+                            modelName: deviceInfo.modelName,
+                            osVersion: deviceInfo.osVersion,
+                            jScore: mainData.jscore,
+                            uuid: uuid,
+                            usedMemory: memInfo.usedMemory,
+                            totalMemory: memInfo.totalMemory,
+                            memoryPercentage: memInfo.percentage,
+                            batteryLife: mainData.batteryLife
                         });
                     });
                 });
             });
-        };
+        });
 
-        var bugsFetcherAsync = function(callback) {
+    };
 
-            savedInfoFetcherAsync(bugsRawData,
-                                  window.carat.getBugs,
-                                  callback);
-        };
+    bugsFetcherAsync(callback) {
+        this.savedInfoFetcherAsync(this.bugsRawData, carat.getBugs, callback);
+    };
 
-        var hogsFetcherAsync = function(callback) {
+    hogsFetcherAsync(callback) {
 
-            savedInfoFetcherAsync(hogsRawData,
-                                  window.carat.getHogs,
-                                  callback);
-        };
+        this.savedInfoFetcherAsync(this.hogsRawData, carat.getHogs, callback);
+    };
 
-        var hogsAndBugsFetcherAsync = function(callback) {
+    hogsAndBugsFetcherAsync(callback) {
 
-            bugsFetcherAsync(function(bugs) {
-                hogsFetcherAsync(function(hogs) {
-                    callback({
-                        bugs: bugs,
-                        hogs: hogs
-                    });
+        let _this = this;
+        _this.bugsFetcherAsync(function(bugs) {
+            _this.hogsFetcherAsync(function(hogs) {
+                callback({
+                    bugs: bugs,
+                    hogs: hogs
                 });
             });
-        };
-
-        bugsView.setDataSource(bugsFetcherAsync);
-        hogsView.setDataSource(hogsFetcherAsync);
-        homeView.setDataSource(hogsAndBugsFetcherAsync);
-        statsView.setDataSource(myDeviceFetcherAsync);
-
-        /**
-         * @function
-         * @instance
-         * @memberOf MasterView
-         * @summary Render all views and insert the results as
-         part of the document.
-         */
-        var render = function() {
-            bugsView.renderInsert();
-            hogsView.renderInsert();
-            homeView.renderInsert();
-            statsView.renderInsert();
-        };
-
-        var renderBase = function() {
-            headerView.renderInsert();
-            mainView.renderInsert();
-        };
-
-        return {
-            render: render,
-            renderBase: renderBase
-        };
+        });
     };
-})(new Headerbar(), new MainContent(),
-   new BugCards(), new HogCards(),
-   new HomeCards(), new StatsCards());
 
-module.exports.MasterView = MasterView;
+    render() {
+        this.bugsView.renderInsert();
+        this.hogsView.renderInsert();
+        this.homeView.renderInsert();
+        this.statsView.renderInsert();
+    };
+
+    renderBase() {
+        this.headerView.renderInsert();
+        this.mainView.renderInsert();
+    };
+
+}
+
+window.MasterView = MasterView;
+export default MasterView;

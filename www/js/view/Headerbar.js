@@ -1,38 +1,39 @@
-var Utilities = require("../helper/Utilities.js").Utilities;
+import ejs from "ejs";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
 
-module.exports.Headerbar = (function(template, elemId, parentId, utilities) {
-    return function() {
+var Template = fs.readFileSync(__dirname + "/../template/headerbar.ejs", "utf-8");
 
-        var renderTemplate = function() {
-            return template.render();
-        };
+class Headerbar {
+    constructor(){
+        this.elemId = "header-bar";
+        this.parentId = "main-screen";
+    }
 
-        var hide = function() {
-            var elem = document.getElementById(elemId);
-
-            if(elem) {
-                elem.style["display"] = "none";
-            }
-        };
-
-        var show = function() {
-            var elem = document.getElementById(elemId);
-
-            if(elem) {
-                elem.style["display"] = "inherit";
-            }
-        };
-
-        var renderInsert = function() {
-            var node = utilities.makeDomNode(renderTemplate());
-            document.getElementById(parentId).appendChild(node);
-        };
-
-        return {
-            renderInsert: renderInsert,
-            hide: hide,
-            show: show
-        };
+    renderTemplate() {
+        return ejs.render(Template);
     };
-})(new EJS({url: 'js/template/headerbar.ejs'}), "header-bar",
-   "main-screen", Utilities);
+
+    hide() {
+        var elem = document.getElementById(elemId);
+
+        if(elem) {
+            elem.style["display"] = "none";
+        }
+    };
+
+    show() {
+        var elem = document.getElementById(elemId);
+
+        if(elem) {
+            elem.style["display"] = "inherit";
+        }
+    };
+
+    renderInsert() {
+        var node = Utilities.makeDomNode(renderTemplate());
+        document.getElementById(parentId).appendChild(node);
+    };
+}
+
+export default Headerbar;
