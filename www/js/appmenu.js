@@ -59,20 +59,6 @@ function disableMenuItem(){
 
     }
 }
-
-//
-//function cancelAll(){ 
-//        var keys = Object.keys(localStorage);
-//        i = keys.length;
-//
-//        while (i--) {
-//            var item = localStorage.getItem(keys[i]);
-//            if (item == "bug_dismissed" || item == "hog_dismissed") {
-//                cancel(keys[i]);
-//                localStorage.removeItem(keys[i]);
-//            }
-//        }
-//}
     
 function cancelBug(){ 
     var keys = Object.keys(localStorage);
