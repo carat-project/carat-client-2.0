@@ -127,7 +127,6 @@ function handleSetting(e) {
 }
 
 
-	sendFeedback();
-	appSettings();
-	appStatistics();
-	backToIndex();
+sendFeedback();
+appSettings();
+appStatistics();

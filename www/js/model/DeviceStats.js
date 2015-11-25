@@ -19,7 +19,6 @@ class DeviceStats {
     // create node and bind functions
     createNode(html) {
         var node = Utilities.makeDomNode(html);
-        makeElemPanSwipable(node);
 
         var cpuText = node.querySelector("#cpuProgressBar span");
         var cpuLoad = node.querySelector("#cpuProgressBar div");

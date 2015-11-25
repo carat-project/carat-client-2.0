@@ -3100,7 +3100,7 @@ function _classCallCheck(instance, Constructor) {
 var Template = "<div class=\"overlay\" id=\"popup-overlay\" style=\"visibility: hidden; display: flex;\">\r\n    <div class=\"modal\" id=\"popup-modal\" style=\"display: flex;\">\r\n        <div class=\"mdl-card mdl-shadow--2dp\">\r\n            <div class=\"carat-card__title gray-title\">\r\n                <div class=\"mdl-card__title-text gray-title\"><!-- Title --></div>\r\n                <div class=\"mdl-layout-spacer\"></div>\r\n                <button class=\"mdl-button mdl-js-button mdl-button--icon close\" data-upgraded=\",MaterialButton\">\r\n                    <i class=\"material-icons\"></i>\r\n                </button>\r\n            </div>\r\n            <div class=\"mdl-card__supporting-text dialog-text\"><!-- Text --></div>\r\n            <div class=\"mdl-card__actions dialog-buttons\">\r\n                <button class=\"mdl-button mdl-js-button mdl-js-ripple-effec close\">OK</button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
 
 /**
- * Dynamic popup dialog over the application view.
+ * Dynamic popup dialog displayed over the application.
  */
 
 var InformationDialog = (function () {
@@ -3130,8 +3130,7 @@ var InformationDialog = (function () {
 
 	/**
   * Shows a dialog window
-  * @param  {object} content contains
-  * dialog properties title and text.
+  * @param  {object(title, text)} content dialog title and text
   */
 
 	_createClass(InformationDialog, [{
@@ -3385,7 +3384,6 @@ var DeviceStats = (function () {
         key: "createNode",
         value: function createNode(html) {
             var node = _Utilities.Utilities.makeDomNode(html);
-            makeElemPanSwipable(node);
 
             var cpuText = node.querySelector("#cpuProgressBar span");
             var cpuLoad = node.querySelector("#cpuProgressBar div");
@@ -3460,6 +3458,11 @@ function _classCallCheck(instance, Constructor) {
 }
 
 var Template = "<div class=\"mdl-card sleeker smaller-time-text mdl-shadow--2dp\"\r\n     id=\"<%= id %>\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><img src=\"<%= icon %>\"></div>\r\n        <div class=\"mdl-card__title-text\">\r\n            <%= label %>\r\n            <div class=\"expand\">\r\n                <button class=\"expand-button\">\r\n                    <i class=\"material-icons\r\n                              md-light\r\n                              normal-icon\">\r\n                        &#xE5CF;\r\n                    </i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"carat-card-time\">\r\n            <%= benefit %>\r\n            <span class=\"benefit-error\">\r\n                <%= benefitError %>\r\n            </span>\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"collapse\" id=\"card-<%= id %>-textpand\">\r\n            <div><%= \"Version: \" + version %></div>\r\n            <div><%= \"Samples: \" + samples %></div>\r\n            <div><%= \"Found in \" + popularity + \"% of devices.\" %></div>\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <span>\r\n            <button class=\"action-button\"\r\n               id=\"<%= closeId %>\"\r\n               <% if(!killable) { %>\r\n               disabled\r\n               <% } %>>\r\n                Close app\r\n            </button>\r\n        </span>\r\n        <span>\r\n            <button class=\"action-button\"\r\n               id=\"<%= uninstallId %>\"\r\n               <% if(!uninstallable) { %>\r\n               disabled\r\n               <% } %>>\r\n                Uninstall\r\n            </button>\r\n        </span>\r\n    </div>\r\n</div>\r\n";
+
+/**
+* @class HogBug
+* @summary Hog/bug cards with actions.
+*/
 
 var HogBug = (function () {
     function HogBug(data) {
