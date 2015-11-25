@@ -1,0 +1,34 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [
+            "./www/js/view",
+            "./www/js/model",
+            "./www/js/helper",
+            "./www/js/components"],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "docs|bundled.js",
+        "exclude": [
+            "lib"
+        ]
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks:": true,
+        "monospaceLinks": true,
+        "navType": "vertical",
+        "systemName": "Carat 2.0",
+        "inverseNav": true,
+        "footer": "Created by Carat 2.0 Superteam",
+        "copyright": "2015",
+        "linenums": true,
+        "collapseSymbols": true
+    },
+    "opts": {
+        "encoding": "utf8",
+        "destination": "www/doc",
+        "recurse": true
+    }
+}

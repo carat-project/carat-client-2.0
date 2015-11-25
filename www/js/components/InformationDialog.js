@@ -5,7 +5,7 @@ const fs = require("fs");
 var Template = fs.readFileSync(__dirname + "/../template/informationDialog.ejs", "utf-8");
 
 /**
- * Dynamic popup dialog over the application view.
+ * Dynamic popup dialog displayed over the application.
  */
 class InformationDialog {
 	constructor(){
@@ -28,8 +28,7 @@ class InformationDialog {
 
 	/**
 	 * Shows a dialog window
-	 * @param  {object} content contains
-	 * dialog properties title and text.
+	 * @param  {object(title, text)} content dialog title and text
 	 */
 	show(content){
 		this.title.innerHTML = content.title;

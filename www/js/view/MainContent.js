@@ -4,6 +4,10 @@ const fs = require("fs");
 
 var Template = fs.readFileSync(__dirname + "/../template/mainContent.ejs", "utf-8");
 
+ /**
+ * @class MainContent
+ * @summary Content view
+ */
 class MainContent {
     constructor(){
         this.parentId = "main-screen";

@@ -3667,6 +3667,11 @@ function _classCallCheck(instance, Constructor) {
 
 var Template = "<div class=\"mdl-card mdl-shadow--2dp\" id=\"summary-0\">\r\n    <div class=\"carat-card__title\" id=\"summary\">\r\n        <div class=\"mdl-card__title-text carat_summaryCard_title_text\">\r\n            Summary\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text carat-card__supporting-text\">\r\n        <div class=\"ScoreAndBattery\">\r\n            <div class=\"carat-Jscore-text\"></div>\r\n            <div class=\"carat-battery-text\"></div>\r\n            <div class=\"circleContainer\">\r\n                <div class=\"outerCircle\">\r\n                    <div class=\"innerCircle\">\r\n                        <div class=\"numberCircle\">\r\n                            <button class=\"info\"></button>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\" id=\"bugTitleAndCount\">\r\n            <%= bugsCount %>\r\n        </div>\r\n        <div id=\"bugSummaryGrid\" class=\"carat_hide\">\r\n            <div class=\"carat_summary_grid\" id=\"bugsGrid\">\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\" id=\"hogTitleAndCount\">\r\n             <%= hogsCount %>\r\n        </div>\r\n        <div id=\"hogSummaryGrid\" class=\"carat_show\">\r\n            <div class=\"carat_summary_grid\" id=\"hogsGrid\">\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\">\r\n             0 System notifications\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__actions carat-card__actions\">\r\n        <a class=\"mdl-card__more\" id=\"summary-button\" role=\"button\" onclick=\"showOrHideActions()\" href=\"#\">\r\n           More\r\n        </a>\r\n    </div>\r\n</div>\r\n";
 
+/**
+* @class SummaryContainer
+* @summary Summary card
+*/
+
 var SummaryContainer = (function () {
     function SummaryContainer(bugs, hogs) {
         _classCallCheck(this, SummaryContainer);
@@ -3954,6 +3959,11 @@ function _classCallCheck(instance, Constructor) {
 
 var Template = "<header class=\"mdl-layout__header mdl-color--blue-grey-500\"\r\n        id=\"header-bar\">\r\n    <img class=\"mdl-layout-icon\" src=\"img/icon.png\"></img>\r\n    <div class=\"mdl-layout__header-row mdl-layout-title\"\r\n         style=\"float:left; left:0px; top:2px;\">\r\n        <!-- Title -->\r\n        <span>Carat 2.0</span>\r\n        <span id=\"progress\"></span>\r\n        <span id=\"state\"></span>\r\n\r\n        <div class=\"mdl-layout-spacer\"></div>\r\n        <button class=\"mdl-button mdl-js-button mdl-button--icon\"\r\n                id=\"menu\" onclick=\"listenMenu();\">\r\n            <i class=\"material-icons\">more_vert</i>\r\n        </button>\r\n        <ul class=\"mdl-menu mdl-js-menu mdl-menu--bottom-right\"\r\n            for=\"menu\">\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenBugCards\"\r\n                disabled=\"true\">Show hidden bugs</li>\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenHogCards\"\r\n                disabled=\"true\">Show hidden hogs</li>\r\n            <li class=\"mdl-menu__item\" id=\"sendFeedback\">\r\n                Send Feedback\r\n            </li>\r\n            <li class=\"mdl-menu__item\" id=\"changeUuid\">Change UUID</li>\r\n            <li class=\"mdl-menu__item\" id=\"appSettings\">Settings</li>\r\n        </ul>\r\n\r\n    </div>\r\n\r\n    <!-- Tabs -->\r\n    <div class=\"mdl-layout__tab-bar mdl-color--blue-grey-500\">\r\n        <a href=\"#home\" class=\"mdl-layout__tab is-active\" id=\"home-tab\">\r\n            Home\r\n        </a>\r\n        <a href=\"#bugs\" class=\"mdl-layout__tab\" id=\"bugs-tab\">Bugs</a>\r\n        <a href=\"#hogs\" class=\"mdl-layout__tab\" id=\"hogs-tab\">Hogs</a>\r\n        <a href=\"#system\" class=\"mdl-layout__tab\" id=\"system-tab\">\r\n            Stats\r\n        </a>\r\n    </div>\r\n</header>\r\n";
 
+/**
+* @class Headerbar
+* @summary Navigation bar.
+*/
+
 var Headerbar = (function () {
     function Headerbar() {
         _classCallCheck(this, Headerbar);
@@ -4036,6 +4046,11 @@ function _classCallCheck(instance, Constructor) {
 }
 
 var Template = "<div class=\"page-content\">\r\n    <% if(hogBugsArray && hogBugsArray.running && hogBugsArray.running.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                Running:&nbsp; <%= hogBugsArray.running.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.runningId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n    <% if(hogBugsArray && hogBugsArray.inactive && hogBugsArray.inactive.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                Inactive:&nbsp; <%= hogBugsArray.inactive.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.inactiveId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n    <% if(hogBugsArray && hogBugsArray.system && hogBugsArray.system.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                System:&nbsp;<%= hogBugsArray.system.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.systemId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n</div>\r\n";
+
+/**
+* @class HogBugCards
+* @summary List view for hog/bug cards.
+*/
 
 var HogBugCards = (function () {
     function HogBugCards(dataSource, outputElemId) {
@@ -4320,6 +4335,11 @@ function _classCallCheck(instance, Constructor) {
 
 var Template = "<main class=\"mdl-layout__content\">\r\n    <!-- Home view -->\r\n    <section class=\"mdl-layout__tab-panel is-active\" id=\"home\">\r\n\r\n        <!-- Pie card -->\r\n        <div class=\"page-content\">\r\n            <div class=\"mdl-card mdl-shadow--2dp\">\r\n                <div class=\"carat-caratCard__title\">\r\n                    <div class=\"mdl-card__title-text\r\n                                carat_caratCard_title_text\">\r\n                        Global Statistics\r\n                    </div>\r\n                </div>\r\n                <div class=\"carat-card__supporting-text\">\r\n                    <div class=\"canvas-container\">\r\n                        <canvas width=\"350\" height=\"250\"\r\n                                id=\"chart\"></canvas>\r\n                    </div>\r\n                    <ul id=\"chart-legend\"></ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n    </section>\r\n\r\n    <!-- Bugs tabs view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"bugs\">\r\n        <div class=\"page-content mdl-grid\">\r\n        </div>\r\n    </section>\r\n\r\n    <!-- Hogs tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"hogs\">\r\n        <div class=\"page-content mdl-grid\">\r\n        </div>\r\n\r\n        <!-- System tab view -->\r\n    </section>\r\n    <section class=\"mdl-layout__tab-panel\" id=\"system\">\r\n        <div class=\"page-content\">\r\n        </div>\r\n    </section>\r\n</main>\r\n";
 
+/**
+* @class MainContent
+* @summary Content view
+*/
+
 var MainContent = (function () {
     function MainContent() {
         _classCallCheck(this, MainContent);
@@ -4381,6 +4401,11 @@ function _classCallCheck(instance, Constructor) {
         throw new TypeError("Cannot call a class as a function");
     }
 }
+
+/**
+* @class StatsCards
+* @summary Handles device information.
+*/
 
 var StatsCards = (function () {
     function StatsCards() {

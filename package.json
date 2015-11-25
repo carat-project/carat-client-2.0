@@ -7,7 +7,8 @@
   "scripts": {
     "watch": "watchify www/js/view/masterview.js -o www/js/bundled.js -v",
     "browserify": "browserify www/js/view/masterview.js -t babelify --outfile www/js/bundled.js",
-    "build": "npm run browserify"
+    "build": "npm run browserify",
+    "docs": "jsdoc --readme README.md -c conf.json "
   },
   "dependencies": {
     "jasmine-core": ">=2.3.4",

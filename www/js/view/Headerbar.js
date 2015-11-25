@@ -4,6 +4,10 @@ const fs = require("fs");
 
 var Template = fs.readFileSync(__dirname + "/../template/headerbar.ejs", "utf-8");
 
+ /**
+ * @class Headerbar
+ * @summary Navigation bar.
+ */
 class Headerbar {
     constructor(){
         this.elemId = "header-bar";

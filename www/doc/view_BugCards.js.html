@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MasterView</title>
+    <title>JSDoc: Source: view/BugCards.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,127 +17,34 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MasterView</h1>
+    <h1 class="page-title">Source: view/BugCards.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>MasterView</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var HogBugCards = require("./HogBugCards.js").HogBugCards;
 
-<article>
-    <div class="container-overview">
-    
-        
+/**
+ * @class BugCards
+ * @extends HogBugCards
+ * @param {} bugsSource A callback that is used for fetching
+ the bugs from the server.
+ * @summary Specializes HogBugCards for bugs specifically.
+ */
+module.exports.BugCards = function(bugsSource) {
 
-    
-
-    <h4 class="name" id="MasterView"><span class="type-signature"></span>new MasterView<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-    <p class="summary">Class that wraps up all other views.</p>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="view_MasterView.js.html">view/MasterView.js</a>, <a href="view_MasterView.js.html#line8">line 8</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    if(!bugsSource) {
+        bugsSource = window.carat.getBugs;
+    }
+    return new HogBugCards(bugsSource, "bugs", makeElemPanSwipable);
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MasterView</title>
+    <title>JSDoc: Source: view/Headerbar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,127 +17,60 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MasterView</h1>
+    <h1 class="page-title">Source: view/Headerbar.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>MasterView</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ejs from "ejs";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
 
-<article>
-    <div class="container-overview">
-    
-        
+var Template = fs.readFileSync(__dirname + "/../template/headerbar.ejs", "utf-8");
 
-    
+ /**
+ * @class Headerbar
+ * @summary Navigation bar.
+ */
+class Headerbar {
+    constructor(){
+        this.elemId = "header-bar";
+        this.parentId = "main-screen";
+    }
 
-    <h4 class="name" id="MasterView"><span class="type-signature"></span>new MasterView<span class="signature">()</span><span class="type-signature"></span></h4>
+    renderTemplate() {
+        return ejs.render(Template);
+    };
 
-    
-    <p class="summary">Class that wraps up all other views.</p>
-    
+    hide() {
+        var elem = document.getElementById(elemId);
 
+        if(elem) {
+            elem.style["display"] = "none";
+        }
+    };
 
+    show() {
+        var elem = document.getElementById(elemId);
 
+        if(elem) {
+            elem.style["display"] = "inherit";
+        }
+    };
 
+    renderInsert() {
+        var node = Utilities.makeDomNode(renderTemplate());
+        document.getElementById(parentId).appendChild(node);
+    };
+}
 
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="view_MasterView.js.html">view/MasterView.js</a>, <a href="view_MasterView.js.html#line8">line 8</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+export default Headerbar;</code></pre>
+        </article>
+    </section>
 
 
 
