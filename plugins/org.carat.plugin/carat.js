@@ -56,5 +56,8 @@ module.exports = {
     },
     showNotification: function(title, message, callback){
         exec(callback, callback, service, "notify", [title, message]);
+    },
+    changeStatusbarColor: function(color, callback) {
+        exec(callback, callback, service, "color", [color]);
     }
 };

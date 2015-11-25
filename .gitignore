@@ -43,6 +43,8 @@ plugins/org.carat.plugin/manifest.mf
 *.tmPreferences.cache
 *.stTheme.cache
 sftp-config.json
+.eslintrc
+.idea/
 
 # Other
 npm_modules/
@@ -54,3 +56,4 @@ npm_modules/
 ehthumbs.db
 Thumbs.db
 Error.log
+notes.txt

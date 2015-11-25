@@ -1,0 +1,44 @@
+<div class="mdl-card mdl-shadow--2dp" id="summary-0">
+    <div class="carat-card__title" id="summary">
+        <div class="mdl-card__title-text carat_summaryCard_title_text">
+            Summary
+        </div>
+    </div>
+    <div class="mdl-card__supporting-text carat-card__supporting-text">
+        <div class="ScoreAndBattery">
+            <div class="carat-Jscore-text"></div>
+            <div class="carat-battery-text"></div>
+            <div class="circleContainer">
+                <div class="outerCircle">
+                    <div class="innerCircle">
+                        <div class="numberCircle">
+                            <button class="info"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carat_summaryCard_group_title" id="bugTitleAndCount">
+            <%= bugsCount %>
+        </div>
+        <div id="bugSummaryGrid" class="carat_hide">
+            <div class="carat_summary_grid" id="bugsGrid">
+            </div>
+        </div>
+        <div class="carat_summaryCard_group_title" id="hogTitleAndCount">
+             <%= hogsCount %>
+        </div>
+        <div id="hogSummaryGrid" class="carat_show">
+            <div class="carat_summary_grid" id="hogsGrid">
+            </div>
+        </div>
+        <div class="carat_summaryCard_group_title">
+             0 System notifications
+        </div>
+    </div>
+    <div class="mdl-card__actions carat-card__actions">
+        <a class="mdl-card__more" id="summary-button" role="button" onclick="showOrHideActions()" href="#">
+           More
+        </a>
+    </div>
+</div>

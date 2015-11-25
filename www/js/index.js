@@ -29,7 +29,7 @@ var app = {
     bindEvents: function() {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
-        document.addEventListener("renderfinished", this.refreshCpuUsage, false);
+        document.addEventListener("renderfinished", this.refreshSystemData, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -86,7 +86,7 @@ var app = {
                     carat.showToast("Press back again to exit");
                     backPressed = true;
                     setTimeout(function(){
-                        backPressed = false
+                        backPressed = false;
                     }, 4000);
                 }
             }
@@ -114,6 +114,8 @@ var app = {
     // Load objects asynchronously with callbacks
     onDataReady: function(){
         console.log("Requesting data from plugin");
+        var masterView = new MasterView();
+        masterView.render();
 
         // Start of the callback chain
         var displayData = function(){
@@ -124,7 +126,6 @@ var app = {
         var displayHogs = function(hogs){
             console.log("Received Data: hogs");
             // Pass hogs to controller
-            itemCards.generateHogs(hogs, carat.killApp, carat.uninstallApp);
 
             carat.getBugs(function(bugs) {
                 return displayBugsAndSummary(bugs, hogs);
@@ -137,7 +138,6 @@ var app = {
             console.log("Received Data: bugs");
 
             // Pass bugs to controller
-            itemCards.generateBugs(bugs, carat.killApp, carat.uninstallApp);
             itemCards.generateSummary(hogs, bugs);
             itemCards.generateCards(bugs, hogs, carat.killApp, carat.uninstallApp);
 
@@ -155,7 +155,7 @@ var app = {
                         var usedMemory = Math.round((meminfo.total - meminfo.available) / 1000);
                         var totalMemory = Math.round(meminfo.total / 1000);
                         var percentage = Math.floor((usedMemory/totalMemory)*100);
-                        var duration = main
+                        var duration = main;
 
                         var deviceInfo = {
                             batteryLife: main.batteryLife,
@@ -166,16 +166,16 @@ var app = {
                             memoryTotal: totalMemory + " MiB"
                         };
 
-                        itemCards.generateStatistics(main, deviceInfo);
                         itemCards.generateSummaryStatistics(main, deviceInfo);
 
 
                         // Remove progress indicator
                         document.getElementById("progress").innerHTML = "";
+
                         console.log("Finished rendering");
                         cordova.fireDocumentEvent("renderfinished");
                     });
-            }
+            };
 
             // Get uuid for deviceInfo
             carat.getUuid(function(uuid){
@@ -207,7 +207,7 @@ var app = {
     },
 
     // Set an interval for refreshing cpu usage
-    refreshCpuUsage: function() {
+    refreshSystemData: function() {
 
         var cpuText = document.querySelector("#cpuProgressBar > span");
         var cpuLoad = document.querySelector("#cpuProgressBar > div");

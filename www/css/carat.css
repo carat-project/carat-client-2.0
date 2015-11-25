@@ -741,22 +741,22 @@ _:-ms-input-placeholder, :root .carat-graph {
 }
 
 section.mdl-layout__tab-panel div.page-content {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .mdl-card.sleeker {
     z-index: 2;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    margin-left: 0px;
-    margin-right: 0px;
-    width: 100%;
-    overflow:hidden; 
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+    overflow: hidden; 
 }
 
 .restored {
-/*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
+    /*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
     background-color: rgb(255,255,255);
 }
 
@@ -773,32 +773,32 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker .mdl-card__title-text {
-  font-size: 20px;
-  font-weight: light;
-  color: #616161;
+    font-size: 20px;
+    font-weight: light;
+    color: #616161;
     display: block;
     padding-left: 60px;
 }
 
 .mdl-card.sleeker div div span.button {
-  padding: 8px 12px;
-  font-size: 14px;
-  background: #ccc;
-  display: block:
-  width: 200px;
-  border-radius: 3px;
-  cursor: pointer;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #ccc;
+    display: block:
+    width: 200px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .mdl-card.sleeker div a.mdl-card__more {
-  width: 2px;
-  height: 10px;
-  float: left;
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 0px;
-  margin-right: 20px;
-  display: inline;
+    width: 2px;
+    height: 10px;
+    float: left;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0px;
+    margin-right: 20px;
+    display: inline;
 }
 
 .mdl-card.sleeker div .mdl-card__actions {
@@ -807,25 +807,25 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker .carat-card-time {
-	color: #bf360c;
-	font-size: 16px;
+    color: #bf360c;
+    font-size: 16px;
     display: block;
     text-align: left;
     padding-left: 60px;
     
 }
-	
+
 .mdl-card.sleeker .icon {
-  height: 42px;
-  width: 42px;
-  float: left;
-  margin: 0 15px 0 0;
-  background: url("apple.png") top left no-repeat;
+    height: 42px;
+    width: 42px;
+    float: left;
+    margin: 0 15px 0 0;
+    background: url("apple.png") top left no-repeat;
 }
 
 .mdl-card.sleeker div.mdl-card__icon img {
     width: 40px;
-    height 40px;
+    height: 40px;
     position: absolute;
     left: 15px;
     top: 16px;
@@ -838,15 +838,6 @@ section.mdl-layout__tab-panel div.page-content {
 
 #home .mdl-card.sleeker .mdl-card__supporting-text .collapse.in {
     padding-bottom: 0px;
-}
-
-#home .mdl-card.sleeker {
-    z-index: 2;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: 8px;
-    margin-right: 8px;
-    width: calc(100% - 16px);
 }
 
 #home .mdl-card.sleeker p {
@@ -867,17 +858,17 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 #bugs .bar {
-  background-color: #eeeeee;
+    background-color: #eeeeee;
     margin-top: 10px;
     margin-bottom: 0px;
     margin-right: 10px;
     margin-left: 15px;
-	color: #757575;
-	
+    color: #757575;
+    
 }
 
 #bugs .bar .button{
-		float: right;
+    float: right;
 }
 
 #home .mdl-card__supporting-text {
@@ -895,19 +886,19 @@ section.mdl-layout__tab-panel div.page-content {
     display: inline-block;
 }
 .carat-caratCard__title-text {
-  font-size: 20px;
-  font-weight: light;
-  color: #616161;
+    font-size: 20px;
+    font-weight: light;
+    color: #616161;
     display: block;
     padding-left: 0px;
 }
 
 #home .carat-card__supporting-text {
-  color: rgba(0,0,0, 0.54);
-  font-size: 13px;
-  line-height: normal;
-  overflow: hidden;
-  width: calc(100% - 30px); }
+    color: rgba(0,0,0, 0.54);
+    font-size: 13px;
+    line-height: normal;
+    overflow: hidden;
+    width: calc(100% - 30px); }
 
 #system .mdl-card__supporting-text {
     padding: 15px 15px;
@@ -941,17 +932,17 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 [data-icon]:before {
-  font-family: icons; /* BYO icon font, mapped smartly */
-  content: attr(data-icon);
-  speak: none; /* Not to be trusted, but hey. */
+    font-family: icons; /* BYO icon font, mapped smartly */
+    content: attr(data-icon);
+    speak: none; /* Not to be trusted, but hey. */
 }
 
 .show-on-expand {
-/*    display: none;*/
-/*
+    /*    display: none;*/
+    /*
     -webkit-transition:opacity 0.15s ease-in-out;
     transition:opacity 0.15s ease-in-out;
-*/
+   */
 }
 
 .is-a-hog {
@@ -960,11 +951,11 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-menu__container, .mdl-menu__outline {
-        -webkit-backface-visibility: hidden;
-        -moz-backface-visibility: hidden;
-        -ms-backface-visibility: hidden;
-        -o-backface-visibility: hidden;
-        backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .sleeker > .mdl-card--border {
@@ -983,6 +974,7 @@ section.mdl-layout__tab-panel div.page-content {
 .carat-module {
     padding-top: 16px;
     padding-bottom: 4px;
+    width: auto;
 }
 
 .carat-module-title {
@@ -1002,11 +994,11 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .ScoreAndBattery .carat-Jscore-text {
-/*
+    /*
     padding-right: 30%;
     padding-bottom: 20px;
     padding-top: 32px;
-*/
+   */
     
     padding-right: 0;
     padding-bottom: 0;
@@ -1035,13 +1027,13 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .chartLegend {
-	-moz-border-radius:7px 7px 7px 7px;
-	border-radius:7px 7px 7px 7px;
-	margin-right:4px;
-	width:15px;
-	height:15px;
-	float:right;
-	display:inline-block;
+    -moz-border-radius:7px 7px 7px 7px;
+    border-radius:7px 7px 7px 7px;
+    margin-right:4px;
+    width:15px;
+    height:15px;
+    float:right;
+    display:inline-block;
 }
 
 .mdl-card.sleeker.system {
@@ -1071,7 +1063,7 @@ section.mdl-layout__tab-panel div.page-content {
     text-align: center;
     color: dimgray;
     background-color: darkgray;
-    height 40px;
+    height: 40px;
     position: absolute;
     left: 15px;
     top: 15px;
@@ -1099,5 +1091,3 @@ section.mdl-layout__tab-panel div.page-content {
 .no-reports .mdl-card__supporting-text > div {
     padding-top: 15px;
 }
-
-

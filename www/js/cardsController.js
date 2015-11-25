@@ -1021,13 +1021,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //receive hogs server data; create and add corresponding cards
     var generateHogs = function(hogsSource, appCloseCallback, appUninstallCallback) {
-        generatePage("#hogs", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
+        generatePage("#system", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
     };
 
     //make summary card (and for the time being other cards in home tab)
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
-        generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
+        //generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
         //calls summaryCard.js and opens summary entries grid
 //        showOrHideActions();
     };
