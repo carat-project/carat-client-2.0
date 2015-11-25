@@ -11,6 +11,14 @@ class SummaryContainer {
         this.bugEntries = this.makeModels(bugs);
         this.hogEntries = this.makeModels(hogs);
         this.node = this.createNode();
+
+        var jscoreButton = this.node.querySelector(".info");
+        jscoreButton.addEventListener("click", function(){
+            app.showDialog({
+                title: "What is a J-Score?",
+                text: fs.readFileSync(__dirname + "/../template/strings/jscoreInfo.ejs")
+            });
+        });
     }
 
     /**

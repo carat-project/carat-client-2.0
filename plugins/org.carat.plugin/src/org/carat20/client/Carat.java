@@ -73,7 +73,7 @@ public class Carat extends CordovaPlugin {
         Log.v("Carat", "Plugin is initializing");
         super.initialize(cordova, webView);
         Carat.activity = cordova.getActivity();
-        int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
+        String color = preferences.getString("StatusBarBackgroundColor", "#000000");
         DeviceLibrary.changeStatusbarColor(color, activity);
         // ...
     }
@@ -117,6 +117,7 @@ public class Carat extends CordovaPlugin {
                     case REMOVE:    removeApp(cb, args);        break;
                     case TOAST:     showToast(cb, args);        break;
                     case NOTIFY:    notification(cb, args);     break;
+                    case COLOR:     setStatusColor(cb, args);   break;
                         
                     // Polling
                     case CPUPOLL:   pollCPU(cb ,args);          break;
@@ -379,13 +380,13 @@ public class Carat extends CordovaPlugin {
             display.getSize(size);
             final int offset = (int)(size.y*0.05);
             activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
-                        toast.show();
-                        cb.success();
-                    }
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
+                    toast.show();
+                    cb.success();
+                }
             });
         } catch (JSONException e){
             Log.v("Carat", "Failed to show toast, no message");
@@ -402,6 +403,23 @@ public class Carat extends CordovaPlugin {
             cb.success();
         } catch (JSONException e){
             Log.v("Carat", "Failed to show notification. Invalid parameters.");
+            cb.error("Failure");
+        }
+    }
+    
+    // Change statusbar color on versions 5+
+    private void setStatusColor(final CallbackContext cb, JSONArray args){
+        try {
+            final String color = args.getString(0);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    deviceLibrary.changeStatusbarColor(color);
+                    cb.success();
+                }
+            });
+        } catch (JSONException e){
+            Log.v("Carat", "Invalid color specified");
             cb.error("Failure");
         }
     }

@@ -3,6 +3,7 @@ import HogBugCards from "./HogBugCards.js";
 import StatsCards from "./StatsCards.js";
 import Headerbar from "./Headerbar.js";
 import MainContent from "./MainContent.js";
+import InformationDialog from "../components/InformationDialog.js";
 
  /**
  * @class MasterView
@@ -24,6 +25,10 @@ class MasterView {
         this.statsView = new StatsCards();
         this.bugsView = new HogBugCards(carat.getHogs, "bugs");
         this.hogsView = new HogBugCards(carat.getBugs, "hogs");
+
+        // Make dialog globally accessible via app namespace
+        var dialog = new InformationDialog();
+        app.showDialog = dialog.show.bind(dialog);
 
         this.bugsFetcherAsync = this.bugsFetcherAsync.bind(this);
         this.hogsFetcherAsync = this.hogsFetcherAsync.bind(this);
