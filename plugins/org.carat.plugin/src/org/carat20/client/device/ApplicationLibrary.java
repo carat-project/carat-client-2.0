@@ -10,11 +10,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import java.util.Arrays;
+import org.carat20.client.utility.TypeUtilities;
 
 /**
  * Provides application information and performs tasks. 
@@ -74,6 +77,43 @@ public class ApplicationLibrary {
             return "";
         }
     }
+    
+    /**
+     * Returns application icon as a bitmap.
+     * @param packageName Application package name
+     * @param context Context
+     * @return Icon as a bitmap
+     */
+    public static Bitmap getApplicationIcon(String packageName, Context context){
+        try{
+            Drawable d = context.getPackageManager().getApplicationIcon(packageName);
+            return TypeUtilities.getBitmap(d);
+        } catch (PackageManager.NameNotFoundException e){
+            return null;
+        }
+    }
+    
+    public Bitmap getApplicationIcon(String packageName){
+        return ApplicationLibrary.getApplicationIcon(packageName, context);
+    }
+    
+    /**
+     * Return a human-readable application label from package name.
+     * @param packageName Fixed package name
+     * @return Application label if found, otherwise package name.
+     * Null package names are returned with <i>Unknown</i> as label.
+     */
+    public String getApplicationLabel(String packageName){
+        if(packageName == null) return "Unknown";
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+            if(info !=null){
+                return pm.getApplicationLabel(info).toString();
+            } else return packageName; 
+        } catch(NameNotFoundException e){
+            return packageName;
+        }
+    }
 
     /**
      * @param packageName Package name.
@@ -81,11 +121,14 @@ public class ApplicationLibrary {
      */
     public boolean isAppInstalled(String packageName) {
         try {
+            // This throws an exception if package is not found
             pm.getPackageInfo(packageName, 0);
+            
+            // Consider disabled apps uninstalled
+            return getAppInfo(packageName).enabled;
         } catch (NameNotFoundException e) {
             return false;
         }
-        return true;
     }
 
     /**
@@ -95,6 +138,7 @@ public class ApplicationLibrary {
     public boolean isAppRunning(String packageName) {
         for (RunningAppProcessInfo pid : am.getRunningAppProcesses()) {
             // Process can have multiple packages
+            // Todo: Check process importance
             if (Arrays.asList(pid.pkgList).contains(packageName)) {
                 return true;
             }
@@ -107,11 +151,7 @@ public class ApplicationLibrary {
      * @return True if application can be uninstalled.
      */
     public boolean isAppRemovable(String packageName) {
-        ApplicationInfo appInfo = getAppInfo(packageName);
-        if (appInfo == null) {
-            return false;
-        }
-        return !isSystem(appInfo);
+        return !isAppSystem(packageName);
     }
 
     /**
@@ -128,9 +168,23 @@ public class ApplicationLibrary {
         }
         
         // Allow killing system apps for now
-        return !(//isSystem(appInfo)  || 
+        return !(//isSystemSigned(packageName)  || 
                 isPersistent(appInfo) || 
                 isIgnored(appInfo));
+    }
+    
+    /**
+     * Checks if package is signed and flagged as a system app.
+     * @param packageName Application package name
+     * @return True if application belongs to system 
+     */
+    public boolean isAppSystem(String packageName){
+        if(packageName == null) return false;
+        ApplicationInfo info = getAppInfo(packageName);
+        if(info != null){
+            return (isSystemSigned(packageName) && isPreloaded(info));
+        }
+        return false;
     }
 
     /**
@@ -158,6 +212,7 @@ public class ApplicationLibrary {
      * This is used to avoid excessive permissions.
      *
      * @param packageName Application package name.
+     * @return True when details were be opened
      */
     public boolean openAppDetails(String packageName) {
         Intent intent = new Intent();
@@ -189,19 +244,32 @@ public class ApplicationLibrary {
         }
         return true;
     }
-
-    // Detect system applications
-    private boolean isSystem(ApplicationInfo app) {
-        return (app.flags & ApplicationInfo.FLAG_SYSTEM) != 0
-                || (app.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
+    
+    // Detects system applications
+    private boolean isPreloaded(ApplicationInfo app) {
+        return ((app.flags & (ApplicationInfo.FLAG_SYSTEM 
+                | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
+    }
+    
+    // Compares application and system signatures
+    private boolean isSystemSigned(String packageName){
+        try {
+            PackageInfo pi = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+            PackageInfo sys = pm.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            if(pi==null || sys == null) return false;
+            return (sys.signatures[0].equals(pi.signatures[0]));
+        } catch (NameNotFoundException ex) {
+            Log.v("Carat", "No package info found for "+packageName, ex);
+            return false;
+        }
     }
 
-    // Detect applications that are running at all times
+    // Detects applications that are running at all times
     private boolean isPersistent(ApplicationInfo info) {
         return (info.flags & ApplicationInfo.FLAG_PERSISTENT) != 0;
     }
 
-    // Detect blacklisted applications
+    // Detects blacklisted applications
     private boolean isIgnored(ApplicationInfo info) {
         // ...
         return false;

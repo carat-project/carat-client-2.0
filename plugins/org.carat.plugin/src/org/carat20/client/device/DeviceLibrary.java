@@ -1,9 +1,11 @@
 package org.carat20.client.device;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,14 +14,17 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.provider.Settings.SettingNotFoundException;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import org.carat20.client.storage.DataStorage;
+import org.carat20.client.utility.TypeUtilities;
 
 /**
  * Provides device information and statistics.
@@ -31,23 +36,24 @@ public class DeviceLibrary {
     private static Intent intent;
     private static TelephonyManager telManager;
     private static Location lastKnownLocation;
-    
+    private static Activity activity;
+
     private static final int EVDO_B = 12;
     private static final int LTE = 13;
     private static final int EHRPD = 14;
     private static final int HSPAP = 15;
-    
-    
-    
-    public DeviceLibrary(Context context, Intent intent){
-                 context.getSystemService(Context.TELEPHONY_SERVICE);
 
+
+
+    public DeviceLibrary(Context context, Intent intent, Activity activity){
+                 context.getSystemService(Context.TELEPHONY_SERVICE);
         lastKnownLocation = null;
         DeviceLibrary.context = context;
         DeviceLibrary.intent = intent;
+        DeviceLibrary.activity = activity;
         telManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
-    
+
     /**
      * @return Device manufacturer.
      */
@@ -82,7 +88,7 @@ public class DeviceLibrary {
     public static String getBrand() {
         return android.os.Build.BRAND;
     }
-    
+
     public HashMap<String, Object> getDeviceInfo(){
         return new HashMap<String, Object>() {{
             put("batteryTemperature", getBatteryTemperature());
@@ -98,14 +104,14 @@ public class DeviceLibrary {
             put("distanceTraveled", (int) getDistanceTraveled());
         }};
     }
-    
+
     /**
      * @return Battery temperature
      */
     public int getBatteryTemperature() {
         return intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10;
     }
-    
+
     /**
      * @return Battery health
      */
@@ -120,16 +126,16 @@ public class DeviceLibrary {
             default: return "unknown";
         }
     }
-    
+
     /**
-     * @return WiFi signal strength 
+     * @return WiFi signal strength
      */
     public int getWifiSignalStrength() {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo myWifiInfo = wifiManager.getConnectionInfo();
         return myWifiInfo.getRssi();
     }
-   
+
     /**
      * @return WiFi status
      */
@@ -144,7 +150,7 @@ public class DeviceLibrary {
             default: return "unknown";
         }
     }
-    
+
     /**
      * Get general network type, like mobile or wifi.
      * @return Network type
@@ -156,7 +162,7 @@ public class DeviceLibrary {
         if (i == null) return "unknown";
         return i.getTypeName().toLowerCase();
     }
-    
+
     /**
      * Get specific mobile network type
      * @return Mobile network type
@@ -182,7 +188,7 @@ public class DeviceLibrary {
             default: return Integer.toString(netType);
         }
     }
-    
+
     /**
      * @return Mobile data activity
      */
@@ -208,7 +214,7 @@ public class DeviceLibrary {
             default: return "suspended";
 	}
     }
-    
+
     /**
      * @return Screen brightness
      */
@@ -223,18 +229,18 @@ public class DeviceLibrary {
         }
         return screenBrightnessValue;
     }
-    
+
     /**
      * @return Distance between current location and last snapshot
      */
     public double getDistanceTraveled(){
         Location location;
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        
+
         Criteria low = new Criteria();
         low.setAccuracy(Criteria.ACCURACY_COARSE);
         low.setPowerRequirement(Criteria.POWER_LOW);
-        
+
         double distance = 0.0;
         String provider = lm.getBestProvider(low, true);
         if(provider != null && !provider.equals("gps")){
@@ -246,7 +252,7 @@ public class DeviceLibrary {
         }
         return distance;
     }
-    
+
     /**
      * Show a local notification.
      * @param title Title
@@ -254,22 +260,22 @@ public class DeviceLibrary {
      */
     public static void showNotification(String title, String content) {
         Log.v("Carat", "Showing notification");
-        
+
         // Get application launch intent
         String mainPackage = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(mainPackage);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
-        
+
         // Build the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
                 .setSmallIcon(context.getApplicationInfo().icon) // This needs to be transparent
-                .setLargeIcon(DataStorage.getApplicationIcon(mainPackage, context))
+                .setLargeIcon(ApplicationLibrary.getApplicationIcon(mainPackage, context))
                 .setContentTitle(title)
                 .setContentText(content);
         notification.setContentIntent(pIntent);
         notification.setAutoCancel(true);
-        
+
         // Show the notification
         NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         nManager.notify(1, notification.build());
@@ -280,24 +286,28 @@ public class DeviceLibrary {
      *
      * @return HashMap containing memory statistics.
      */
-    public static HashMap<String, Integer> getMemoryInfo() {
-        Log.v("Carat", "Reading memory info");
-        HashMap<String, Integer> result = new HashMap<String, Integer>();
+    public static MemoryStats getMemoryStats() {
+        //Log.v("Carat", "Reading memory info");
         RandomAccessFile reader;
         try {
             reader = new RandomAccessFile("/proc/meminfo", "r");
             int[][] data = readLines(reader, 7, 2, "\\s+");
-            result.put("total", data[0][1]);
-            result.put("free", data[1][1]);
-            result.put("cached", data[3][1]);
-            result.put("active", data[5][1]);
-            result.put("inactive", data[6][1]);
             reader.close();
-            return result;
+            return new MemoryStats(data);
         } catch (IOException e) {
             Log.v("Carat", "Failed to read meminfo", e);
         }
         return null;
+    }
+
+    /**
+     * Get memory usage percentage
+     * @return Memory usage percentage
+     */
+    public static float getMemoryUsage(){
+        MemoryStats mem = getMemoryStats();
+        float memP = 100*(mem.used/mem.total);
+        return (memP > 0)? memP : 0;
     }
 
     /**
@@ -306,7 +316,7 @@ public class DeviceLibrary {
      * @return CPU usage percentage
      */
     public static float getCpuUsage(int interval) {
-        Log.v("Carat", "Reading cpu usage");
+        //Log.v("Carat", "Reading cpu usage");
         try {
             RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
             int[] data = readLines(reader, 1, 10, "\\s+")[0];
@@ -318,12 +328,12 @@ public class DeviceLibrary {
             }
             data = readLines(reader, 1, 10, "\\s+")[0];
             CPUStats cpu2 = new CPUStats(data); //Snapshot 2
-            
+
             float totaldiff = cpu2.total - cpu1.total;
             if(totaldiff == 0) return 100; // Avoid diving by zero
-            float idlediff = cpu2.idleAll - cpu1.idleAll; 
+            float idlediff = cpu2.idleAll - cpu1.idleAll;
             float cpuP = 100*(totaldiff - idlediff)/totaldiff;
-            
+
             // Disregard negative values
             return (cpuP > 0)? cpuP : 0;
         } catch (IOException e) {
@@ -331,7 +341,44 @@ public class DeviceLibrary {
             return 0;
         }
     }
-    
+
+    /**
+     * @return True if network is available
+     */
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        NetworkInfo i = cm.getActiveNetworkInfo();
+        return i != null && i.isConnected();
+    }
+
+    /**
+     * Changes statusbar color on Android 5+ devices.
+     * @param colorString Color string, e.g. #F0F0F0
+     * @param activity Application activity
+     * @return True if action is supported
+     */
+    public static boolean changeStatusbarColor(String colorString, Activity activity){
+        int color = Color.parseColor(colorString);
+        Window window = activity.getWindow();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+            return true;
+        }
+        return false;
+   }
+
+    /**
+     * Non-static version of changeStatusbarColor
+     * @param color Color value as integer
+     * @return True if action is supported
+     */
+    public boolean changeStatusbarColor(String color){
+        return DeviceLibrary.changeStatusbarColor(color, activity);
+    }
+
     // Helper method for reading /stat/proc or meminfo
     private static int[][] readLines(RandomAccessFile reader, int maxRows, int maxColumns, String delim) throws IOException {
         int[][] result = new int[maxRows+1][maxColumns+1];
@@ -340,7 +387,7 @@ public class DeviceLibrary {
             if (line == null) break; // EOF
             String[] tokens = line.split(delim);
             for (int column = 0; column < maxColumns; column++) {
-                if(maxColumns < tokens.length && isInteger(tokens[column])){
+                if(maxColumns < tokens.length && TypeUtilities.isInteger(tokens[column])){
                     result[row][column] = Integer.parseInt(tokens[column]);
                 } else result[row][column] = 0; // Default to zero
             }
@@ -349,13 +396,4 @@ public class DeviceLibrary {
         return result;
     }
 
-    // Utility method
-    public static boolean isInteger(String self) {
-        try {
-            Integer.valueOf(self.trim());
-            return true;
-        } catch (NumberFormatException n) {
-            return false;
-        }
-    }
 }

@@ -1,9 +1,6 @@
 function showOrHideActions() {
     
     var button = document.querySelector("#summary-button");
-
-    console.log(button);
-    console.log(button.innerHTML);
     var bugs = document.querySelector("#bugTitleAndCount").innerHTML;
     var hogs = document.querySelector("#hogTitleAndCount").innerHTML;
     
@@ -13,7 +10,6 @@ function showOrHideActions() {
 
     // opens hogs and bugs
     if (button.innerHTML == "Less"){
-        console.log("less");
         hogGrid.className="carat_hide";
         bugGrid.className="carat_hide";
         button.innerHTML=("More");

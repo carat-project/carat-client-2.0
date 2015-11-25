@@ -100,29 +100,50 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         appendTextOrRemoveNode(mainTextNode, mainText);
     };
     
-    var injectJScoreText = function(cardDomNode, mainText) {
-
+    //tää pois ku summarykortti toimii
+//    var injectJScoreText = function(cardDomNode, mainText) {
+//
+//        if(!mainText) {
+//            return;
+//        }
+//
+//        var mainTextNode = cardDomNode
+//                .querySelector(".carat-Jscore-text");
+//
+//        appendTextOrRemoveNode(mainTextNode, mainText);
+//    };
+    
+        var injectBatteryText = function(cardDomNode, mainText) {
         if(!mainText) {
             return;
         }
 
-        var mainTextNode = cardDomNode
-                .querySelector(".carat-Jscore-text");
+            var mainTextNode = cardDomNode
+                .querySelector(".carat-battery-text");
+            appendTextOrRemoveNode(mainTextNode, mainText);
+            
+            var textElement = document.createElement("p");
+            mainTextNode.appendChild(textElement);
+            var text = "Active battery life";
+            appendTextOrRemoveNode(textElement, text);
+        }
 
-        appendTextOrRemoveNode(mainTextNode, mainText);
-    };
+            
+
+    
 
     //add additional text to a card, id is required for
     //the expand to work
     var injectSecondaryText = function(cardDomNode,
                                        secondaryText,
-                                       notificationId) {
+                                       notificationId, type) {
 
         var secondaryTextNode = cardDomNode
                 .querySelector(".collapse");
 
         var versionContainer = cardDomNode.querySelector("#version");
         var samplesContainer = cardDomNode.querySelector("#samples");
+        var popularityContainer = cardDomNode.querySelector("#popularity");
         var moreButton = cardDomNode
                 .querySelector(".mdl-card__more");
         var nodeId = "card-" + notificationId + "-textpand";
@@ -134,13 +155,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 trashANode(moreButton);
             }
         } else {
-            addNodeText(versionContainer, secondaryText.version);
-            addNodeText(samplesContainer, secondaryText.samples);
+            addNodeText(versionContainer, "Version: " + secondaryText.version);
+            addNodeText(samplesContainer, "Samples: " + secondaryText.samples)
+            if(type != "BUG") {
+                addNodeText(popularityContainer, "Found in " + secondaryText.popularity +"% of devices.");
+            }
             secondaryTextNode.id = nodeId;
             //            moreButton.href = "#" + nodeId;
         }
     };
 
+    // for collapsing div
     var injectMultiparagraphSecondaryText = function(cardDomNode,
                                                      secondaryTextParagraphs,
                                                      notificationId) {
@@ -163,7 +188,6 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                 var textNode = document.createTextNode(paragraph);
 
                 paragraphNode.appendChild(textNode);
-                console.log(paragraphNode);
 
                 secondaryTextNode.insertBefore(paragraphNode, secondaryTextNode.firstChild);
             }
@@ -171,7 +195,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             secondaryTextNode.id = nodeId;
         }
     };
-    
+
+        // in main text area, doesn't collapse
+    var injectMultiparagraphText = function(cardDomNode, TextParagraphs, notificationId) {
+        var TextNode = cardDomNode
+                .querySelector(".mdl-card__supporting-text");
+        var moreButton = cardDomNode
+                .querySelector(".mdl-card__more");
+        var nodeId = "card-" + notificationId + "-textpand";
+
+        for(var paragraphKey in TextParagraphs) {
+            var paragraph = TextParagraphs[paragraphKey];
+            var paragraphNode = document.createElement("div");
+            var textNode = document.createTextNode(paragraph);
+
+            paragraphNode.appendChild(textNode);
+            console.log(textNode);
+            console.log(textNode.firstChild);
+
+            TextNode.insertBefore(paragraphNode, TextNode.firstChild);
+        }
+
+        TextNode.id = nodeId;
+    };
+
     var injectParagraphSecondaryText = function(cardDomNode,
                                                      secondaryTextParagraph,
                                                      notificationId) {
@@ -187,9 +234,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             var paragraphNode = document.createElement("p");
             var textNode = document.createTextNode(secondaryTextParagraph);
             paragraphNode.appendChild(textNode);
-            console.log(paragraphNode);
 
-                secondaryTextNode.appendChild(paragraphNode);
+            secondaryTextNode.appendChild(paragraphNode);
             }
 
             secondaryTextNode.id = nodeId;
@@ -207,25 +253,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
 
-	  //adds a click event listener for element
-    //that directs user to right card using id
+    // Adds a click listener to summary items
+    // Relocates user to a corresponding card
     var linkifySummaryEntry = function(element, nameTag, type) {
+        // Only handle links to hog/bug tabs
+        if(type != "HOG" && type != "BUG") return;
 
-        var tab;
-
-        if(type === "BUG") {
-            tab = "bugs-tab";
-        } else if(type === "HOG") {
-            tab = "hogs-tab";
-        } else {
-            return;
-        }
-
+        // Get tab and element ids
+        var tabId = type.toLowerCase() + "s-tab";
         var elemId = notificationsArray.makeIdFromAppName(nameTag, type);
 
+        // Handles clicks on summary items
         element.addEventListener("click", function() {
-            document.getElementById(tab).click();
+            // Move to the correct tab and card
+            document.getElementById(tabId).click();
             window.location.hash = elemId;
+
+            // Get the div containing expandable content
+            var expandId = "card-"+elemId+"-textpand";
+            var expand = $("#"+expandId);
+
+            // Expand if not already expanded
+            if(!expand.hasClass("in")){
+                expand.addClass("in");
+            }
         });
     };
 
@@ -237,67 +288,69 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                                 packageName,
                                                 appCloseCallback,
                                                 appUninstallCallback,
-                                                appName) {
-
-        if(!hasCloseButton && !hasUninstallButton) {
-            return;
-        }
+                                                appName,
+                                                isSystem) {
 
         var buttonSpot = cardDomNode
                 .querySelector(".mdl-card__actions");
 
         buttonSpot.className = "mdl-card__actions mdl-card--border";
 
-        if(hasCloseButton) {
-            var closeButton = document.createElement("span");
-            var closeLink = document.createElement("a");
-            closeLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
-
-            closeLink.innerHTML = "Close app";
-            closeButton.appendChild(closeLink);
-
-            console.log(appCloseCallback);
-
-            closeButton.addEventListener("click",  function(ev) {
-                var button = ev.target;
-				console.log("rivi 262 errori", packageName);
-                appCloseCallback(packageName, function(state) {
-                    console.log("Killing app: " + state);
-                    if(state == "Success"){
-                        carat.showToast(appName+ " closed", function(state){
-                            trashANode(button);
-                        });
-                    } else {
-                        carat.showToast(appName + " couldn't be closed!", function(state){
-                            button.disabled = true;
-                        });
-                    }
-                });
+        // Todo: Use a template for action button
+        // Show a popup when i-button is clicked
+        var closeButton = document.createElement("button");
+        closeButton.className = "action-button";
+        if(!hasCloseButton) closeButton.disabled = true;
+        closeButton.innerHTML = "Close app";
+        closeButton.onclick = function(event){
+            var button = event.target;
+            appCloseCallback(packageName, function(state){
+                closeButton.disabled = true;
+                if(state == "Success") {
+                    carat.showToast(appName + " closed");
+                } else {
+                    carat.showToast(appName + " couldn't be closed!");
+                }
             });
+        };
 
-            buttonSpot.appendChild(closeButton);
-        }
-        if (hasUninstallButton) {
-            var uninstallButton = document.createElement("span");
-            var uninstallLink = document.createElement("a");
-            uninstallLink.className = "mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect";
-
-            uninstallLink.innerHTML = "Uninstall";
-            uninstallButton.appendChild(uninstallLink);
-
-            uninstallButton.addEventListener("click", function(ev){
-                appUninstallCallback(packageName, function(state) {
-                    console.log("Opening app details: " + state);
-
-                    // Setup this when we have dynamic onResume
-                    // cardDomNode.style.display = "none";
-                });
+        var uninstallButton = document.createElement("button");
+        uninstallButton.className = "action-button";
+        if(!hasUninstallButton) uninstallButton.disabled = true;
+        uninstallButton.innerHTML = "Uninstall";
+        uninstallButton.onclick = function(event){
+            var button = event.target;
+            appUninstallCallback(packageName, function(state){
+                console.log("Opened " + appName + " dialog");
             });
+        };
 
-            buttonSpot.appendChild(uninstallButton);
+        buttonSpot.appendChild(closeButton);
+        buttonSpot.appendChild(uninstallButton);
+
+        if(isSystem){
+            var systemInfo = document.createElement("div");
+            systemInfo.className = "action-info";
+            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+            "<div class='action-info-text'>System app</span>";
+            buttonSpot.appendChild(systemInfo);
         }
     };
     
+    var injectTypeInfo = function (cardDomNode, text) {
+            var iconFileName = "img/ic_info_black_24dp_1x.png"
+            if (text == "Bug" || text == "Hog"){
+                iconFileName = "img/"+text.toLowerCase() + "_icon.png";
+            }
+            var buttonSpot = cardDomNode
+                .querySelector(".mdl-card__actions");
+            var systemInfo = document.createElement("div");
+            systemInfo.className = "action-info";
+            systemInfo.innerHTML = "<img width='20px' height='20px' style='margin-right: 2px' src='"+iconFileName+"' />"+
+            "<div class='action-info-text'>" + text + "</span>";
+            buttonSpot.appendChild(systemInfo);
+    };
+
     var changePaddingForButton = function(cardDomNode) {
       cardDomNode.style.padding = "0px 10px 10px";  
     };
@@ -392,8 +445,11 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             countNode = summaryDomNode
                 .querySelector("#" + hog);
         }
-
+        if (count == 1) {
+            appendTextOrRemoveNode(countNode, count + " " + bugOrHog);
+        } else {
         appendTextOrRemoveNode(countNode, count + " " + bugOrHog+"s");
+        }
     };
 
     var injectJscore = function(statisticsDomNode,
@@ -443,6 +499,13 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
     
+    // reverse order compared to homebrewConcatChildren
+    var homebrewConcatChildrenReverse = function(spot, concatees) {            
+        for(var i = 0; i  < concatees.length; i++) {
+            spot.appendChild(concatees[i]);
+        }
+    };
+    
     //like homebrewConcatChildren with maximium number of concatees
     var homebrewConcatChildrenWithMaxNumber = function(spot,
                                                        firstChild,
@@ -479,22 +542,58 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         console.log(deviceInfo.osVersion);
 
         injectTitle(statisticsDomNode, "My Device");
-        injectJScoreText(statisticsDomNode,
-                                          "Your device is more energy efficient than " + statisticsObject.jscore +
-                            "% of other devices measured by Carat.");
-        injectJscore(statisticsDomNode, statisticsObject.jscore);
+//        injectJScoreText(statisticsDomNode,
+//                                          "Your device is more energy efficient than " + statisticsObject.jscore +
+//                            "% of other devices measured by Carat.");
+//        injectJscore(statisticsDomNode, statisticsObject.jscore);
         injectIdToCard(statisticsDomNode, statisticsCardId);
         var expandText = [
                           "Carat id: " + deviceInfo.caratId,
-                          "Memory used: " + deviceInfo.memoryUsed,
                           "Memory total: " + deviceInfo.memoryTotal,
                           "Battery duration: " + deviceInfo.batteryLife,
                           "Device model: " + deviceInfo.modelName,
                           "OS version: " + deviceInfo.osVersion,
                          ];
-        injectMultiparagraphSecondaryText(statisticsDomNode,
+        injectMultiparagraphText(statisticsDomNode,
                                           expandText,
                                           statisticsCardId);
+    };
+    
+    var makeNoRaportsCard = function(hogOrBugOrSystem) {
+        newCardNode = cardTemplates.getNewItemDomNodeTemplate(); 
+        var expandArrowToRemovedParent = newCardNode.querySelector(".mdl-card__title-text");
+        
+//         removes expand arrow from template, might be better to make own template in th future
+        expandArrowToRemovedParent.removeChild(expandArrowToRemovedParent.childNodes[0]);
+            
+        var NoRaportsCardId = "No_apps-" + hogOrBugOrSystem;
+        injectIdToCard(newCardNode, NoRaportsCardId);
+        newCardNode.classList.add("no-reports");
+        var title;
+        var node;
+        var expandText;
+                
+        if (hogOrBugOrSystem == "hog") {
+            title = "Congratulations! You have no Hogs.";
+            expandText = [
+                          "Please check back in a week.",
+                          "If your apps are behaving normally, there will be no hogs here.",
+                          "When an app starts to use more energy on your device than on others, it will show up here."
+                         ];
+            node = "#hogs";
+        } else if (hogOrBugOrSystem == "bug"){
+            title = "Congratulations! You have no Bugs.";
+            expandText = [
+                          "Please check back in a week.",
+                          "If your apps are behaving normally, there will be no bugs here.",
+                          "When an app starts to use significantly more energy on your device than on others, it will show up here."
+                         ];
+            node = "#bugs";
+        }   
+            
+        injectTitle(newCardNode, title);
+        injectMultiparagraphText(newCardNode, expandText, NoRaportsCardId); 
+        document.querySelector(node).appendChild(newCardNode);
     };
 
 	var makeCaratCard = function(caratDomNode,
@@ -517,7 +616,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 //        //summary title
 //        injectSummaryTitle(summaryDomNode,
 //                           summaryObject.title);
-
+        
         // all bugEntries
         var summaryEntryBugNodes = homebrewMap(
             summaryObject.bugEntries, makeSummaryEntry);
@@ -547,6 +646,17 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         }
     };
     
+    var injectSummaryStatistics = function(summaryStatisticsObject, deviceinfo) {
+                
+        var statsSpot = document.querySelector(".ScoreAndBattery");
+        injectJscore(statsSpot, summaryStatisticsObject.jscore);
+//        injectJScoreText(statsSpot,
+//                         "Your device is more energy efficient than " + summaryStatisticsObject.jscore +
+//                         "% of other devices measured by Carat.");
+        injectBatteryText(statsSpot, deviceinfo.batteryLife);
+            
+    };
+    
     //make either an item card (hog or bug) or summary card
     //from a model object that represents either one
     var makeCardBasedOnModel = function(notificationObject) {
@@ -569,9 +679,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -584,15 +695,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
 
             if(localStorage.getItem(itemData.id) === 'dismissed') {
                 newCardNode.style.display = 'none';
             }
+           
             
+        // bug suggestion card
         } else if (notificationObject.worstBug) {
             var itemData = notificationObject.worstBug;
-
+            
+            // suggested action text
+            var hintText;
+            if (itemData.buttons.removeButton && itemData.buttons.killButton) {   
+                hintText = "Close, Update or Uninstall";
+            } else if (itemData.buttons.removeButton) {   
+                hintText = "Update or Uninstall";
+            } else {
+                hintText = "Close";
+            }     
+            hintText += " - Unexpectedly heavy use of energy."
+            
+                        
             newCardNode = cardTemplates
                 .getNewWorstBugHogTemplate();
 
@@ -601,15 +727,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           "Update or Uninstall - Unexpectedly heavy use of energy.");
+                           hintText);
             injectParagraphSecondaryText(newCardNode,
                            itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -622,15 +749,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
+            injectTypeInfo(newCardNode, "Bug");
 
-            if(localStorage.getItem(itemData.id) === 'dismissed') {
+            if(localStorage.getItem(itemData.id) === 'dismissed' || itemData.isSystem==true) {
                 newCardNode.style.display = 'none';
             }
             
+        // hog suggestion card
         } else if (notificationObject.worstHog) {
             var itemData = notificationObject.worstHog;
 
+            // suggested action text
+            var hintText;
+            if (itemData.buttons.removeButton && itemData.buttons.killButton) {   
+                hintText = "Close, Update or Uninstall";
+            } else if (itemData.buttons.removeButton) {   
+                hintText = "Update or Uninstall";
+            } else {
+                hintText = "Close";
+            }     
+            hintText += " - Increased use of energy.";
+            
+            
             newCardNode = cardTemplates
                 .getNewWorstBugHogTemplate();
 
@@ -639,15 +781,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             injectTitle(newCardNode, itemData.title);
             injectIcon(newCardNode, itemData.icon);
             injectMainText(newCardNode,
-                           "Close or Uninstall - Increased use of energy.");
+                           hintText);
             injectParagraphSecondaryText(newCardNode,
                            itemData.textfield, itemData.id);
             injectSecondaryText(newCardNode,
                                 {
                                     samples: itemData.samples,
-                                    version: itemData.version
+                                    version: itemData.version,
+                                    popularity: itemData.popularity
                                 },
-                                itemData.id);
+                                itemData.id, itemData.type);
             injectClasses(newCardNode,
                           itemData.classes);
             injectTimeDrain(newCardNode,
@@ -660,9 +803,12 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                          itemData.packageName,
                                          itemData.appCloseCallback,
                                          itemData.appUninstallCallback,
-                                         itemData.title);
+                                         itemData.title,
+                                         itemData.isSystem);
+            injectTypeInfo(newCardNode, "Hog");
 
-            if(localStorage.getItem(itemData.id) === 'dismissed') {
+
+            if(localStorage.getItem(itemData.id) === 'dismissed' || itemData.isSystem==true) {
                 newCardNode.style.display = 'none';
             }
 
@@ -688,6 +834,8 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
             makeStatisticsCard(statisticsData,
                                notificationObject.deviceInfo, newCardNode);
+            
+            
         } else if(notificationObject.carat) {
 			
 			newCardNode = cardTemplates
@@ -700,8 +848,7 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         return newCardNode;
     };
 
-
-    //fetch correct models for the home tab and create corresponding cards
+    //fetch correct models for the home tab suggested actions and create corresponding cards
     //for them
     var getHomeCards = function(bugOrHogSource, bugOrHogSelector,
                                 appCloseCallback, appUninstallCallback) {
@@ -728,9 +875,9 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                   makeCardBasedOnModel);
         }
 
-        for (i=0; i<result.length-1; i++){
-            result[i].style.display="none";
-        }
+//        for (i=0; i<result.length-1; i++){
+//            result[i].style.display="none";
+//        }
         
         
         return result;
@@ -741,11 +888,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //to create cards from
     var getHogsCards = function(hogsSource,
                                 appCloseCallback, appUninstallCallback) {
-
+    
+        if (typeof hogsSource == 'undefined' || hogsSource == null || hogsSource.length <= 0) {
+            makeNoRaportsCard("hog");
+        }
+        
         return homebrewMap(notificationsArray
-                           .getHogs(hogsSource,
-                                    appCloseCallback, appUninstallCallback),
-                           makeCardBasedOnModel);
+                            .getHogs(hogsSource,
+                            appCloseCallback,
+                            appUninstallCallback),
+                            makeCardBasedOnModel);
     };
 
     //pass bugs source(data from server) to
@@ -753,14 +905,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //to create cards from
     var getBugsCards = function(bugsSource,
                                 appCloseCallback, appUninstallCallback) {
+        if (typeof bugsSource == "undefined" || bugsSource == null || bugsSource.length <= 0) {
+            makeNoRaportsCard("bug");
+        }
 
-        var result =  homebrewMap(notificationsArray
-                                  .getBugs(bugsSource,
-                                           appCloseCallback,
-                                           appUninstallCallback),
-                                  makeCardBasedOnModel);
-
-        return result;
+        return homebrewMap(notificationsArray
+                            .getBugs(bugsSource,
+                            appCloseCallback,
+                            appUninstallCallback),
+                            makeCardBasedOnModel);;
     };
 
     //fetch a model object for the system tab cards
@@ -779,6 +932,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                            makeCardBasedOnModel);
     };
 
+    // gets stats to summarycard from notifications.js
+    var getSummaryStatistics = function(mainDataSource, deviceInfo) {
+        var statisticsObject = notificationsArray
+                .getStatistics(mainDataSource);
+        statisticsObject.deviceInfo = deviceInfo;
+
+        //injects stats to summarycard
+        return injectSummaryStatistics(statisticsObject.statistics, statisticsObject.deviceInfo);
+    };
+    
     var getStatisticsCard = function(mainDataSource, deviceInfo) {
 
         var statisticsObject = notificationsArray
@@ -806,15 +969,19 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
     //in "nodeArray")
     var generatePage = function(selector, nodeArray) {
 
-        console.log("generatePage");
-        
         var rightSpot;
-        if(selector==='#suggestions' || selector==='#summary') {
+
+        //creates separately suggestions and summarycard
+        if(selector==='#suggestions') {
             rightSpot = document.querySelector(selector);
+            //reverse order to sort cards correctly
+            homebrewConcatChildrenReverse(rightSpot, nodeArray);
+       
+        } else if (selector==='#summary') {
+             rightSpot = document.querySelector(selector);
             homebrewConcatChildren(rightSpot,
                                        rightSpot.firstChild,
                                        nodeArray);
-            
         } else {
         rightSpot = selectCardsSpot(selector);
         }
@@ -836,13 +1003,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //generate home and system tab cards
     var generateCards = function(bugsSource, hogsSource, appCloseCallback, appUninstallCallback) {
+        // generates hog action suggestions
         if (typeof hogsSource !== 'undefined' && hogsSource.length>0) {
             generatePage("#suggestions", getHomeCards(hogsSource, "hog", appCloseCallback, appUninstallCallback));
         }
+        //generates bug action suggestions
         if (typeof bugsSource !== 'undefined' && bugsSource.length>0) {
             generatePage("#suggestions", getHomeCards(bugsSource, "bug", appCloseCallback, appUninstallCallback));
         }
-        generatePage("#system", getSystemCards());
+//        generatePage("#system", getSystemCards());
     };
 
     //receive bugs server data; create and add corresponding cards
@@ -852,21 +1021,30 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
 
     //receive hogs server data; create and add corresponding cards
     var generateHogs = function(hogsSource, appCloseCallback, appUninstallCallback) {
-        generatePage("#hogs", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
+        generatePage("#system", getHogsCards(hogsSource, appCloseCallback, appUninstallCallback));
     };
 
     //make summary card (and for the time being other cards in home tab)
     //based on server data
     var generateSummary = function(hogsSource, bugsSource) {
-        generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
+        //generatePage("#summary", getSummaryCard(hogsSource, bugsSource));
         //calls summaryCard.js and opens summary entries grid
-        showOrHideActions();
+//        showOrHideActions();
+    };
+    
+    var generateSummaryStatistics = function(mainDataSource, deviceInfo) {
+        getSummaryStatistics(mainDataSource, deviceInfo);
     };
 
     var generateStatistics = function(mainDataSource, deviceInfo) {
-        generatePage("#system", [getStatisticsCard(mainDataSource,
+       generatePage("#system", [getStatisticsCard(mainDataSource,
                                                  deviceInfo)]);
     };
+	
+	//var generateSystem = function(mainDataSource, deviceInfo) {
+//		generatePage("#system", [getStatisticsCard(mainDataSource,
+//                                                 deviceInfo)]);
+//	};
 
     //public methods of the module
     return {
@@ -874,7 +1052,10 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         generateBugs: generateBugs,
         generateHogs: generateHogs,
         generateSummary: generateSummary,
-        generateStatistics: generateStatistics
+        generateSummaryStatistics: generateSummaryStatistics,
+		generateStatistics: generateStatistics
+	//	generateSystem: generateSystem
+       
     };
 })(model.notifications, {panSwipefy: makeElemPanSwipable,
                          onlyTapify: makeElemTappable},

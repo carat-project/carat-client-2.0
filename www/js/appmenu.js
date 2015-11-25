@@ -59,20 +59,6 @@ function disableMenuItem(){
 
     }
 }
-
-//
-//function cancelAll(){ 
-//        var keys = Object.keys(localStorage);
-//        i = keys.length;
-//
-//        while (i--) {
-//            var item = localStorage.getItem(keys[i]);
-//            if (item == "bug_dismissed" || item == "hog_dismissed") {
-//                cancel(keys[i]);
-//                localStorage.removeItem(keys[i]);
-//            }
-//        }
-//}
     
 function cancelBug(){ 
     var keys = Object.keys(localStorage);
@@ -102,11 +88,13 @@ function cancelHog(){
 
 function sendFeedback(){
 
-    var li = document.querySelector("#sendFeedback");
+    //var li = document.querySelector("#sendFeedback");
+//
+//   	li.addEventListener('click', function () {
+//    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
+//		});
 
-   	li.addEventListener('click', function () {
-    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
-		});
+	moveToPage('sendFeedback', 'feedback.html');
 }
 
 //function appSettings(){
@@ -121,6 +109,9 @@ function appSettings(){
     moveToPage('appSettings', 'settings.html');
 }
 
+function appStatistics() {
+	moveToPage('appStatistics', 'statistics.html');	
+}
 
 function moveToPage(pagename, address){
     var li = document.querySelector("#"+pagename);
@@ -138,4 +129,5 @@ function handleSetting(e) {
 
 	sendFeedback();
 	appSettings();
+	appStatistics();
 	backToIndex();

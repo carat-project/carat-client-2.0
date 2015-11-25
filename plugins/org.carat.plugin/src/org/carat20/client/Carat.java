@@ -1,12 +1,10 @@
 package org.carat20.client;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.os.Build;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONArray;
@@ -14,10 +12,10 @@ import org.json.JSONException;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 import java.util.HashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
@@ -26,6 +24,7 @@ import org.carat20.client.device.ApplicationLibrary;
 import org.carat20.client.device.DeviceLibrary;
 
 import static org.carat20.client.Constants.*;
+import org.carat20.client.device.MemoryStats;
 import org.carat20.client.protocol.CommunicationManager;
 import org.carat20.client.storage.DataStorage;
 import org.carat20.client.storage.EVTree;
@@ -74,14 +73,8 @@ public class Carat extends CordovaPlugin {
         Log.v("Carat", "Plugin is initializing");
         super.initialize(cordova, webView);
         Carat.activity = cordova.getActivity();
-        Window window = activity.getWindow();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int color = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(color);
-        }
-        
+        String color = preferences.getString("StatusBarBackgroundColor", "#000000");
+        DeviceLibrary.changeStatusbarColor(color, activity);
         // ...
     }
 
@@ -99,32 +92,37 @@ public class Carat extends CordovaPlugin {
     public boolean execute(final String action, final JSONArray args, final CallbackContext cb) {
         Log.v("Carat", "Executing action: " + action);
         
-        // Use threading to avoid blocking rendering
+        // Avoid blocking uithread
         cordova.getThreadPool().execute(new Runnable(){
             @Override
             public void run() {
                 // Tasks
                 switch(ActionType.get(action)){
                     // Management
-                    case SETUP:     handleSetup(cb);        break;
-                    case CLEAR:     handleClear(cb);        break;
-                    case REFRESH:   handleRefresh(cb);      break;
-                    case UUID:      handleUuid(cb, args);   break;
+                    case SETUP:     setupPlugin(cb);            break;
+                    case CLEAR:     clearStorage(cb);           break;
+                    case REFRESH:   refreshStorages(cb);        break;
+                    case UUID:      handleUuid(cb, args);       break;
                     
                     // Data
-                    case JSCORE:    handleJscore(cb);       break;
-                    case MAIN:      handleMain(cb);         break;
-                    case HOGS:      handleHogs(cb);         break;
-                    case BUGS:      handleBugs(cb);         break;
-                    case MEMORY:    handleMemory(cb);       break;
-                    case SETTINGS:  handleSettings(cb);     break;
+                    case JSCORE:    getJscore(cb);              break;
+                    case MAIN:      getMainReports(cb);         break;
+                    case HOGS:      getHogs(cb);                break;
+                    case BUGS:      getBugs(cb);                break;
+                    case MEMORY:    getMemoryInfo(cb);          break;
+                    case SETTINGS:  getSettings(cb);            break;
                         
                     // Actions
-                    case KILL:      handleKill(cb, args);   break;
-                    case REMOVE:    handleRem(cb, args);    break;
-                    case CPU:       handleCPU(cb);          break;
-                    case TOAST:     handleToast(cb, args);  break;
-                    case NOTIFY:    handleNotify(cb, args); break;
+                    case KILL:      killApp(cb, args);          break;
+                    case REMOVE:    removeApp(cb, args);        break;
+                    case TOAST:     showToast(cb, args);        break;
+                    case NOTIFY:    notification(cb, args);     break;
+                    case COLOR:     setStatusColor(cb, args);   break;
+                        
+                    // Polling
+                    case CPUPOLL:   pollCPU(cb ,args);          break;
+                    case MEMPOLL:   pollMemory(cb ,args);       break;
+                        
                     default: cb.error("No such action");
                 }
             }
@@ -141,25 +139,25 @@ public class Carat extends CordovaPlugin {
         //...
     }
     
-    // Handle action
+    // Handle actions
     
     /**
      * Initializes application context and storage.
      * @param cb Callback for sending success.
      */
-    public void handleSetup(CallbackContext cb){
+    public void setupPlugin(CallbackContext cb){
         Log.v("Carat", "Setting up storage");
         activity = cordova.getActivity();
         context = activity.getApplicationContext();
         intent = activity.getIntent();
-        storage = new DataStorage(context);
         applicationLibrary = new ApplicationLibrary(activity);
-        deviceLibrary = new DeviceLibrary(context, intent);
+        storage = new DataStorage(context, applicationLibrary);
+        deviceLibrary = new DeviceLibrary(context, intent, activity);
         cb.success();
     }
     
     // Clear storage
-    private void handleClear(CallbackContext cb){
+    private void clearStorage(CallbackContext cb){
         Log.v("Carat", "Clearing storage");
         storage.clearData();
         if(storage.isEmpty()){
@@ -170,48 +168,36 @@ public class Carat extends CordovaPlugin {
     }
     
     // Refresh data in storages
-    private void handleRefresh(CallbackContext cb){
+    private void refreshStorages(CallbackContext cb){
         Log.v("Carat", "Refreshing data");
         uuid = storage.getUuid();
         
         // Use plugin.xml value if we have no uuid
         if(uuid == null || uuid.isEmpty()){  
             uuid = readConfig("uuid");
-            Log.v("Carat", "Using default uuid "+uuid);
             storage.writeUuid(uuid);
-        } else {
-            Log.v("Carat", "Using custom uuid "+uuid);
         }
         
+        Log.v("Carat", "Using uuid "+uuid);
         commManager = new CommunicationManager(storage, uuid);
         
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                // No data
-                if(storage.isEmpty()){
-                    Log.v("Carat", "Storage is empty, fetching reports..");
-                    commManager.refreshAllReports();
-                }
-                // Missing data
-                else if (!storage.isComplete()){
-                    Log.v("Carat", "Storage is incomplete, fetching missing reports..");
-                    if(storage.getMainReports() == null) commManager.refreshMainReports();
-                    if(storage.getHogReports() == null) commManager.refreshHogsBugs("hogs");
-                    if(storage.getBugReports() == null) commManager.refreshHogsBugs("bugs");
-                    if(storage.getBugReports() == null) commManager.refreshSettings();
-                } else {
-                    Log.v("Carat", "Storage is complete and ready to go");
-                }
-                // Send dataready event when storage is ready
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendEvent("dataready");
-                    }
-                });
-            }
-        });
+        // Reload data if storage isn't complete
+        if(!storage.isComplete() && deviceLibrary.isNetworkAvailable()) {
+            Log.v("Carat", "Storage is empty or incomplete, fetching reports..");
+            
+            // Fetch data from server
+            sendPluginResult(cb, "Updating system");
+            commManager.refreshMainReports();
+            sendPluginResult(cb, "Updating hogs");
+            commManager.refreshHogsBugs("Hog");
+            sendPluginResult(cb, "Updating bugs");
+            commManager.refreshHogsBugs("Bug");
+            sendPluginResult(cb, "Updating settings");
+            commManager.refreshSettings();
+        } 
+        
+        // Let webview know we're ready
+        cb.success("READY");
     }
     
     // Combined method for getting and setting uuid
@@ -222,14 +208,10 @@ public class Carat extends CordovaPlugin {
         } catch (JSONException e) {
             uuid = "";
         }
-        
-        // When no uuid is specified..
         if(uuid.equals("get")){
-            // .. use the one in storage..
+            // Fetch from storage
             uuid = storage.getUuid();
-            // .. and if there is no uuid stored..
             if(uuid == null || uuid.isEmpty()){
-                // .. return an empty string
                 cb.success("");
             }
         } else {
@@ -241,13 +223,13 @@ public class Carat extends CordovaPlugin {
     }
     
     // Jscore
-    private void handleJscore(CallbackContext cc){
+    private void getJscore(CallbackContext cc){
         int jscore = (int)(storage.getMainReports().getJScore() * 100);
         cc.success(jscore);
     }
     
     // Main reports
-    private void handleMain(CallbackContext cb){
+    private void getMainReports(CallbackContext cb){
         try{
             mainReports = storage.getMainReports();
             cb.success(convertToJSON(mainReports));
@@ -257,7 +239,7 @@ public class Carat extends CordovaPlugin {
     }
     
     // Hog reports
-    private void handleHogs(CallbackContext cb){
+    private void getHogs(CallbackContext cb){
         try{
             hogReports = storage.getHogReports();
             cb.success(convertToJSON(hogReports));
@@ -267,7 +249,7 @@ public class Carat extends CordovaPlugin {
     }
     
     // Bug reports
-    private void handleBugs(CallbackContext cb){
+    private void getBugs(CallbackContext cb){
         try{
             bugReports = storage.getBugReports();
             cb.success(convertToJSON(bugReports));
@@ -276,16 +258,20 @@ public class Carat extends CordovaPlugin {
         }
     }
     
-    
-    
-    private void handleSettings(CallbackContext cb){
+    // System setting suggestions
+    private void getSettings(CallbackContext cb){
         try {
             HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
-            if(deviceInfo == null) return;
+            if(deviceInfo == null){
+                cb.error(new JSONObject());
+                return;
+            }
             EVTree tree = storage.getSettingsTree();
-            if(tree == null) return;
+            if(tree == null){
+                cb.error(new JSONObject());
+                return;
+            }
             settingsReports = tree.getSuggestions(deviceInfo);
-            if(settingsReports == null) return;
             cb.success(convertToJSON(settingsReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert settings.", e);
@@ -293,22 +279,17 @@ public class Carat extends CordovaPlugin {
     }
     
     // Memory info
-    private void handleMemory(CallbackContext cb){
-        HashMap<String, Integer> memInfo = DeviceLibrary.getMemoryInfo();
-        if (memInfo == null) return;
+    private void getMemoryInfo(CallbackContext cb){
+        MemoryStats memStats = DeviceLibrary.getMemoryStats();
+        if (memStats == null) return;
         try{
-            int freeMem = memInfo.get("free");
-            int cachedMem = memInfo.get("cached");
-            
-            // MemoryInfo.availMem = MemFree + Cached 
-            int availMem = freeMem + cachedMem;
             JSONObject result = new JSONObject()
-                .put("total", memInfo.get("total"))
-                .put("available", availMem)
-                .put("free", freeMem)
-                .put("cached", cachedMem)
-                .put("active", memInfo.get("active"))
-                .put("inactive", memInfo.get("inactive"));
+                .put("total", memStats.total)
+                .put("available", memStats.available)
+                .put("free", memStats.free)
+                .put("cached", memStats.cached)
+                .put("active", memStats.active)
+                .put("inactive", memStats.inactive);
             cb.success(result);
         } catch(JSONException e){
             Log.v("Carat", "Failed to convert memory info", e);
@@ -316,7 +297,7 @@ public class Carat extends CordovaPlugin {
     }
     
     // Kill application
-    private void handleKill(CallbackContext cb, JSONArray args){
+    private void killApp(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
             if(applicationLibrary.killApp(packageName)){
@@ -331,7 +312,7 @@ public class Carat extends CordovaPlugin {
     }
     
     // Open application details to proceed with uninstalling
-    private void handleRem(CallbackContext cb, JSONArray args){
+    private void removeApp(CallbackContext cb, JSONArray args){
         try{
             String packageName = (String) args.get(0);
             if(applicationLibrary.openAppDetails(packageName)){
@@ -345,21 +326,53 @@ public class Carat extends CordovaPlugin {
         cb.success();
     }
     
-    // Get cpu usage while keeping callback
-    private void handleCPU(final CallbackContext cb){
-        cordova.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                String cpuUsage = String.format("%.1f", DeviceLibrary.getCpuUsage(1000));
-                PluginResult result = new PluginResult(PluginResult.Status.OK, cpuUsage);
-                result.setKeepCallback(true); // Keep sending results
-                cb.sendPluginResult(result);
-            }
-        });
+    // CPU usage polling
+    private void pollCPU(final CallbackContext cb, final JSONArray args){
+        Log.v("Carat", "Starting cpu polling");
+        try {
+            final int interval = (Integer) args.get(0);
+            final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            exec.schedule(new Runnable(){
+                @Override
+                public void run() {
+                    long time = System.currentTimeMillis();
+                    String cpuUsage = String.format("%.1f", DeviceLibrary.getCpuUsage(2000));
+                    sendPluginResult(cb, cpuUsage);
+                    
+                    // Consider elapsed processing time when scheduling next task
+                    long nextDelay = interval-(System.currentTimeMillis()-time);
+                    exec.schedule(this, (nextDelay < 0) ? 0 : nextDelay, TimeUnit.MILLISECONDS);
+                }
+            }, 0, TimeUnit.MILLISECONDS);
+        } catch (Exception e){
+            Log.v("Carat", "Failed polling cpu", e);
+        }
+    }
+    
+    // Memory usage polling
+    private void pollMemory(final CallbackContext cb, final JSONArray args){
+        Log.v("Carat", "Starting memory polling");
+        try {
+            final int interval = (Integer) args.get(0);
+            final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+            exec.schedule(new Runnable(){
+                @Override
+                public void run() {
+                    long time = System.currentTimeMillis();
+                    String memUsage = String.format("%.1f", DeviceLibrary.getMemoryUsage());
+                    sendPluginResult(cb, memUsage);
+                    
+                    long nextDelay = interval-(System.currentTimeMillis()-time);
+                    exec.schedule(this, (nextDelay < 0) ? 0 : nextDelay, TimeUnit.MILLISECONDS);
+                }
+            }, 0, TimeUnit.MILLISECONDS);
+        } catch (Exception e){
+            Log.v("Carat", "Failed polling memory", e);
+        }
     }
     
     // Show a toast message
-    private void handleToast(final CallbackContext cb, final JSONArray args){
+    private void showToast(final CallbackContext cb, final JSONArray args){
         try {
             final String message = (String) args.get(0);
             Display display = activity.getWindowManager().getDefaultDisplay();
@@ -367,13 +380,13 @@ public class Carat extends CordovaPlugin {
             display.getSize(size);
             final int offset = (int)(size.y*0.05);
             activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
-                        toast.show();
-                        cb.success();
-                    }
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, offset);
+                    toast.show();
+                    cb.success();
+                }
             });
         } catch (JSONException e){
             Log.v("Carat", "Failed to show toast, no message");
@@ -382,7 +395,7 @@ public class Carat extends CordovaPlugin {
     }
     
     // Show a local notification
-    private void handleNotify(CallbackContext cb, final JSONArray args){
+    private void notification(CallbackContext cb, final JSONArray args){
         try{
             String title = args.getString(0);
             String content = args.getString(1);
@@ -390,6 +403,23 @@ public class Carat extends CordovaPlugin {
             cb.success();
         } catch (JSONException e){
             Log.v("Carat", "Failed to show notification. Invalid parameters.");
+            cb.error("Failure");
+        }
+    }
+    
+    // Change statusbar color on versions 5+
+    private void setStatusColor(final CallbackContext cb, JSONArray args){
+        try {
+            final String color = args.getString(0);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    deviceLibrary.changeStatusbarColor(color);
+                    cb.success();
+                }
+            });
+        } catch (JSONException e){
+            Log.v("Carat", "Invalid color specified");
             cb.error("Failure");
         }
     }
@@ -419,17 +449,26 @@ public class Carat extends CordovaPlugin {
         );
     }
     
+    // Sends a plugin result while keeping callback open
+    private void sendPluginResult(CallbackContext cb, String value){
+        // Get usage and pass to webview
+        PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+        result.setKeepCallback(true); // Keep sending results
+        cb.sendPluginResult(result);
+    }
+    
     // Utility methods for converting data to JSON.
     
     /**
-     * Creates a JSON array for hog or bug reports.
-     * @param reports Hogs/bugs in a list.
+     * Converts hog/bug reports to a JSON array.
+     * @param reports List of hog/bug reports
      * @return JSONArray with reports as JSONObjects.
      * @throws org.json.JSONException
      */
     public JSONArray convertToJSON(SimpleHogBug[] reports) throws JSONException{
         Log.v("Carat", "Converting hog/bug reports to JSON");
         JSONArray results = new JSONArray();
+        if(reports == null) return results;
         for(SimpleHogBug s : reports){
             String packageName = s.getAppName();
             
@@ -437,31 +476,42 @@ public class Carat extends CordovaPlugin {
             if(!applicationLibrary.isAppInstalled(packageName) 
                     || s.getErrorRatio() > ERROR_LIMIT) continue;
             
+            int samples = s.getSamples();
+            int samplesWithout = s.getSamplesWithout();
+            double samplesPercentage = 100 *(samples / (double)(samples + samplesWithout));
+            String popularity = String.format("%.3f",  samplesPercentage);
+            
             JSONObject app = new JSONObject()
-                // Static
                 .put("type", s.getType())
                 .put("label", s.getAppLabel())
                 .put("name", packageName)
                 .put("benefit",s.getBenefitText())
                 .put("priority",s.getAppPriority())
-                .put("samples", s.getSamples())
-                .put("samplesWithout", s.getSamplesWithout())
-                .put("expected", s.getExpectedValue())
-                .put("expectedWithout", s.getExpectedValueWithout())
-                .put("icon", s.getAppIcon())
-
-                 // Dynamic
+                .put("samples", samples)
+                .put("samplesWithout", samplesWithout)
+                .put("popularity", popularity)
+                    
                 .put("version", applicationLibrary.getAppVersion(packageName))
                 .put("running", applicationLibrary.isAppRunning(packageName))
                 .put("killable", applicationLibrary.isAppKillable(packageName))
-                .put("removable", applicationLibrary.isAppRemovable(packageName));
+                .put("removable", applicationLibrary.isAppRemovable(packageName))
+                .put("system", applicationLibrary.isAppSystem(packageName))
+                    
+                .put("icon", s.getAppIcon());
             results.put(app);
         }
         return results;
     }
     
+    /**
+     * Converts system setting suggestions to a JSON array.
+     * @param settings List of setting suggestions
+     * @return JSONArray with suggestions as JSONObjects
+     * @throws JSONException 
+     */
     public JSONArray convertToJSON(SimpleSettings[] settings) throws JSONException {
         JSONArray results = new JSONArray();
+        if(settings == null) return results;
         for(SimpleSettings s : settings){
             //if(s.getErrorRatio() > ERROR_LIMIT) continue;
             
@@ -489,6 +539,7 @@ public class Carat extends CordovaPlugin {
      * @throws org.json.JSONException
      */
     public JSONObject convertToJSON(Reports r) throws JSONException{
+        if(r == null) return new JSONObject();
         final String batteryLife = this.getBatteryLife(r);
         
         Log.v("Converting main reports to JSON", r.toString());
@@ -529,12 +580,11 @@ public class Carat extends CordovaPlugin {
         int batteryMinutes = (int)(batteryLife / 60);
         
         int errorHours = 0;
-        int errorMinutes = 0;
         if(error > 7200){
             errorHours = (int)(error / 3600);
             error -= errorHours * 3600;
         }
-        errorMinutes = (int)(error / 60);
+        int errorMinutes = (int)(error / 60);
         return batteryHours + "h "+
                batteryMinutes+"m \u00B1 "+ 
                (errorHours > 0 ? errorHours + "h ": "") + 

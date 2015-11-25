@@ -1,0 +1,51 @@
+<div class="mdl-card sleeker smaller-time-text mdl-shadow--2dp"
+     id="<%= id %>">
+    <div class="carat-card__title">
+        <div class="mdl-card__icon"><img src="<%= icon %>"></div>
+        <div class="mdl-card__title-text">
+            <%= label %>
+            <div class="expand">
+                <button class="expand-button">
+                    <i class="material-icons
+                              md-light
+                              normal-icon">
+                        &#xE5CF;
+                    </i>
+                </button>
+            </div>
+        </div>
+        <div class="carat-card-time">
+            <%= benefit %>
+            <span class="benefit-error">
+                <%= benefitError %>
+            </span>
+        </div>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <div class="collapse" id="card-<%= id %>-textpand">
+            <div><%= "Version: " + version %></div>
+            <div><%= "Samples: " + samples %></div>
+            <div><%= "Found in " + popularity + "% of devices." %></div>
+        </div>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <span>
+            <button class="action-button"
+               id="<%= closeId %>"
+               <% if(!killable) { %>
+               disabled
+               <% } %>>
+                Close app
+            </button>
+        </span>
+        <span>
+            <button class="action-button"
+               id="<%= uninstallId %>"
+               <% if(!uninstallable) { %>
+               disabled
+               <% } %>>
+                Uninstall
+            </button>
+        </span>
+    </div>
+</div>

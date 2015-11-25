@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: view/HogBugCards.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: view/HogBugCards.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ejs from "ejs";
+import HogBug from "../model/HogBug.js";
+import {Utilities} from "../helper/Utilities.js";
+const fs = require("fs");
+
+var Template = fs.readFileSync(__dirname + "/../template/hogBugListing.ejs", "utf-8");
+
+ /**
+ * @class HogBugCards
+ * @summary List view for hog/bug cards.
+ */
+class HogBugCards {
+
+    constructor(dataSource, outputElemId){
+        this.dataSource = dataSource;
+        this.outputElemId = outputElemId;
+        this.docLocation = document.getElementById(outputElemId);
+        this.renderAsync = this.renderAsyncSource(dataSource);
+        this.cardLocIds = {
+            runningId: this.cardLocIdMaker("running"),
+            inactiveId: this.cardLocIdMaker("inactive"),
+            systemId: this.cardLocIdMaker("system")
+        };
+    }
+
+    cardLocIdMaker(locName) {
+        return Utilities.makeIdFromOtherId(this.outputElemId,locName);
+    };
+
+    renderTemplate(hogBugsArray) {
+
+        var templateData = {
+            cardLocIds: this.cardLocIds,
+            hogBugsArray: hogBugsArray
+        };
+        var html = ejs.render(Template, templateData);
+        var rendered = Utilities.makeDomNode(html);
+
+
+        var runningLoc = Utilities.findById(rendered, this.cardLocIds.runningId);
+        var inactiveLoc = Utilities.findById(rendered, this.cardLocIds.inactiveId);
+        var systemLoc = Utilities.findById(rendered, this.cardLocIds.systemId);
+
+        Utilities.appendChildAll(runningLoc, hogBugsArray.running);
+        Utilities.appendChildAll(inactiveLoc, hogBugsArray.inactive);
+        Utilities.appendChildAll(systemLoc, hogBugsArray.system);
+
+        return rendered;
+    };
+
+    makeModels(rawData) {
+
+        var result = {
+            running: [],
+            inactive: [],
+            system: []
+        };
+
+        for(var key in rawData) {
+            var model = new HogBug(rawData[key]);
+
+            if(model.getRunning()) {
+                result.running.push(model);
+            } else if(!model.getUninstallable()) {
+                result.system.push(model);
+            } else {
+                result.inactive.push(model);
+            }
+        }
+
+        return result;
+    };
+
+    renderModels(categories) {
+
+        var morphToHTML = function(model) {
+            return model.render();
+        };
+
+        return {
+            running: categories.running.map(morphToHTML),
+            inactive: categories.inactive.map(morphToHTML),
+            system: categories.system.map(morphToHTML)
+        };
+    };
+
+    renderAsyncSource(sourceCallback) {
+        let _this = this;
+        return function(onResultCallback) {
+            sourceCallback(function(data) {
+                var models = _this.makeModels(data);
+                var result = _this.renderTemplate(_this.renderModels(models));
+                if(onResultCallback) {
+                    onResultCallback(result);
+                }
+            });
+        };
+    };
+
+
+    /**
+     * @function
+     * @instance
+     * @param {} freshDataSource A callback which is used for
+     acquiring data from the server.
+     * @memberOf HogBugCards
+     */
+    setDataSource(freshDataSource) {
+        this.dataSource = freshDataSource;
+        this.renderAsync = this.renderAsyncSource(freshDataSource);
+    };
+
+    /**
+     * @function
+     * @instance
+     * @memberOf HogBugCards
+     * @summary Insert these cards as a part of the document.
+     */
+    renderInsert(){
+        let _this = this;
+        this.renderAsync(function(renderedTemplate) {
+            _this.docLocation.appendChild(renderedTemplate);
+        });
+    };
+}
+
+export default HogBugCards;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BugCards.html">BugCards</a></li><li><a href="Headerbar.html">Headerbar</a></li><li><a href="HogBug.html">HogBug</a></li><li><a href="HogBugCards.html">HogBugCards</a></li><li><a href="HogCards.html">HogCards</a></li><li><a href="HomeCards.html">HomeCards</a></li><li><a href="InformationDialog.html">InformationDialog</a></li><li><a href="MainContent.html">MainContent</a></li><li><a href="MasterView.html">MasterView</a></li><li><a href="StatsCards.html">StatsCards</a></li><li><a href="SummaryContainer.html">SummaryContainer</a></li><li><a href="SummaryEntry.html">SummaryEntry</a></li></ul><h3>Namespaces</h3><ul><li><a href="Utilities.html">Utilities</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Nov 25 2015 20:56:17 GMT+0200 (FLE Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

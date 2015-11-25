@@ -1,23 +1,64 @@
-	.overlay {
-  		position: absolute;
-  		top: 0;
-  		left: 0;
-        height: 100%;
-  		width: 100%;  
-  		z-index: 10;
-        overflow: hidden;
-  		background-color: rgba(0,0,0,0.5);
-  		visibility: hidden;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-	}
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+  height: 100%;
+	width: 100%;
+	z-index: 10;
+	background-color: rgba(0,0,0,0.5);
+	visibility: hidden;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
 
-	.modal {
-		width:90%;
-        max-height: 90%;
-        overflow: auto;
-		z-index: 20;
-		visibility: hidden;
-	}
+.dialog-text > div {
+  margin-bottom: 8px;
+}
+
+.dialog-text {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-y: scroll !important;
+  overflow-x: hidden;
+}
+
+.overlay img {
+  margin: 10px 0 10px 0;
+  max-width: 100%;
+}
+
+.modal {
+  margin-top: 0px;
+	width:95%;
+  max-height: 95%;
+  overflow: auto;
+	z-index: 20;
+}
+
+.mdl-card__actions.dialog-buttons {
+  padding: 10px 10px 15px 10px;
+  margin-top: 0px;
+  background-color: #F2F2F2;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.mdl-card__actions.dialog-buttons > button {
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+  color: #F7A71B;
+  vertical-align: middle;
+}
+
+.carat-card__title.gray-title {
+  vertical-align: middle;
+  margin-top: 0px;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #F2F2F2;
+}

@@ -1,3 +1,98 @@
+/* = TEMPORARY UPDATE STATUS = */
+
+#state {
+  float: right;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+/* = PROGRESS INDICATOR = */
+
+#progress {
+  float: right;
+  margin-left: 12px;
+  margin-bottom: 4px;
+}
+
+
+/* = HOG/BUG INTRO */
+
+.intro-container {
+  margin: 9px 16px 0px 15px;
+  padding-top: 7px;
+  padding-bottom: 5px;
+  height: 60px;
+}
+
+.intro-container img {
+  display: block;
+  margin-top: 1px;
+  padding: 4px 16px 5px 3px;
+  height: 45px;
+  width: 45px;
+}
+
+.intro-image {
+  text-align: center;
+  display: inline-block;
+  float: left;
+  height: 100%;
+}
+
+.intro-text {
+  text-align: left;
+  padding-top: 2px;
+  margin-right: 5px;
+  line-height: 103%;
+  overflow: hidden;
+  font-size: 14px;
+  color: rgb(139, 146, 155);
+}
+
+
+/* = ACTION BUTTON */
+
+.action-button {
+  margin-right: 6px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+  text-align: center;
+  text-transform: uppercase;
+/*  font-weight: bold;*/
+  font-size: 12px;
+  vertical-align: middle;
+  padding: 8px 14px 8px 14px;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B;
+/*  box-shadow: 1px 1px 0px #C0C0C0;*/
+}
+
+.action-info {
+  display: inline-block;
+  float: right;
+  text-transform: uppercase;
+  text-align: right;
+  padding-top: 8px;
+  padding-right: 10px;
+}
+
+.action-info-text {
+  color: rgb(177, 177, 177);
+  padding: 0px 0px 0px 3px;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.action-button:disabled {
+  background-color: #E0E0E0;
+  border-color: #E0E0E0;
+/*  box-shadow: 1px 1px 0px #B0B0B0;*/
+  color: #B0B0B0;
+}
 
 /* = BENEFIT ERROR = */
 
@@ -23,7 +118,7 @@
   vertical-align: middle;
   border: 2px solid #F7A71B;
   border-radius: 4px;
-  background-color: #F7A71B !important;
+  background-color: #F7A71B;
 }
 
 .rotated-icon {
@@ -66,14 +161,13 @@
   background-color: #66BB6A;
 }
 
-/* = PROGRESS INDICATOR = */
-
-#progress {
-  margin-left: 10px;
-  margin-bottom: 5px;
-}
-
 /* = JSCORE CIRCLE = */
+
+#home .circleContainer {
+  position: absolute;
+  right: 12%;
+  top: 15px;
+}
 
 .outerCircle {
   position: relative;
@@ -105,6 +199,13 @@
   vertical-align: middle;
 }
 
+#home .numberCircle {
+  position: absolute;
+  top: 24.5%;
+  text-align: center;
+  vertical-align: middle;
+}
+
 
 div.numberCircle > button {
     position: relative;
@@ -123,7 +224,7 @@ div.numberCircle > button {
 /* = OTHER = */
 
 .mdl-layout__header-row {
-  margin-left: -8px;
+  margin-left: -12px;
 }
 
 .mdl-layout-icon {
@@ -148,7 +249,7 @@ div.numberCircle > button {
   overflow: hidden;
     margin-left: 0px;
     margin-right: 0px;
-    margin-bottom: 0px;
+    margin-bottom: 3px;
     margin-top: 0px;
   z-index: 2;
   padding-left: 8px;
@@ -381,8 +482,9 @@ div.numberCircle > button {
 }
 
 p {
-      font-size: 16px;
-  line-height: normal;
+    font-size: 16px;
+    line-height: normal;
+    padding-bottom: 10px;
 }
 
 .circleContainer {
@@ -639,22 +741,22 @@ _:-ms-input-placeholder, :root .carat-graph {
 }
 
 section.mdl-layout__tab-panel div.page-content {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .mdl-card.sleeker {
     z-index: 2;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    margin-left: 0px;
-    margin-right: 0px;
-    width: 100%;
-    overflow:hidden; 
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+    overflow: hidden; 
 }
 
 .restored {
-/*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
+    /*      box-shadow: inset 0 0 20px rgba(180,180,180, 1);*/
     background-color: rgb(255,255,255);
 }
 
@@ -671,62 +773,62 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-card.sleeker .mdl-card__title-text {
-  font-size: 20px;
-  font-weight: light;
-  color: #616161;
+    font-size: 20px;
+    font-weight: light;
+    color: #616161;
     display: block;
     padding-left: 60px;
 }
 
 .mdl-card.sleeker div div span.button {
-  padding: 8px 12px;
-  font-size: 14px;
-  background: #ccc;
-  display: block:
-  width: 200px;
-  border-radius: 3px;
-  cursor: pointer;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: #ccc;
+    display: block:
+    width: 200px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .mdl-card.sleeker div a.mdl-card__more {
-  width: 2px;
-  height: 10px;
-  float: left;
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 0px;
-  margin-right: 20px;
-  display: inline;
+    width: 2px;
+    height: 10px;
+    float: left;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 0px;
+    margin-right: 20px;
+    display: inline;
 }
 
 .mdl-card.sleeker div .mdl-card__actions {
     width: inherit;
-    padding: 0px 5px;
+    padding: 0px 8px;
 }
 
 .mdl-card.sleeker .carat-card-time {
-	color: #bf360c;
-	font-size: 16px;
+    color: #bf360c;
+    font-size: 16px;
     display: block;
     text-align: left;
     padding-left: 60px;
     
 }
-	
+
 .mdl-card.sleeker .icon {
-  height: 42px;
-  width: 42px;
-  float: left;
-  margin: 0 15px 0 0;
-  background: url("apple.png") top left no-repeat;
+    height: 42px;
+    width: 42px;
+    float: left;
+    margin: 0 15px 0 0;
+    background: url("apple.png") top left no-repeat;
 }
 
 .mdl-card.sleeker div.mdl-card__icon img {
     width: 40px;
-    height 40px;
+    height: 40px;
     position: absolute;
     left: 15px;
-    top: 15px;
+    top: 16px;
 }
 
 #home .mdl-card.sleeker .mdl-card__supporting-text {
@@ -736,15 +838,6 @@ section.mdl-layout__tab-panel div.page-content {
 
 #home .mdl-card.sleeker .mdl-card__supporting-text .collapse.in {
     padding-bottom: 0px;
-}
-
-#home .mdl-card.sleeker {
-    z-index: 2;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: 8px;
-    margin-right: 8px;
-    width: calc(100% - 16px);
 }
 
 #home .mdl-card.sleeker p {
@@ -765,17 +858,17 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 #bugs .bar {
-  background-color: #eeeeee;
+    background-color: #eeeeee;
     margin-top: 10px;
     margin-bottom: 0px;
     margin-right: 10px;
     margin-left: 15px;
-	color: #757575;
-	
+    color: #757575;
+    
 }
 
 #bugs .bar .button{
-		float: right;
+    float: right;
 }
 
 #home .mdl-card__supporting-text {
@@ -793,19 +886,19 @@ section.mdl-layout__tab-panel div.page-content {
     display: inline-block;
 }
 .carat-caratCard__title-text {
-  font-size: 20px;
-  font-weight: light;
-  color: #616161;
+    font-size: 20px;
+    font-weight: light;
+    color: #616161;
     display: block;
     padding-left: 0px;
 }
 
 #home .carat-card__supporting-text {
-  color: rgba(0,0,0, 0.54);
-  font-size: 13px;
-  line-height: normal;
-  overflow: hidden;
-  width: calc(100% - 30px); }
+    color: rgba(0,0,0, 0.54);
+    font-size: 13px;
+    line-height: normal;
+    overflow: hidden;
+    width: calc(100% - 30px); }
 
 #system .mdl-card__supporting-text {
     padding: 15px 15px;
@@ -839,17 +932,17 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 [data-icon]:before {
-  font-family: icons; /* BYO icon font, mapped smartly */
-  content: attr(data-icon);
-  speak: none; /* Not to be trusted, but hey. */
+    font-family: icons; /* BYO icon font, mapped smartly */
+    content: attr(data-icon);
+    speak: none; /* Not to be trusted, but hey. */
 }
 
 .show-on-expand {
-/*    display: none;*/
-/*
+    /*    display: none;*/
+    /*
     -webkit-transition:opacity 0.15s ease-in-out;
     transition:opacity 0.15s ease-in-out;
-*/
+   */
 }
 
 .is-a-hog {
@@ -858,11 +951,11 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .mdl-menu__container, .mdl-menu__outline {
-        -webkit-backface-visibility: hidden;
-        -moz-backface-visibility: hidden;
-        -ms-backface-visibility: hidden;
-        -o-backface-visibility: hidden;
-        backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .sleeker > .mdl-card--border {
@@ -881,6 +974,7 @@ section.mdl-layout__tab-panel div.page-content {
 .carat-module {
     padding-top: 16px;
     padding-bottom: 4px;
+    width: auto;
 }
 
 .carat-module-title {
@@ -894,4 +988,106 @@ section.mdl-layout__tab-panel div.page-content {
 .worstBug, .worstHog {
 }
 
+.ScoreAndBattery {
+    margin-bottom: 25px;
+    margin-top: 8px;
+}
 
+.ScoreAndBattery .carat-Jscore-text {
+    /*
+    padding-right: 30%;
+    padding-bottom: 20px;
+    padding-top: 32px;
+   */
+    
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+}
+
+.carat-battery-text {
+    color: rgba(0,0,0, 0.54);
+    font-weight: 500;
+    font-size: 20px;
+    padding-top: 20px;
+    width: 60%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.carat-battery-text > p {
+    color: rgba(0,0,0, 0.54);
+    font-size: 16px;
+    text-align: center;
+}
+
+#card-statistics-jscore-textpand > div {
+    margin-bottom: 12px;
+}
+
+.chartLegend {
+    -moz-border-radius:7px 7px 7px 7px;
+    border-radius:7px 7px 7px 7px;
+    margin-right:4px;
+    width:15px;
+    height:15px;
+    float:right;
+    display:inline-block;
+}
+
+.mdl-card.sleeker.system {
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 16px);
+}
+
+.suggested-action {
+    color: #F7A71B;
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 6px;
+}
+
+#system .system .carat-card__title {
+    border-width: 0;
+    padding-top: 15px;
+}
+
+.system .mdl-card__icon {
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    color: dimgray;
+    background-color: darkgray;
+    height: 40px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+.system .mdl-card__icon .material-icons {
+    line-height: 40px;
+    vertical-align: middle;
+}
+
+
+.no-reports .mdl-card__title-text {
+    padding-top: 15px;
+    width: 100%;
+    color: #F7A71B;
+    font-weight: 600;
+}
+
+.no-reports .mdl-card__supporting-text {
+    padding-top: 0px;
+    padding-left: 15px;
+    padding-right: 20px;
+}
+
+.no-reports .mdl-card__supporting-text > div {
+    padding-top: 15px;
+}

@@ -1,0 +1,26 @@
+<div class="page-content">
+    <% if(hogBugsArray && hogBugsArray.running && hogBugsArray.running.length >= 1) { %>
+        <div class="carat-module">
+            <div class="carat-module-title">
+                Running:&nbsp; <%= hogBugsArray.running.length %>
+            </div>
+            <div class="carat-module-content" id="<%= cardLocIds.runningId %>"></div>
+        </div>
+    <% } %>
+    <% if(hogBugsArray && hogBugsArray.inactive && hogBugsArray.inactive.length >= 1) { %>
+        <div class="carat-module">
+            <div class="carat-module-title">
+                Inactive:&nbsp; <%= hogBugsArray.inactive.length %>
+            </div>
+            <div class="carat-module-content" id="<%= cardLocIds.inactiveId %>"></div>
+        </div>
+    <% } %>
+    <% if(hogBugsArray && hogBugsArray.system && hogBugsArray.system.length >= 1) { %>
+        <div class="carat-module">
+            <div class="carat-module-title">
+                System:&nbsp;<%= hogBugsArray.system.length %>
+            </div>
+            <div class="carat-module-content" id="<%= cardLocIds.systemId %>"></div>
+        </div>
+    <% } %>
+</div>

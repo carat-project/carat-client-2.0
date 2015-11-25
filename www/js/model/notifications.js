@@ -15,7 +15,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
         return {
             item: {
                 title: title,
@@ -34,7 +34,10 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
             }
         };
     };
@@ -44,7 +47,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
         return {
             worstBug: {
                 title: title,
@@ -63,7 +66,10 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
             }
         };
     };
@@ -73,7 +79,7 @@ model.notifications = (function() {
                                     timeDrain,
                                     timeDrainErrorString,
                                     killButton, removeButton,
-                                    id, appCloseCallback, appUninstallCallback, textfield) {
+                                    id, appCloseCallback, appUninstallCallback, textfield, system, popularity, type) {
         return {
             worstHog: {
                 title: title,
@@ -92,7 +98,10 @@ model.notifications = (function() {
                 id: id,
                 appCloseCallback: appCloseCallback,
                 appUninstallCallback: appUninstallCallback,
-                textfield: textfield
+                textfield: textfield,
+                isSystem: system,
+                popularity: popularity,
+                type: type
             }
         };
     };
@@ -134,6 +143,15 @@ model.notifications = (function() {
             }
         };
     };
+
+	var makeSystem = function(setting) {
+		
+		return {
+			system: {
+				 setting: setting
+			}
+		};
+	};
 
 	var makeCarat = function(chart) {
 		
@@ -223,20 +241,23 @@ model.notifications = (function() {
             if (elemType === "worstBug") {
 
                 result = makeWorstBug(label,
-                                           elem.icon,
-                                           elem.name,
-                                           elem.name,
-                                           "Version: " + elem.version,
-                                           "Samples: " + elem.samples,
-                                           styles,
-                                           times.timeDrainPart,
-                                           times.timeDrainErrorPart,
-                                           elem.killable && elem.running,
-                                           elem.removable,
-                                           makeIdFromAppName(elem.name, elemType),
-                                           appCloseCallback,
-                                           appUninstallCallback,
-                                           textfield);
+                                       elem.icon,
+                                       elem.name,
+                                       elem.name,
+                                       elem.version,
+                                       elem.samples,
+                                       styles,
+                                       times.timeDrainPart,
+                                       times.timeDrainErrorPart,
+                                       elem.killable && elem.running,
+                                       elem.removable,
+                                       makeIdFromAppName(elem.name, elemType),
+                                       appCloseCallback,
+                                       appUninstallCallback,
+                                       textfield,
+                                       elem.system,
+                                       elem.popularity,
+                                       elem.type);
                 
             } else if (elemType === "worstHog") {
 
@@ -244,8 +265,8 @@ model.notifications = (function() {
                                            elem.icon,
                                            elem.name,
                                            elem.name,
-                                           "Version: " + elem.version,
-                                           "Samples: " + elem.samples,
+                                           elem.version,
+                                           elem.samples,
                                            styles,
                                            times.timeDrainPart,
                                            times.timeDrainErrorPart,
@@ -254,15 +275,18 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
-                                           textfield);
+                                           textfield,
+                                           elem.system,
+                                           elem.popularity,
+                                           elem.type);
             }else {
         
             result =  makeNotification(label,
                                            elem.icon,
                                            elem.name,
                                            elem.name,
-                                           "Version: " + elem.version,
-                                           "Samples: " + elem.samples,
+                                           elem.version,
+                                           elem.samples,
                                            styles,
                                            times.timeDrainPart,
                                            times.timeDrainErrorPart,
@@ -271,7 +295,10 @@ model.notifications = (function() {
                                            makeIdFromAppName(elem.name, elemType),
                                            appCloseCallback,
                                            appUninstallCallback,
-                                           textfield);
+                                           textfield,
+                                           elem.system,
+                                           elem.popularity,
+                                           elem.type);
                 
             }
 

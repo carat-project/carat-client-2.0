@@ -29,6 +29,7 @@ cardTemplates = (function() {
                                 '<div class="collapse">'+
                                     '<div id="version"></div>' +
                                     '<div id="samples"></div>' +
+                                    '<div id="popularity"></div>' +
                                 '</div>'+
                             '</div>'+
                             '<div class="mdl-card__actions carat_card_actions"></div>'+
@@ -54,6 +55,7 @@ cardTemplates = (function() {
                 '<div class="collapse">' +
                 '<div id="version"></div>' +
                 '<div id="samples"></div>' +
+                '<div id="popularity"></div>' +
                 '</div></div><div class="mdl-card__actions carat_card_actions"></div></div>';
 
         var domNode = parseDomNode(htmlString);
@@ -83,6 +85,19 @@ cardTemplates = (function() {
 //                '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
 //                '<div class="expand"><i class="material-icons">&#xE5CE;</i></div></div></div>' +
                 '<div class="mdl-card__supporting-text carat-card__supporting-text">' +
+                '<div class="ScoreAndBattery">' + 
+                    '<div class="carat-Jscore-text"></div>'+
+                    '<div class="carat-battery-text"></div>'+
+                    '<div class="circleContainer">'+
+                        '<div class="outerCircle">'+
+                            '<div class="innerCircle">'+
+                                '<div class="numberCircle">'+
+                                    '<button class="info" onclick="JscoreInfo()"></button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>' + 
                 '<div class="carat_summaryCard_group_title" id ="bugTitleAndCount"></div>' +
                 '<div id="bugSummaryGrid" class="carat_hide">' +
                 '<div class="carat_summary_grid" id="bugsGrid"></div></div>' +
@@ -101,7 +116,7 @@ cardTemplates = (function() {
     var progressBar = function(barId, initialText) {
         return '<div id="'+barId+'" class="progressBar">'+
                     '<span>'+initialText+'</span>'+
-                    '<div></div>'
+                    '<div></div>'+
                 '</div>'
     }
 
@@ -111,24 +126,27 @@ cardTemplates = (function() {
         var htmlString = '<div class="mdl-card mdl-shadow--2dp">' +
                             '<div class="carat-card__title">' +
                                 '<div class="mdl-card__title-text carat_summaryCard_title_text">' +
-                                    '<div class="expand">' +
-                                        '<i class="material-icons">&#xE5CF;</i>'+
-                                    '</div>'+
+//                                    '<div class="expand">' +
+//                                        '<i class="material-icons">&#xE5CF;</i>'+
+//                                    '</div>'+
                                 '</div>' +
                             '</div>' +
                             '<div class="mdl-card__supporting-text">' +
-                                '<div class="carat-Jscore-text"></div>'+
-                                '<div class="circleContainer">'+
-                                    '<div class="outerCircle">'+
-                                        '<div class="innerCircle">'+
-                                            '<div class="numberCircle">'+
-                                                '<button class="info" onclick="JscoreInfo()"></button>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>'+
+                                '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "?") +
                                 '</div>'+
+                                '<div style="display: inline-block">Memory usage: '+progressBar("memProgressBar", "?") +
+                                '</div>'+
+//                                '<div class="carat-Jscore-text"></div>'+
+//                                '<div class="circleContainer">'+
+//                                    '<div class="outerCircle">'+
+//                                        '<div class="innerCircle">'+
+//                                            '<div class="numberCircle">'+
+//                                                '<button class="info" onclick="JscoreInfo()"></button>'+
+//                                            '</div>'+
+//                                        '</div>'+
+//                                    '</div>'+
+//                                '</div>'+
                                 '<div class="collapse">'+
-                                    '<div style="display: inline-block">CPU usage: '+progressBar("cpuProgressBar", "Calculating..")+'</div>'+
                                 '</div>' +
                             '</div>' +
                         '</div>';

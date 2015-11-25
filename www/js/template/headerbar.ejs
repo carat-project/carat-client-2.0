@@ -1,0 +1,42 @@
+<header class="mdl-layout__header mdl-color--blue-grey-500"
+        id="header-bar">
+    <img class="mdl-layout-icon" src="img/icon.png"></img>
+    <div class="mdl-layout__header-row mdl-layout-title"
+         style="float:left; left:0px; top:2px;">
+        <!-- Title -->
+        <span>Carat 2.0</span>
+        <span id="progress"></span>
+        <span id="state"></span>
+
+        <div class="mdl-layout-spacer"></div>
+        <button class="mdl-button mdl-js-button mdl-button--icon"
+                id="menu" onclick="listenMenu();">
+            <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right"
+            for="menu">
+            <li class="mdl-menu__item" id="showHiddenBugCards"
+                disabled="true">Show hidden bugs</li>
+            <li class="mdl-menu__item" id="showHiddenHogCards"
+                disabled="true">Show hidden hogs</li>
+            <li class="mdl-menu__item" id="sendFeedback">
+                Send Feedback
+            </li>
+            <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
+            <li class="mdl-menu__item" id="appSettings">Settings</li>
+        </ul>
+
+    </div>
+
+    <!-- Tabs -->
+    <div class="mdl-layout__tab-bar mdl-color--blue-grey-500">
+        <a href="#home" class="mdl-layout__tab is-active" id="home-tab">
+            Home
+        </a>
+        <a href="#bugs" class="mdl-layout__tab" id="bugs-tab">Bugs</a>
+        <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
+        <a href="#system" class="mdl-layout__tab" id="system-tab">
+            Stats
+        </a>
+    </div>
+</header>
