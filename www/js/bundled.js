@@ -3165,7 +3165,153 @@ var InformationDialog = (function () {
 
 exports.default = InformationDialog;
 
-},{"../helper/Utilities.js":12,"ejs":8}],12:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],12:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () {
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	};
+})();
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _ejs = require("ejs");
+
+var _ejs2 = _interopRequireDefault(_ejs);
+
+var _Utilities = require("../helper/Utilities.js");
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
+}
+
+var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\r\n        <div class=\"mdl-card__title-text\"><%= label %></div>\r\n        <div class=\"carat-card-time\"><%= benefit %></div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"suggested-action\">Change to\r\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\r\n                range <%= changeTo.min %> - <%= changeTo.max %>\r\n            <% } else { %>\r\n                <%= changeTo %>\r\n            <% } %>\r\n        </div>Place for additional infotext. Current setting \"<%= current %>\" consumes more energy. In order to save energy change this setting.\r\n        <div class=\"collapse\"></div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <button class=\"action-button\">Change</button>\r\n    </div>\r\n</div>";
+
+var SettingCard = (function () {
+	function SettingCard(data) {
+		var _this = this;
+
+		_classCallCheck(this, SettingCard);
+
+		// Prepare and reformat data
+		data.label = data.label.split(/(?=[A-Z])/).join(" "); // Temporary split
+		data.label = data.label.toLowerCase();
+		data.label = _Utilities.Utilities.capitalize(data.label);
+
+		// Create initial node
+		this.data = data;
+		var html = _ejs2.default.render(Template, data);
+		this.node = _Utilities.Utilities.makeDomNode(html);
+
+		// Bind button responsbile for changing the setting
+		var button = this.node.querySelector(".action-button");
+		button.addEventListener("click", function () {
+			_this.openSetting();
+		});
+
+		// Make card swipeable
+		makeElemPanSwipable(this.node);
+	}
+
+	_createClass(SettingCard, [{
+		key: "render",
+		value: function render() {
+			return this.node;
+		}
+	}, {
+		key: "openSetting",
+		value: function openSetting() {
+			carat.showToast("Open " + this.data.label + " settings");
+		}
+	}]);
+
+	return SettingCard;
+})();
+
+exports.default = SettingCard;
+
+},{"../helper/Utilities.js":14,"ejs":8}],13:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () {
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	};
+})();
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _ejs = require("ejs");
+
+var _ejs2 = _interopRequireDefault(_ejs);
+
+var _SettingCard = require("../components/SettingCard.js");
+
+var _SettingCard2 = _interopRequireDefault(_SettingCard);
+
+var _Utilities = require("../helper/Utilities.js");
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
+}
+
+var Template = "<div class=\"carat-module\">\r\n\t<% if(count >= 1) { %>\r\n\t    <div class=\"carat-module-title\">Settings: <%= count %></div>\r\n\t    <div class=\"carat-module-content\" id=\"system-cards\"></div>\r\n\t<% } %>\r\n</div>";
+
+var SettingList = (function () {
+	function SettingList(suggestions) {
+		var _this = this;
+
+		_classCallCheck(this, SettingList);
+
+		var html = _ejs2.default.render(Template, { count: suggestions.length });
+		this.node = _Utilities.Utilities.makeDomNode(html);
+		if (suggestions.length >= 1) {
+			this.cardContainer = this.node.querySelector("#system-cards");
+			suggestions.forEach(function (suggestion) {
+				var card = new _SettingCard2.default(suggestion);
+				_this.cardContainer.appendChild(card.render());
+			});
+		}
+	}
+
+	_createClass(SettingList, [{
+		key: "render",
+		value: function render() {
+			return this.node;
+		}
+	}]);
+
+	return SettingList;
+})();
+
+exports.default = SettingList;
+
+},{"../components/SettingCard.js":12,"../helper/Utilities.js":14,"ejs":8}],14:[function(require,module,exports){
 "use strict"
 
 /**
@@ -3317,6 +3463,10 @@ module.exports.Utilities = (function () {
         return label.length > length ? label.slice(0, length - 3) + ellipsis : label;
     };
 
+    var capitalize = function capitalize(string) {
+        return string[0].toUpperCase() + string.slice(1);
+    };
+
     return {
         cutLabel: cutLabel,
         makeIdFromAppName: makeIdFromAppName,
@@ -3325,11 +3475,12 @@ module.exports.Utilities = (function () {
         makeDomNode: makeDomNode,
         makeIdFromOtherId: makeIdFromOtherId,
         appendChildAll: appendChildAll,
-        findById: findById
+        findById: findById,
+        capitalize: capitalize
     };
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -3363,7 +3514,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 // Template
-var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\r\n     id=\"statistics-jscore\"\r\n     style=\"-webkit-user-select: none;\r\n            -webkit-user-drag: none;\r\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__title-text carat_summaryCard_title_text\">\r\n            My Device\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text in_large\">\r\n        <div>OS version: <%= osVersion %></div>\r\n        <div>Device model: <%= deviceModel %></div>\r\n        <div>Battery duration: <%= batteryLife %></div>\r\n        <div>Memory total: <%= totalMemory %> MiB</div>\r\n        <div>Carat id: <%= uuid %></div>\r\n        <div style=\"display: inline-block;\">\r\n            CPU usage:&nbsp;\r\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div style=\"display: inline-block;\">\r\n            Memory usage:&nbsp;\r\n            <div id=\"memProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\r\n     id=\"statistics-jscore\"\r\n     style=\"-webkit-user-select: none;\r\n            -webkit-user-drag: none;\r\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\r\n    <div class=\"mdl-card__supporting-text in_large\">\r\n        <div>OS version: <%= osVersion %></div>\r\n        <div>Device model: <%= deviceModel %></div>\r\n        <div>Battery duration: <%= batteryLife %></div>\r\n        <div>Memory total: <%= totalMemory %> MiB</div>\r\n        <div>Carat id: <%= uuid %></div>\r\n        <div style=\"display: inline-block;\">\r\n            CPU usage:&nbsp;\r\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div style=\"display: inline-block;\">\r\n            Memory usage:&nbsp;\r\n            <div id=\"memProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n";
 
 var DeviceStats = (function () {
     function DeviceStats(data) {
@@ -3424,7 +3575,7 @@ var DeviceStats = (function () {
 
 exports.default = DeviceStats;
 
-},{"../helper/Utilities.js":12,"ejs":8}],14:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -3630,7 +3781,7 @@ var HogBug = (function () {
 
 exports.default = HogBug;
 
-},{"../helper/Utilities.js":12,"ejs":8}],15:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],17:[function(require,module,exports){
 (function (Buffer){
 "use strict";
 
@@ -3788,7 +3939,7 @@ var SummaryContainer = (function () {
 exports.default = SummaryContainer;
 
 }).call(this,require("buffer").Buffer)
-},{"../helper/Utilities.js":12,"./SummaryEntry.js":16,"buffer":2,"ejs":8}],16:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"./SummaryEntry.js":18,"buffer":2,"ejs":8}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -3927,7 +4078,7 @@ var SummaryEntry = (function () {
 
 exports.default = SummaryEntry;
 
-},{"../helper/Utilities.js":12,"ejs":8}],17:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4011,7 +4162,7 @@ var Headerbar = (function () {
 
 exports.default = Headerbar;
 
-},{"../helper/Utilities.js":12,"ejs":8}],18:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4184,7 +4335,7 @@ var HogBugCards = (function () {
 
 exports.default = HogBugCards;
 
-},{"../helper/Utilities.js":12,"../model/HogBug.js":14,"ejs":8}],19:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"../model/HogBug.js":16,"ejs":8}],21:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4303,7 +4454,7 @@ var HomeCards = (function () {
 
 exports.default = HomeCards;
 
-},{"../helper/Utilities.js":12,"../model/SummaryContainer.js":15,"ejs":8}],20:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"../model/SummaryContainer.js":17,"ejs":8}],22:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4336,7 +4487,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<main class=\"mdl-layout__content\">\r\n    <!-- Home view -->\r\n    <section class=\"mdl-layout__tab-panel is-active\" id=\"home\">\r\n\r\n        <!-- Pie card -->\r\n        <div class=\"page-content\">\r\n            <div class=\"mdl-card mdl-shadow--2dp\">\r\n                <div class=\"carat-caratCard__title\">\r\n                    <div class=\"mdl-card__title-text\r\n                                carat_caratCard_title_text\">\r\n                        Global Statistics\r\n                    </div>\r\n                </div>\r\n                <div class=\"carat-card__supporting-text\">\r\n                    <div class=\"canvas-container\">\r\n                        <canvas width=\"350\" height=\"250\"\r\n                                id=\"chart\"></canvas>\r\n                    </div>\r\n                    <ul id=\"chart-legend\"></ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n    </section>\r\n\r\n    <!-- Bugs tabs view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"bugs\">\r\n        <div class=\"page-content mdl-grid\">\r\n        </div>\r\n    </section>\r\n\r\n    <!-- Hogs tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"hogs\">\r\n        <div class=\"page-content mdl-grid\">\r\n        </div>\r\n\r\n        <!-- System tab view -->\r\n    </section>\r\n    <section class=\"mdl-layout__tab-panel\" id=\"system\">\r\n        <div class=\"page-content\">\r\n        </div>\r\n    </section>\r\n</main>\r\n";
+var Template = "<main class=\"mdl-layout__content\">\r\n    <!-- Home view -->\r\n    <section class=\"mdl-layout__tab-panel is-active\" id=\"home\">\r\n\r\n        <!-- Pie card -->\r\n        <div class=\"page-content\">\r\n            <div class=\"mdl-card mdl-shadow--2dp\">\r\n                <div class=\"carat-caratCard__title\">\r\n                    <div class=\"mdl-card__title-text\r\n                                carat_caratCard_title_text\">\r\n                        Global Statistics\r\n                    </div>\r\n                </div>\r\n                <div class=\"carat-card__supporting-text\">\r\n                    <div class=\"canvas-container\">\r\n                        <canvas width=\"350\" height=\"250\"\r\n                                id=\"chart\"></canvas>\r\n                    </div>\r\n                    <ul id=\"chart-legend\"></ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n    </section>\r\n\r\n    <!-- Bugs tabs view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"bugs\">\r\n    </section>\r\n\r\n    <!-- Hogs tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"hogs\">\r\n    </section>\r\n\r\n    <!-- System tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"system\">\r\n    </section>\r\n</main>\r\n";
 
 /**
 * @class MainContent
@@ -4368,7 +4519,7 @@ var MainContent = (function () {
 
 exports.default = MainContent;
 
-},{"../helper/Utilities.js":12,"ejs":8}],21:[function(require,module,exports){
+},{"../helper/Utilities.js":14,"ejs":8}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4393,6 +4544,10 @@ var _DeviceStats = require("../model/DeviceStats.js");
 
 var _DeviceStats2 = _interopRequireDefault(_DeviceStats);
 
+var _SettingList = require("../components/SettingList.js");
+
+var _SettingList2 = _interopRequireDefault(_SettingList);
+
 var _Utilities = require("../helper/Utilities.js");
 
 function _interopRequireDefault(obj) {
@@ -4405,6 +4560,8 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
+var Template = "<div class=\"page-content\">\r\n    <div class=\"carat-module\">\r\n        <div class=\"carat-module-title\">\r\n            System information:\r\n        </div>\r\n    <div class=\"carat-module-content\" id=\"system-info\"></div>\r\n    </div>\r\n    <div class=\"carat-module\" id=\"system-card-list\"></div>\r\n</div>";
+
 /**
 * @class StatsCards
 * @summary Handles device information.
@@ -4414,23 +4571,29 @@ var StatsCards = (function () {
     function StatsCards() {
         _classCallCheck(this, StatsCards);
 
-        this.docLocation = document.querySelector("#system .page-content");
         this.dataSource = this.defaultDataSource;
+        var html = _ejs2.default.render(Template);
+        this.node = _Utilities.Utilities.makeDomNode(html);
 
-        var _this = this;
-        this.renderAsync = (function (source) {
-            return _this.renderAsyncSource(source);
-        })(this.dataSource);
+        // Get mutable elements
+        this.info = this.node.querySelector("#system-info");
+        this.cardList = this.node.querySelector("#system-card-list");
+
+        // Start loading system information and suggestions
+        // Rendering can take place before these finish
+        this.loadInfo();
+        this.loadSuggestions();
     }
 
     _createClass(StatsCards, [{
-        key: "defaultDataSource",
-        value: function defaultDataSource(callback) {
+        key: "loadInfo",
+        value: function loadInfo() {
+            var _this = this;
 
             carat.getMainReports(function (main) {
                 carat.getMemoryInfo(function (memInfo) {
                     carat.getUuid(function (uuid) {
-                        callback({
+                        var systemCard = new _DeviceStats2.default({
                             modelName: window.device.model,
                             osVersion: window.device.version,
                             jScore: main.jscore,
@@ -4440,51 +4603,25 @@ var StatsCards = (function () {
                             percentage: memInfo.available / memInfo.total,
                             batteryLife: main.batteryLife
                         });
+                        _this.info.appendChild(systemCard.render());
                     });
                 });
             });
         }
     }, {
-        key: "renderAsyncSource",
-        value: function renderAsyncSource(sourceCallback) {
-            var _this = this;
-            return function (onResultCallback) {
-                sourceCallback(function (data) {
-                    var myDeviceModel = new _DeviceStats2.default(data);
-                    var rendered = myDeviceModel.render();
-                    onResultCallback(rendered);
-                });
-            };
-        }
-    }, {
-        key: "setDataSource",
+        key: "loadSuggestions",
+        value: function loadSuggestions() {
+            var _this2 = this;
 
-        /**
-         * @function
-         * @instance
-         * @param {} freshDataSource A callback which is used for
-         acquiring data from the server.
-         * @memberOf StatsCards
-         */
-        value: function setDataSource(freshDataSource) {
-            this.dataSource = freshDataSource;
-            this.renderAsync = this.renderAsyncSource(freshDataSource);
-        }
-    }, {
-        key: "renderInsert",
-
-        /**
-         * @function
-         * @instance
-         * @memberOf StatsCards
-         * @summary Insert these cards as a part of the document.
-         */
-        value: function renderInsert() {
-            var _this = this;
-            this.renderAsync(function (renderedTemplate) {
-                var node = renderedTemplate;
-                _this.docLocation.appendChild(node);
+            carat.getSettings(function (suggestions) {
+                var settingsList = new _SettingList2.default(suggestions);
+                _this2.cardList.appendChild(settingsList.render());
             });
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return this.node;
         }
     }]);
 
@@ -4493,7 +4630,7 @@ var StatsCards = (function () {
 
 exports.default = StatsCards;
 
-},{"../helper/Utilities.js":12,"../model/DeviceStats.js":13,"ejs":8}],22:[function(require,module,exports){
+},{"../components/SettingList.js":13,"../helper/Utilities.js":14,"../model/DeviceStats.js":15,"ejs":8}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () {
@@ -4563,7 +4700,7 @@ var MasterView = (function () {
         this.headerView = new _Headerbar2.default();
         this.mainView = new _MainContent2.default();
         this.homeView = new _HomeCards2.default();
-        this.statsView = new _StatsCards2.default();
+        this.systemTab = new _StatsCards2.default();
         this.bugsView = new _HogBugCards2.default(carat.getHogs, "bugs");
         this.hogsView = new _HogBugCards2.default(carat.getBugs, "hogs");
 
@@ -4580,7 +4717,6 @@ var MasterView = (function () {
         this.bugsView.setDataSource(this.bugsFetcherAsync);
         this.hogsView.setDataSource(this.hogsFetcherAsync);
         this.homeView.setDataSource(this.hogsAndBugsFetcherAsync);
-        this.statsView.setDataSource(this.myDeviceFetcherAsync);
     }
 
     _createClass(MasterView, [{
@@ -4710,7 +4846,10 @@ var MasterView = (function () {
             this.bugsView.renderInsert();
             this.hogsView.renderInsert();
             this.homeView.renderInsert();
-            this.statsView.renderInsert();
+
+            // Experimental rendering
+            var container = document.querySelector("#system");
+            container.appendChild(this.systemTab.render());
         }
     }, {
         key: "renderBase",
@@ -4726,4 +4865,4 @@ var MasterView = (function () {
 window.MasterView = MasterView;
 exports.default = MasterView;
 
-},{"../components/InformationDialog.js":11,"./Headerbar.js":17,"./HogBugCards.js":18,"./HomeCards.js":19,"./MainContent.js":20,"./StatsCards.js":21}]},{},[22]);
+},{"../components/InformationDialog.js":11,"./Headerbar.js":19,"./HogBugCards.js":20,"./HomeCards.js":21,"./MainContent.js":22,"./StatsCards.js":23}]},{},[24]);

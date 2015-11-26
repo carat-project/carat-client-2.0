@@ -22,7 +22,7 @@ class MasterView {
         this.headerView = new Headerbar();
         this.mainView = new MainContent();
         this.homeView = new HomeCards();
-        this.statsView = new StatsCards();
+        this.systemTab = new StatsCards();
         this.bugsView = new HogBugCards(carat.getHogs, "bugs");
         this.hogsView = new HogBugCards(carat.getBugs, "hogs");
 
@@ -39,7 +39,6 @@ class MasterView {
         this.bugsView.setDataSource(this.bugsFetcherAsync);
         this.hogsView.setDataSource(this.hogsFetcherAsync);
         this.homeView.setDataSource(this.hogsAndBugsFetcherAsync);
-        this.statsView.setDataSource(this.myDeviceFetcherAsync);
     }
 
     savedInfoFetcherAsync(savedInfo, dataSource, callback) {
@@ -162,7 +161,10 @@ class MasterView {
         this.bugsView.renderInsert();
         this.hogsView.renderInsert();
         this.homeView.renderInsert();
-        this.statsView.renderInsert();
+
+        // Experimental rendering
+        let container = document.querySelector("#system");
+        container.appendChild(this.systemTab.render());
     };
 
     renderBase() {

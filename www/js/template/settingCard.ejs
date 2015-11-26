@@ -1,0 +1,20 @@
+<div class="mdl-card mdl-shadow--2dp sleeker smaller-time-text system">
+    <div class="carat-card__title">
+        <div class="mdl-card__icon"><i class="material-icons">&#xE1DA;</i></div>
+        <div class="mdl-card__title-text"><%= label %></div>
+        <div class="carat-card-time"><%= benefit %></div>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <div class="suggested-action">Change to
+            <% if(changeTo.hasOwnProperty("min")){ %>
+                range <%= changeTo.min %> - <%= changeTo.max %>
+            <% } else { %>
+                <%= changeTo %>
+            <% } %>
+        </div>Place for additional infotext. Current setting "<%= current %>" consumes more energy. In order to save energy change this setting.
+        <div class="collapse"></div>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <button class="action-button">Change</button>
+    </div>
+</div>

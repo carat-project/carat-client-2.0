@@ -21,7 +21,7 @@
 .intro-container {
   margin: 9px 16px 0px 15px;
   padding-top: 7px;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
   height: 60px;
 }
 
@@ -494,7 +494,8 @@ p {
 }
 
 .page-content {
-    padding: 0px !important;
+    margin-top: 15px !important;
+    padding: 0 0 0 0 !important;
     overflow: hidden;
 }
 
@@ -972,8 +973,8 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .carat-module {
-    padding-top: 16px;
-    padding-bottom: 4px;
+    padding-top: 0px;
+    padding-bottom: 5px;
     width: auto;
 }
 
@@ -982,6 +983,7 @@ section.mdl-layout__tab-panel div.page-content {
     font-weight: 600;
     text-transform: uppercase;  
     margin-left: 8px;
+    padding-top: 10px;
     color: dimgray;
 }
 

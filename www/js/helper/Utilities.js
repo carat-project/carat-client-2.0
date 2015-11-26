@@ -150,6 +150,10 @@ module.exports.Utilities = (function() {
             label.slice(0,length-3) + ellipsis : label;
     };
 
+    var capitalize = function(string) {
+        return string[0].toUpperCase() + string.slice(1);
+    };
+
     return {
         cutLabel: cutLabel,
         makeIdFromAppName: makeIdFromAppName,
@@ -158,6 +162,7 @@ module.exports.Utilities = (function() {
         makeDomNode: makeDomNode,
         makeIdFromOtherId: makeIdFromOtherId,
         appendChildAll: appendChildAll,
-        findById: findById
+        findById: findById,
+        capitalize: capitalize
     };
 })();
