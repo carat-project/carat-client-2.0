@@ -75,11 +75,14 @@ var app = {
 
     // When device is ready we start up the plugin
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        app.receivedEvent("deviceready");
 
         // Specify back button behavior
         document.addEventListener("backbutton", function(e){
-            if(window.location.href.indexOf("index.html")){
+            if(window.location.hash.indexOf("dialog") > -1){
+                window.location.hash = "";
+                app.closeDialog();
+            } else if(window.location.href.indexOf("index.html") > -1){
                 if(backPressed){
                     navigator.app.exitApp();
                 } else {
@@ -89,8 +92,9 @@ var app = {
                         backPressed = false;
                     }, 4000);
                 }
+            } else {
+                navigator.app.backHistory();
             }
-            navigator.app.backHistory();
         }, false);
 
         // Attempt at making taps faster

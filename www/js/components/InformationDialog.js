@@ -31,6 +31,7 @@ class InformationDialog {
 	 * @param  {object(title, text)} content dialog title and text
 	 */
 	show(content){
+		window.location.hash="#dialog"; // Used for back button
 		this.title.innerHTML = content.title;
 		this.text.innerHTML = content.text;
 		carat.changeStatusbarColor("#794800", (status) => {
@@ -42,6 +43,7 @@ class InformationDialog {
 	 * Hides a dialog window
 	 */
 	hide(){
+		window.location.hash=""; // Used for back button
 		carat.changeStatusbarColor("#F1840C", (status) => {
 			this.node.style.visibility = "hidden";
 		});

@@ -29,6 +29,7 @@ class MasterView {
         // Make dialog globally accessible via app namespace
         var dialog = new InformationDialog();
         app.showDialog = dialog.show.bind(dialog);
+        app.closeDialog = dialog.hide.bind(dialog);
 
         this.bugsFetcherAsync = this.bugsFetcherAsync.bind(this);
         this.hogsFetcherAsync = this.hogsFetcherAsync.bind(this);

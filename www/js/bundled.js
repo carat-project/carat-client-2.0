@@ -3138,6 +3138,7 @@ var InformationDialog = (function () {
 		value: function show(content) {
 			var _this2 = this;
 
+			window.location.hash = "#dialog";
 			this.title.innerHTML = content.title;
 			this.text.innerHTML = content.text;
 			carat.changeStatusbarColor("#794800", function (status) {
@@ -3154,6 +3155,7 @@ var InformationDialog = (function () {
 		value: function hide() {
 			var _this3 = this;
 
+			window.location.hash = "";
 			carat.changeStatusbarColor("#F1840C", function (status) {
 				_this3.node.style.visibility = "hidden";
 			});
@@ -4765,6 +4767,7 @@ var MasterView = (function () {
         // Make dialog globally accessible via app namespace
         var dialog = new _InformationDialog2.default();
         app.showDialog = dialog.show.bind(dialog);
+        app.closeDialog = dialog.hide.bind(dialog);
 
         this.bugsFetcherAsync = this.bugsFetcherAsync.bind(this);
         this.hogsFetcherAsync = this.hogsFetcherAsync.bind(this);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/InformationDialog.js</title>
+    <title>JSDoc: Source: components/SettingList.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/InformationDialog.js</h1>
+    <h1 class="page-title">Source: components/SettingList.js</h1>
 
     
 
@@ -27,56 +27,69 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import ejs from "ejs";
+import SettingCard from "../components/SettingCard.js";
 import {Utilities} from "../helper/Utilities.js";
 const fs = require("fs");
 
-var Template = fs.readFileSync(__dirname + "/../template/informationDialog.ejs", "utf-8");
+let Template = fs.readFileSync(__dirname + "/../template/settingList.ejs", "utf-8");
 
-/**
- * Dynamic popup dialog displayed over the application.
+ /**
+ * @class SettingList
+ * @summary Listview of system setting suggestions.
  */
-class InformationDialog {
-	constructor(){
-		// Render component
-		var html = ejs.render(Template);
+class SettingList {
+	constructor() {
+		let html = ejs.render(Template);
 		this.node = Utilities.makeDomNode(html);
 
-		// Get functional component elements
-		this.title = this.node.querySelector(".mdl-card__title-text");
-		this.text = this.node.querySelector(".mdl-card__supporting-text");
+		this.clear = this.clear.bind(this);
+		this.cardCount = this.node.querySelector("#system-card-count")
+		this.cardContainer = this.node.querySelector("#system-cards");
 
-		// Bind close buttons to hide
-		var closeButtons = this.node.querySelectorAll(".close");
-		for(let i=0; i&lt; closeButtons.length; i++){
-			closeButtons[i].addEventListener("click", () => this.hide());
-		}
+		this.reload();
 
-		document.body.insertBefore(this.node, document.body.firstChild);
-	}
-
-	/**
-	 * Shows a dialog window
-	 * @param  {object(title, text)} content dialog title and text
-	 */
-	show(content){
-		this.title.innerHTML = content.title;
-		this.text.innerHTML = content.text;
-		carat.changeStatusbarColor("#794800", (status) => {
-			this.node.style.visibility = "visible";
+		let refreshButton = this.node.querySelector("#system-card-refresh");
+		refreshButton.addEventListener("click", ()=>{
+			carat.showToast("Reloading settings..");
+			this.reload();
 		});
 	}
 
 	/**
-	 * Hides a dialog window
+	 * Clears the list for rerendering
 	 */
-	hide(){
-		carat.changeStatusbarColor("#F1840C", (status) => {
-			this.node.style.visibility = "hidden";
+	clear(){
+		this.cardContainer.innerHTML = "";
+	}
+
+
+	/**
+	 * Reloads and appends setting cards
+	 */
+	reload(){
+		carat.getSettings((suggestions)=>{
+			this.cardCount.innerHTML = suggestions.length;
+			this.clear();
+			if(suggestions.length >= 1){
+				this.cardContainer = this.node.querySelector("#system-cards");
+				suggestions.forEach((suggestion) => {
+	                let card = new SettingCard(suggestion);
+	               	this.cardContainer.appendChild(card.render());
+	       		});
+			}
 		});
+	}
+
+	/**
+	 * Returns a rendered setting list
+	 * @return {node} List node
+	 */
+	render() {
+		return this.node;
 	}
 }
 
-export default InformationDialog;</code></pre>
+export default SettingList;</code></pre>
         </article>
     </section>
 
