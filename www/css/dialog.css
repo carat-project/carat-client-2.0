@@ -20,7 +20,7 @@
 .dialog-text {
   padding-top: 10px;
   padding-bottom: 10px;
-  overflow-y: scroll !important;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 

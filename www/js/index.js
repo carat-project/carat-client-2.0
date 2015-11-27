@@ -191,7 +191,7 @@ var app = {
         displayData();
 
         // Display setting suggestions for debugging
-        carat.getSettings(function(settings){
+        /*carat.getSettings(function(settings){
             if((typeof settings !== "undefined") && (settings !== null) && (settings.length > 0)){
                 var suggestion = settings[0];
                 var benefit = suggestion.benefit
@@ -203,7 +203,7 @@ var app = {
                 });
             }
             //console.log(JSON.stringify(settings));
-        });
+        });*/
     },
 
     // Set an interval for refreshing cpu usage

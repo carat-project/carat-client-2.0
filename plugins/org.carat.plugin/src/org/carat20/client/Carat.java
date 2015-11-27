@@ -3,7 +3,7 @@ package org.carat20.client;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Point;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -60,6 +60,7 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
     private SimpleSettings[] settingsReports;
+    private OnSharedPreferenceChangeListener listener;
     
     private String uuid;
 
@@ -75,7 +76,7 @@ public class Carat extends CordovaPlugin {
         Carat.activity = cordova.getActivity();
         String color = preferences.getString("StatusBarBackgroundColor", "#000000");
         DeviceLibrary.changeStatusbarColor(color, activity);
-        // ...
+        // .. 
     }
 
     /**
@@ -259,23 +260,21 @@ public class Carat extends CordovaPlugin {
     }
     
     // System setting suggestions
-    private void getSettings(CallbackContext cb){
+    public void getSettings(final CallbackContext cb){
         try {
-            HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
-            if(deviceInfo == null){
-                cb.error(new JSONObject());
-                return;
-            }
-            EVTree tree = storage.getSettingsTree();
-            if(tree == null){
-                cb.error(new JSONObject());
-                return;
-            }
-            settingsReports = tree.getSuggestions(deviceInfo);
+            settingsReports = getSettings();
             cb.success(convertToJSON(settingsReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert settings.", e);
         }
+    }
+    
+    private SimpleSettings[] getSettings(){
+        HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();;
+        if(deviceInfo == null) return null;
+        EVTree tree = storage.getSettingsTree();
+        if(tree == null) return null;
+        return tree.getSuggestions(deviceInfo);
     }
     
     // Memory info
@@ -457,6 +456,14 @@ public class Carat extends CordovaPlugin {
         cb.sendPluginResult(result);
     }
     
+    // Sends a plugin result while keeping callback open
+    private void sendPluginResult(CallbackContext cb, JSONArray array){
+        // Get usage and pass to webview
+        PluginResult result = new PluginResult(PluginResult.Status.OK, array);
+        result.setKeepCallback(true); // Keep sending results
+        cb.sendPluginResult(result);
+    }
+    
     // Utility methods for converting data to JSON.
     
     /**
@@ -514,7 +521,6 @@ public class Carat extends CordovaPlugin {
         if(settings == null) return results;
         for(SimpleSettings s : settings){
             //if(s.getErrorRatio() > ERROR_LIMIT) continue;
-            
             JSONObject setting = new JSONObject()
             .put("label", s.getLabel())
             .put("current", s.getValue());
@@ -525,8 +531,10 @@ public class Carat extends CordovaPlugin {
                          .put("min", valueRange.getMin())
                          .put("max", valueRange.getMax());
                  setting.put("changeTo", range);
-             } else setting.put("changeTo", value)    
-            .put("benefit", s.getBenefitText());
+             } else {
+                 setting.put("changeTo", value);
+             }    
+            setting.put("benefit", s.getBenefitText());
             results.put(setting);
         }
         return results;

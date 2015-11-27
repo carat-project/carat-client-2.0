@@ -38,7 +38,7 @@ class StatsCards {
                         jScore: main.jscore,
                         uuid: uuid,
                         usedMemory: memInfo.total - memInfo.available,
-                        totalMemory: memInfo.total,
+                        totalMemory: memInfo.total / 1000,
                         percentage: memInfo.available / memInfo.total,
                         batteryLife: main.batteryLife
                     });
@@ -49,10 +49,8 @@ class StatsCards {
     };
 
     loadSuggestions() {
-        carat.getSettings((suggestions) => {
            let settingsList = new SettingList(suggestions);
            this.cardList.appendChild(settingsList.render());
-        });
     }
 
     render(){

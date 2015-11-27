@@ -3200,6 +3200,11 @@ function _classCallCheck(instance, Constructor) {
 
 var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\r\n        <div class=\"mdl-card__title-text\"><%= label %></div>\r\n        <div class=\"carat-card-time\"><%= benefit %></div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"suggested-action\">Change to\r\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\r\n                range <%= changeTo.min %> - <%= changeTo.max %>\r\n            <% } else { %>\r\n                <%= changeTo %>\r\n            <% } %>\r\n        </div>Place for additional infotext. Current setting \"<%= current %>\" consumes more energy. In order to save energy change this setting.\r\n        <div class=\"collapse\"></div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <button class=\"action-button\">Change</button>\r\n    </div>\r\n</div>";
 
+/**
+* @class SettingCard
+* @summary Setting suggestion card.
+*/
+
 var SettingCard = (function () {
 	function SettingCard(data) {
 		var _this = this;
@@ -3226,11 +3231,21 @@ var SettingCard = (function () {
 		makeElemPanSwipable(this.node);
 	}
 
+	/**
+  * Returns a rendered setting card
+  * @return {node} Card node
+  */
+
 	_createClass(SettingCard, [{
 		key: "render",
 		value: function render() {
 			return this.node;
 		}
+
+		/**
+   * Opens a setting related to the card
+   */
+
 	}, {
 		key: "openSetting",
 		value: function openSetting() {
@@ -3280,26 +3295,73 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Template = "<div class=\"carat-module\">\r\n\t<% if(count >= 1) { %>\r\n\t    <div class=\"carat-module-title\">Settings: <%= count %></div>\r\n\t    <div class=\"carat-module-content\" id=\"system-cards\"></div>\r\n\t<% } %>\r\n</div>";
+var Template = "<div class=\"carat-module\">\r\n\t    <div class=\"carat-module-title\">\r\n\t    \tSettings: <span id=\"system-card-count\">0</span>\r\n\t    \t<div id=\"system-card-refresh\">\r\n\t    \t\t<i class=\"material-icons\">&#xE5D5;</i>\r\n\t    \t</div>\r\n\t    </div>\r\n\t    <div class=\"carat-module-content\" id=\"system-cards\"></div>\r\n</div>";
+
+/**
+* @class SettingList
+* @summary Listview of system setting suggestions.
+*/
 
 var SettingList = (function () {
-	function SettingList(suggestions) {
+	function SettingList() {
 		var _this = this;
 
 		_classCallCheck(this, SettingList);
 
-		var html = _ejs2.default.render(Template, { count: suggestions.length });
+		var html = _ejs2.default.render(Template);
 		this.node = _Utilities.Utilities.makeDomNode(html);
-		if (suggestions.length >= 1) {
-			this.cardContainer = this.node.querySelector("#system-cards");
-			suggestions.forEach(function (suggestion) {
-				var card = new _SettingCard2.default(suggestion);
-				_this.cardContainer.appendChild(card.render());
-			});
-		}
+
+		this.clear = this.clear.bind(this);
+		this.cardCount = this.node.querySelector("#system-card-count");
+		this.cardContainer = this.node.querySelector("#system-cards");
+
+		this.reload();
+
+		var refreshButton = this.node.querySelector("#system-card-refresh");
+		refreshButton.addEventListener("click", function () {
+			carat.showToast("Reloading settings..");
+			_this.reload();
+		});
 	}
 
+	/**
+  * Clears the list for rerendering
+  */
+
 	_createClass(SettingList, [{
+		key: "clear",
+		value: function clear() {
+			this.cardContainer.innerHTML = "";
+		}
+
+		/**
+   * Reloads and appends setting cards
+   */
+
+	}, {
+		key: "reload",
+		value: function reload() {
+			var _this2 = this;
+
+			carat.getSettings(function (suggestions) {
+				_this2.cardCount.innerHTML = suggestions.length;
+				_this2.clear();
+				if (suggestions.length >= 1) {
+					_this2.cardContainer = _this2.node.querySelector("#system-cards");
+					suggestions.forEach(function (suggestion) {
+						var card = new _SettingCard2.default(suggestion);
+						_this2.cardContainer.appendChild(card.render());
+					});
+				}
+			});
+		}
+
+		/**
+   * Returns a rendered setting list
+   * @return {node} List node
+   */
+
+	}, {
 		key: "render",
 		value: function render() {
 			return this.node;
@@ -3514,7 +3576,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 // Template
-var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\r\n     id=\"statistics-jscore\"\r\n     style=\"-webkit-user-select: none;\r\n            -webkit-user-drag: none;\r\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\r\n    <div class=\"mdl-card__supporting-text in_large\">\r\n        <div>OS version: <%= osVersion %></div>\r\n        <div>Device model: <%= deviceModel %></div>\r\n        <div>Battery duration: <%= batteryLife %></div>\r\n        <div>Memory total: <%= totalMemory %> MiB</div>\r\n        <div>Carat id: <%= uuid %></div>\r\n        <div style=\"display: inline-block;\">\r\n            CPU usage:&nbsp;\r\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div style=\"display: inline-block;\">\r\n            Memory usage:&nbsp;\r\n            <div id=\"memProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\r\n     id=\"statistics-jscore\"\r\n     style=\"-webkit-user-select: none;\r\n            -webkit-user-drag: none;\r\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\r\n    <div class=\"mdl-card__supporting-text in_large\">\r\n        <div class=\"list-item\">OS version: <%= osVersion %></div>\r\n        <div class-\"list-item\">Device model: <%= deviceModel %></div>\r\n        <div class=\"list-item\" style=\"display: inline-block;\">\r\n            CPU usage:&nbsp;\r\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div class=\"list-item\">Memory total: <%= totalMemory %> MiB</div>\r\n        <div class=\"list-item\" style=\"display: inline-block;\">\r\n            Memory usage:&nbsp;\r\n            <div id=\"memProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div class=\"list-item\">Carat id: <%= uuid %></div>\r\n    </div>\r\n</div>\r\n";
 
 var DeviceStats = (function () {
     function DeviceStats(data) {
@@ -4599,7 +4661,7 @@ var StatsCards = (function () {
                             jScore: main.jscore,
                             uuid: uuid,
                             usedMemory: memInfo.total - memInfo.available,
-                            totalMemory: memInfo.total,
+                            totalMemory: memInfo.total / 1000,
                             percentage: memInfo.available / memInfo.total,
                             batteryLife: main.batteryLife
                         });
@@ -4611,12 +4673,8 @@ var StatsCards = (function () {
     }, {
         key: "loadSuggestions",
         value: function loadSuggestions() {
-            var _this2 = this;
-
-            carat.getSettings(function (suggestions) {
-                var settingsList = new _SettingList2.default(suggestions);
-                _this2.cardList.appendChild(settingsList.render());
-            });
+            var settingsList = new _SettingList2.default(suggestions);
+            this.cardList.appendChild(settingsList.render());
         }
     }, {
         key: "render",

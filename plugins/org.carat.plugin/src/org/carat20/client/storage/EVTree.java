@@ -98,9 +98,9 @@ public class EVTree implements Serializable{
                    
                    // Compare matching node to best
                    // Ignore "other" for now
-                   if((best.getEv() < child.getEv()) 
-                           && !(best.getValue() instanceof String 
-                           && ((String) best.getValue()).equalsIgnoreCase("other"))){
+                   if(best.getEv() < child.getEv()) { 
+                           //&& !(best.getValue() instanceof String ))
+                           //&& ((String) best.getValue()).equalsIgnoreCase("other"))){
                         
                         SimpleSettings setting = new SimpleSettings();
                         setting.setLabel(best.getSplit());
