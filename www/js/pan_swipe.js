@@ -199,7 +199,7 @@ function makeElemTappable(el, mc, timer,
                 //name to snackbar
                 var name = el.querySelector(".mdl-card__title-text").innerHTML.split('<')[0];         
                 createSnackbar(name + ' hidden', 'Undo', function() {
-                    el.style.display = 'inherit';
+                    cancel(el.id);
                 }); //torkutetusta kortista snackbar ja palautusnappi
             }
         };
