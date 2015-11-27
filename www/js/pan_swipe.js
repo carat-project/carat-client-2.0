@@ -181,53 +181,10 @@ function makeElemTappable(el, mc, timer,
             }
         };
 
-        //    var onPan = function(ev) {
-        //        var angle = Math.abs(ev.angle);
-        //        console.log(angle);
-        //        if(el.classList.contains("animate")) {
-        //            el.classList.remove("animate");
-        //        }
-        //        transform.translate = {
-        //            x: START_X + ev.deltaX,
-        //            y: START_Y
-        //        };
-        //        requestElementUpdate();
-        //
-        //    };
-
         var onSwipeRight = function(ev) {
             
             // hides swiped bug and shows next bug 
-            if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {
-                
-//                var list;
-//                
-//                if (el.classList.contains("worstBug")){
-//                    list = document.querySelectorAll(".worstBug");
-//                } else {
-//                    list = document.querySelectorAll(".worstHog");
-//                }
-//                
-//                console.log(list);
-//                var elPlaceinList;
-//                for (i=0; i < list.length; i++ ) {
-//                    console.log(list[i]);
-//                    if (list[i].id === el.id) {
-//                        elPlaceinList = i;
-//                        break;
-//                    }
-//                }
-//                
-//                if (elPlaceinList < list.length-1) {
-//
-//                    list[elPlaceinList+1].style.display='inherit';
-//                    list[elPlaceinList+1].style.visibility='visible';
-//                    list[elPlaceinList+1].style.opacity="0";
-//                    setTimeout(function() {
-//                        list[elPlaceinList+1].style.opacity="1";
-//                    }, 1);                    
-//                    
-//                } 
+            if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {   
                 el.style.display='none';
                 el.style.visibility='hidden';
 
@@ -242,7 +199,7 @@ function makeElemTappable(el, mc, timer,
                 //name to snackbar
                 var name = el.querySelector(".mdl-card__title-text").innerHTML.split('<')[0];         
                 createSnackbar(name + ' hidden', 'Undo', function() {
-                    el.style.display = 'inline';
+                    el.style.display = 'inherit';
                 }); //torkutetusta kortista snackbar ja palautusnappi
             }
         };
