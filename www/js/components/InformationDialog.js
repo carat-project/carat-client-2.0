@@ -20,7 +20,7 @@ class InformationDialog {
 		// Bind close buttons to hide
 		var closeButtons = this.node.querySelectorAll(".close");
 		for(let i=0; i< closeButtons.length; i++){
-			closeButtons[i].addEventListener("click", () => this.hide());
+			closeButtons[i].addEventListener("click", () => this.hide())
 		}
 
 		document.body.insertBefore(this.node, document.body.firstChild);
@@ -36,6 +36,8 @@ class InformationDialog {
 		this.text.innerHTML = content.text;
 		carat.changeStatusbarColor("#794800", (status) => {
 			this.node.style.visibility = "visible";
+            this.node.style.display = "flex"; 
+
 		});
 	}
 
@@ -46,6 +48,8 @@ class InformationDialog {
 		window.location.hash=""; // Used for back button
 		carat.changeStatusbarColor("#F1840C", (status) => {
 			this.node.style.visibility = "hidden";
+            this.node.style.display = "none";
+
 		});
 	}
 }

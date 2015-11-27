@@ -25,11 +25,15 @@ function makeElemTappable(el, mc, timer,
     }
 
     var onTap = function(ev) {
-
-        if(ev.target.nodeName === "BUTTON" || ev.target.nodeName === "A") {
+        // filters out buttons, links and bug/hog symbols from the action-info div
+        if(ev.target.nodeName === "BUTTON" 
+           || ev.target.nodeName === "A" 
+           || ev.target.className == "action-info"
+           || ev.target.className == "action-info-text") {
+                    console.log("dissmiss");
             return;
         }
-
+        
         showOrHideCollapse(ev);
     };
 

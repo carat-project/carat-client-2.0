@@ -328,13 +328,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         buttonSpot.appendChild(closeButton);
         buttonSpot.appendChild(uninstallButton);
 
-        if(isSystem){
-            var systemInfo = document.createElement("div");
-            systemInfo.className = "action-info";
-            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
-            "<div class='action-info-text'>System app</span>";
-            buttonSpot.appendChild(systemInfo);
-        }
+//        if(isSystem){
+//            var systemInfo = document.createElement("div");
+//            systemInfo.className = "action-info";
+//            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+//            "<div class='action-info-text'>System app</span>";
+//            
+//            buttonSpot.appendChild(systemInfo);
+//        }
     };
     
     var injectTypeInfo = function (cardDomNode, text) {
@@ -348,6 +349,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             systemInfo.className = "action-info";
             systemInfo.innerHTML = "<img width='20px' height='20px' style='margin-right: 2px' src='"+iconFileName+"' />"+
             "<div class='action-info-text'>" + text + "</span>";
+        
+        // listener for typeInfo, opens dialog
+        systemInfo.addEventListener("click", function(){
+            app.showDialog({
+                title: "What is a Bug / Hog?",
+                    text:"this is description for bugs/hogs. Suggestions aren't injected to the new MVC, so this will be updated later."
+            });
+        });
+    
             buttonSpot.appendChild(systemInfo);
     };
 
