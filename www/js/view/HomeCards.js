@@ -80,7 +80,6 @@ class HomeCards {
      */
     renderInsert(){
         let _this = this;
-        this.refreshSummaryCard();
         this.renderAsync(function(renderedTemplate) {
             var node = renderedTemplate;
             _this.refreshSummaryCard();
