@@ -4552,7 +4552,6 @@ var HomeCards = (function () {
         key: "renderInsert",
         value: function renderInsert() {
             var _this = this;
-            this.refreshSummaryCard();
             this.renderAsync(function (renderedTemplate) {
                 var node = renderedTemplate;
                 _this.refreshSummaryCard();
