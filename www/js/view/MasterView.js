@@ -159,18 +159,14 @@ class MasterView {
     };
 
     render() {
-        this.homeView.renderInsert();
         this.bugsView.renderInsert();
         this.hogsView.renderInsert();
+        this.homeView.renderInsert();
 
         // Experimental rendering
         let container = document.querySelector("#system");
         container.appendChild(this.systemTab.render());
     };
-
-    renderBeforeData() {
-        this.homeView.renderInsert();
-    }
 
     renderBase() {
         this.headerView.renderInsert();

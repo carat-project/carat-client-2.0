@@ -3695,7 +3695,7 @@ var Template = "<div class=\"mdl-card sleeker smaller-time-text mdl-shadow--2dp\
 */
 
 var HogBug = (function () {
-    function HogBug(data, Template) {
+    function HogBug(data) {
         _classCallCheck(this, HogBug);
 
         // Prepare and reformat data
@@ -3710,8 +3710,8 @@ var HogBug = (function () {
         data.closeId = _Utilities.Utilities.makeIdFromAppName(data.name, data.type, "close");
 
         this.data = data;
-        this.Template = Template;
 
+        console.log(data, Template);
         // render template
         var html = _ejs2.default.render(Template, data);
         this.node = this.createNode(html);
@@ -4951,18 +4951,13 @@ var MasterView = (function () {
     }, {
         key: "render",
         value: function render() {
-            this.homeView.renderInsert();
             this.bugsView.renderInsert();
             this.hogsView.renderInsert();
+            this.homeView.renderInsert();
 
             // Experimental rendering
             var container = document.querySelector("#system");
             container.appendChild(this.systemTab.render());
-        }
-    }, {
-        key: "renderBeforeData",
-        value: function renderBeforeData() {
-            this.homeView.renderInsert();
         }
     }, {
         key: "renderBase",

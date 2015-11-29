@@ -10,7 +10,7 @@ var Template = fs.readFileSync(__dirname + "/../template/hogBugCard.ejs", "utf-8
  */
 class HogBug {
 
-    constructor(data, Template){
+    constructor(data){
         // Prepare and reformat data
         data.label = Utilities.cutLabel(data.label, 20);
         data.benefitSubstrings = Utilities.splitTimeDrainString(data.benefit);
@@ -23,7 +23,6 @@ class HogBug {
         data.closeId = Utilities.makeIdFromAppName(data.name,data.type,"close");
 
         this.data = data;
-        this.Template = Template;
 
         // render template
         var html = ejs.render(Template, data);
