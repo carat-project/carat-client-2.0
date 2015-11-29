@@ -36,7 +36,7 @@ class InformationDialog {
 		this.text.innerHTML = content.text;
 		carat.changeStatusbarColor("#794800", (status) => {
 			this.node.style.visibility = "visible";
-            this.node.style.display = "flex"; 
+            this.node.style.display = "flex";
 
 		});
 	}
