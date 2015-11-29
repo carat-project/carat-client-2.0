@@ -3038,7 +3038,7 @@ module.exports={
   },
   "_id": "ejs@2.3.4",
   "_shasum": "3c76caa09664b3583b0037af9dc136e79ec68b98",
-  "_resolved": "https://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
+  "_resolved": "http://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
   "_from": "ejs@2.3.4",
   "_npmVersion": "2.10.1",
   "_nodeVersion": "0.12.4",
@@ -3060,8 +3060,7 @@ module.exports={
     "shasum": "3c76caa09664b3583b0037af9dc136e79ec68b98",
     "tarball": "http://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz"
   },
-  "directories": {},
-  "readme": "ERROR: No README data found!"
+  "directories": {}
 }
 
 },{}],11:[function(require,module,exports){
@@ -3761,7 +3760,6 @@ var HogBug = (function () {
 
         this.data = data;
 
-        console.log(data, Template);
         // render template
         var html = _ejs2.default.render(Template, data);
         this.node = this.createNode(html);
@@ -4079,6 +4077,14 @@ var SummaryContainer = (function () {
             this.hogEntries = this.makeModels(hogs);
 
             this.node = this.createNode();
+
+            var jscoreButton = this.node.querySelector(".info");
+            jscoreButton.addEventListener("click", function () {
+                app.showDialog({
+                    title: "What is a J-Score?",
+                    text: Buffer("PGRpdj5UaGUgSi1TY29yZSByZXByZXNlbnRzIHRoZSBwZXJjZW50aWxlIGJhdHRlcnkgbGlmZSB5b3Ugc2VlIHJlbGF0aXZlIHRvIGFsbCBvdGhlciBkZXZpY2VzDQpiZWluZyBtZWFzdXJlZCBieSBDYXJhdC48L2Rpdj4NCg0KPGRpdj5TbywgaWYgeW91IGhhdmUgYSBKLVNjb3JlIG9mIDUwLCB0aGF0IG1lYW5zIHlvdXIgZXhwZWN0ZWQgYmF0dGVyeSBsaWZlIGlzIGJldHRlciB0aGFuDQpoYWxmIG9mIG91ciB1c2VyczsgYSBzY29yZSBvZiA5OSBtZWFucyB5b3UgaGF2ZSBiZXR0ZXIgYmF0dGVyeSBsaWZlIHRoYW4gOTklIG9mIG91ciB1c2Vycy48L2Rpdj4NCg0KPGltZyBzcmM9ImltZy9qc2NvcmVfcGxvdC5wbmciIC8+DQoNCjxkaXY+IE9mIGNvdXJzZSwgYSBzaW5nbGUgbnVtYmVyIGRvZXMgbm90IHByb3ZpZGUgYSBjb21wbGV0ZSBkZXNjcmlwdGlvbiBvZiB5b3VyIGJhdHRlcnkgbGlmZS4NCkEgbG93IEotU2NvcmUgY291bGQgbWVhbiB0aGF0IHlvdXIgZGV2aWNlIGlzIHVzaW5nIGEgYmlnIGJhdHRlcnkgaW5lZmZpY2llbnRseSBvciBhIHNtYWxsDQpiYXR0ZXJ5IHdpdGggYXZlcmFnZSBlZmZpY2llbmN5LjwvZGl2Pg0KDQo8ZGl2PlNpbWlsYXJseSwgYSBoaWdoIEotU2NvcmUgY291bGQgc2ltcGx5IG1lYW4gdGhhdCB5b3UgZG9uJ3QgdXNlIHlvdXIgZGV2aWNlIGhlYXZpbHkuPC9kaXY+DQoNCjxkaXY+Q2FyYXQgY29tcHV0ZXMgYSBodWdlIHZhcmlldHkgb2Ygc3RhdGlzdGljcywgYW5kIHRoZSBKLVNjb3JlIGlzIGp1c3Qgb25lIG9mIHRoZW0uIDwvZGl2Pg==", "base64")
+                });
+            });
         }
     }]);
 

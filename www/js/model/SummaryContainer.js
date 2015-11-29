@@ -27,7 +27,7 @@ class SummaryContainer {
         this.node = this.createNode();
         this.id = "summary-0";
 
-        var jscoreButton = this.node.querySelector(".info");
+        let jscoreButton = this.node.querySelector(".info");
         jscoreButton.addEventListener("click", function(){
             app.showDialog({
                 title: "What is a J-Score?",
@@ -119,6 +119,14 @@ class SummaryContainer {
         this.hogEntries = this.makeModels(hogs);
 
         this.node = this.createNode();
+
+        let jscoreButton = this.node.querySelector(".info");
+        jscoreButton.addEventListener("click", function(){
+            app.showDialog({
+                title: "What is a J-Score?",
+                text: fs.readFileSync(__dirname + "/../template/strings/jscoreInfo.ejs")
+            });
+        });
     }
 }
 
