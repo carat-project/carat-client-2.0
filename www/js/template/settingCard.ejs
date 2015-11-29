@@ -11,10 +11,15 @@
             <% } else { %>
                 <%= changeTo %>
             <% } %>
-        </div>Place for additional infotext. Current setting "<%= current %>" consumes more energy. In order to save energy change this setting.
+        </div>Current setting '<%= current %>' consumes more energy. Save battery by changing this setting.
         <div class="collapse"></div>
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <button class="action-button">Change</button>
+       <button class="action-button"> Change</button>
+        <% if(setting == "unknown"){ %>
+            <button class="setting-info-button">
+                <i class="material-icons">&#xE88E;</i> How to change this?
+            </button>
+        <% } %>
     </div>
 </div>

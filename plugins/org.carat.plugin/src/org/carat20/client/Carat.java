@@ -3,7 +3,6 @@ package org.carat20.client;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Point;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -60,7 +59,6 @@ public class Carat extends CordovaPlugin {
     private SimpleHogBug[] hogReports;
     private SimpleHogBug[] bugReports;
     private SimpleSettings[] settingsReports;
-    private OnSharedPreferenceChangeListener listener;
     
     private String uuid;
 
@@ -119,6 +117,7 @@ public class Carat extends CordovaPlugin {
                     case TOAST:     showToast(cb, args);        break;
                     case NOTIFY:    notification(cb, args);     break;
                     case COLOR:     setStatusColor(cb, args);   break;
+                    case OPEN:      openDialog(cb, args);       break;
                         
                     // Polling
                     case CPUPOLL:   pollCPU(cb ,args);          break;
@@ -423,6 +422,17 @@ public class Carat extends CordovaPlugin {
         }
     }
     
+    private void openDialog(final CallbackContext cb, JSONArray args){
+        try{
+            String settingName = args.getString(0);
+            deviceLibrary.openSettingMenu(settingName);
+            cb.success();
+        } catch(JSONException e){
+            Log.v("Carat","Invalid setting specified");
+            cb.error("Failure");
+        }
+    }
+    
     /**
      * Reads string values from plugin.xml.
      * @param variable Key.
@@ -448,7 +458,7 @@ public class Carat extends CordovaPlugin {
         );
     }
     
-    // Sends a plugin result while keeping callback open
+    // Sends a string result while keeping the callback open
     private void sendPluginResult(CallbackContext cb, String value){
         // Get usage and pass to webview
         PluginResult result = new PluginResult(PluginResult.Status.OK, value);
@@ -456,7 +466,7 @@ public class Carat extends CordovaPlugin {
         cb.sendPluginResult(result);
     }
     
-    // Sends a plugin result while keeping callback open
+    // Sends a jsonarray result while keeping the callback open
     private void sendPluginResult(CallbackContext cb, JSONArray array){
         // Get usage and pass to webview
         PluginResult result = new PluginResult(PluginResult.Status.OK, array);
@@ -523,6 +533,7 @@ public class Carat extends CordovaPlugin {
             //if(s.getErrorRatio() > ERROR_LIMIT) continue;
             JSONObject setting = new JSONObject()
             .put("label", s.getLabel())
+            .put("setting", s.getSetting())
             .put("current", s.getValue());
             Object value = s.getValueWithout();
              if(value instanceof Range){

@@ -15,7 +15,7 @@ public class Constants {
     public static enum ActionType {
         SETUP, CLEAR, UUID, REFRESH, JSCORE, MAIN, HOGS, BUGS, 
         KILL, REMOVE, MEMORY, UNKNOWN, CPUPOLL, TOAST, NOTIFY, 
-        SETTINGS, MEMPOLL, COLOR;
+        SETTINGS, MEMPOLL, COLOR, OPEN;
         
         public static ActionType get(String action){
             if(action.equals("setup"))      return SETUP;
@@ -35,6 +35,7 @@ public class Constants {
             if(action.equals("settings"))   return SETTINGS;
             if(action.equals("cpupoll"))    return CPUPOLL;
             if(action.equals("mempoll"))    return MEMPOLL;
+            if(action.equals("open"))       return OPEN;
             return UNKNOWN;
         }
     }

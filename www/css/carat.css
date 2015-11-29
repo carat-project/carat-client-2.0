@@ -1,3 +1,35 @@
+/* = SETTING CARD INFO BUTTON =*/
+
+.setting-info-button {
+  float: right;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 6px;
+  vertical-align: bottom;
+  color: dimgray;
+}
+
+.setting-info-button:focus {
+  outline: 0px !important;
+  border: 0px !important;
+}
+
+.setting-info-button:active {
+  outline: 0px !important;
+  border: 0px !important;
+}
+
+.setting-info-button i {
+  vertical-align: bottom;
+  margin: 0px 0px -2px 2px;
+}
+
+
+/* = SYSTEM INFORMATION CARD = */
+
 .list-item {
   line-height: 22px !important;
 }

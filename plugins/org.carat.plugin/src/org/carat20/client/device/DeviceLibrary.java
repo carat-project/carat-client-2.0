@@ -15,6 +15,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
@@ -37,13 +38,27 @@ public class DeviceLibrary {
     private static TelephonyManager telManager;
     private static Location lastKnownLocation;
     private static Activity activity;
-
-    private static final int EVDO_B = 12;
-    private static final int LTE = 13;
-    private static final int EHRPD = 14;
-    private static final int HSPAP = 15;
-
-
+    
+    // Setting intent literals
+    public static final String BATTERY_TEMPERATURE = "batteryTemperature";
+    public static final String BATTERY_HEALTH = "batteryHealth";
+    public static final String WIFI_SIGNAL_STRENGTH = "wifiSignalStrength";
+    public static final String WIFI_STATUS = "wifiStatus";
+    public static final String NETWORK_TYPE = "networkType";
+    public static final String MOBILE_NETWORK_TYPE = "mobileNetworkType";
+    public static final String MOBILE_DATA_ACTIVITY = "mobileDataActivity";
+    public static final String MOBILE_DATA_STATUS = "mobileDataStatus";
+    public static final String CPU_USAGE = "cpuUsage";
+    public static final String SCREEN_BRIGHTNESS = "screenBrightness";
+    public static final String DISTANCE_TRAVELED = "distanceTraveled";
+    
+    // Grotesque hack, don't deploy
+    private static final HashMap<String, String> settingMap = new HashMap<String, String>(){{
+        put(WIFI_STATUS, Settings.ACTION_WIFI_SETTINGS);
+        put(NETWORK_TYPE, Settings.ACTION_SETTINGS);
+        put(MOBILE_NETWORK_TYPE, Settings.ACTION_DATA_ROAMING_SETTINGS);
+        put(SCREEN_BRIGHTNESS, Settings.ACTION_DISPLAY_SETTINGS);
+    }};
 
     public DeviceLibrary(Context context, Intent intent, Activity activity){
                  context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -52,6 +67,17 @@ public class DeviceLibrary {
         DeviceLibrary.intent = intent;
         DeviceLibrary.activity = activity;
         telManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
+    
+    /**
+     * 
+     * @param settingName Setting name, see literals.
+     * @return Android settings literal
+     */
+    public static String getSetting(String settingName){
+        String setting = settingMap.get(settingName);
+        if(setting == null) return "unknown";
+        return setting;
     }
 
     /**
@@ -91,17 +117,17 @@ public class DeviceLibrary {
 
     public HashMap<String, Object> getDeviceInfo(){
         return new HashMap<String, Object>() {{
-            put("batteryTemperature", getBatteryTemperature());
-            put("batteryHealth", getBatteryHealth());
-            put("wifiSignalStrength", getWifiSignalStrength());
-            put("wifiStatus", getWifiStatus());
-            put("networkType", getNetworkType());
-            put("mobileNetworkType", getMobileNetworkType());
-            put("mobileDataActivity", getMobileDataActivity());
-            put("mobileDataStatus", getMobileDataStatus());
-            put("cpuUsage", (int) getCpuUsage(1000));
-            put("screenBrightness", getScreenBrightness());
-            put("distanceTraveled", (int) getDistanceTraveled());
+            put(BATTERY_TEMPERATURE, getBatteryTemperature());
+            put(BATTERY_HEALTH, getBatteryHealth());
+            put(WIFI_SIGNAL_STRENGTH, getWifiSignalStrength());
+            put(WIFI_STATUS, getWifiStatus());
+            put(NETWORK_TYPE, getNetworkType());
+            put(MOBILE_NETWORK_TYPE, getMobileNetworkType());
+            put(MOBILE_DATA_ACTIVITY, getMobileDataActivity());
+            put(MOBILE_DATA_STATUS, getMobileDataStatus());
+            put(CPU_USAGE, (int) getCpuUsage(1000));
+            put(SCREEN_BRIGHTNESS, getScreenBrightness());
+            put(DISTANCE_TRAVELED, (int) getDistanceTraveled());
         }};
     }
 
@@ -173,17 +199,17 @@ public class DeviceLibrary {
             case TelephonyManager.NETWORK_TYPE_1xRTT: return "1xrtt";
             case TelephonyManager.NETWORK_TYPE_CDMA: return "cdma";
             case TelephonyManager.NETWORK_TYPE_EDGE: return "edge";
-            case EHRPD: return "ehrpd";
+            case 14: return "ehrpd";
             case TelephonyManager.NETWORK_TYPE_EVDO_0: return "evdo_0";
             case TelephonyManager.NETWORK_TYPE_EVDO_A: return "evdo_a";
-            case EVDO_B: return "evdo_b";
+            case 12: return "evdo_b";
             case TelephonyManager.NETWORK_TYPE_GPRS: return "gprs";
             case TelephonyManager.NETWORK_TYPE_HSDPA: return "hsdpa";
             case TelephonyManager.NETWORK_TYPE_HSPA: return "hspa";
-            case HSPAP: return "hspap";
+            case 15: return "hspap";
             case TelephonyManager.NETWORK_TYPE_HSUPA: return "hsupa";
             case TelephonyManager.NETWORK_TYPE_IDEN: return "iden";
-            case LTE: return "lte";
+            case 13: return "lte";
             case TelephonyManager.NETWORK_TYPE_UMTS: return "umts";
             default: return Integer.toString(netType);
         }
@@ -323,7 +349,9 @@ public class DeviceLibrary {
             CPUStats cpu1 = new CPUStats(data); //Snapshot 1
             try {
                 Thread.sleep(interval);
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
+                Log.v("Carat", "Failed to poll cpu usage", e);
+                return 0;
                 // ...
             }
             data = readLines(reader, 1, 10, "\\s+")[0];
@@ -334,11 +362,33 @@ public class DeviceLibrary {
             float idlediff = cpu2.idleAll - cpu1.idleAll;
             float cpuP = 100*(totaldiff - idlediff)/totaldiff;
 
-            // Disregard negative values
+            // Disregard negative values caused by a bug in linux kernel
             return (cpuP > 0)? cpuP : 0;
         } catch (IOException e) {
-            Log.v("Carat", "Failed reading /proc/stat");
+            Log.v("Carat", "Failed reading /proc/stat", e);
             return 0;
+        }
+    }
+    
+    
+    /**
+     * Opens a setting menu.
+     * @param setting Setting name, see literals
+     * @return True if menu could be opened
+     */
+    public boolean openSettingMenu(String setting){
+        Log.v("Carat", "Opening setting "+setting);
+        Intent settingIntent = new Intent();
+        
+        // Open generic settings activity as a fallback
+        if(!settingMap.containsKey(setting)) setting = Settings.ACTION_SETTINGS;
+        settingIntent.setAction(setting);
+        try{
+            activity.startActivity(settingIntent);
+            return true;
+        } catch(Exception e){
+            Log.v("Carat", "Failed to open setting", e);
+            return false;
         }
     }
 

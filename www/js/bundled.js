@@ -3038,7 +3038,7 @@ module.exports={
   },
   "_id": "ejs@2.3.4",
   "_shasum": "3c76caa09664b3583b0037af9dc136e79ec68b98",
-  "_resolved": "http://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
+  "_resolved": "https://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
   "_from": "ejs@2.3.4",
   "_npmVersion": "2.10.1",
   "_nodeVersion": "0.12.4",
@@ -3060,7 +3060,8 @@ module.exports={
     "shasum": "3c76caa09664b3583b0037af9dc136e79ec68b98",
     "tarball": "http://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz"
   },
-  "directories": {}
+  "directories": {},
+  "readme": "ERROR: No README data found!"
 }
 
 },{}],11:[function(require,module,exports){
@@ -3201,17 +3202,16 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\r\n        <div class=\"mdl-card__title-text\"><%= label %></div>\r\n        <div class=\"carat-card-time\"><%= benefit %></div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"suggested-action\">Change to\r\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\r\n                range <%= changeTo.min %> - <%= changeTo.max %>\r\n            <% } else { %>\r\n                <%= changeTo %>\r\n            <% } %>\r\n        </div>Place for additional infotext. Current setting \"<%= current %>\" consumes more energy. In order to save energy change this setting.\r\n        <div class=\"collapse\"></div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <button class=\"action-button\">Change</button>\r\n    </div>\r\n</div>";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\r\n        <div class=\"mdl-card__title-text\"><%= label %></div>\r\n        <div class=\"carat-card-time\"><%= benefit %></div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"suggested-action\">Change to\r\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\r\n                range <%= changeTo.min %> - <%= changeTo.max %>\r\n            <% } else { %>\r\n                <%= changeTo %>\r\n            <% } %>\r\n        </div>Current setting '<%= current %>' consumes more energy. Save battery by changing this setting.\r\n        <div class=\"collapse\"></div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n       <button class=\"action-button\"> Change</button>\r\n        <% if(setting == \"unknown\"){ %>\r\n            <button class=\"setting-info-button\">\r\n                <i class=\"material-icons\">&#xE88E;</i> How to change this?\r\n            </button>\r\n        <% } %>\r\n    </div>\r\n</div>";
 
 /**
+* @public
 * @class SettingCard
 * @summary Setting suggestion card.
 */
 
 var SettingCard = (function () {
 	function SettingCard(data) {
-		var _this = this;
-
 		_classCallCheck(this, SettingCard);
 
 		// Prepare and reformat data
@@ -3219,40 +3219,90 @@ var SettingCard = (function () {
 		data.label = data.label.toLowerCase();
 		data.label = _Utilities.Utilities.capitalize(data.label);
 
-		// Create initial node
 		this.data = data;
-		var html = _ejs2.default.render(Template, data);
-		this.node = _Utilities.Utilities.makeDomNode(html);
 
-		// Bind button responsbile for changing the setting
-		var button = this.node.querySelector(".action-button");
-		button.addEventListener("click", function () {
-			_this.openSetting();
-		});
+		// Create initial node
+		var _html = _ejs2.default.render(Template, data);
+		this.node = _Utilities.Utilities.makeDomNode(_html);
+
+		// Bind card buttons
+		this._bindEvents();
 
 		// Make card swipeable
 		makeElemPanSwipable(this.node);
 	}
 
 	/**
-  * Returns a rendered setting card
-  * @return {node} Card node
+  * Opens a setting related to the card
+  * @private
   */
 
 	_createClass(SettingCard, [{
-		key: "render",
-		value: function render() {
-			return this.node;
+		key: "_openSetting",
+		value: function _openSetting() {
+			carat.openSetting(this.data.setting);
 		}
 
 		/**
-   * Opens a setting related to the card
+   * Shows setting related information dialog
+   * @private
    */
 
 	}, {
-		key: "openSetting",
-		value: function openSetting() {
-			carat.showToast("Open " + this.data.label + " settings");
+		key: "_showInfo",
+		value: function _showInfo() {
+			app.showDialog({
+				title: this.data.label,
+				text: "Under construction. Here you'll see information about changing " + "a setting which has no specific toggle in the system settings."
+			});
+		}
+
+		/**
+   * Binds card actions to buttons
+   * @private
+   */
+
+	}, {
+		key: "_bindEvents",
+		value: function _bindEvents() {
+			var _this = this;
+
+			var _actionButton = this.node.querySelector(".action-button");
+			if (this.data.setting != "unknown") {
+				_actionButton.addEventListener("click", function () {
+					_this._openSetting();
+				});
+			} else {
+				// Gray out action button
+				_actionButton.disabled = true;
+
+				var _infoButton = this.node.querySelector(".setting-info-button");
+				_infoButton.addEventListener("click", function () {
+					_this._showInfo();
+				});
+			}
+		}
+
+		/**
+   * Tells if node is attached to a parent node
+   * @return {Boolean} True if component is mounted
+   */
+
+	}, {
+		key: "isComponentMounted",
+		value: function isComponentMounted() {
+			return !!this.node.parent;
+		}
+
+		/**
+   * Returns a rendered setting card
+   * @return {node} Card node
+   */
+
+	}, {
+		key: "render",
+		value: function render() {
+			return this.node;
 		}
 	}]);
 
