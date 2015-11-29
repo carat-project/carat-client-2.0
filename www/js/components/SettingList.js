@@ -15,6 +15,7 @@ class SettingList {
 		this.node = Utilities.makeDomNode(html);
 
 		this.clear = this.clear.bind(this);
+		this._showNotification = this._showNotification.bind(this); 
 		this.cardCount = this.node.querySelector("#system-card-count")
 		this.cardContainer = this.node.querySelector("#system-cards");
 
@@ -34,12 +35,35 @@ class SettingList {
 		this.cardContainer.innerHTML = "";
 	}
 
+	/**
+	 * Displays a placeholder notification for a setting suggestion
+	 * @param  {Object} suggestion System setting suggestion
+	 * @private
+	 */
+	_showNotification(suggestion){
+        let benefit = suggestion.benefit
+        let length =  benefit.indexOf("±");
+        benefit = benefit.substr(0, length-1);
+
+        carat.showNotification("Change to "+suggestion.changeTo, "Benefit: "+benefit, (success) => {
+            console.log("Showing placeholder notification for a system setting");
+        });
+	}
+
 
 	/**
 	 * Reloads and appends setting cards
 	 */
 	reload(){
 		carat.getSettings((suggestions)=>{
+			// Display a notification
+			if((typeof suggestions !== "undefined")
+				&& (suggestions !== null)
+				&& (suggestions.length > 0)){
+				this._showNotification(suggestions[0]);
+			}
+
+			// Refresh the view
 			this.cardCount.innerHTML = suggestions.length;
 			this.clear();
 			if(suggestions.length >= 1){

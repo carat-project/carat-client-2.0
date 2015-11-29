@@ -1,5 +1,6 @@
 package org.carat20.client.device;
 
+import android.R;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -292,11 +293,11 @@ public class DeviceLibrary {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(mainPackage);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
-
+        
         // Build the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context)
-                .setSmallIcon(context.getApplicationInfo().icon) // This needs to be transparent
-                .setLargeIcon(ApplicationLibrary.getApplicationIcon(mainPackage, context))
+                .setSmallIcon(activity.getResources().getIdentifier("mini", "drawable", activity.getPackageName())) // This needs to be transparent
+                //.setLargeIcon(ApplicationLibrary.getApplicationIcon(mainPackage, context))
                 .setContentTitle(title)
                 .setContentText(content);
         notification.setContentIntent(pIntent);
