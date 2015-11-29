@@ -3038,7 +3038,7 @@ module.exports={
   },
   "_id": "ejs@2.3.4",
   "_shasum": "3c76caa09664b3583b0037af9dc136e79ec68b98",
-  "_resolved": "https://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
+  "_resolved": "http://registry.npmjs.org/ejs/-/ejs-2.3.4.tgz",
   "_from": "ejs@2.3.4",
   "_npmVersion": "2.10.1",
   "_nodeVersion": "0.12.4",
@@ -3096,7 +3096,7 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Template = "<div class=\"overlay\" id=\"popup-overlay\" style=\"visibility: hidden; display: flex;\">\n    <div class=\"modal\" id=\"popup-modal\" style=\"display: flex;\">\n        <div class=\"mdl-card mdl-shadow--2dp\">\n            <div class=\"carat-card__title gray-title\">\n                <div class=\"mdl-card__title-text gray-title\"><!-- Title --></div>\n                <div class=\"mdl-layout-spacer\"></div>\n                <button class=\"mdl-button mdl-js-button mdl-button--icon close\" data-upgraded=\",MaterialButton\">\n                    <i class=\"material-icons\"></i>\n                </button>\n            </div>\n            <div class=\"mdl-card__supporting-text dialog-text\"><!-- Text --></div>\n            <div class=\"mdl-card__actions dialog-buttons\">\n                <button class=\"mdl-button mdl-js-button mdl-js-ripple-effec close\">OK</button>\n            </div>\n        </div>\n    </div>\n</div>";
+var Template = "<div class=\"overlay\" id=\"popup-overlay\" style=\"visibility: hidden; display: flex;\">\r\n    <div class=\"modal\" id=\"popup-modal\" style=\"display: flex;\">\r\n        <div class=\"mdl-card mdl-shadow--2dp\">\r\n            <div class=\"carat-card__title gray-title\">\r\n                <div class=\"mdl-card__title-text gray-title\"><!-- Title --></div>\r\n                <div class=\"mdl-layout-spacer\"></div>\r\n                <button class=\"mdl-button mdl-js-button mdl-button--icon close\" data-upgraded=\",MaterialButton\">\r\n                    <i class=\"material-icons\"></i>\r\n                </button>\r\n            </div>\r\n            <div class=\"mdl-card__supporting-text dialog-text\"><!-- Text --></div>\r\n            <div class=\"mdl-card__actions dialog-buttons\">\r\n                <button class=\"mdl-button mdl-js-button mdl-js-ripple-effec close\">OK</button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>";
 
 /**
  * Dynamic popup dialog displayed over the application.
@@ -3201,7 +3201,7 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\n    <div class=\"carat-card__title\">\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\n        <div class=\"mdl-card__title-text\"><%= label %></div>\n        <div class=\"carat-card-time\"><%= benefit %></div>\n    </div>\n    <div class=\"mdl-card__supporting-text\">\n        <div class=\"suggested-action\">Change to\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\n                range <%= changeTo.min %> - <%= changeTo.max %>\n            <% } else { %>\n                <%= changeTo %>\n            <% } %>\n        </div>Place for additional infotext. Current setting \"<%= current %>\" consumes more energy. In order to save energy change this setting.\n        <div class=\"collapse\"></div>\n    </div>\n    <div class=\"mdl-card__actions mdl-card--border\">\n        <button class=\"action-button\">Change</button>\n    </div>\n</div>";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp sleeker smaller-time-text system\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><i class=\"material-icons\">&#xE1DA;</i></div>\r\n        <div class=\"mdl-card__title-text\"><%= label %></div>\r\n        <div class=\"carat-card-time\"><%= benefit %></div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"suggested-action\">Change to\r\n            <% if(changeTo.hasOwnProperty(\"min\")){ %>\r\n                range <%= changeTo.min %> - <%= changeTo.max %>\r\n            <% } else { %>\r\n                <%= changeTo %>\r\n            <% } %>\r\n        </div>Place for additional infotext. Current setting \"<%= current %>\" consumes more energy. In order to save energy change this setting.\r\n        <div class=\"collapse\"></div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <button class=\"action-button\">Change</button>\r\n    </div>\r\n</div>";
 
 /**
 * @class SettingCard
@@ -3298,7 +3298,7 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Template = "<div class=\"carat-module\">\n\t    <div class=\"carat-module-title\">\n\t    \tSettings: <span id=\"system-card-count\">0</span>\n\t    \t<div id=\"system-card-refresh\">\n\t    \t\t<i class=\"material-icons\">&#xE5D5;</i>\n\t    \t</div>\n\t    </div>\n\t    <div class=\"carat-module-content\" id=\"system-cards\"></div>\n</div>";
+var Template = "<div class=\"carat-module\">\r\n\t    <div class=\"carat-module-title\">\r\n\t    \tSettings: <span id=\"system-card-count\">0</span>\r\n\t    \t<div id=\"system-card-refresh\">\r\n\t    \t\t<i class=\"material-icons\">&#xE5D5;</i>\r\n\t    \t</div>\r\n\t    </div>\r\n\t    <div class=\"carat-module-content\" id=\"system-cards\"></div>\r\n</div>";
 
 /**
 * @class SettingList
@@ -3431,8 +3431,21 @@ module.exports.Utilities = (function () {
      * @memberOf Utilities
      */
     var findById = function findById(elem, id) {
-        if (!elem.querySelector) return;
-        return elem.querySelector("#" + id);
+        if (!elem.querySelector) {
+            return null;
+        } else {
+            return elem.querySelector("#" + id);
+        }
+    };
+
+    var appendOrReplace = function appendOrReplace(appendLocation, updateId, elem) {
+        var oldElem = findById(appendLocation, updateId);
+
+        if (!oldElem) {
+            appendLocation.appendChild(elem);
+        } else {
+            oldElem.parentNode.replaceChild(elem, oldElem);
+        }
     };
 
     /**
@@ -3541,7 +3554,8 @@ module.exports.Utilities = (function () {
         makeIdFromOtherId: makeIdFromOtherId,
         appendChildAll: appendChildAll,
         findById: findById,
-        capitalize: capitalize
+        capitalize: capitalize,
+        appendOrReplace: appendOrReplace
     };
 })();
 
@@ -3579,7 +3593,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 // Template
-var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\n     id=\"statistics-jscore\"\n     style=\"-webkit-user-select: none;\n            -webkit-user-drag: none;\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\n    <div class=\"mdl-card__supporting-text in_large\">\n        <div class=\"list-item\">OS version: <%= osVersion %></div>\n        <div class-\"list-item\">Device model: <%= deviceModel %></div>\n        <div class=\"list-item\" style=\"display: inline-block;\">\n            CPU usage:&nbsp;\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\n                <span>?</span>\n                <div></div>\n            </div>\n        </div>\n        <div class=\"list-item\">Memory total: <%= totalMemory %> MiB</div>\n        <div class=\"list-item\" style=\"display: inline-block;\">\n            Memory usage:&nbsp;\n            <div id=\"memProgressBar\" class=\"progressBar\">\n                <span>?</span>\n                <div></div>\n            </div>\n        </div>\n        <div class=\"list-item\">Carat id: <%= uuid %></div>\n    </div>\n</div>\n";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp\"\r\n     id=\"statistics-jscore\"\r\n     style=\"-webkit-user-select: none;\r\n            -webkit-user-drag: none;\r\n            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\">\r\n    <div class=\"mdl-card__supporting-text in_large\">\r\n        <div class=\"list-item\">OS version: <%= osVersion %></div>\r\n        <div class-\"list-item\">Device model: <%= deviceModel %></div>\r\n        <div class=\"list-item\" style=\"display: inline-block;\">\r\n            CPU usage:&nbsp;\r\n            <div id=\"cpuProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div class=\"list-item\">Memory total: <%= totalMemory %> MiB</div>\r\n        <div class=\"list-item\" style=\"display: inline-block;\">\r\n            Memory usage:&nbsp;\r\n            <div id=\"memProgressBar\" class=\"progressBar\">\r\n                <span>?</span>\r\n                <div></div>\r\n            </div>\r\n        </div>\r\n        <div class=\"list-item\">Carat id: <%= uuid %></div>\r\n    </div>\r\n</div>\r\n";
 
 var DeviceStats = (function () {
     function DeviceStats(data) {
@@ -3673,7 +3687,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<div class=\"mdl-card sleeker smaller-time-text mdl-shadow--2dp\"\n     id=\"<%= id %>\">\n    <div class=\"carat-card__title\">\n        <div class=\"mdl-card__icon\"><img src=\"<%= icon %>\"></div>\n        <div class=\"mdl-card__title-text\">\n            <%= label %>\n            <div class=\"expand\">\n                <button class=\"expand-button\">\n                    <i class=\"material-icons\n                              md-light\n                              normal-icon\">\n                        &#xE5CF;\n                    </i>\n                </button>\n            </div>\n        </div>\n        <div class=\"carat-card-time\">\n            <%= benefit %>\n            <span class=\"benefit-error\">\n                <%= benefitError %>\n            </span>\n        </div>\n    </div>\n    <div class=\"mdl-card__supporting-text\">\n        <div class=\"collapse\" id=\"card-<%= id %>-textpand\">\n            <div><%= \"Version: \" + version %></div>\n            <div><%= \"Samples: \" + samples %></div>\n            <div><%= \"Found in \" + popularity + \"% of devices.\" %></div>\n        </div>\n    </div>\n    <div class=\"mdl-card__actions mdl-card--border\">\n        <span>\n            <button class=\"action-button\"\n               id=\"<%= closeId %>\"\n               <% if(!killable) { %>\n               disabled\n               <% } %>>\n                Close app\n            </button>\n        </span>\n        <span>\n            <button class=\"action-button\"\n               id=\"<%= uninstallId %>\"\n               <% if(!uninstallable) { %>\n               disabled\n               <% } %>>\n                Uninstall\n            </button>\n        </span>\n    </div>\n</div>\n";
+var Template = "<div class=\"mdl-card sleeker smaller-time-text mdl-shadow--2dp\"\r\n     id=\"<%= id %>\">\r\n    <div class=\"carat-card__title\">\r\n        <div class=\"mdl-card__icon\"><img src=\"<%= icon %>\"></div>\r\n        <div class=\"mdl-card__title-text\">\r\n            <%= label %>\r\n            <div class=\"expand\">\r\n                <button class=\"expand-button\">\r\n                    <i class=\"material-icons\r\n                              md-light\r\n                              normal-icon\">\r\n                        &#xE5CF;\r\n                    </i>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <div class=\"carat-card-time\">\r\n            <%= benefit %>\r\n            <span class=\"benefit-error\">\r\n                <%= benefitError %>\r\n            </span>\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text\">\r\n        <div class=\"collapse\" id=\"card-<%= id %>-textpand\">\r\n            <div><%= \"Version: \" + version %></div>\r\n            <div><%= \"Samples: \" + samples %></div>\r\n            <div><%= \"Found in \" + popularity + \"% of devices.\" %></div>\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__actions mdl-card--border\">\r\n        <span>\r\n            <button class=\"action-button\"\r\n               id=\"<%= closeId %>\"\r\n               <% if(!killable) { %>\r\n               disabled\r\n               <% } %>>\r\n                Close app\r\n            </button>\r\n        </span>\r\n        <span>\r\n            <button class=\"action-button\"\r\n               id=\"<%= uninstallId %>\"\r\n               <% if(!uninstallable) { %>\r\n               disabled\r\n               <% } %>>\r\n                Uninstall\r\n            </button>\r\n        </span>\r\n    </div>\r\n</div>\r\n";
 
 /**
 * @class HogBug
@@ -3681,7 +3695,7 @@ var Template = "<div class=\"mdl-card sleeker smaller-time-text mdl-shadow--2dp\
 */
 
 var HogBug = (function () {
-    function HogBug(data) {
+    function HogBug(data, Template) {
         _classCallCheck(this, HogBug);
 
         // Prepare and reformat data
@@ -3696,6 +3710,7 @@ var HogBug = (function () {
         data.closeId = _Utilities.Utilities.makeIdFromAppName(data.name, data.type, "close");
 
         this.data = data;
+        this.Template = Template;
 
         // render template
         var html = _ejs2.default.render(Template, data);
@@ -3884,7 +3899,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<div class=\"mdl-card mdl-shadow--2dp\" id=\"summary-0\">\n    <div class=\"carat-card__title\" id=\"summary\">\n        <div class=\"mdl-card__title-text carat_summaryCard_title_text\">\n            Summary\n        </div>\n    </div>\n    <div class=\"mdl-card__supporting-text carat-card__supporting-text\">\n        <div class=\"ScoreAndBattery\">\n            <div class=\"carat-Jscore-text\"></div>\n            <div class=\"carat-battery-text\"></div>\n            <div class=\"circleContainer\">\n                <div class=\"outerCircle\">\n                    <div class=\"innerCircle\">\n                        <div class=\"numberCircle\">\n                            <button class=\"info\"></button>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"carat_summaryCard_group_title\" id=\"bugTitleAndCount\">\n            <%= bugsCount %>\n        </div>\n        <div id=\"bugSummaryGrid\" class=\"carat_hide\">\n            <div class=\"carat_summary_grid\" id=\"bugsGrid\">\n            </div>\n        </div>\n        <div class=\"carat_summaryCard_group_title\" id=\"hogTitleAndCount\">\n             <%= hogsCount %>\n        </div>\n        <div id=\"hogSummaryGrid\" class=\"carat_show\">\n            <div class=\"carat_summary_grid\" id=\"hogsGrid\">\n            </div>\n        </div>\n        <div class=\"carat_summaryCard_group_title\">\n             0 System notifications\n        </div>\n    </div>\n    <div class=\"mdl-card__actions carat-card__actions\">\n        <a class=\"mdl-card__more\" id=\"summary-button\" role=\"button\" onclick=\"showOrHideActions()\" href=\"#\">\n           More\n        </a>\n    </div>\n</div>\n";
+var Template = "<div class=\"mdl-card mdl-shadow--2dp\" id=\"summary-0\">\r\n    <div class=\"carat-card__title\" id=\"summary\">\r\n        <div class=\"mdl-card__title-text carat_summaryCard_title_text\">\r\n            Summary\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__supporting-text carat-card__supporting-text\">\r\n        <div class=\"ScoreAndBattery\">\r\n            <div class=\"carat-Jscore-text\"></div>\r\n            <div class=\"carat-battery-text\"></div>\r\n            <div class=\"circleContainer\">\r\n                <div class=\"outerCircle\">\r\n                    <div class=\"innerCircle\">\r\n                        <div class=\"numberCircle\">\r\n                            <button class=\"info\"></button>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\" id=\"bugTitleAndCount\">\r\n            <%= bugsCount %>\r\n        </div>\r\n        <div id=\"bugSummaryGrid\" class=\"carat_hide\">\r\n            <div class=\"carat_summary_grid\" id=\"bugsGrid\">\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\" id=\"hogTitleAndCount\">\r\n             <%= hogsCount %>\r\n        </div>\r\n        <div id=\"hogSummaryGrid\" class=\"carat_show\">\r\n            <div class=\"carat_summary_grid\" id=\"hogsGrid\">\r\n            </div>\r\n        </div>\r\n        <div class=\"carat_summaryCard_group_title\">\r\n             0 System notifications\r\n        </div>\r\n    </div>\r\n    <div class=\"mdl-card__actions carat-card__actions\">\r\n        <a class=\"mdl-card__more\" id=\"summary-button\" role=\"button\" onclick=\"showOrHideActions()\" href=\"#\">\r\n           More\r\n        </a>\r\n    </div>\r\n</div>\r\n";
 
 /**
 * @class SummaryContainer
@@ -3895,15 +3910,26 @@ var SummaryContainer = (function () {
     function SummaryContainer(bugs, hogs) {
         _classCallCheck(this, SummaryContainer);
 
-        this.bugEntries = this.makeModels(bugs);
-        this.hogEntries = this.makeModels(hogs);
+        if (!bugs) {
+            this.bugEntries = [];
+        } else {
+            this.bugEntries = this.makeModels(bugs);
+        }
+
+        if (!hogs) {
+            this.hogEntries = [];
+        } else {
+            this.hogEntries = this.makeModels(hogs);
+        }
+
         this.node = this.createNode();
+        this.id = "summary-0";
 
         var jscoreButton = this.node.querySelector(".info");
         jscoreButton.addEventListener("click", function () {
             app.showDialog({
                 title: "What is a J-Score?",
-                text: Buffer("PGRpdj5UaGUgSi1TY29yZSByZXByZXNlbnRzIHRoZSBwZXJjZW50aWxlIGJhdHRlcnkgbGlmZSB5b3Ugc2VlIHJlbGF0aXZlIHRvIGFsbCBvdGhlciBkZXZpY2VzCmJlaW5nIG1lYXN1cmVkIGJ5IENhcmF0LjwvZGl2PgoKPGRpdj5TbywgaWYgeW91IGhhdmUgYSBKLVNjb3JlIG9mIDUwLCB0aGF0IG1lYW5zIHlvdXIgZXhwZWN0ZWQgYmF0dGVyeSBsaWZlIGlzIGJldHRlciB0aGFuCmhhbGYgb2Ygb3VyIHVzZXJzOyBhIHNjb3JlIG9mIDk5IG1lYW5zIHlvdSBoYXZlIGJldHRlciBiYXR0ZXJ5IGxpZmUgdGhhbiA5OSUgb2Ygb3VyIHVzZXJzLjwvZGl2PgoKPGltZyBzcmM9ImltZy9qc2NvcmVfcGxvdC5wbmciIC8+Cgo8ZGl2PiBPZiBjb3Vyc2UsIGEgc2luZ2xlIG51bWJlciBkb2VzIG5vdCBwcm92aWRlIGEgY29tcGxldGUgZGVzY3JpcHRpb24gb2YgeW91ciBiYXR0ZXJ5IGxpZmUuCkEgbG93IEotU2NvcmUgY291bGQgbWVhbiB0aGF0IHlvdXIgZGV2aWNlIGlzIHVzaW5nIGEgYmlnIGJhdHRlcnkgaW5lZmZpY2llbnRseSBvciBhIHNtYWxsCmJhdHRlcnkgd2l0aCBhdmVyYWdlIGVmZmljaWVuY3kuPC9kaXY+Cgo8ZGl2PlNpbWlsYXJseSwgYSBoaWdoIEotU2NvcmUgY291bGQgc2ltcGx5IG1lYW4gdGhhdCB5b3UgZG9uJ3QgdXNlIHlvdXIgZGV2aWNlIGhlYXZpbHkuPC9kaXY+Cgo8ZGl2PkNhcmF0IGNvbXB1dGVzIGEgaHVnZSB2YXJpZXR5IG9mIHN0YXRpc3RpY3MsIGFuZCB0aGUgSi1TY29yZSBpcyBqdXN0IG9uZSBvZiB0aGVtLiA8L2Rpdj4=", "base64")
+                text: Buffer("PGRpdj5UaGUgSi1TY29yZSByZXByZXNlbnRzIHRoZSBwZXJjZW50aWxlIGJhdHRlcnkgbGlmZSB5b3Ugc2VlIHJlbGF0aXZlIHRvIGFsbCBvdGhlciBkZXZpY2VzDQpiZWluZyBtZWFzdXJlZCBieSBDYXJhdC48L2Rpdj4NCg0KPGRpdj5TbywgaWYgeW91IGhhdmUgYSBKLVNjb3JlIG9mIDUwLCB0aGF0IG1lYW5zIHlvdXIgZXhwZWN0ZWQgYmF0dGVyeSBsaWZlIGlzIGJldHRlciB0aGFuDQpoYWxmIG9mIG91ciB1c2VyczsgYSBzY29yZSBvZiA5OSBtZWFucyB5b3UgaGF2ZSBiZXR0ZXIgYmF0dGVyeSBsaWZlIHRoYW4gOTklIG9mIG91ciB1c2Vycy48L2Rpdj4NCg0KPGltZyBzcmM9ImltZy9qc2NvcmVfcGxvdC5wbmciIC8+DQoNCjxkaXY+IE9mIGNvdXJzZSwgYSBzaW5nbGUgbnVtYmVyIGRvZXMgbm90IHByb3ZpZGUgYSBjb21wbGV0ZSBkZXNjcmlwdGlvbiBvZiB5b3VyIGJhdHRlcnkgbGlmZS4NCkEgbG93IEotU2NvcmUgY291bGQgbWVhbiB0aGF0IHlvdXIgZGV2aWNlIGlzIHVzaW5nIGEgYmlnIGJhdHRlcnkgaW5lZmZpY2llbnRseSBvciBhIHNtYWxsDQpiYXR0ZXJ5IHdpdGggYXZlcmFnZSBlZmZpY2llbmN5LjwvZGl2Pg0KDQo8ZGl2PlNpbWlsYXJseSwgYSBoaWdoIEotU2NvcmUgY291bGQgc2ltcGx5IG1lYW4gdGhhdCB5b3UgZG9uJ3QgdXNlIHlvdXIgZGV2aWNlIGhlYXZpbHkuPC9kaXY+DQoNCjxkaXY+Q2FyYXQgY29tcHV0ZXMgYSBodWdlIHZhcmlldHkgb2Ygc3RhdGlzdGljcywgYW5kIHRoZSBKLVNjb3JlIGlzIGp1c3Qgb25lIG9mIHRoZW0uIDwvZGl2Pg==", "base64")
             });
         });
     }
@@ -3968,7 +3994,7 @@ var SummaryContainer = (function () {
         }
     }, {
         key: "createNode",
-        value: function createNode(html) {
+        value: function createNode() {
 
             var rendered = this.getRendered();
             var html = _ejs2.default.render(Template, rendered);
@@ -3995,6 +4021,14 @@ var SummaryContainer = (function () {
         key: "render",
         value: function render() {
             return this.node;
+        }
+    }, {
+        key: "refreshModel",
+        value: function refreshModel(bugs, hogs) {
+            this.bugEntries = this.makeModels(bugs);
+            this.hogEntries = this.makeModels(hogs);
+
+            this.node = this.createNode();
         }
     }]);
 
@@ -4037,7 +4071,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-phone carat_summary_item\" id=\"<%= id %>\">\n    <div class=\"carat_summaryCard_app_icon\">\n        <div class=\"mdl-card__icon\">\n            <img src=\"<%= icon %>\">\n        </div>\n        <i class=\"material-icons\"></i>\n    </div>\n    <div class=\"carat_summaryCard_app_name\"><%= label %></div>\n    <div class=\"carat_summaryCard_app_time\"><%= benefit %></div>\n</div>\n";
+var Template = "<div class=\"mdl-cell mdl-cell--2-col mdl-cell--1-col-phone carat_summary_item\" id=\"<%= id %>\">\r\n    <div class=\"carat_summaryCard_app_icon\">\r\n        <div class=\"mdl-card__icon\">\r\n            <img src=\"<%= icon %>\">\r\n        </div>\r\n        <i class=\"material-icons\"></i>\r\n    </div>\r\n    <div class=\"carat_summaryCard_app_name\"><%= label %></div>\r\n    <div class=\"carat_summaryCard_app_time\"><%= benefit %></div>\r\n</div>\r\n";
 
 /**
  * @class SummaryEntry
@@ -4176,7 +4210,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<header class=\"mdl-layout__header mdl-color--blue-grey-500\"\n        id=\"header-bar\">\n    <img class=\"mdl-layout-icon\" src=\"img/icon.png\"></img>\n    <div class=\"mdl-layout__header-row mdl-layout-title\"\n         style=\"float:left; left:0px; top:2px;\">\n        <!-- Title -->\n        <span>Carat 2.0</span>\n        <span id=\"progress\"></span>\n        <span id=\"state\"></span>\n\n        <div class=\"mdl-layout-spacer\"></div>\n        <button class=\"mdl-button mdl-js-button mdl-button--icon\"\n                id=\"menu\" onclick=\"listenMenu();\">\n            <i class=\"material-icons\">more_vert</i>\n        </button>\n        <ul class=\"mdl-menu mdl-js-menu mdl-menu--bottom-right\"\n            for=\"menu\">\n            <li class=\"mdl-menu__item\" id=\"showHiddenBugCards\"\n                disabled=\"true\">Show hidden bugs</li>\n            <li class=\"mdl-menu__item\" id=\"showHiddenHogCards\"\n                disabled=\"true\">Show hidden hogs</li>\n            <li class=\"mdl-menu__item\" id=\"sendFeedback\">\n                Send Feedback\n            </li>\n            <li class=\"mdl-menu__item\" id=\"changeUuid\">Change UUID</li>\n            <li class=\"mdl-menu__item\" id=\"appSettings\">Settings</li>\n        </ul>\n\n    </div>\n\n    <!-- Tabs -->\n    <div class=\"mdl-layout__tab-bar mdl-color--blue-grey-500\">\n        <a href=\"#home\" class=\"mdl-layout__tab is-active\" id=\"home-tab\">\n            Home\n        </a>\n        <a href=\"#bugs\" class=\"mdl-layout__tab\" id=\"bugs-tab\">Bugs</a>\n        <a href=\"#hogs\" class=\"mdl-layout__tab\" id=\"hogs-tab\">Hogs</a>\n        <a href=\"#system\" class=\"mdl-layout__tab\" id=\"system-tab\">\n            Stats\n        </a>\n    </div>\n</header>\n";
+var Template = "<header class=\"mdl-layout__header mdl-color--blue-grey-500\"\r\n        id=\"header-bar\">\r\n    <img class=\"mdl-layout-icon\" src=\"img/icon.png\"></img>\r\n    <div class=\"mdl-layout__header-row mdl-layout-title\"\r\n         style=\"float:left; left:0px; top:2px;\">\r\n        <!-- Title -->\r\n        <span>Carat 2.0</span>\r\n        <span id=\"progress\"></span>\r\n        <span id=\"state\"></span>\r\n\r\n        <div class=\"mdl-layout-spacer\"></div>\r\n        <button class=\"mdl-button mdl-js-button mdl-button--icon\"\r\n                id=\"menu\" onclick=\"listenMenu();\">\r\n            <i class=\"material-icons\">more_vert</i>\r\n        </button>\r\n        <ul class=\"mdl-menu mdl-js-menu mdl-menu--bottom-right\"\r\n            for=\"menu\">\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenBugCards\"\r\n                disabled=\"true\">Show hidden bugs</li>\r\n            <li class=\"mdl-menu__item\" id=\"showHiddenHogCards\"\r\n                disabled=\"true\">Show hidden hogs</li>\r\n            <li class=\"mdl-menu__item\" id=\"sendFeedback\">\r\n                Send Feedback\r\n            </li>\r\n            <li class=\"mdl-menu__item\" id=\"changeUuid\">Change UUID</li>\r\n            <li class=\"mdl-menu__item\" id=\"appSettings\">Settings</li>\r\n        </ul>\r\n\r\n    </div>\r\n\r\n    <!-- Tabs -->\r\n    <div class=\"mdl-layout__tab-bar mdl-color--blue-grey-500\">\r\n        <a href=\"#home\" class=\"mdl-layout__tab is-active\" id=\"home-tab\">\r\n            Home\r\n        </a>\r\n        <a href=\"#bugs\" class=\"mdl-layout__tab\" id=\"bugs-tab\">Bugs</a>\r\n        <a href=\"#hogs\" class=\"mdl-layout__tab\" id=\"hogs-tab\">Hogs</a>\r\n        <a href=\"#system\" class=\"mdl-layout__tab\" id=\"system-tab\">\r\n            Stats\r\n        </a>\r\n    </div>\r\n</header>\r\n";
 
 /**
 * @class Headerbar
@@ -4264,7 +4298,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<div class=\"page-content\">\n    <% if(hogBugsArray && hogBugsArray.running && hogBugsArray.running.length >= 1) { %>\n        <div class=\"carat-module\">\n            <div class=\"carat-module-title\">\n                Running:&nbsp; <%= hogBugsArray.running.length %>\n            </div>\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.runningId %>\"></div>\n        </div>\n    <% } %>\n    <% if(hogBugsArray && hogBugsArray.inactive && hogBugsArray.inactive.length >= 1) { %>\n        <div class=\"carat-module\">\n            <div class=\"carat-module-title\">\n                Inactive:&nbsp; <%= hogBugsArray.inactive.length %>\n            </div>\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.inactiveId %>\"></div>\n        </div>\n    <% } %>\n    <% if(hogBugsArray && hogBugsArray.system && hogBugsArray.system.length >= 1) { %>\n        <div class=\"carat-module\">\n            <div class=\"carat-module-title\">\n                System:&nbsp;<%= hogBugsArray.system.length %>\n            </div>\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.systemId %>\"></div>\n        </div>\n    <% } %>\n</div>\n";
+var Template = "<div class=\"page-content\">\r\n    <% if(hogBugsArray && hogBugsArray.running && hogBugsArray.running.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                Running:&nbsp; <%= hogBugsArray.running.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.runningId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n    <% if(hogBugsArray && hogBugsArray.inactive && hogBugsArray.inactive.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                Inactive:&nbsp; <%= hogBugsArray.inactive.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.inactiveId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n    <% if(hogBugsArray && hogBugsArray.system && hogBugsArray.system.length >= 1) { %>\r\n        <div class=\"carat-module\">\r\n            <div class=\"carat-module-title\">\r\n                System:&nbsp;<%= hogBugsArray.system.length %>\r\n            </div>\r\n            <div class=\"carat-module-content\" id=\"<%= cardLocIds.systemId %>\"></div>\r\n        </div>\r\n    <% } %>\r\n</div>\r\n";
 
 /**
 * @class HogBugCards
@@ -4447,6 +4481,7 @@ var HomeCards = (function () {
 
         this.docLocation = document.querySelector("#home .page-content");
         this.dataSource = this.defaultDataSource;
+        this.summaryContainer = new _SummaryContainer2.default();
 
         var _this = this;
         this.renderAsync = (function (source) {
@@ -4469,11 +4504,16 @@ var HomeCards = (function () {
     }, {
         key: "renderAsyncSource",
         value: function renderAsyncSource(sourceCallback) {
+            var _this = this;
             return function (onResultCallback) {
                 sourceCallback(function (data) {
 
-                    var model = new _SummaryContainer2.default(data.bugs, data.hogs);
-                    var rendered = model.render();
+                    if (!_this.summaryContainer) {
+                        _this.summaryContainer = new _SummaryContainer2.default(data.bugs, data.hogs);
+                    } else {
+                        _this.summaryContainer.refreshModel(data.bugs, data.hogs);
+                    }
+                    var rendered = _this.summaryContainer.render();
 
                     if (onResultCallback) {
                         onResultCallback(rendered);
@@ -4496,7 +4536,10 @@ var HomeCards = (function () {
             this.renderAsync = this.renderAsyncSource(freshDataSource);
         }
     }, {
-        key: "renderInsert",
+        key: "refreshSummaryCard",
+        value: function refreshSummaryCard() {
+            _Utilities.Utilities.appendOrReplace(this.docLocation, this.summaryContainer.id, this.summaryContainer.render());
+        }
 
         /**
          * @function
@@ -4504,11 +4547,15 @@ var HomeCards = (function () {
          * @memberOf HomeCards
          * @summary Insert these cards as a part of the document.
          */
+
+    }, {
+        key: "renderInsert",
         value: function renderInsert() {
             var _this = this;
+            this.refreshSummaryCard();
             this.renderAsync(function (renderedTemplate) {
                 var node = renderedTemplate;
-                _this.docLocation.appendChild(node);
+                _this.refreshSummaryCard();
                 showOrHideActions();
             });
         }
@@ -4552,7 +4599,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<main class=\"mdl-layout__content\">\n    <!-- Home view -->\n    <section class=\"mdl-layout__tab-panel is-active\" id=\"home\">\n\n        <!-- Pie card -->\n        <div class=\"page-content\">\n            <div class=\"mdl-card mdl-shadow--2dp\">\n                <div class=\"carat-caratCard__title\">\n                    <div class=\"mdl-card__title-text\n                                carat_caratCard_title_text\">\n                        Global Statistics\n                    </div>\n                </div>\n                <div class=\"carat-card__supporting-text\">\n                    <div class=\"canvas-container\">\n                        <canvas width=\"350\" height=\"250\"\n                                id=\"chart\"></canvas>\n                    </div>\n                    <ul id=\"chart-legend\"></ul>\n                </div>\n            </div>\n        </div>\n\n    </section>\n\n    <!-- Bugs tabs view -->\n    <section class=\"mdl-layout__tab-panel\" id=\"bugs\">\n    </section>\n\n    <!-- Hogs tab view -->\n    <section class=\"mdl-layout__tab-panel\" id=\"hogs\">\n    </section>\n\n    <!-- System tab view -->\n    <section class=\"mdl-layout__tab-panel\" id=\"system\">\n    </section>\n</main>\n";
+var Template = "<main class=\"mdl-layout__content\">\r\n    <!-- Home view -->\r\n    <section class=\"mdl-layout__tab-panel is-active\" id=\"home\">\r\n\r\n        <!-- Pie card -->\r\n        <div class=\"page-content\">\r\n            <div class=\"mdl-card mdl-shadow--2dp\">\r\n                <div class=\"carat-caratCard__title\">\r\n                    <div class=\"mdl-card__title-text\r\n                                carat_caratCard_title_text\">\r\n                        Global Statistics\r\n                    </div>\r\n                </div>\r\n                <div class=\"carat-card__supporting-text\">\r\n                    <div class=\"canvas-container\">\r\n                        <canvas width=\"350\" height=\"250\"\r\n                                id=\"chart\"></canvas>\r\n                    </div>\r\n                    <ul id=\"chart-legend\"></ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n\r\n    </section>\r\n\r\n    <!-- Bugs tabs view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"bugs\">\r\n    </section>\r\n\r\n    <!-- Hogs tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"hogs\">\r\n    </section>\r\n\r\n    <!-- System tab view -->\r\n    <section class=\"mdl-layout__tab-panel\" id=\"system\">\r\n    </section>\r\n</main>\r\n";
 
 /**
 * @class MainContent
@@ -4625,7 +4672,7 @@ function _classCallCheck(instance, Constructor) {
     }
 }
 
-var Template = "<div class=\"page-content\">\n    <div class=\"carat-module\">\n        <div class=\"carat-module-title\">\n            System information:\n        </div>\n    <div class=\"carat-module-content\" id=\"system-info\"></div>\n    </div>\n    <div class=\"carat-module\" id=\"system-card-list\"></div>\n</div>";
+var Template = "<div class=\"page-content\">\r\n    <div class=\"carat-module\">\r\n        <div class=\"carat-module-title\">\r\n            System information:\r\n        </div>\r\n    <div class=\"carat-module-content\" id=\"system-info\"></div>\r\n    </div>\r\n    <div class=\"carat-module\" id=\"system-card-list\"></div>\r\n</div>";
 
 /**
 * @class StatsCards
@@ -4905,13 +4952,18 @@ var MasterView = (function () {
     }, {
         key: "render",
         value: function render() {
+            this.homeView.renderInsert();
             this.bugsView.renderInsert();
             this.hogsView.renderInsert();
-            this.homeView.renderInsert();
 
             // Experimental rendering
             var container = document.querySelector("#system");
             container.appendChild(this.systemTab.render());
+        }
+    }, {
+        key: "renderBeforeData",
+        value: function renderBeforeData() {
+            this.homeView.renderInsert();
         }
     }, {
         key: "renderBase",

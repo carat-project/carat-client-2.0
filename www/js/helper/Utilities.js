@@ -52,8 +52,22 @@ module.exports.Utilities = (function() {
      * @memberOf Utilities
      */
     var findById = function(elem, id) {
-        if(!elem.querySelector) return;
-        return elem.querySelector("#" + id);
+        if(!elem.querySelector) {
+            return null;
+        } else {
+            return elem.querySelector("#" + id);
+        }
+    };
+
+    var appendOrReplace = function(appendLocation,
+                                  updateId, elem) {
+        var oldElem = findById(appendLocation, updateId);
+
+        if(!oldElem) {
+            appendLocation.appendChild(elem);
+        } else {
+            oldElem.parentNode.replaceChild(elem, oldElem);
+        }
     };
 
     /**
@@ -163,6 +177,7 @@ module.exports.Utilities = (function() {
         makeIdFromOtherId: makeIdFromOtherId,
         appendChildAll: appendChildAll,
         findById: findById,
-        capitalize: capitalize
+        capitalize: capitalize,
+        appendOrReplace: appendOrReplace
     };
 })();

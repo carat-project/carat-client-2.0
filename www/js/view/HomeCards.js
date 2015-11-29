@@ -8,9 +8,10 @@ const fs = require("fs");
  */
 class HomeCards {
 
-    constructor(){
+    constructor() {
         this.docLocation = document.querySelector("#home .page-content");
         this.dataSource = this.defaultDataSource;
+        this.summaryContainer = new SummaryContainer();
 
         let _this = this;
         this.renderAsync = (function(source) {
@@ -31,11 +32,20 @@ class HomeCards {
 
 
     renderAsyncSource(sourceCallback) {
+        let _this = this;
         return function(onResultCallback) {
             sourceCallback(function(data) {
 
-                var model = new SummaryContainer(data.bugs, data.hogs);
-                var rendered = model.render();
+                if(!_this.summaryContainer) {
+                    _this.summaryContainer =
+                        new SummaryContainer(data.bugs,
+                                             data.hogs);
+                } else {
+                    _this.summaryContainer
+                        .refreshModel(data.bugs,
+                                      data.hogs);
+                }
+                var rendered = _this.summaryContainer.render();
 
                 if(onResultCallback) {
                     onResultCallback(rendered);
@@ -56,6 +66,12 @@ class HomeCards {
         this.renderAsync = this.renderAsyncSource(freshDataSource);
     };
 
+    refreshSummaryCard() {
+        Utilities.appendOrReplace(this.docLocation,
+                                  this.summaryContainer.id,
+                                  this.summaryContainer.render());
+    }
+
     /**
      * @function
      * @instance
@@ -64,9 +80,10 @@ class HomeCards {
      */
     renderInsert(){
         let _this = this;
+        this.refreshSummaryCard();
         this.renderAsync(function(renderedTemplate) {
             var node = renderedTemplate;
-            _this.docLocation.appendChild(node);
+            _this.refreshSummaryCard();
             showOrHideActions();
         });
     };

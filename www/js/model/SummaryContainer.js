@@ -12,9 +12,20 @@ var Template = fs.readFileSync(__dirname + "/../template/summary.ejs", "utf-8");
 class SummaryContainer {
 
     constructor(bugs, hogs){
-        this.bugEntries = this.makeModels(bugs);
-        this.hogEntries = this.makeModels(hogs);
+        if(!bugs) {
+            this.bugEntries = [];
+        } else {
+            this.bugEntries = this.makeModels(bugs);
+        }
+
+        if(!hogs) {
+            this.hogEntries = [];
+        } else {
+            this.hogEntries = this.makeModels(hogs);
+        }
+
         this.node = this.createNode();
+        this.id = "summary-0";
 
         var jscoreButton = this.node.querySelector(".info");
         jscoreButton.addEventListener("click", function(){
@@ -76,7 +87,7 @@ class SummaryContainer {
         };
     };
 
-    createNode(html){
+    createNode(){
 
         var rendered = this.getRendered();
         var html = ejs.render(Template, rendered);
@@ -102,6 +113,13 @@ class SummaryContainer {
     render() {
         return this.node;
     };
+
+    refreshModel(bugs, hogs) {
+        this.bugEntries = this.makeModels(bugs);
+        this.hogEntries = this.makeModels(hogs);
+
+        this.node = this.createNode();
+    }
 }
 
 export default SummaryContainer;
