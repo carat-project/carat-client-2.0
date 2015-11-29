@@ -12,16 +12,16 @@ Install dependencies listed in *package.json* using `npm install` and have brows
 ```
 npm install -g browserify
 ```
-**Build**: Run `npm run build`to created *bundled.js*. Add a platform using:
+**Build**: Run `npm run build` to created *bundled.js*. Add a platform using:
 ```
 phonegap platform add android
 ```
 **Run**: ```phonegap run android (--verbose)``` or build an apk.
 
 # Documentation
-Documentation can be generated using jsdoc:
+Documentation for javascript files can be generated using jsdoc:
 ```
 npm install -g jsdoc
 ```
-Running `npm run docs` outputs to *www/doc*.    
+Running `npm run docs` outputs documentation to folder *www/doc*.    
 Plugin code similarly has a javadoc available.
