@@ -99,6 +99,8 @@ class SummaryContainer {
 
         Utilities.appendChildAll(hogsLoc, rendered.hogs);
         Utilities.appendChildAll(bugsLoc, rendered.bugs);
+		
+		showOrHideActions();
 
         return node;
     }

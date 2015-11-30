@@ -26,7 +26,8 @@ function makeElemTappable(el, mc, timer,
 
     var onTap = function(ev) {
         // filters out buttons, links and bug/hog symbols from the action-info div
-        if(ev.target.nodeName === "BUTTON" 
+		 if(ev.target.className != "expand-button" 
+		   && ev.target.nodeName === "BUTTON" 
            || ev.target.nodeName === "A" 
            || ev.target.className == "action-info"
            || ev.target.className == "action-info-text") {
@@ -78,7 +79,7 @@ function makeElemTappable(el, mc, timer,
                 iconNode.removeClass("rotated-icon");
                 iconNode.addClass("normal-icon");
             }
-            /*if (icon.innerHTML != "") {
+            /*if (icon.innerHTML != "") {
                 icon.innerHTML = "&#xE5CF";
             } else {
                 icon.innerHTML = "&#xE5CE";
