@@ -62,6 +62,8 @@ function makeElemTappable(el, mc, timer,
             if (el.id =="statistics-jscore"){
                 $("#card-" + el.id + "-textpand").toggleClass("in_large");
             
+            } else if(el.id == "summary-0"){
+                $("#card-summary-0-textpand > .collapse").toggleClass("in");
             } else {
                 $("#card-" + el.id + "-textpand").toggleClass("in");
             }
