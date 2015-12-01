@@ -1,6 +1,23 @@
 <div class="mdl-card mdl-shadow--2dp sleeker smaller-time-text system">
     <div class="carat-card__title">
-        <div class="mdl-card__icon"><i class="material-icons">&#xE1DA;</i></div>
+        <div class="mdl-card__icon">
+            <i class="material-icons no-flip">
+                <% if((changeTo.indexOf && changeTo.toLowerCase().indexOf("wifi") > -1)
+                    || label.toLowerCase().indexOf("wifi") > -1) { %>
+                    &#xE1BA;
+                <% } else if(label.toLowerCase().indexOf("mobile") > -1) { %>
+                    &#xE8A4;
+                <% } else if(label.toLowerCase().indexOf("screen") > -1) { %>
+                    &#xE8BD;
+               <% } else if(label.toLowerCase().indexOf("distance") > -1) { %>
+                    &#xE55C;
+                <% } else if(label.toLowerCase().indexOf("battery") > -1) { %>
+                   &#xE1A4;
+                <% } else { %>
+                   &#xE8B8;
+                <% } %>
+            </i>
+        </div>
         <div class="mdl-card__title-text"><%= label %></div>
         <div class="carat-card-time"><%= benefit %></div>
     </div>

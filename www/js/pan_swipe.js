@@ -83,6 +83,7 @@ function makeElemTappable(el, defaultExpand, mc, timer,
     //changes expand arrow, uses strange material design character in if statement
     var changeExpandArrow = function(ev) {
         var icon = el.querySelector("i.material-icons");
+        if(icon.className.indexOf && icon.className.indexOf("no-flip") > -1) return;
         var iconNode = $(icon);
         if(iconNode.hasClass("normal-icon")){
             iconNode.removeClass("normal-icon");

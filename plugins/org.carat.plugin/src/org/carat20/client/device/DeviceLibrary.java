@@ -382,7 +382,7 @@ public class DeviceLibrary {
         Intent settingIntent = new Intent();
         
         // Open generic settings activity as a fallback
-        if(!settingMap.containsKey(setting)) setting = Settings.ACTION_SETTINGS;
+        if(!settingMap.containsValue(setting)) setting = Settings.ACTION_SETTINGS;
         settingIntent.setAction(setting);
         try{
             activity.startActivity(settingIntent);
