@@ -87,7 +87,7 @@ class SummaryContainer {
         };
     };
 
-    createNode(){
+    createNode() {
 
         var rendered = this.getRendered();
         var html = ejs.render(Template, rendered);
@@ -100,7 +100,7 @@ class SummaryContainer {
         Utilities.appendChildAll(hogsLoc, rendered.hogs);
         Utilities.appendChildAll(bugsLoc, rendered.bugs);
 
-        makeElemTappable(node);
+        makeElemTappable(node, true);
 
         return node;
     }

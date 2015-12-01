@@ -83,7 +83,6 @@ class HomeCards {
         this.renderAsync(function(renderedTemplate) {
             var node = renderedTemplate;
             _this.refreshSummaryCard();
-            showOrHideActions();
         });
     };
 
