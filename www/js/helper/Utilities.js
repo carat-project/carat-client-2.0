@@ -161,7 +161,7 @@ module.exports.Utilities = (function() {
         // Charcode 8230 is ellipsis
         var ellipsis = String.fromCharCode(8230);
         return label.length > length ?
-            label.slice(0,length-3) + ellipsis : label;
+            label.slice(0,length-3) + "..": label;
     };
 
     var capitalize = function(string) {

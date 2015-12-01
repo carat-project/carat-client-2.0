@@ -1,22 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 var backPressed = false;
 
 var app = {
@@ -29,7 +10,6 @@ var app = {
     bindEvents: function() {
         console.log("Binding events");
         document.addEventListener("deviceready", this.onDeviceReady, false);
-        document.addEventListener("renderfinished", this.refreshSystemData, false);
 
         // Listener for changing uuid
         var uuidButton = document.getElementById("changeUuid");
@@ -197,45 +177,6 @@ var app = {
 
         // Begin the callback chain
         displayData();
-
-        // Display setting suggestions for debugging
-        /*carat.getSettings(function(settings){
-            if((typeof settings !== "undefined") && (settings !== null) && (settings.length > 0)){
-                var suggestion = settings[0];
-                var benefit = suggestion.benefit
-                var length =  benefit.indexOf("±");
-                var benefit = benefit.substr(0, length-1);
-
-                carat.showNotification("Change to "+suggestion.changeTo, "Benefit: "+benefit, function(success){
-                    console.log("Showing placeholder notification for a system setting");
-                });
-            }
-            //console.log(JSON.stringify(settings));
-        });*/
-    },
-
-    // Set an interval for refreshing cpu usage
-    refreshSystemData: function() {
-
-        var cpuText = document.querySelector("#cpuProgressBar > span");
-        var cpuLoad = document.querySelector("#cpuProgressBar > div");
-
-        var memText = document.querySelector("#memProgressBar > span");
-        var memLoad = document.querySelector("#memProgressBar > div");
-
-        carat.startCpuPolling(function(usage){
-            cpuText.style.color = (usage > 65) ? "#fff" : "#000";
-            usage = usage + "%";
-            cpuText.innerHTML = usage;
-            cpuLoad.style.width = usage;
-        }, 4000);
-
-        carat.startMemoryPolling(function(usage){
-            memText.style.color = (usage > 65) ? "#fff" : "#000";
-            usage = usage + "%";
-            memText.innerHTML = usage;
-            memLoad.style.width = usage;
-        }, 4000);
     },
 
     showProgress: function(){

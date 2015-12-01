@@ -76,14 +76,14 @@ class SummaryContainer {
             return hog.render();
         });
 
-        var bugsCount = Utilities.pluralize(renderedBugs.length, "bug");
-        var hogsCount = Utilities.pluralize(renderedHogs.length, "hog");
+        var bugsCount = Utilities.pluralize(renderedBugs.length, "Bug");
+        var hogsCount = Utilities.pluralize(renderedHogs.length, "Hog");
 
         return {
             hogs: renderedHogs,
             bugs: renderedBugs,
-            bugsCount: bugsCount,
-            hogsCount: hogsCount
+            bugsCount: bugsCount+" »",
+            hogsCount: hogsCount+" »"
         };
     };
 
@@ -100,7 +100,7 @@ class SummaryContainer {
         Utilities.appendChildAll(hogsLoc, rendered.hogs);
         Utilities.appendChildAll(bugsLoc, rendered.bugs);
 
-        makeElemTappable(node, true);
+        //makeElemTappable(node, true);
 
         return node;
     }

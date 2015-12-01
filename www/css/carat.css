@@ -1,3 +1,9 @@
+.mdl-card__icon_summary {
+    width: 50%;
+    height: 50%;
+    margin-bottom: 5px;
+}
+
 /* = SETTING CARD INFO BUTTON =*/
 
 .setting-info-button {
@@ -234,7 +240,8 @@
 
 #home .circleContainer {
   position: absolute;
-  right: 12%;
+  top: 26px;
+  right: 16%;
 }
 
 .outerCircle {
@@ -448,10 +455,12 @@ div.numberCircle > button {
 
 .carat_summaryCard_app_time {
     text-align: center;
-    color: #f00000
+    color: #f00000;
+    margin-left: -20px;
 }
 
 .carat_summaryCard_app_name {
+    margin-left: -20px;
     text-align: center;
 }
 
@@ -553,12 +562,6 @@ p {
     font-size: 16px;
     line-height: normal;
     padding-bottom: 10px;
-}
-
-.circleContainer {
-  position: absolute;
-  right: 10%;
-  top: 68px;
 }
 
 .page-content {
@@ -1061,6 +1064,7 @@ section.mdl-layout__tab-panel div.page-content {
 .ScoreAndBattery {
     margin-bottom: 25px;
     margin-top: 8px;
+    margin-left: -20px;
 }
 
 .ScoreAndBattery .carat-Jscore-text {
@@ -1069,7 +1073,6 @@ section.mdl-layout__tab-panel div.page-content {
     padding-bottom: 20px;
     padding-top: 32px;
    */
-    
     padding-right: 0;
     padding-bottom: 0;
     padding-top: 0;
@@ -1078,12 +1081,12 @@ section.mdl-layout__tab-panel div.page-content {
 
 .carat-battery-text {
     color: rgba(0,0,0, 0.54);
-    font-weight: 500;
+    font-weight: bold;
     font-size: 20px;
     padding-top: 20px;
     width: 60%;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 17px 0px 5px 10px;
 }
 
 .carat-battery-text > p {
