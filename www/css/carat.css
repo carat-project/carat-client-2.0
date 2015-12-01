@@ -1,3 +1,22 @@
+.summary-statistics-button {
+  margin-left: 43px;
+  margin-right: 6px;
+  margin-top: -25px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;
+  outline-width: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  vertical-align: middle;
+  padding: 5px 8px 5px 8px;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B;
+}
+
+
 .mdl-card__icon_summary {
     width: 50%;
     height: 50%;
@@ -1062,8 +1081,8 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .ScoreAndBattery {
-    margin-bottom: 25px;
-    margin-top: 8px;
+    margin-bottom: 17px;
+    margin-top: -15px;
     margin-left: -20px;
 }
 
