@@ -73,6 +73,7 @@ class SummaryEntry {
             if(!expand.hasClass("in")){
                 expand.addClass("in");
             }
+            window.history.pushState("#home", "", "#home");
         });
 
         return node;

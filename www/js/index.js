@@ -83,7 +83,11 @@ var app = {
                 window.location.hash = "";
                 app.closeDialog();
             } else if(window.location.href.indexOf("index.html") > -1){
-                if(backPressed){
+                if(window.history.state === "#home") {
+                    var hometab = document.getElementById("home-tab");
+                    hometab.click();
+                    console.log(hometab);
+                } else if(backPressed){
                     navigator.app.exitApp();
                 } else {
                     carat.showToast("Press back again to exit");
