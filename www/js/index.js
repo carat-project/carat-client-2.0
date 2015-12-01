@@ -86,7 +86,7 @@ var app = {
                 if(window.history.state === "#home") {
                     var hometab = document.getElementById("home-tab");
                     hometab.click();
-                    console.log(hometab);
+                    window.history.pushState(null, "", "#home");
                 } else if(backPressed){
                     navigator.app.exitApp();
                 } else {
