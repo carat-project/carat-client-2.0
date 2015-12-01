@@ -466,16 +466,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
         var circle = statisticsDomNode.querySelector(".outerCircle");
-        var degree = jscore*3.6;
+        var degree = Math.round(jscore*3.6);
         var color;
         if(degree <= 180){
-            degree = 90+degree;
+            degree = degree+90;
             color= "#FBE2B6";
         } else  {
             degree = degree-90;
             color = "#F7A71B";
         }
-        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #F7A71B 50%, transparent 50%)";
+        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%),linear-gradient(90deg, #FBE2B6 50%, transparent 50%)";
 
         appendTextOrRemoveNode(spot, jscore);
     };
