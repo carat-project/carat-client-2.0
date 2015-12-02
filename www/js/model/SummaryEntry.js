@@ -12,7 +12,7 @@ class SummaryEntry {
 
     constructor(data){
         // Prepare and reformat data
-        data.label = Utilities.cutLabel(data.label, 6);
+        data.label = Utilities.cutLabel(data.label, 8);
         data.benefit = Utilities.splitTimeDrainString(data.benefit).timeDrainPart;
         data.id = Utilities.makeIdFromAppName(data.name, data.type, "entry");
         data.targetId = Utilities.makeIdFromAppName(data.name, data.type);
@@ -73,6 +73,7 @@ class SummaryEntry {
             if(!expand.hasClass("in")){
                 expand.addClass("in");
             }
+            window.history.pushState("#home", "", "#home");
         });
 
         return node;

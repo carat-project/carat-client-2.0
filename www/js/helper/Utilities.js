@@ -52,8 +52,22 @@ module.exports.Utilities = (function() {
      * @memberOf Utilities
      */
     var findById = function(elem, id) {
-        if(!elem.querySelector) return;
-        return elem.querySelector("#" + id);
+        if(!elem.querySelector) {
+            return null;
+        } else {
+            return elem.querySelector("#" + id);
+        }
+    };
+
+    var appendOrReplace = function(appendLocation,
+                                  updateId, elem) {
+        var oldElem = findById(appendLocation, updateId);
+
+        if(!oldElem) {
+            appendLocation.appendChild(elem);
+        } else {
+            oldElem.parentNode.replaceChild(elem, oldElem);
+        }
     };
 
     /**
@@ -147,7 +161,11 @@ module.exports.Utilities = (function() {
         // Charcode 8230 is ellipsis
         var ellipsis = String.fromCharCode(8230);
         return label.length > length ?
-            label.slice(0,length-3) + ellipsis : label;
+            label.slice(0,length-3) + "..": label;
+    };
+
+    var capitalize = function(string) {
+        return string[0].toUpperCase() + string.slice(1);
     };
 
     return {
@@ -158,6 +176,8 @@ module.exports.Utilities = (function() {
         makeDomNode: makeDomNode,
         makeIdFromOtherId: makeIdFromOtherId,
         appendChildAll: appendChildAll,
-        findById: findById
+        findById: findById,
+        capitalize: capitalize,
+        appendOrReplace: appendOrReplace
     };
 })();

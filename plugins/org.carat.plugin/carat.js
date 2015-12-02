@@ -1,10 +1,6 @@
 var exec = require("cordova/exec"),
     service = "CaratPlugin";
 
-var generic = function(d) {
-    return;
-};
-
 module.exports = {
     setup: function(callback){
         exec(callback, callback, service, "setup", [""]);
@@ -59,5 +55,8 @@ module.exports = {
     },
     changeStatusbarColor: function(color, callback) {
         exec(callback, callback, service, "color", [color]);
+    },
+    openSetting: function(settingName, callback) {
+        exec(callback, callback, service, "open", [settingName]);
     }
 };

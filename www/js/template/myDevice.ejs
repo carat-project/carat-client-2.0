@@ -3,30 +3,24 @@
      style="-webkit-user-select: none;
             -webkit-user-drag: none;
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-    <div class="carat-card__title">
-        <div class="mdl-card__title-text carat_summaryCard_title_text">
-            My Device
-        </div>
-    </div>
     <div class="mdl-card__supporting-text in_large">
-        <div>OS version: <%= osVersion %></div>
-        <div>Device model: <%= deviceModel %></div>
-        <div>Battery duration: <%= batteryLife %></div>
-        <div>Memory total: <%= totalMemory %> MiB</div>
-        <div>Carat id: <%= uuid %></div>
-        <div style="display: inline-block;">
+        <div class="list-item">OS version: <%= osVersion %></div>
+        <div class-"list-item">Device model: <%= deviceModel %></div>
+        <div class="list-item" style="display: inline-block;">
             CPU usage:&nbsp;
             <div id="cpuProgressBar" class="progressBar">
                 <span>?</span>
                 <div></div>
             </div>
         </div>
-        <div style="display: inline-block;">
+        <div class="list-item">Memory total: <%= totalMemory %> MiB</div>
+        <div class="list-item" style="display: inline-block;">
             Memory usage:&nbsp;
             <div id="memProgressBar" class="progressBar">
                 <span>?</span>
                 <div></div>
             </div>
         </div>
+        <div class="list-item">Carat id: <%= uuid %></div>
     </div>
 </div>

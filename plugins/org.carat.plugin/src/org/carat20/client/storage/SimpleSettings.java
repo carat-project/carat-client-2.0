@@ -1,15 +1,15 @@
 package org.carat20.client.storage;
 
-import android.util.Log;
 import java.io.Serializable;
 
 /**
- *
+ * Simple container class for setting suggestions.
  * @author Jonatan Hamberg
  */
 public class SimpleSettings implements Serializable, Comparable {
     
     private String label;
+    private String setting;
     private Object value;
     private double ev;
     private double entropy;
@@ -26,6 +26,14 @@ public class SimpleSettings implements Serializable, Comparable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getSetting() {
+        return setting;
+    }
+
+    public void setSetting(String setting) {
+        this.setting = setting;
     }
 
     public Object getValue() {

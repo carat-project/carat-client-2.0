@@ -20,7 +20,7 @@
 .dialog-text {
   padding-top: 10px;
   padding-bottom: 10px;
-  overflow-y: scroll !important;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -39,6 +39,8 @@
 
 .mdl-card__actions.dialog-buttons {
   padding: 10px 10px 15px 10px;
+  max-height: 49px;
+  min-height: 49px;
   margin-top: 0px;
   background-color: #F2F2F2;
   text-align: right;
@@ -54,10 +56,12 @@
 }
 
 .carat-card__title.gray-title {
+  max-height: 55px;
+  min-height: 55px;
   vertical-align: middle;
   margin-top: 0px;
   padding-top: 20px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   font-size: 20px;
   font-weight: bold;
   background-color: #F2F2F2;

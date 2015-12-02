@@ -328,13 +328,14 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
         buttonSpot.appendChild(closeButton);
         buttonSpot.appendChild(uninstallButton);
 
-        if(isSystem){
-            var systemInfo = document.createElement("div");
-            systemInfo.className = "action-info";
-            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
-            "<div class='action-info-text'>System app</span>";
-            buttonSpot.appendChild(systemInfo);
-        }
+//        if(isSystem){
+//            var systemInfo = document.createElement("div");
+//            systemInfo.className = "action-info";
+//            systemInfo.innerHTML = "<img width='20px' height='20px' src='img/ic_info_black_24dp_1x.png' />"+
+//            "<div class='action-info-text'>System app</span>";
+//            
+//            buttonSpot.appendChild(systemInfo);
+//        }
     };
     
     var injectTypeInfo = function (cardDomNode, text) {
@@ -348,6 +349,15 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
             systemInfo.className = "action-info";
             systemInfo.innerHTML = "<img width='20px' height='20px' style='margin-right: 2px' src='"+iconFileName+"' />"+
             "<div class='action-info-text'>" + text + "</span>";
+        
+        // listener for typeInfo, opens dialog
+        systemInfo.addEventListener("click", function(){
+            app.showDialog({
+                title: "What is a Bug / Hog?",
+                    text:"this is description for bugs/hogs. Suggestions aren't injected to the new MVC, so this will be updated later."
+            });
+        });
+    
             buttonSpot.appendChild(systemInfo);
     };
 
@@ -456,16 +466,16 @@ itemCards = (function(notificationsArray, gestureCallbacks, cardTemplates) {
                                 jscore) {
         var spot = statisticsDomNode.querySelector(".numberCircle");
         var circle = statisticsDomNode.querySelector(".outerCircle");
-        var degree = jscore*3.6;
+        var degree = Math.round(jscore*3.6);
         var color;
         if(degree <= 180){
-            degree = 90+degree;
+            degree = degree+90;
             color= "#FBE2B6";
         } else  {
             degree = degree-90;
             color = "#F7A71B";
         }
-        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%), linear-gradient(90deg, #F7A71B 50%, transparent 50%)";
+        circle.style.backgroundImage = "linear-gradient("+degree+"deg, transparent 50%, "+color+" 50%),linear-gradient(90deg, #FBE2B6 50%, transparent 50%)";
 
         appendTextOrRemoveNode(spot, jscore);
     };

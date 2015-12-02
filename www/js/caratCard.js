@@ -1,5 +1,6 @@
 // creates a piechart from given data and puts it in the element of given id
 function createChart(statisticsDataSource, observations, id) {
+	if(!document.getElementById(id)) return;
     var ctx = document.getElementById(id).getContext("2d");
     // creates legends to chart
     var makeLegend = function(data) {
@@ -9,7 +10,7 @@ function createChart(statisticsDataSource, observations, id) {
         };
         // creates a list element for a legend
         var makeLi =  function(color, label) {
-            return '<li style="margin-left: 7px;">' +
+            return '<li style="margin-left: 2px;">' +
                 '<span class="chartLegend" style="background-color:'+ color +';">' +
                 '</span>' + label + '</li>';
         };

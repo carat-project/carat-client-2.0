@@ -3,7 +3,6 @@ package org.carat20.client;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -75,7 +74,7 @@ public class Carat extends CordovaPlugin {
         Carat.activity = cordova.getActivity();
         String color = preferences.getString("StatusBarBackgroundColor", "#000000");
         DeviceLibrary.changeStatusbarColor(color, activity);
-        // ...
+        // .. 
     }
 
     /**
@@ -118,6 +117,7 @@ public class Carat extends CordovaPlugin {
                     case TOAST:     showToast(cb, args);        break;
                     case NOTIFY:    notification(cb, args);     break;
                     case COLOR:     setStatusColor(cb, args);   break;
+                    case OPEN:      openDialog(cb, args);       break;
                         
                     // Polling
                     case CPUPOLL:   pollCPU(cb ,args);          break;
@@ -259,23 +259,21 @@ public class Carat extends CordovaPlugin {
     }
     
     // System setting suggestions
-    private void getSettings(CallbackContext cb){
+    public void getSettings(final CallbackContext cb){
         try {
-            HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();
-            if(deviceInfo == null){
-                cb.error(new JSONObject());
-                return;
-            }
-            EVTree tree = storage.getSettingsTree();
-            if(tree == null){
-                cb.error(new JSONObject());
-                return;
-            }
-            settingsReports = tree.getSuggestions(deviceInfo);
+            settingsReports = getSettings();
             cb.success(convertToJSON(settingsReports));
         } catch (JSONException e){
             Log.v("Carat", "Failed to convert settings.", e);
         }
+    }
+    
+    private SimpleSettings[] getSettings(){
+        HashMap<String, Object> deviceInfo = deviceLibrary.getDeviceInfo();;
+        if(deviceInfo == null) return null;
+        EVTree tree = storage.getSettingsTree();
+        if(tree == null) return null;
+        return tree.getSuggestions(deviceInfo);
     }
     
     // Memory info
@@ -424,6 +422,17 @@ public class Carat extends CordovaPlugin {
         }
     }
     
+    private void openDialog(final CallbackContext cb, JSONArray args){
+        try{
+            String settingName = args.getString(0);
+            deviceLibrary.openSettingMenu(settingName);
+            cb.success();
+        } catch(JSONException e){
+            Log.v("Carat","Invalid setting specified");
+            cb.error("Failure");
+        }
+    }
+    
     /**
      * Reads string values from plugin.xml.
      * @param variable Key.
@@ -449,10 +458,18 @@ public class Carat extends CordovaPlugin {
         );
     }
     
-    // Sends a plugin result while keeping callback open
+    // Sends a string result while keeping the callback open
     private void sendPluginResult(CallbackContext cb, String value){
         // Get usage and pass to webview
         PluginResult result = new PluginResult(PluginResult.Status.OK, value);
+        result.setKeepCallback(true); // Keep sending results
+        cb.sendPluginResult(result);
+    }
+    
+    // Sends a jsonarray result while keeping the callback open
+    private void sendPluginResult(CallbackContext cb, JSONArray array){
+        // Get usage and pass to webview
+        PluginResult result = new PluginResult(PluginResult.Status.OK, array);
         result.setKeepCallback(true); // Keep sending results
         cb.sendPluginResult(result);
     }
@@ -514,9 +531,9 @@ public class Carat extends CordovaPlugin {
         if(settings == null) return results;
         for(SimpleSettings s : settings){
             //if(s.getErrorRatio() > ERROR_LIMIT) continue;
-            
             JSONObject setting = new JSONObject()
             .put("label", s.getLabel())
+            .put("setting", s.getSetting())
             .put("current", s.getValue());
             Object value = s.getValueWithout();
              if(value instanceof Range){
@@ -525,8 +542,10 @@ public class Carat extends CordovaPlugin {
                          .put("min", valueRange.getMin())
                          .put("max", valueRange.getMax());
                  setting.put("changeTo", range);
-             } else setting.put("changeTo", value)    
-            .put("benefit", s.getBenefitText());
+             } else {
+                 setting.put("changeTo", value);
+             }    
+            setting.put("benefit", s.getBenefitText());
             results.put(setting);
         }
         return results;

@@ -1,3 +1,97 @@
+.summary-statistics-button {
+  margin-left: 43px;
+  margin-right: 6px;
+  margin-top: -25px;
+  box-shadow: none;
+  outline: 0;
+  outline-style: none;cmd
+  outline-width: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  vertical-align: middle;
+  padding: 5px 8px 5px 8px;
+  border: 2px solid #F7A71B;
+  border-radius: 4px;
+  background-color: #F7A71B;
+}
+
+
+.mdl-card__icon_summary {
+    width: 50%;
+    height: 50%;
+    margin-bottom: 5px;
+}
+
+/* = SETTING CARD INFO BUTTON =*/
+
+.setting-info-button {
+  float: right;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-right: 6px;
+  vertical-align: bottom;
+  color: dimgray;
+}
+
+.setting-info-button:focus {
+  outline: 0px !important;
+  border: 0px !important;
+}
+
+.setting-info-button:active {
+  outline: 0px !important;
+  border: 0px !important;
+}
+
+.setting-info-button i {
+  vertical-align: bottom;
+  margin: 0px 0px -2px 2px;
+}
+
+
+/* = SYSTEM INFORMATION CARD = */
+
+.list-item {
+  line-height: 22px !important;
+}
+
+#statistics-jscore{
+  background-image: url('../img/ic_phone_android_black_24px.svg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right;
+  background-size: 30% 90%;
+}
+
+/* = REFRESH BUTTON =*/
+
+#system-card-refresh {
+  display: inline;
+  background: none;
+  border: 0px;
+  border-radius: 50%;
+}
+
+#system-card-refresh i{
+  margin: 0px 0px -2px 2px;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+#system-card-refresh:active{
+  border: 0px !important;
+}
+
+#system-card-refresh:focus{
+  outline: 0px !important;
+  border: 0px !important;
+}
+
+
 /* = TEMPORARY UPDATE STATUS = */
 
 #state {
@@ -21,7 +115,7 @@
 .intro-container {
   margin: 9px 16px 0px 15px;
   padding-top: 7px;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
   height: 60px;
 }
 
@@ -149,7 +243,7 @@
 
 .progressBar > span {
   position: absolute;
-  top: -1px;
+  top: -3px;
   left: 40%;
   font-size: 10px;
   color: #000;
@@ -165,8 +259,8 @@
 
 #home .circleContainer {
   position: absolute;
-  right: 12%;
-  top: 15px;
+  top: 26px;
+  right: 16%;
 }
 
 .outerCircle {
@@ -175,7 +269,7 @@
   width: 68px;
   height: 68px;
   z-index: 2;
-  background: #FBE2B6;
+  background: #F7A71B;
 }
 
 .innerCircle {
@@ -380,10 +474,12 @@ div.numberCircle > button {
 
 .carat_summaryCard_app_time {
     text-align: center;
-    color: #f00000
+    color: #f00000;
+    margin-left: -20px;
 }
 
 .carat_summaryCard_app_name {
+    margin-left: -20px;
     text-align: center;
 }
 
@@ -487,14 +583,9 @@ p {
     padding-bottom: 10px;
 }
 
-.circleContainer {
-  position: absolute;
-  right: 10%;
-  top: 68px;
-}
-
 .page-content {
-    padding: 0px !important;
+    margin-top: 15px !important;
+    padding: 0 0 0 0 !important;
     overflow: hidden;
 }
 
@@ -972,8 +1063,8 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .carat-module {
-    padding-top: 16px;
-    padding-bottom: 4px;
+    padding-top: 0px;
+    padding-bottom: 5px;
     width: auto;
 }
 
@@ -982,6 +1073,7 @@ section.mdl-layout__tab-panel div.page-content {
     font-weight: 600;
     text-transform: uppercase;  
     margin-left: 8px;
+    padding-top: 10px;
     color: dimgray;
 }
 
@@ -989,8 +1081,9 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .ScoreAndBattery {
-    margin-bottom: 25px;
-    margin-top: 8px;
+    margin-bottom: 17px;
+    margin-top: -15px;
+    margin-left: -20px;
 }
 
 .ScoreAndBattery .carat-Jscore-text {
@@ -999,7 +1092,6 @@ section.mdl-layout__tab-panel div.page-content {
     padding-bottom: 20px;
     padding-top: 32px;
    */
-    
     padding-right: 0;
     padding-bottom: 0;
     padding-top: 0;
@@ -1008,12 +1100,12 @@ section.mdl-layout__tab-panel div.page-content {
 
 .carat-battery-text {
     color: rgba(0,0,0, 0.54);
-    font-weight: 500;
+    font-weight: bold;
     font-size: 20px;
     padding-top: 20px;
     width: 60%;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 17px 0px 5px 10px;
 }
 
 .carat-battery-text > p {

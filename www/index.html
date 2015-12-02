@@ -21,24 +21,6 @@
     </head>
 
     <body>
-        <!-- dialog for everything needed -->
-        <div class="overlay" id="popup-overlay">
-            <div class="modal" id="popup-modal">
-                <div class="mdl-card mdl-shadow--2dp">
-                    <div class="carat-card__title">
-                        <div class="mdl-card__title-text"></div>
-                        <div class="mdl-layout-spacer"></div>
-                        <button class="mdl-button mdl-js-button mdl-button--icon" id="modalClose" onclick="closeModal()">
-                            <i class="material-icons">&#xE5CD;</i>
-                        </button>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                    </div>
-                    <div class="mdl-card__actions">
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs mdl-color--grey-200">
             <header class="mdl-layout__header mdl-color--orange-500">
@@ -60,6 +42,7 @@
                         <li class="mdl-menu__item" id="changeUuid">Change UUID</li>
                         <li class="mdl-menu__item" id="appSettings">Settings</li>
                         <li class="mdl-menu__item" id="appStatistics">Statistics</li>
+                        <li class="mdl-menu__item" id="appDescription">About Carat</li>
                     </ul>
 
                 </div>
@@ -71,6 +54,7 @@
                     <a href="#hogs" class="mdl-layout__tab" id="hogs-tab">Hogs</a>
                     <a href="#system" class="mdl-layout__tab" id="system-tab">System</a>
                 </div>
+
             </header>
             <main class="mdl-layout__content">
                 <!-- Home view -->
@@ -78,6 +62,45 @@
 
                     <div class="page-content">
                         <div class="carat-module">
+                            <div class="carat-module-title">
+                                Device summary
+                            </div>
+                            <div class="mdl-card mdl-shadow--2dp" id="summary-0">
+                                <div class="mdl-card__supporting-text carat-card__supporting-text">
+                                    <div class="ScoreAndBattery">
+                                        <div class="carat-battery-text">
+                                            Loading battery...
+                                            <p>Active battery life</p>
+                                        </div>
+                                        <button class="summary-statistics-button"
+                                                onclick="window.location='statistics.html'">Global statistics</button>
+                                        <div class="circleContainer">
+                                            <div class="outerCircle">
+                                                <div class="innerCircle">
+                                                    <div class="numberCircle">
+                                                        ?
+                                                        <button class="info"></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carat_summaryCard_group_title" id="bugTitleAndCount">
+                                        Loading bugs...
+                                    </div>
+                                    <div id="bugSummaryGrid" class="carat_hide">
+                                        <div class="carat_summary_grid" id="bugsGrid">
+                                        </div>
+                                    </div>
+                                    <div class="carat_summaryCard_group_title" id="hogTitleAndCount">
+                                        Loading hogs...
+                                    </div>
+                                    <div id="hogSummaryGrid" class="carat_show">
+                                        <div class="carat_summary_grid" id="hogsGrid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="carat-module-title">Suggested actions:</div>
                             <div class="carat-module-content" id="suggestions"></div>
                         </div>
@@ -96,7 +119,7 @@
                         </div>
                         <div class="intro-text">
                             Bugs are apps that use a lot of energy on a small number of devices, including yours.
-                            Killing or uninstalling these apps may improve your battery life.
+                            Killing or uninstalling bugs may improve your battery life.
                         </div>
                     </div>
                     <!-- End bug intro -->
@@ -113,7 +136,7 @@
                         </div>
                         <div class="intro-text">
                             Hogs are apps that are correlated with higher energy use across many devices.
-                            Killing or uninstalling these apps may improve your battery life.
+                            Killing or uninstalling hogs may improve your battery life.
                         </div>
                     </div>
                     <!-- End hog intro -->
@@ -121,28 +144,10 @@
                     <!-- System tab view -->
                 </section>
                 <section class="mdl-layout__tab-panel" id="system">
-                    <div class="page-content">
-
-                        <!--placeholder system card-->
-                        <div class="mdl-card mdl-shadow--2dp sleeker smaller-time-text system">
-                            <div class="carat-card__title">
-                                <div class="mdl-card__icon"><i class="material-icons">&#xE1DA;</i></div>
-                                <div class="mdl-card__title-text">Mobile Data</div>
-                                <div class="carat-card-time">+39m</div>
-                            </div>
-                            <div class="mdl-card__supporting-text">
-                                <div class="suggested-action">Switch to Wi-Fi</div>Place for additional infotext. Mobile data consumes more energy than Wi-Fi. In order to save energy switch to Wi-Fi.
-                                <div class="collapse"></div>
-                            </div>
-                            <div class="mdl-card__actions mdl-card--border">
-                                <button class="action-button">Enable Wifi</button>
-                            </div>
-                        </div>
-                        <!--End placeholder system card-->
-                    </div>
                 </section>
             </main>
         </div>
+
 
         <script type="text/javascript" src="js/lib/jquery.min.js"></script>
         <script type="text/javascript" src="js/lib/hammer.min.js"></script>
@@ -154,7 +159,6 @@
         <script type="text/javascript" src="js/model/notifications.js"></script>
         <script type="text/javascript" src="js/view/cardTemplates.js"></script>
         <script type="text/javascript" src="js/cardsController.js"></script>
-        <script type="text/javascript" src="js/dialog.js"></script>
         <script type="text/javascript" src="js/bundled.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/summaryCard.js"></script>
@@ -164,7 +168,7 @@
         <script type="text/javascript" src="js/caratCard.js"></script>
 
         <script type="text/javascript">
-            app.initialize();
+         app.initialize();
         </script>
     </body>
 </html>

@@ -12,11 +12,22 @@ var Template = fs.readFileSync(__dirname + "/../template/summary.ejs", "utf-8");
 class SummaryContainer {
 
     constructor(bugs, hogs){
-        this.bugEntries = this.makeModels(bugs);
-        this.hogEntries = this.makeModels(hogs);
-        this.node = this.createNode();
+        if(!bugs) {
+            this.bugEntries = [];
+        } else {
+            this.bugEntries = this.makeModels(bugs);
+        }
 
-        var jscoreButton = this.node.querySelector(".info");
+        if(!hogs) {
+            this.hogEntries = [];
+        } else {
+            this.hogEntries = this.makeModels(hogs);
+        }
+
+        this.node = this.createNode();
+        this.id = "summary-0";
+
+        let jscoreButton = this.node.querySelector(".info");
         jscoreButton.addEventListener("click", function(){
             app.showDialog({
                 title: "What is a J-Score?",
@@ -65,18 +76,18 @@ class SummaryContainer {
             return hog.render();
         });
 
-        var bugsCount = Utilities.pluralize(renderedBugs.length, "bug");
-        var hogsCount = Utilities.pluralize(renderedHogs.length, "hog");
+        var bugsCount = Utilities.pluralize(renderedBugs.length, "Bug");
+        var hogsCount = Utilities.pluralize(renderedHogs.length, "Hog");
 
         return {
             hogs: renderedHogs,
             bugs: renderedBugs,
-            bugsCount: bugsCount,
-            hogsCount: hogsCount
+            bugsCount: bugsCount+" »",
+            hogsCount: hogsCount+" »"
         };
     };
 
-    createNode(html){
+    createNode() {
 
         var rendered = this.getRendered();
         var html = ejs.render(Template, rendered);
@@ -88,6 +99,8 @@ class SummaryContainer {
 
         Utilities.appendChildAll(hogsLoc, rendered.hogs);
         Utilities.appendChildAll(bugsLoc, rendered.bugs);
+
+        //makeElemTappable(node, true);
 
         return node;
     }
@@ -102,6 +115,21 @@ class SummaryContainer {
     render() {
         return this.node;
     };
+
+    refreshModel(bugs, hogs) {
+        this.bugEntries = this.makeModels(bugs);
+        this.hogEntries = this.makeModels(hogs);
+
+        this.node = this.createNode();
+
+        let jscoreButton = this.node.querySelector(".info");
+        jscoreButton.addEventListener("click", function(){
+            app.showDialog({
+                title: "What is a J-Score?",
+                text: fs.readFileSync(__dirname + "/../template/strings/jscoreInfo.ejs")
+            });
+        });
+    }
 }
 
 export default SummaryContainer;

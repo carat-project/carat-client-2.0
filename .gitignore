@@ -14,6 +14,8 @@ node_modules/
 log.txt
 nbproject/
 */coverage/
+www/doc
+www/js/bundled.js
 
 # Plugin build process
 plugins/org.carat.plugin/build
@@ -21,7 +23,6 @@ plugins/org.carat.plugin/build.xml
 plugins/org.carat.plugin/nbproject
 plugins/org.carat.plugin/dist
 plugins/org.carat.plugin/manifest.mf
-
 
 # Java files
 *.class
@@ -57,3 +58,4 @@ ehthumbs.db
 Thumbs.db
 Error.log
 notes.txt
+npm-debug.log

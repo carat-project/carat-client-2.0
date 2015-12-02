@@ -1,8 +1,7 @@
 /*Function to dismiss card forever/snooze it*/
 function snooze(id){
 //    toggleVisibilityOff();
-    var element = document.getElementById(id);
-    if (element.classList.contains("bug")) {
+    if (id.indexOf("BUG") !=-1) {
         localStorage.setItem(id, "bug_dismissed");
     } else {
         localStorage.setItem(id, "hog_dismissed");
@@ -18,5 +17,6 @@ function cancel(id){
     setTimeout(function() {
     el.style.opacity="1";     
     }, 1);
+    // for highlighting restored cards
     el.classList.add("restored");
 }

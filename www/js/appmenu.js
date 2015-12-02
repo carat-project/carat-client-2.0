@@ -113,6 +113,10 @@ function appStatistics() {
 	moveToPage('appStatistics', 'statistics.html');	
 }
 
+function appDescription() {
+	moveToPage('appDescription', 'aboutCarat.html');
+}
+
 function moveToPage(pagename, address){
     var li = document.querySelector("#"+pagename);
 
@@ -127,7 +131,7 @@ function handleSetting(e) {
 }
 
 
-	sendFeedback();
-	appSettings();
-	appStatistics();
-	backToIndex();
+sendFeedback();
+appSettings();
+appStatistics();
+appDescription();

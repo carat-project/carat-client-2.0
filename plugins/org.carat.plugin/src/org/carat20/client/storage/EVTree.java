@@ -1,13 +1,12 @@
 
 package org.carat20.client.storage;
 
-import android.util.Log;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
+import org.carat20.client.device.DeviceLibrary;
 import org.carat20.client.utility.Range;
 
 /**
@@ -47,27 +46,6 @@ public class EVTree implements Serializable{
     public void print(int depth) {
         print(root, "", depth);
     }
-    
-    
-   /*
-    public SimpleSettings[] getSuggestions(HashMap<String, Object> info){
-        List<SimpleSettings> results = new LinkedList<SimpleSettings>();
-        
-        // Loop through suggested nodes
-        ArrayList<EVNode> suggestedNodes = this.getSuggestedNodes(info);
-        for(EVNode node : suggestedNodes){
-            SimpleSettings suggestion = new SimpleSettings();
-            suggestion.setLabel(node.getSplit());
-            suggestion.setEntropy(node.getEntropy());
-            suggestion.setErr(node.getErr());
-            suggestion.setEv(node.getEv());
-            suggestion.setSamples(node.getCount());
-            suggestion.setValue(node.getValue());
-            results.add(suggestion);
-        }
-        
-        return results.toArray(new SimpleSettings[results.size()]);
-    }*/
         
     // Gets a list of suggested nodes
     public SimpleSettings[] getSuggestions(HashMap<String, Object> info) {
@@ -98,12 +76,16 @@ public class EVTree implements Serializable{
                    
                    // Compare matching node to best
                    // Ignore "other" for now
-                   if((best.getEv() < child.getEv()) 
-                           && !(best.getValue() instanceof String 
-                           && ((String) best.getValue()).equalsIgnoreCase("other"))){
-                        
+                   if(best.getEv() < child.getEv()) { 
+                           //&& !(best.getValue() instanceof String ))
+                           //&& ((String) best.getValue()).equalsIgnoreCase("other"))){
+                       
+                        String label = best.getSplit();
+                        String settingName = DeviceLibrary.getSetting(label);
+                       
                         SimpleSettings setting = new SimpleSettings();
-                        setting.setLabel(best.getSplit());
+                        setting.setLabel(label);
+                        setting.setSetting(settingName);
                         setting.setEntropy(best.getEntropy());
                         setting.setErrWithout(best.getErr());
                         setting.setEvWithout(best.getEv());

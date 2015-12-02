@@ -67,5 +67,7 @@
         <source-file src="src/org/carat20/client/thrift/Reports.java" target-dir="src/org/carat20/client/thrift"/>
         <source-file src="src/org/carat20/client/thrift/Sample.java" target-dir="src/org/carat20/client/thrift"/>
 
+        <!-- Assets -->
+        <source-file src="src/res/drawable/mini.png" target-dir="res/drawable"/>
     </platform>
 </plugin>
