@@ -34,7 +34,7 @@ class InformationDialog {
 		window.location.hash="#dialog"; // Used for back button
 		this.title.innerHTML = content.title;
 		this.text.innerHTML = content.text;
-		carat.changeStatusbarColor("#794800", (status) => {
+		carat.changeStatusbarColor("#684B20", (status) => {
 			this.node.style.visibility = "visible";
             this.node.style.display = "flex";
 
@@ -46,7 +46,7 @@ class InformationDialog {
 	 */
 	hide(){
 		window.location.hash=""; // Used for back button
-		carat.changeStatusbarColor("#F1840C", (status) => {
+		carat.changeStatusbarColor("#FFA41A", (status) => {
 			this.node.style.visibility = "hidden";
             this.node.style.display = "none";
 
