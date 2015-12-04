@@ -165,20 +165,16 @@ function makeElemPanSwipable(el) {
     //detects start movement with angle filter. If movement is sideways, moving starts
     var onPanStart = function(ev) {
         var angle = Math.abs(ev.angle);
-        console.log("trying to start"  + angle);
-
         if (angle >= 90 && angle < 150)
             return;
         if (angle > 30 && angle < 90)
             return;
-
         moving = true;
-        console.log("start");
     };
 
+    // while moving
     var onPanMove = function(ev) {
         if (moving == true) {
-            console.log("moving");
 
             if(el.classList.contains("animate")) {
                 el.classList.remove("animate");
@@ -192,21 +188,19 @@ function makeElemPanSwipable(el) {
     };
 
 
-
+    // ends moving
     var onPanEnd = function(ev) {
         if (moving == true) {
             moving = false;
-            console.log("end");
         }
     };
 
     var onSwipeRight = function(ev) {
 
-        // hides swiped bug and shows next bug
+        // hides Suggestions in home screen, contains no extra logic
         if (el.classList.contains("worstBug") || el.classList.contains("worstHog")) {
             el.style.display='none';
             el.style.visibility='hidden';
-
             return;
         }
 
@@ -229,13 +223,6 @@ function makeElemPanSwipable(el) {
 
 
     var hideCard = function(ev){
-        transform.ry = (ev.direction & Hammer.DIRECTION_HORIZONTAL) ? 1 : 0;
-
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            resetElement();
-        }, 300);
-        requestElementUpdate();
         el.style.display='none';
     };
 

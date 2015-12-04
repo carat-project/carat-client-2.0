@@ -1,47 +1,25 @@
-/*placeholder functions for menu items. They don't work for some reason, because apparently I'm dumb or something*/
-
 //function to show all snoozed cards again and remove from localstorage
-
 function initializeListeners() {
-    var cancelA = document.querySelector("#showAllHiddenCards");
-                             
+    
+    //listener for menu item "show Hidden Bugs"
     var cancelBugSnooze = document.querySelector("#showHiddenBugCards");
     cancelBugSnooze.addEventListener('click', function () {
         cancelBug();
     });
     
+    //listener for menu item "show Hidden Hogs"
     var cancelHogSnooze = document.querySelector("#showHiddenHogCards");
     cancelHogSnooze.addEventListener('click', function () {
         cancelHog();
     });
-    
-    //listeners for tabs
-    var tabs = document.querySelectorAll(".mdl-layout__tab");  
-    for (i=0; i<tabs.length; i++) {
-        tabs[i].addEventListener("click", function(){
-        removeHighlight(); 
-        });
-    }    
 }
     
  function listenMenu () {
      disableMenuItem();
 }
 
-function removeHighlight() {
-    var restored = document.querySelectorAll(".restored");
-   
-    if (restored !== null) {
-        i = restored.length;
-        while (i--) {
-            restored[i].classList.remove("restored");
-        }
-    }
 
-}
-
-
-
+// disables menu option "show hidden bugs/hogs" when not in correct view
 function disableMenuItem(){
     var bugtab = document.querySelector("#bugs-tab");
     var hogtab = document.querySelector("#hogs-tab");
@@ -56,7 +34,6 @@ function disableMenuItem(){
         bugmenuitem.removeAttribute("disabled");
     } else if (hogtab.classList.contains("is-active")) {
         hogmenuitem.removeAttribute("disabled");
-
     }
 }
     
@@ -87,23 +64,8 @@ function cancelHog(){
 }
 
 function sendFeedback(){
-
-    //var li = document.querySelector("#sendFeedback");
-//
-//   	li.addEventListener('click', function () {
-//    	window.open('mailto:carat@cs.helsinki.fi?subject=Carat 2.0 Feedback&body=Dear Carat team, Your socks stink.');
-//		});
-
 	moveToPage('sendFeedback', 'feedback.html');
 }
-
-//function appSettings(){
-//    var li = document.querySelector("#appSettings");
-//
-//       	li.addEventListener('click', function () {
-//        	window.location = "settings.html";
-//    		});
-//}
 
 function appSettings(){
     moveToPage('appSettings', 'settings.html');
