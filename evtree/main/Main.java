@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 /**
- * EVTreeusage demonstration
+ * EVTree usage example
  * @author Jonatan Hamberg
  */
 public class Main {
@@ -39,7 +39,7 @@ public class Main {
     }
     
     // Simulate data coming from an Android device
-    // These can be changed to refresh suggestions
+    // These can be altered in order to get new suggestions
     private static HashMap<String, Object> getDeviceInfo() {
         return new HashMap<String, Object>() {{
             put("batteryTemperature", 20);
