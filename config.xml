@@ -74,6 +74,7 @@
     <access origin="*" />
     <plugin name="cordova-plugin-whitelist" version="1" />
     <plugin name="cordova-plugin-device" version="1.0.1" />
+    <plugin name="org.carat.plugin" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
