@@ -17,6 +17,4 @@ function cancel(id){
     setTimeout(function() {
     el.style.opacity="1";     
     }, 1);
-    // for highlighting restored cards
-    el.classList.add("restored");
 }

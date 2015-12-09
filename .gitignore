@@ -6,9 +6,8 @@
 
 # Generated files
 platforms/
-plugins/cordova-plugin-whitelist
-plugins/android.json
-plugins/fetch.json
+plugins/*
+!plugins/org.carat.plugin
 hooks/
 node_modules/
 log.txt

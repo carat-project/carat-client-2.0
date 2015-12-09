@@ -11,9 +11,9 @@
   font-size: 12px;
   vertical-align: middle;
   padding: 5px 8px 5px 8px;
-  border: 2px solid #F7A71B;
+  border: 2px solid #ffb74d;
   border-radius: 4px;
-  background-color: #F7A71B;
+  background-color: #ffb74d;
 }
 
 
@@ -159,9 +159,9 @@
   font-size: 12px;
   vertical-align: middle;
   padding: 8px 14px 8px 14px;
-  border: 2px solid #F7A71B;
+  border: 2px solid #ffb74d;
   border-radius: 4px;
-  background-color: #F7A71B;
+  background-color: #ffb74d;
 /*  box-shadow: 1px 1px 0px #C0C0C0;*/
 }
 
@@ -210,9 +210,9 @@
   outline-width: 0;
   text-align: center;
   vertical-align: middle;
-  border: 2px solid #F7A71B;
+  border: 2px solid #ffb74d;
   border-radius: 4px;
-  background-color: #F7A71B;
+  background-color: #ffb74d;
 }
 
 .rotated-icon {
@@ -269,7 +269,7 @@
   width: 68px;
   height: 68px;
   z-index: 2;
-  background: #F7A71B;
+  background: #ffb74d;
 }
 
 .innerCircle {
@@ -1135,7 +1135,7 @@ section.mdl-layout__tab-panel div.page-content {
 }
 
 .suggested-action {
-    color: #F7A71B;
+    color: #ffb74d;
     font-size: 20px;
     font-weight: 600;
     padding-bottom: 6px;
@@ -1170,7 +1170,7 @@ section.mdl-layout__tab-panel div.page-content {
 .no-reports .mdl-card__title-text {
     padding-top: 15px;
     width: 100%;
-    color: #F7A71B;
+    color: #ffb74d;
     font-weight: 600;
 }
 
